@@ -4,9 +4,20 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { GitHub, repoParts } = require('./github.cjs');
 const { randomUUID } = require('node:crypto');
+const { spawn } = require('node:child_process');
+const { createUpdater } = require('./updater.cjs');
+const APP_VERSION = require('../package.json').version;
 app.disableHardwareAcceleration();
 let win, dir, token = '', account = null, permissions = null;
-let loginGeneration = 0, writeBusy = false, syncBusy = false;
+let loginGeneration = 0, writeBusy = false, syncBusy = false, updateBusy = false, installing = false, updater;
+function processEnvForInstaller() {
+  const environment = { ...process.env };
+  delete environment.ELECTRON_RUN_AS_NODE;
+  return environment;
+}
+function ensureIdle() {
+  if (updateBusy || installing) throw new Error('客户端正在更新，请等待更新完成');
+}
 const defaults = { repo: 'qmx-acm-data/2026', clientId: '', theme: 'light' };
 function read(name, fallback) {
   try { return JSON.parse(fs.readFileSync(path.join(dir, name), 'utf8')); } catch { return fallback; }
@@ -27,7 +38,7 @@ function state(error) {
     records: matching ? (cache.records || []).filter(r => r.kind === 'document').map(r => ({ ...r, repo: s.repo })) : [],
     issues: matching ? (cache.issues || (cache.records || []).filter(r => r.kind === 'issue')).map(r => ({ ...r, repo: s.repo })) : [],
     lastSync: matching ? cache.lastSync : null,
-    settings: s, account, permissions: permissions?.repo === s.repo ? permissions : null,
+    settings: s, account, appVersion: APP_VERSION, update: updater?.getState(), permissions: permissions?.repo === s.repo ? permissions : null,
     local: local(), error: error || null
   };
 }
@@ -116,6 +127,7 @@ async function writeOperation(fn) {
 function handle(name, fn) {
   ipcMain.handle(name, async (event, ...args) => {
     if (event.sender !== win.webContents) throw new Error('非法调用');
+    if (!['bootstrap', 'checkForUpdates', 'downloadUpdate', 'installUpdate', 'updateLocal', 'exportLocal'].includes(name)) ensureIdle();
     return fn(...args);
   });
 }
@@ -139,6 +151,34 @@ function rememberDocument(result, removed = false) {
 }
 function setup() {
   handle('bootstrap', () => state());
+  handle('checkForUpdates', async () => {
+    if (writeBusy || syncBusy || updateBusy || installing) throw new Error('请等待当前操作完成后检查更新');
+    updateBusy = true;
+    try { return await updater.check(); } finally { updateBusy = false; }
+  });
+  handle('downloadUpdate', async () => {
+    if (writeBusy || syncBusy || updateBusy || installing) throw new Error('请等待当前操作完成后下载更新');
+    updateBusy = true;
+    try { await updater.download(); return updater.getState(); } finally { updateBusy = false; }
+  });
+  handle('installUpdate', async () => {
+    if (writeBusy || syncBusy || updateBusy || installing) throw new Error('请等待当前操作完成后安装更新');
+    if (!app.isPackaged) throw new Error('源码运行模式不能覆盖升级，请使用安装版客户端');
+    updateBusy = true;
+    try {
+      const ready = await updater.verifyReady();
+      // No renderer-supplied executable or arguments are accepted.
+      await new Promise((resolve, reject) => {
+        const process = spawn(ready.path, [], { detached: true, stdio: 'ignore', windowsHide: false, env: { ...processEnvForInstaller() } });
+        process.once('error', reject);
+        process.once('spawn', () => { process.unref(); resolve(); });
+      });
+      installing = true;
+      setTimeout(() => app.quit(), 400);
+      return { installing: true };
+    } catch (error) { throw new Error(`启动升级失败：${error.message}。可重新尝试安装。`); }
+    finally { updateBusy = false; }
+  });
   handle('refreshAccount', async () => {
     if (!token) throw new Error('请先登录 GitHub');
     return writeOperation(() => refreshIdentity());
@@ -266,6 +306,13 @@ app.whenReady().then(() => {
     webPreferences: { preload: process.argv.includes('--preview') ? undefined : path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true } });
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   win.webContents.on('will-navigate', event => event.preventDefault());
+  updater = createUpdater({
+    currentVersion: APP_VERSION, downloadDir: path.join(dir, 'updates'),
+    onProgress: progress => { if (!win.isDestroyed()) win.webContents.send('update-progress', progress); }
+  });
+  win.on('close', event => {
+    if (updateBusy && !installing) event.preventDefault();
+  });
   setup(); win.loadFile(path.join(__dirname, '../ui/index.html'));
 });
 app.on('window-all-closed', () => { loginGeneration++; app.quit(); });

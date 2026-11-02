@@ -22,6 +22,9 @@
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(STORAGE) || 'null'); } catch (_) { /* Storage may be disabled. */ }
   const s = { view: 'public', records: [], local: { records: [], favorites: [], mastery: {}, draft: {} }, settings: {}, account: null, permissions: {}, issues: [], editor: null, lastSync: null, error: '', selected: null, comments: new Map(), loading: true, busy: false };
+  s.appVersion = ''; s.update = null;
+  let updateRunning = false;
+  let updateReady = false;
   let toastTimer;
   let draftTimer;
   let commentRequest = 0;
@@ -52,6 +55,9 @@
   async function persistLocal() { if (demo) { writeDemo(); return; } const snapshot = structuredClone(s.local); const write = localWrite.catch(() => {}).then(() => call('updateLocal', snapshot)); localWrite = write; await write; }
   function applyPayload(payload) {
     if (!payload || typeof payload !== 'object') throw new Error('客户端未返回有效数据');
+    if (typeof payload.appVersion === 'string') s.appVersion = payload.appVersion;
+    if (payload.update && typeof payload.update === 'object') s.update = { ...payload.update };
+    renderUpdate();
     s.records = (Array.isArray(payload.records) ? payload.records : []).filter(record => record.kind === 'document');
     s.issues = (Array.isArray(payload.issues) ? payload.issues : []).filter(record => record.kind === 'issue');
     s.permissions = payload.permissions || {};
@@ -189,12 +195,20 @@
   }
   function clearFilters() { $('#search-input').value = ''; ['#platform-filter', '#tag-filter', '#state-filter'].forEach(selector => { $(selector).value = ''; }); render(); }
   async function openExternal(url) { try { const parsed = new URL(String(url)); if (!['https:', 'http:'].includes(parsed.protocol)) throw new Error('仅支持 http 或 https 题目链接'); if (demo) window.open(parsed.href, '_blank', 'noopener,noreferrer'); else await call('openExternal', parsed.href); } catch (error) { toast(errorMessage(error)); } }
+  let updateLockedControls = null;
   function setBusy(value) {
+    if (!value && updateLockedControls) { updateLockedControls.forEach(([node, disabled]) => { node.disabled = disabled; }); updateLockedControls = null; }
     s.busy = value;
     ['sync-button', 'account-button', 'settings-button', 'theme-select', 'submit-button', 'save-local-button', 'publish-button', 'account-login', 'account-logout', 'account-switch', 'account-refresh'].forEach(id => { const node = document.getElementById(id); if (node) node.disabled = value; });
     $$('[data-close], #settings-form input, #settings-form select, #settings-form button').forEach(node => { node.disabled = value; });
     $$('#submit-form input, #submit-form textarea').forEach(node => { node.readOnly = value; });
     if (!value && s.editor?.record?.kind === 'document') $('#save-local-button').disabled = true;
+    if (value && updateRunning) {
+      const controls = $$('button, input, select, textarea');
+      if (!updateLockedControls) updateLockedControls = controls.map(node => [node, node.disabled]);
+      controls.forEach(node => { node.disabled = true; });
+    }
+    $('#check-update-button').disabled = value;
   }
   function formDraft() { const data = new FormData($('#submit-form')); return Object.fromEntries(['url', 'title', 'pid', 'platform', 'tags', 'reason', 'body', 'trick', 'rating', 'difficulty'].map(name => [name, String(data.get(name) || '')])); }
   function fillForm(draft) { const form = $('#submit-form'); form.reset(); Object.entries(draft || {}).forEach(([name, value]) => { const input = form.elements.namedItem(name); if (input) input.value = String(value ?? ''); }); }
@@ -294,7 +308,7 @@
     catch (error) { s.error = errorMessage(error); updateStatus(); toast(s.error); } finally { setBusy(false); }
   }
   $$('.nav-item').forEach(node => node.addEventListener('click', () => { s.view = node.dataset.view; clearFilters(); }));
-  $('.brand').addEventListener('click', event => { event.preventDefault(); s.view = 'public'; clearFilters(); });
+  $('.brand').addEventListener('click', event => { event.preventDefault(); if (s.busy) return; s.view = 'public'; clearFilters(); });
   $('#search-input').addEventListener('input', render); ['#platform-filter', '#tag-filter', '#state-filter'].forEach(selector => $(selector).addEventListener('change', render)); $('#clear-filters').addEventListener('click', clearFilters);
   $('#submit-button').addEventListener('click', () => openSubmit()); $('#sync-button').addEventListener('click', sync);
   $$('dialog').forEach(dialog => dialog.addEventListener('cancel', event => { if (s.busy) event.preventDefault(); }));
@@ -305,7 +319,69 @@
   $('#theme-select').addEventListener('change', async event => { const previous = { ...s.settings }; s.settings.theme = event.target.value; applyTheme(s.settings.theme); try { if (demo) writeDemo(); else await call('saveSettings', { ...s.settings }); } catch (error) { s.settings = previous; toast(`当前风格已预览，设置未保存：${errorMessage(error)}`); } });
   $('#settings-button').addEventListener('click', () => { if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; } const form = $('#settings-form'); form.elements.theme.value = document.body.dataset.theme; form.elements.repo.value = s.settings.repo || 'qmx-acm-data/2026'; form.elements.clientId.value = s.settings.clientId || ''; form.elements.displayName.value = s.settings.displayName || ''; form.elements.autoSync.checked = s.settings.autoSync !== false; $('#settings-dialog').showModal(); });
   $('#settings-form').addEventListener('submit', async event => { event.preventDefault(); const form = event.currentTarget; const settings = { ...s.settings, theme: form.elements.theme.value, repo: form.elements.repo.value.trim() || 'qmx-acm-data/2026', clientId: form.elements.clientId.value.trim(), displayName: form.elements.displayName.value.trim(), autoSync: form.elements.autoSync.checked }; const control = $('button[type="submit"]', form); if (s.busy) return; setBusy(true); try { if (!demo) { await call('saveSettings', settings); applyPayload(await call('bootstrap')); } else s.settings = settings; applyTheme(settings.theme); writeDemo(); $('#settings-dialog').close(); refreshFilters(); render(); toast('设置已保存'); } catch (error) { toast(errorMessage(error)); } finally { setBusy(false); } });
+  function renderUpdate() {
+    $('#app-version').textContent = s.appVersion || (demo ? '浏览器预览（非桌面客户端）' : '尚未获取');
+    const update = s.update || {};
+    const latest = update.latestVersion ? ` ${update.latestVersion}` : '';
+    const labels = { checking: '正在检查更新…', available: `发现新版本${latest}，即将自动下载。`, downloading: `正在下载新版本${latest}…`, ready: `新版本${latest}已校验，正在准备启动安装。`, installing: '安装程序已启动，请完成安装后重新打开应用。', error: '更新失败，请点击检查更新重试。' };
+    let text = labels[update.phase] || (update.available === false && !!update.message ? `当前已是最新版本${latest}。` : '可随时检查更新，无需登录 GitHub。');
+    if (update.phase === 'checking' || update.phase === 'available' || update.phase === 'downloading' || update.phase === 'ready' || update.phase === 'installing' || update.phase === 'error' || update.available === false) {
+      if (update.message) text += ` ${update.message}`;
+    }
+    const progress = $('#update-progress');
+    progress.hidden = update.phase !== 'downloading';
+    const percent = typeof update.percent === 'number' && Number.isFinite(update.percent) ? update.percent : typeof update.total === 'number' && update.total > 0 && Number.isFinite(update.downloaded) ? update.downloaded / update.total * 100 : null;
+    if (percent === null) progress.removeAttribute('value'); else { progress.value = Math.min(100, Math.max(0, percent)); if (!progress.hidden) text += ` ${Math.round(progress.value)}%`; }
+    if (!progress.hidden && Number.isFinite(update.downloaded) && Number.isFinite(update.total) && update.total > 0) text += `（${(update.downloaded / 1048576).toFixed(1)} / ${(update.total / 1048576).toFixed(1)} MB）`;
+    $('#update-status').textContent = text;
+    $('#update-status').classList.toggle('update-error', update.phase === 'error');
+    $('#check-update-button').textContent = updateReady && update.phase === 'error' ? '重试安装' : '检查更新';
+  }
+  function receiveUpdate(update) {
+    if (!update || typeof update !== 'object') return;
+    // Clear stale progress and errors when a fresh check starts.
+    s.update = update.phase === 'checking' ? { ...update } : { ...s.update, ...update };
+    renderUpdate();
+  }
+  async function saveBeforeUpdate() {
+    clearTimeout(draftTimer);
+    try { await localWrite; } catch (error) { localWrite = Promise.resolve(); throw new Error(`本地数据尚未保存，更新已停止：${errorMessage(error)}`); }
+    try { if (s.editor) await saveDraft(true); else await persistLocal(); }
+    catch (error) { localWrite = Promise.resolve(); throw error; }
+  }
+  async function checkForUpdates() {
+    if (s.busy || updateRunning) return;
+    if (demo) { receiveUpdate({ phase: 'error', message: '浏览器预览不连接更新服务，请在桌面客户端检查更新。' }); return; }
+    updateRunning = true; setBusy(true);
+    let installing = false;
+    try {
+      if (!updateReady) {
+        receiveUpdate({ phase: 'checking' });
+        const checked = await call('checkForUpdates');
+        if (!checked || checked.phase === 'error') throw new Error(checked?.message || '检查更新失败');
+        receiveUpdate(checked);
+        if (!checked.available) return;
+        await saveBeforeUpdate();
+        receiveUpdate({ phase: 'downloading', percent: 0, downloaded: 0, total: 0 });
+        const downloaded = await call('downloadUpdate');
+        if (downloaded?.phase !== 'ready') throw new Error(downloaded?.message || '下载未完成或安装包未通过校验');
+        updateReady = true; receiveUpdate(downloaded);
+      }
+      await saveBeforeUpdate();
+      const result = await call('installUpdate');
+      if (result?.installing !== true) throw new Error(result?.message || '安装程序未能启动');
+      installing = true; receiveUpdate({ phase: 'installing' });
+    } catch (error) { receiveUpdate({ phase: 'error', message: errorMessage(error) }); }
+    finally { if (!installing) { setBusy(false); updateRunning = false; } }
+  }
+  if (typeof bridge?.onUpdateProgress === 'function') bridge.onUpdateProgress(update => {
+    // Backend errors may invalidate the verified package; require a fresh check/download.
+    if (update?.phase === 'error') updateReady = false;
+    receiveUpdate(update);
+  });
+  $('#check-update-button').addEventListener('click', checkForUpdates);
   function renderAccount() {
+    renderUpdate();
     const box = $('#account-details'); box.replaceChildren();
     for (const [label, value] of [['姓名', s.account?.name || '未设置'], ['GitHub 登录名', s.account?.login || '未登录'], ['GitHub ID', s.account?.id ?? '未登录'], ['当前仓库', repo() || '未配置'], ['权限', s.account ? s.permissions.admin ? '管理员 · 可直接维护自己的题解' : s.permissions.push ? '可推送 · 可直接维护自己的题解' : '只读 · 可使用本地记录' : '未登录 · 仅本地编辑']]) append(box, element('dt', '', label), element('dd', '', value));
     $('#account-login').hidden = !!s.account; ['account-switch', 'account-logout', 'account-refresh'].forEach(id => { document.getElementById(id).hidden = !s.account; });

@@ -2,7 +2,7 @@
 
 面向 ACM 集训队的 Windows 本地错题与算法资料客户端，无需自建服务器、数据库或域名。默认资料来源：[qmx-acm-data/2026](https://github.com/qmx-acm-data/2026)。
 
-**[下载 Windows x64 安装包 v0.1.0](https://github.com/qmx-acm-data/qmx-acm-notebook/releases/download/v0.1.0/QMX-Notebook-Setup-0.1.0.exe)** · [所有版本](https://github.com/qmx-acm-data/qmx-acm-notebook/releases)
+**[下载 Windows x64 安装包 v0.3.0](https://github.com/qmx-acm-data/qmx-acm-notebook/releases/download/v0.3.0/QMX-Notebook-Setup-0.3.0.exe)** · [所有版本](https://github.com/qmx-acm-data/qmx-acm-notebook/releases)
 
 下载后运行安装程序。首次配置、登录、数据备份与已知限制见 [使用指南](docs/USAGE.md)。当前为预览版，客户端 OAuth 在线投稿尚未完成验收。
 
@@ -13,7 +13,8 @@
 - 正式题库展示 Markdown 题解与算法资料，Issues 在独立交流区展示。
 - 管理标记为“仅本地”的题解、草稿、收藏与复习状态，本地编辑删除不影响 GitHub。
 - GitHub 登录提供账号身份；直接上传题解文件，在客户端修改、删除本人已上传题解，不创建重复 Issue 或 PR。
-- 源码版本 0.2.0；下方已发布的 v0.1.0 安装包不包含本次新功能，新版安装包请查看 Releases。
+- 账户界面检查更新，发现公开正式新版后自动下载、校验并启动安装升级，保留个人数据。
+- 旧版首次需手动安装 0.3.0，之后可通过客户端检查更新。
 - 展示 Markdown、公式、代码与平台原生难度，提供三种界面风格。
 
 ## 文档

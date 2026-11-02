@@ -4,6 +4,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
+const { EventEmitter } = require('node:events');
 
 // Run the real entry point without loading Electron, touching userData, or using a network.
 // Only app readiness is manually advanced; all behavior goes through registered IPC handlers.
@@ -18,7 +19,7 @@ const personal = (records = []) => ({ records, favorites: ['issue:7'], mastery: 
 const clone = value => JSON.parse(JSON.stringify(value));
 function deferred() { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; }
 
-function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {} } = {}) {
+function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {}, updaterBackend = {}, isPackaged = true } = {}) {
   const root = path.resolve('mock-user-data');
   const disk = new Map();
   const writes = [];
@@ -31,14 +32,27 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     renameSync(from, to) { if (!disk.has(from)) throw new Error('ENOENT'); disk.set(to, disk.get(from)); disk.delete(from); },
     mkdirSync() {},
   };
-  const handlers = new Map(), calls = [], windows = [];
-  let ready;
-  class BrowserWindow {
-    constructor(options) { this.options = options; this.webContents = { setWindowOpenHandler(fn) { this.windowOpen = fn; }, on() {}, send() {} }; windows.push(this); }
+  const handlers = new Map(), calls = [], windows = [], updaterCalls = [], spawnCalls = [], timers = new Map(), appEvents = new EventEmitter();
+  let ready, updaterOptions, quitCalls = 0, now = 0, timerId = 0;
+  let updateState = { phase: 'idle', currentVersion: '0.3.0', available: false };
+  const installerPath = path.join(root, 'updates', 'private-cache', 'QMX-Notebook-Setup-0.4.0.exe');
+  const setUpdateState = patch => { updateState = { ...updateState, ...patch }; updaterOptions.onProgress(clone(updateState)); return clone(updateState); };
+  const updater = {};
+  for (const method of ['check', 'download', 'verifyReady', 'getState']) updater[method] = (...args) => {
+    updaterCalls.push({ method, args: clone(args) });
+    if (updaterBackend[method]) return updaterBackend[method](...args, { setState: setUpdateState, installerPath });
+    if (method === 'getState') return clone(updateState);
+    if (method === 'check') return Promise.resolve(setUpdateState({ phase: 'available', available: true, version: '0.4.0' }));
+    setUpdateState({ phase: 'ready', available: true, version: '0.4.0' });
+    return Promise.resolve({ version: '0.4.0', path: installerPath });
+  };
+  class BrowserWindow extends EventEmitter {
+    constructor(options) { super(); this.options = options; this.destroyed = false; this.sent = []; this.webContents = { setWindowOpenHandler(fn) { this.windowOpen = fn; }, on() {}, send: (...args) => this.sent.push(clone(args)) }; windows.push(this); }
+    isDestroyed() { return this.destroyed; }
     loadFile() {}
   }
   const electron = {
-    app: { disableHardwareAcceleration() {}, whenReady: () => ({ then(callback) { ready = callback; } }), getPath: () => root, on() {}, quit() {} },
+    app: { isPackaged, disableHardwareAcceleration() {}, whenReady: () => ({ then(callback) { ready = callback; } }), getPath: () => root, on: (...args) => appEvents.on(...args), quit() { quitCalls++; } },
     BrowserWindow,
     ipcMain: { handle(name, callback) { assert.ok(!handlers.has(name)); handlers.set(name, callback); } },
     shell: { async openExternal() {} },
@@ -58,13 +72,25 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       return [];
     };
   }
-  const context = vm.createContext({ Buffer, URL, AbortSignal, console, process: { argv: [] }, setTimeout, clearTimeout,
+  const context = vm.createContext({ Buffer, URL, AbortSignal, console,
+    process: { argv: [], env: { ELECTRON_RUN_AS_NODE: '1', QMX_TEST_ENV: 'preserved' } },
+    setTimeout(callback, delay) { const id = ++timerId; timers.set(id, { callback, at: now + delay }); return id; },
+    clearTimeout(id) { timers.delete(id); },
     fetch: async () => { throw new Error('NETWORK FORBIDDEN IN MAIN TESTS'); },
     require(name) {
       if (name === 'electron') return electron;
       if (name === 'node:fs') return fakeFs;
       if (name === 'node:path') return path;
       if (name === 'node:crypto') return { randomUUID: () => '00000000-0000-4000-8000-000000000001' };
+      if (name === '../package.json') return { version: '0.3.0' };
+      if (name === './updater.cjs') return { createUpdater(options) { updaterOptions = options; return updater; } };
+      if (name === 'node:child_process') return { spawn(file, args, options) {
+        const child = new EventEmitter();
+        child.unrefCalls = 0;
+        child.unref = () => { child.unrefCalls++; };
+        spawnCalls.push({ file, args: clone(args), options: clone(options), child });
+        return child;
+      } };
       if (name === './github.cjs') return { GitHub: FakeGitHub, repoParts(repo) { if (!/^[\w.-]+\/[\w.-]+$/.test(repo || '')) throw new Error('Invalid repo'); return repo.split('/'); } };
       throw new Error(`Unexpected dependency ${name}`);
     }, __dirname: path.dirname(MAIN),
@@ -74,7 +100,18 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
   assert.equal(typeof ready, 'function');
   ready();
   const invoke = async (name, ...args) => clone(await handlers.get(name)({ sender: windows[0].webContents }, ...clone(args)) ?? null);
-  return { invoke, calls, writes, handlers, windows, stored: name => JSON.parse(disk.get(path.join(root, name)) || 'null') };
+  const advanceTimers = milliseconds => {
+    const end = now + milliseconds;
+    while (true) {
+      const next = [...timers].filter(([, timer]) => timer.at <= end).sort((a, b) => a[1].at - b[1].at)[0];
+      if (!next) break;
+      now = next[1].at; timers.delete(next[0]); next[1].callback();
+    }
+    now = end;
+  };
+  return { invoke, calls, writes, handlers, windows, updaterCalls, spawnCalls, installerPath, advanceTimers,
+    get updaterOptions() { return updaterOptions; }, get quitCalls() { return quitCalls; },
+    stored: name => JSON.parse(disk.get(path.join(root, name)) || 'null') };
 }
 
 test('bootstrap separates a pre-sync mixed legacy cache and scopes it to its repository', async () => {
@@ -264,6 +301,108 @@ test('sync never supplies cached blobs from a different repository to the backen
   assert.deepEqual(h.calls[0].args, [{}]); assert.equal(h.calls[0].options.repo, REPO);
   const state = await h.invoke('bootstrap'); assert.deepEqual(state.records, []); assert.deepEqual(state.issues, []);
   assert.equal(h.stored('cache.json').repo, REPO);
+});
+
+test('updater initializes with the packaged version and private cache and allows signed-out checks and downloads', async () => {
+  const h = harness({ account: null });
+  assert.equal(h.updaterOptions.currentVersion, '0.3.0');
+  assert.equal(h.updaterOptions.downloadDir, path.resolve('mock-user-data', 'updates'));
+  const initial = await h.invoke('bootstrap');
+  assert.equal(initial.account, null); assert.equal(initial.appVersion, '0.3.0'); assert.equal(initial.update.phase, 'idle');
+  assert.equal((await h.invoke('checkForUpdates')).phase, 'available');
+  const downloaded = await h.invoke('downloadUpdate');
+  assert.equal(downloaded.phase, 'ready');
+  assert.equal(Object.hasOwn(downloaded, 'path'), false);
+  assert.ok(!JSON.stringify(downloaded).includes(h.installerPath));
+  assert.deepEqual(h.updaterCalls.filter(call => call.method !== 'getState'), [{ method: 'check', args: [] }, { method: 'download', args: [] }]);
+  assert.equal(h.calls.length, 0); assert.equal(h.spawnCalls.length, 0); assert.equal(h.quitCalls, 0);
+});
+
+test('installation ignores renderer paths, reverifies its internal artifact, sanitizes environment and quits after spawn', async () => {
+  const h = harness({ account: null });
+  await h.invoke('downloadUpdate');
+  const install = h.invoke('installUpdate', { path: 'C:\\attacker.exe', args: ['/malicious'] });
+  await new Promise(setImmediate);
+  assert.equal(h.spawnCalls.length, 1);
+  const launch = h.spawnCalls[0];
+  assert.equal(launch.file, h.installerPath); assert.deepEqual(launch.args, []);
+  assert.deepEqual(launch.options, { detached: true, stdio: 'ignore', windowsHide: false, env: { QMX_TEST_ENV: 'preserved' } });
+  assert.deepEqual(h.updaterCalls.filter(call => call.method === 'verifyReady'), [{ method: 'verifyReady', args: [] }]);
+  h.advanceTimers(1000); assert.equal(h.quitCalls, 0, 'must not quit before the child confirms spawn');
+  launch.child.emit('spawn');
+  assert.deepEqual(await install, { installing: true });
+  assert.equal(launch.child.unrefCalls, 1);
+  h.advanceTimers(399); assert.equal(h.quitCalls, 0);
+  h.advanceTimers(1); assert.equal(h.quitCalls, 1);
+});
+
+test('install reverification detects tampering without spawning or quitting and releases its lock', async () => {
+  const h = harness({ updaterBackend: { verifyReady({ setState }) { setState({ phase: 'error', message: 'Installer SHA-256 verification failed' }); throw new Error('Installer SHA-256 verification failed'); } } });
+  await h.invoke('downloadUpdate');
+  await assert.rejects(h.invoke('installUpdate', { path: h.installerPath }), /SHA-256/);
+  assert.equal((await h.invoke('bootstrap')).update.phase, 'error');
+  assert.equal(h.updaterCalls.filter(call => call.method === 'verifyReady').length, 1);
+  h.advanceTimers(10000); assert.equal(h.spawnCalls.length, 0); assert.equal(h.quitCalls, 0);
+  await h.invoke('saveSettings', { theme: 'dark' });
+  assert.equal(h.stored('settings.json').theme, 'dark');
+});
+
+test('source-mode installation is rejected before verification or process launch', async () => {
+  const h = harness({ isPackaged: false });
+  await h.invoke('downloadUpdate');
+  await assert.rejects(h.invoke('installUpdate'), /源码|安装版/);
+  assert.equal(h.updaterCalls.filter(call => call.method === 'verifyReady').length, 0);
+  h.advanceTimers(10000); assert.equal(h.spawnCalls.length, 0); assert.equal(h.quitCalls, 0);
+});
+
+test('spawn errors are surfaced, retain a retryable verified update and allow a later successful install', async () => {
+  const h = harness();
+  await h.invoke('downloadUpdate');
+  const failed = h.invoke('installUpdate');
+  await new Promise(setImmediate);
+  const rejected = assert.rejects(failed, /启动升级失败.*launch denied.*重新尝试/);
+  h.spawnCalls[0].child.emit('error', new Error('launch denied'));
+  await rejected;
+  assert.equal((await h.invoke('bootstrap')).update.phase, 'ready', 'verified package remains available for install retry');
+  h.advanceTimers(10000); assert.equal(h.quitCalls, 0); assert.equal(h.spawnCalls[0].child.unrefCalls, 0);
+  const retry = h.invoke('installUpdate');
+  await new Promise(setImmediate);
+  assert.equal(h.spawnCalls.length, 2);
+  assert.equal(h.updaterCalls.filter(call => call.method === 'verifyReady').length, 2, 'each retry must reverify');
+  h.spawnCalls[1].child.emit('spawn');
+  assert.deepEqual(await retry, { installing: true });
+  h.advanceTimers(400); assert.equal(h.quitCalls, 1);
+});
+
+test('download blocks conflicting operations and window close while local edits persist between update stages', async () => {
+  const pending = deferred(), data = personal([localRecord()]);
+  const h = harness({ files: { 'local.json': data }, updaterBackend: { download: () => pending.promise } });
+  await h.invoke('checkForUpdates');
+  await h.invoke('updateLocal', { ...data, draft: { body: 'after check' } });
+  assert.deepEqual(h.stored('local.json').draft, { body: 'after check' });
+  const downloading = h.invoke('downloadUpdate');
+  for (const [name, payload] of [['saveDocument', {}], ['submit', {}], ['propose', {}], ['deleteDocument', {}], ['comment', {}], ['sync'], ['refreshAccount'], ['saveSettings', { theme: 'dark' }], ['logout'], ['login'], ['checkForUpdates'], ['downloadUpdate'], ['installUpdate']]) {
+    await assert.rejects(h.invoke(name, payload), /更新|等待/);
+  }
+  let prevented = 0;
+  h.windows[0].emit('close', { preventDefault() { prevented++; } });
+  assert.equal(prevented, 1); assert.equal(h.quitCalls, 0); assert.equal(h.calls.length, 0);
+  pending.resolve({ path: h.installerPath, version: '0.4.0' });
+  const result = await downloading;
+  assert.equal(Object.hasOwn(result, 'path'), false);
+  await h.invoke('updateLocal', { ...data, draft: { body: 'after download' } });
+  assert.deepEqual(h.stored('local.json').draft, { body: 'after download' });
+  h.windows[0].emit('close', { preventDefault() { prevented++; } });
+  assert.equal(prevented, 1, 'normal close resumes once downloading settles');
+});
+
+test('updater progress is delivered only while the application window exists', () => {
+  const h = harness();
+  h.updaterOptions.onProgress({ phase: 'downloading', percent: 25 });
+  assert.deepEqual(h.windows[0].sent, [['update-progress', { phase: 'downloading', percent: 25 }]]);
+  h.windows[0].destroyed = true;
+  h.updaterOptions.onProgress({ phase: 'ready', percent: 100 });
+  assert.equal(h.windows[0].sent.length, 1);
 });
 
 test('IPC handlers reject senders other than the application window', async () => {
