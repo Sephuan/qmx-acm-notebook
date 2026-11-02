@@ -1,82 +1,81 @@
 # 使用指南
 
-[返回首页](../README.md) · [维护与发布](RELEASING.md)
+[项目首页](../README.md) · [维护与发布](RELEASING.md)
 
 ## 安装和启动
 
-从[客户端 Releases](https://github.com/qmx-acm-data/qmx-acm-notebook/releases) 的 **Assets** 下载适合的成品：
+在[客户端 Releases](https://github.com/qmx-acm-data/qmx-acm-notebook/releases)下载对应版本的 `QMX-Notebook-Setup-<version>.exe`，运行后按提示安装。安装无需管理员权限，会创建桌面和开始菜单快捷方式，卸载保留个人数据。浏览器下载本身不会创建快捷方式。
 
-- **安装版**：运行 `QMX-Notebook-Setup-<version>.exe`。这是 Windows 当前用户的 NSIS 安装程序，无需管理员权限，会创建桌面和开始菜单快捷方式，并在安装完成时提供启动选项。仅在浏览器下载文件不会创建快捷方式。卸载会保留个人数据。
-- **便携版**：仅在该版本提供时下载 `QMX-Notebook-Windows-x64.zip`，解压后运行「启动.cmd」或 `QMX-Notebook.exe`。保留整个目录，不能只复制 exe；便携版不自动创建快捷方式。
-
-GitHub 自动附带的 **Source code (zip)** / **Source code (tar.gz)** 是源码归档，不是安装包或可直接运行的便携包。当前未购买代码签名证书，Windows 可能显示未知发布者提示，请核对下载来源。
-
-若便携版普通启动失败，可尝试「兼容启动.cmd」。普通脚本使用 `--disable-gpu`；兼容脚本另加 `--no-sandbox`，会关闭 Chromium 进程沙箱、降低进程隔离能力。当前验证机器曾出现 Electron 原生沙箱启动失败，兼容启动已验证可运行；页面仍启用 `contextIsolation`、关闭 `nodeIntegration` 并清洗 Markdown。
+便携版需解压整个目录，运行「启动.cmd」，不能只复制 exe。普通启动失败时可试「兼容启动.cmd」；兼容模式另加 `--no-sandbox`，会降低 Chromium 进程隔离能力。当前验证机器曾需要兼容模式。程序未签名，Windows 可能提示未知发布者，请核对来源。GitHub 的 Source code 压缩包是源码，不是安装包。
 
 ## 首次设置与 GitHub 登录
 
-无需登录即可保存本地记录、读取公开资料。设置中的资料仓库默认是 `qmx-acm-data/2026`，与客户端下载仓库不同。
+未登录也可查看公开资料、保存和编辑未绑定账号的本地题解。默认资料库是 `qmx-acm-data/2026`，程序源码库是 `qmx-acm-data/qmx-acm-notebook`。
 
-需要投稿时，向队伍负责人取得已启用 Device Flow 的 OAuth App **Client ID**，在右上角设置中填写；它是公开应用标识，不是 Client Secret 或个人 Token。应用注册与归属由[维护者管理](RELEASING.md#归属与许可证)。
+负责人先注册 GitHub OAuth App 并启用 Device Flow，客户端设置中填写公开的 Client ID。点击左下角账号入口，选择登录，在 [GitHub 官方设备授权页面](https://github.com/login/device)输入客户端显示的验证码。无需另注册客户端账号，不要填写 GitHub 密码、Client Secret 或个人 Token。
 
-点击左下角登录按钮，在浏览器打开的 [GitHub 设备授权页](https://github.com/login/device)输入客户端显示的验证码并确认。登录后可提交错题 Issue、发表评论，或把正式题解提交到本人 Fork，再向资料仓库发起 PR。
+账号页显示昵称、用户名、唯一用户 ID 和当前资料库权限，可刷新权限、退出及切换账号。昵称只用于展示，归属按唯一用户 ID 判断，改 GitHub 用户名不会转移题解归属。头像由主进程从 GitHub 获取后以本地数据展示。
 
-OAuth 请求 `public_repo` 权限，涉及该用户有权限操作的公开仓库，不能限定为这一个资料仓库。组织若限制第三方 OAuth 应用，需要组织负责人批准。不要向其他人提供个人 Token 或 Client Secret。
+队员需要资料库写入权限；团队约定可分配 Admin，但 Write 也足以管理 Markdown 文件。登录授权采用 `public_repo`，权限涉及用户可操作的公开仓库，不能仅限一个仓库。组织 OAuth 策略和默认分支保护也可能限制写入。没有权限时会提示联系管理员，不会自动改走 Issue 或 PR。
 
-## 本地记录与同步
+## 本地与 GitHub 题解操作
 
-「我的错题」独立展示本机私人记录和本人提交的共享记录；本地记录、草稿、收藏和复习状态不会自动公开。只有明确点击公开提交、评论或题解提案操作时才写入 GitHub；公共仓库的 Issue、评论和 PR 对所有人公开。
+| 记录 | 保存与修改 | 删除 |
+| --- | --- | --- |
+| 仅本地 | 只保存当前 Windows 用户的数据，不请求 GitHub | 确认后只移除本机记录 |
+| 已上传 | 直接创建或更新资料库中的同一个 Markdown 文件 | 确认仓库和路径后删除 GitHub 当前文件 |
+| Issues 交流 | 独立阅读及发表评论 | 不作为题解文件的删除入口 |
 
-点击同步获取资料仓库 `problems/`、`algorithms/` 下的 Markdown 正式资料及 Issues。内容以实际同步结果为准。这不是逐字实时协作，其他设备需要同步后才能看到公共变化；私人记录不随公共同步上传。
+新建题解填写题目字段和完整 Markdown 正文，选择仅本地保存或上传。上传自动记录真实登录用户 ID，客户端只给本人题解提供在线编辑、删除入口。删除文件会保留 Git 提交历史，并非抹除历史。
 
-客户端按文件 SHA 缓存正文并分页读取。匿名 GitHub API 常见额度为每 IP 每小时 60 次，登录后通常为每用户每小时 5000 次，受 GitHub 当前政策及其他应用共享用量影响。避免频繁点击同步，免费平台政策不由本项目保证。
+本地记录在登录状态创建时绑定当前用户 ID；退出或切换账号不会把它转移给新账号。未登录创建的记录初次上传时需确认绑定当前账号。同一 Windows 用户目录中的本地数据不是账号间的安全隔离空间；共享电脑建议使用不同 Windows 账号。
 
-### 正式 Markdown 元数据
+编辑线上文件会保持原路径并携带读取时的 SHA 版本号。远端已变化时拒绝覆盖，先复制保留当前编辑内容，再同步重新打开。网络超时可能已经写入成功，先同步确认；稳定的记录 ID 可让同一内容重试识别已存在文件，避免重复创建。失败时不会关闭编辑窗口。
 
-题解使用 YAML front matter，兼容 `pid`、`title`、`platform`、`tags`、`author`、`date`，另支持可选 `rating` 和 `difficulty`：
+旧版只有作者昵称的文件可以阅读，但不能据此自动认领。需要维护者核实后补充 `author_id`；不把管理员身份自动当成原作者。旧版 PR 投稿副本显示为已投稿副本，不自动转成新投稿，请先处理原 PR。
+
+## 同步范围
+
+- **正式题库**：默认分支 `problems/`、`algorithms/` 下的 Markdown 文件。这里的“正式”表示已经写入资料目录，不表示经过额外审核；新版直接提交不创建 Issue、Fork 或 PR。
+- **Issues 交流**：资料库的所有普通 Issues，包括未审核、打开和已关闭的记录；PR 不混入其中，评论按需加载。
+- **我的题解**：本人已上传文件以及未绑定或归属当前账号的本地题解。其他账号的绑定本地记录不会转移归属。
+- **不抓取**：未合并 PR 的题解、其他分支和 Fork 文件，以及其他目录内的文件。
+
+同步会移除远端已删除题解的缓存，不会用旧版线上本地副本重新补回。私人记录、草稿、收藏、复习状态不随同步上传；同步不是逐字实时协作，其他设备需再次同步。
+
+匿名 API 常见额度为每 IP 每小时 60 次，登录后通常为每用户每小时 5000 次，受 GitHub 政策及其他应用共享用量影响。正文按 SHA 缓存并分页读取，避免频繁同步。
+
+## Markdown 格式
+
+新版题解保留兼容字段，并自动添加身份与记录 ID：
 
 ```yaml
 ---
+schema: 2
 pid: CF1A
 title: Theatre Square
 platform: CF
-rating: 1000
-difficulty: ''
-tags: [数学, 实现]
+tags: [数学]
 author: github-login
-date: 2026-11-01
+author_id: 123456
+client_id: 12345678-1234-4234-8234-123456789abc
+problem_url: https://codeforces.com/problemset/problem/1/A
+updated_at: '2026-11-02T12:00:00.000Z'
 ---
 ```
 
-CF 使用 rating 分数与色阶，其他平台显示原生 difficulty 文字，不跨平台换算。难度须由提交者填写或资料已有字段提供，当前不会自动抓取平台 rating。
-
-快速错题 Issue 的正文中包含隐藏的 `qmx-record` JSON 元数据，例如：
-
-```html
-<!-- qmx-record {"schema":1,"pid":"CF1A","platform":"CF","tags":["数学"],"problemUrl":"https://codeforces.com/problemset/problem/1/A","cohort":"2026","rating":1000,"difficulty":""} -->
-```
-
-`schema: 1` 是 Issue 元数据格式版本，不是 Markdown front matter 的必填字段。保留该标记可让客户端识别题号、平台、标签和难度，无需普通队员设置 GitHub Labels 的权限。
+`author_id` 与作者由登录身份确定，不能通过编辑昵称冒充。旧文件的 `date`、其他自定义字段继续可读，更新会保留未知元数据。正文完整编辑，避免反复修改导致题解章节重复。CF rating 和其他平台 difficulty 保留平台原生标准，不自动抓取、不跨平台换算。
 
 ## 数据安全与备份
 
-数据通常保存在当前 Windows 用户的 `%APPDATA%\qmx-acm-notebook`，便携版也使用该用户数据目录：
+个人数据通常在 `%APPDATA%\qmx-acm-notebook`，便携版也使用这个目录：`local.json` 保存本地记录、草稿和复习状态，`cache.json` 保存公开缓存，`auth.json` 保存加密凭据。不要分享整个数据目录。设置可导出本地 JSON，尚未提供界面导入；恢复前退出客户端并备份原文件，由维护者协助恢复。
 
-| 文件 | 内容 |
-| --- | --- |
-| `local.json` | 私人记录、草稿、收藏及复习状态等本地内容 |
-| `cache.json` | 公共资料缓存 |
-| `auth.json` | 加密的登录信息 |
+GitHub 请求在 Electron 主进程执行，页面拿不到令牌。登录信息通过 Windows 凭据能力和 Electron `safeStorage` 加密；退出清除本机登录信息，远端撤销授权请访问 [GitHub 应用设置](https://github.com/settings/applications)。安装包不内置管理员凭据。
 
-不要分享整个用户数据目录。在设置中导出本地 JSON 备份，并妥善保存。首版没有界面导入功能；恢复时可由维护者协助恢复 `local.json`，操作前先退出客户端并备份原文件。卸载保留数据不等于已有独立备份。
+Markdown 经 DOMPurify 清洗；页面禁止网络连接和远端正文图片，外链只允许受支持平台及 GitHub 的 HTTPS 地址。客户端的本人操作限制是产品行为；拥有仓库 Admin/Write 的用户仍能在 GitHub 外部修改其他文件，客户端不改变 GitHub 权限模型。
 
-GitHub 网络请求由 Electron 主进程执行，渲染页面不接触令牌。令牌通过 Electron `safeStorage` 使用 Windows 用户凭据加密保存；退出登录会删除本机凭据。若要撤销远端授权，请前往 [GitHub 应用授权设置](https://github.com/settings/applications)。客户端不包含管理员凭据。
+## 验收与当前限制
 
-Markdown 经 DOMPurify 清洗，页面禁止网络连接和远端图片。外部链接由主进程校验，只允许 GitHub 及当前支持题目平台的 HTTPS 地址。
+新版支持直接文件增删改与账号身份归属；实际 OAuth 登录仍需负责人配置 Client ID 并进行真实队员账号验收。维护工具的 GitHub CLI 登录不能代替客户端 OAuth 验收。
 
-## 当前限制
-
-- v0.1.0 为预览版。已实现设备授权、Issue、评论和 Fork / PR 调用，但尚未用真实队员账号完成客户端 OAuth 登录与在线写入验收。浏览器曾发布一条明确标记的 CF1A 测试 Issue，这不代表客户端投稿已通过验收。
-- 公开提交依赖网络、仓库权限与组织 OAuth 策略。首次 Fork 可能尚未准备好，按提示稍后重试。写请求超时后先到 GitHub 检查是否已经成功，避免连续重试造成重复投稿。
-- 尚未实现已有记录的公共正文编辑、PR 后续跟进编辑、图片或其他附件上传、自动去重、私人记录多设备同步，以及本地备份的界面导入。
-- 直接打开源码中的 `ui/index.html` 只会进入带明确示例标记的界面演示，不是实际桌面客户端。
+暂不支持图片附件、私人数据跨设备同步、备份界面导入、自动认领旧版无用户 ID 文档。直接打开源码的页面是浏览器演示，演示不会向 GitHub 投稿。
