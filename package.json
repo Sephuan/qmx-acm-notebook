@@ -1,0 +1,31 @@
+{
+  "name": "qmx-acm-notebook",
+  "version": "0.1.0",
+  "description": "启明星 ACM 共享错题与算法资料客户端",
+  "main": "electron/main.cjs",
+  "private": true,
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@10.28.2",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test --test-isolation=none tests/*.test.cjs",
+    "check": "node --check electron/main.cjs && node --check electron/preload.cjs && node --check electron/github.cjs && node --check ui/app.js && node --check tools/package.cjs && node --check tools/installer.cjs",
+    "package": "node tools/package.cjs",
+    "dist": "node tools/package.cjs && node tools/installer.cjs"
+  },
+  "dependencies": {
+    "dompurify": "^3.2.7",
+    "katex": "^0.16.22",
+    "marked": "^15.0.12",
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "@electron/packager": "^19.0.1",
+    "electron": "^40.0.0",
+    "electron-builder": "^26.18.0",
+    "playwright": "^1.56.0"
+  }
+}

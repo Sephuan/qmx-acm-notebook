@@ -1,0 +1,33 @@
+# Installed dependencies and package-manager caches
+node_modules/
+.pnpm-store/
+
+# Generated desktop bundles and temporary staging
+release/
+.package-stage/
+.electron-zip/
+.test-profile/
+.installer-smoke/
+*.log
+
+# Local credentials and personal records
+.env
+.env.*
+!.env.example
+auth.json
+local.json
+cache.json
+settings.json
+
+# Local handoff artifacts; source lives in the repository, binaries in Releases
+/qmx-acm-notebook-source.zip
+/test-submission.md
+
+*.pem
+*.key
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
