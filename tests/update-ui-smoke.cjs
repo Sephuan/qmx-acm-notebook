@@ -65,7 +65,7 @@ const { chromium } = require('playwright');
     await page.evaluate(() => fixture.finishDownload());
     await page.waitForFunction(() => fixture.calls.includes('install'));
     assert.deepEqual(await calls(page), ['check', 'persist', 'download', 'persist', 'install']);
-    assert.match(await page.locator('#update-status').innerText(), /本地记录已备份.*原位置升级/);
+    assert.match(await page.locator('#update-status').innerText(), /本地记录已备份.*替换程序文件/);
     assert(await page.locator('#check-update-button').isDisabled(), 'keep controls locked while main exits');
     await page.close();
 

@@ -6,7 +6,7 @@ const { GitHub, repoParts } = require('./github.cjs');
 const { randomUUID } = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { createUpdater } = require('./updater.cjs');
-const { prepareUpgrade } = require('./upgrade.cjs');
+const { prepareFileUpgrade, recoverFileUpgrade } = require('./file-upgrade.cjs');
 const APP_VERSION = require('../package.json').version;
 app.disableHardwareAcceleration();
 let win, dir, token = '', account = null, permissions = null;
@@ -174,10 +174,11 @@ function setup() {
     updateBusy = true;
     try {
       const ready = await updater.verifyReady();
-      const upgrade = prepareUpgrade({ userDataDir: dir, installDir: path.dirname(process.execPath), version: APP_VERSION, targetVersion: ready.version });
-      // Installer upgrades the exact existing installation; userData is separately backed up.
+      const upgrade = prepareFileUpgrade({ userDataDir: dir, installDir: path.dirname(process.execPath), version: APP_VERSION, targetVersion: ready.version,
+        ready, runtimeVersion: process.versions.electron, executablePath: process.execPath });
+      // The detached helper waits for exit, then verifies, backs up and swaps app.asar.
       await new Promise((resolve, reject) => {
-        const process = spawn(ready.path, upgrade.args, { detached: true, stdio: 'ignore', windowsHide: true, shell: false, env: { ...processEnvForInstaller() } });
+        const process = spawn(globalThis.process.execPath, upgrade.args, { detached: true, stdio: 'ignore', windowsHide: true, shell: false, env: { ...processEnvForInstaller(), ...upgrade.env } });
         process.once('error', reject);
         process.once('spawn', () => { process.unref(); resolve(); });
       });
@@ -311,6 +312,7 @@ function setup() {
 }
 app.whenReady().then(() => {
   dir = app.getPath('userData'); fs.mkdirSync(dir, { recursive: true });
+  if (app.isPackaged) recoverFileUpgrade(dir, path.dirname(process.execPath));
   const personal = local(); let migrated = false;
   personal.records = personal.records.map(record => {
     if (record.kind !== 'local') return record;
@@ -331,7 +333,7 @@ app.whenReady().then(() => {
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   win.webContents.on('will-navigate', event => event.preventDefault());
   updater = createUpdater({
-    currentVersion: APP_VERSION, downloadDir: path.join(dir, 'updates'),
+    currentVersion: APP_VERSION, runtimeVersion: process.versions.electron, downloadDir: path.join(dir, 'updates'),
     onProgress: progress => { if (!win.isDestroyed()) win.webContents.send('update-progress', progress); }
   });
   win.on('close', event => {

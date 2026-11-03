@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "version": "0.3.4",
+  "runtimeVersion": "40.10.6",
+  "base": "../",
+  "notes": "0.3.4：使用签名更新清单，校验并备份应用包后原位置替换，失败恢复，自动重启。",
+  "publishedAt": "2026-11-03T09:52:32.587Z",
+  "files": [
+    {
+      "path": "resources/app.asar",
+      "size": 7234710,
+      "sha256": "83b7a49766c41872fa1e66e8598f4a5e6da30e0ce0974aab0c043be2a764abe6"
+    }
+  ],
+  "signature": "X8K++nOtzaUIL6+8zLBtUuGwmexRZykdQSWvn6aSeooksDCWCmPnojLkKPPiVtKRBuvQEgUAiTJgynsB7U6vAw=="
+}

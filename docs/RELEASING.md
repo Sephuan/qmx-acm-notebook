@@ -33,6 +33,14 @@ git push -u origin main
 
 Actions 使用仓库提供的 `GITHUB_TOKEN`，无需个人 Token。构建任务使用 `contents: write` 以创建草稿；组织如禁用 Actions 或限制第三方 Actions，需负责人调整策略。每次提交仅做轻量检查，Windows 构建采用手动或标签触发；可用免费用量取决于 GitHub 当前政策与仓库套餐。
 
+## 0.3.4 起的签名更新清单
+
+应用内更新读取默认分支 `feed/manifest.json`，按固定提交下载 `resources/app.asar`。清单通过 Ed25519 签名，公钥固定在客户端，私钥必须保存在仓库之外且备份妥善。丢失私钥后不能给已安装客户端签发新更新。
+
+发布时先设置 `QMX_BUILD_UPDATE_FEED=1` 构建应用，再设置 `QMX_UPDATE_SIGNING_KEY` 为外部私钥路径并运行 `pnpm update:manifest`。脚本生成签名清单和应用包；清单版本与 package 版本必须一致。提交前检查应用包中不含个人资料或凭据。随后清除 `QMX_BUILD_UPDATE_FEED`，运行 `pnpm dist`。打包脚本验证清单和哈希，并让安装包使用同一份已签名应用字节，避免不同构建的哈希漂移。
+
+清单及应用包应与 Release 一同发布，更新通道是默认分支上的签名清单，不以 Release 发布时间决定。运行时版本变动时需通过完整安装程序升级，不能只更新应用包。私钥绝不能加入源码、Release 或普通构建日志。GitHub Actions 使用已签名的应用包，无需持有私钥。
+
 ## 发布验收与交接
 
 - 普通 Windows 用户验证安装无需提权、桌面与开始菜单快捷方式、安装结束启动选项，以及卸载保留个人数据。

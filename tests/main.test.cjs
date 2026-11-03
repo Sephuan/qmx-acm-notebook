@@ -35,17 +35,23 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
   const handlers = new Map(), calls = [], windows = [], updaterCalls = [], spawnCalls = [], timers = new Map(), appEvents = new EventEmitter();
   let ready, updaterOptions, quitCalls = 0, now = 0, timerId = 0;
   let updateState = { phase: 'idle', currentVersion: '0.3.0', available: false };
-  const installerPath = path.join(root, 'updates', 'private-cache', 'QMX-Notebook-Setup-0.4.0.exe');
+  const installerPath = path.join(root, 'updates', 'private-cache', 'app.asar');
+  const manifest = { schema: 1, version: '0.4.0', runtimeVersion: '40.0.0', files: [{ path: 'resources/app.asar' }], signature: 'mock-signed-manifest' };
+  const readyUpdate = { version: '0.4.0', path: installerPath, manifest };
   const execPath = path.resolve('mock-install', 'QMX-Notebook.exe');
   const installDir = path.dirname(execPath);
-  const installerArgs = ['/S', '--updated', '--force-run', '--keep-shortcuts', '/currentuser', '/D=' + installDir];
+  const helperPath = path.join(root, 'updates', 'transaction-mock', 'update-helper.cjs');
+  const jobPath = path.join(root, 'updates', 'transaction-mock', 'job.json');
+  const installerArgs = [helperPath, jobPath];
+  const recoveryCalls = [];
+  const helperEnv = { ELECTRON_RUN_AS_NODE: '1' };
   const backupDir = path.join(root, 'upgrade-backups', 'mock-backup');
   const upgradeCalls = [], installSteps = [];
   const prepareUpgrade = options => {
     installSteps.push('prepareUpgrade');
     upgradeCalls.push(clone(options));
-    if (upgradeBackend.prepareUpgrade) return upgradeBackend.prepareUpgrade(options);
-    return { args: [...installerArgs], backupDir };
+    const prepared = upgradeBackend.prepareUpgrade ? upgradeBackend.prepareUpgrade(options) : { args: [...installerArgs], backupDir };
+    return { ...prepared, env: { ...helperEnv, ...prepared.env } };
   };
   const setUpdateState = patch => { updateState = { ...updateState, ...patch }; updaterOptions.onProgress(clone(updateState)); return clone(updateState); };
   const updater = {};
@@ -56,7 +62,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     if (method === 'getState') return clone(updateState);
     if (method === 'check') return Promise.resolve(setUpdateState({ phase: 'available', available: true, version: '0.4.0' }));
     setUpdateState({ phase: 'ready', available: true, version: '0.4.0' });
-    return Promise.resolve({ version: '0.4.0', path: installerPath });
+    return Promise.resolve(clone(readyUpdate));
   };
   class BrowserWindow extends EventEmitter {
     constructor(options) { super(); this.options = options; this.destroyed = false; this.sent = []; this.webContents = { setWindowOpenHandler(fn) { this.windowOpen = fn; }, on() {}, send: (...args) => this.sent.push(clone(args)) }; windows.push(this); }
@@ -85,7 +91,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     };
   }
   const context = vm.createContext({ Buffer, URL, AbortSignal, console,
-    process: { execPath, argv: [], env: { ELECTRON_RUN_AS_NODE: '1', QMX_TEST_ENV: 'preserved' } },
+    process: { execPath, versions: { electron: '40.0.0' }, argv: [], env: { ELECTRON_RUN_AS_NODE: '1', QMX_TEST_ENV: 'preserved' } },
     setTimeout(callback, delay) { const id = ++timerId; timers.set(id, { callback, at: now + delay }); return id; },
     clearTimeout(id) { timers.delete(id); },
     fetch: async () => { throw new Error('NETWORK FORBIDDEN IN MAIN TESTS'); },
@@ -96,7 +102,16 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       if (name === 'node:crypto') return { randomUUID: () => '00000000-0000-4000-8000-000000000001' };
       if (name === '../package.json') return { version: '0.3.0' };
       if (name === './updater.cjs') return { createUpdater(options) { updaterOptions = options; return updater; } };
-      if (name === './upgrade.cjs') return { prepareUpgrade };
+      if (name === './file-upgrade.cjs') return {
+        prepareFileUpgrade: prepareUpgrade,
+        recoverFileUpgrade(...args) {
+          recoveryCalls.push(clone(args));
+          assert.equal(windows.length, 0, 'recover before opening a window or exposing IPC');
+          assert.equal(handlers.size, 0, 'recover before any renderer operations');
+          if (upgradeBackend.recoverFileUpgrade) return upgradeBackend.recoverFileUpgrade(...args);
+          return { phase: 'none' };
+        },
+      };
       if (name === 'node:child_process') return { spawn(file, args, options) {
         installSteps.push('spawn');
         const child = new EventEmitter();
@@ -123,7 +138,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     }
     now = end;
   };
-  return { invoke, calls, writes, handlers, windows, updaterCalls, upgradeCalls, installSteps, spawnCalls, installerPath, execPath, installDir, installerArgs, backupDir, advanceTimers,
+  return { invoke, calls, writes, handlers, windows, updaterCalls, upgradeCalls, recoveryCalls, installSteps, spawnCalls, installerPath, readyUpdate, helperPath, jobPath, execPath, installDir, installerArgs, backupDir, advanceTimers,
     get updaterOptions() { return updaterOptions; }, get quitCalls() { return quitCalls; },
     stored: name => JSON.parse(disk.get(path.join(root, name)) || 'null') };
 }
@@ -350,9 +365,15 @@ test('sync never supplies cached blobs from a different repository to the backen
   assert.equal(h.stored('cache.json').repo, REPO);
 });
 
+test('packaged startup recovery fails before opening a window or exposing IPC', () => {
+  assert.throws(() => harness({ upgradeBackend: { recoverFileUpgrade() { throw new Error('unsafe transaction requires manual recovery'); } } }), /unsafe transaction requires manual recovery/);
+});
+
 test('updater initializes with the packaged version and private cache and allows signed-out checks and downloads', async () => {
   const h = harness({ account: null });
   assert.equal(h.updaterOptions.currentVersion, '0.3.0');
+  assert.equal(h.updaterOptions.runtimeVersion, '40.0.0');
+  assert.deepEqual(h.recoveryCalls, [[path.resolve('mock-user-data'), h.installDir]]);
   assert.equal(h.updaterOptions.downloadDir, path.resolve('mock-user-data', 'updates'));
   const initial = await h.invoke('bootstrap');
   assert.equal(initial.account, null); assert.equal(initial.appVersion, '0.3.0'); assert.equal(initial.update.phase, 'idle');
@@ -365,18 +386,17 @@ test('updater initializes with the packaged version and private cache and allows
   assert.equal(h.calls.length, 0); assert.equal(h.spawnCalls.length, 0); assert.equal(h.quitCalls, 0);
 });
 
-test('installation ignores renderer paths, reverifies its internal artifact, sanitizes environment and quits after spawn', async () => {
+test('installation ignores renderer paths, reverifies its internal artifact, launches Electron helper and quits after spawn', async () => {
   const h = harness({ account: null });
   await h.invoke('downloadUpdate');
   const install = h.invoke('installUpdate', { path: 'C:\\attacker.exe', execPath: 'C:\\attacker.exe', installDir: 'C:\\attacker', userDataDir: 'C:\\attacker-data', args: ['/malicious'] });
   await new Promise(setImmediate);
   assert.equal(h.spawnCalls.length, 1);
   const launch = h.spawnCalls[0];
-  assert.equal(launch.file, h.installerPath);
-  assert.deepEqual(launch.args, ['/S', '--updated', '--force-run', '--keep-shortcuts', '/currentuser', '/D=' + h.installDir]);
-  assert.equal(launch.args.at(-1), '/D=' + path.dirname(h.execPath), 'the exact running installation must be the final NSIS argument');
-  assert.deepEqual(launch.options, { detached: true, stdio: 'ignore', windowsHide: true, shell: false, env: { QMX_TEST_ENV: 'preserved' } });
-  assert.deepEqual(h.upgradeCalls, [{ userDataDir: path.resolve('mock-user-data'), installDir: path.dirname(h.execPath), version: '0.3.0', targetVersion: '0.4.0' }]);
+  assert.equal(launch.file, h.execPath, 'the installed Electron executable runs the external helper');
+  assert.deepEqual(launch.args, [h.helperPath, h.jobPath]);
+  assert.deepEqual(launch.options, { detached: true, stdio: 'ignore', windowsHide: true, shell: false, env: { ELECTRON_RUN_AS_NODE: '1', QMX_TEST_ENV: 'preserved' } });
+  assert.deepEqual(h.upgradeCalls, [{ userDataDir: path.resolve('mock-user-data'), installDir: path.dirname(h.execPath), version: '0.3.0', targetVersion: '0.4.0', ready: h.readyUpdate, runtimeVersion: '40.0.0', executablePath: h.execPath }]);
   assert.deepEqual(h.installSteps, ['verifyReady', 'prepareUpgrade', 'spawn']);
   assert.deepEqual(h.updaterCalls.filter(call => call.method === 'verifyReady'), [{ method: 'verifyReady', args: [] }]);
   h.advanceTimers(1000); assert.equal(h.quitCalls, 0, 'must not quit before the child confirms spawn');
@@ -387,7 +407,7 @@ test('installation ignores renderer paths, reverifies its internal artifact, san
   h.advanceTimers(1); assert.equal(h.quitCalls, 1);
 });
 
-test('backup preparation waits for successful artifact verification and completes before installer spawn', async () => {
+test('file-upgrade preparation waits for successful artifact verification and completes before helper spawn', async () => {
   const verified = deferred();
   const h = harness({
     updaterBackend: { verifyReady: () => verified.promise },
@@ -403,7 +423,7 @@ test('backup preparation waits for successful artifact verification and complete
   await new Promise(setImmediate);
   assert.deepEqual(h.installSteps, ['verifyReady']);
   assert.equal(h.upgradeCalls.length, 0); assert.equal(h.spawnCalls.length, 0);
-  verified.resolve({ path: h.installerPath, version: '0.4.0' });
+  verified.resolve(clone(h.readyUpdate));
   await new Promise(setImmediate);
   assert.deepEqual(h.installSteps, ['verifyReady', 'prepareUpgrade', 'spawn']);
   h.spawnCalls[0].child.emit('spawn');
@@ -451,6 +471,7 @@ test('install reverification detects tampering without spawning or quitting and 
 
 test('source-mode installation is rejected before verification or process launch', async () => {
   const h = harness({ isPackaged: false });
+  assert.deepEqual(h.recoveryCalls, [], 'source mode does not recover installed application files');
   await h.invoke('downloadUpdate');
   await assert.rejects(h.invoke('installUpdate'), /源码|安装版/);
   assert.equal(h.updaterCalls.filter(call => call.method === 'verifyReady').length, 0);

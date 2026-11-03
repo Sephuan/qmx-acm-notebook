@@ -31,6 +31,16 @@ async function main() {
   if (fs.existsSync(archive)) options.electronZipDir = archiveDir;
   const outputs = await packager(options);
   for (const output of outputs) {
+    // Publish exactly the signed application bytes when a release feed is present.
+    const manifestPath = path.join(root, 'feed', 'manifest.json');
+    if (fs.existsSync(manifestPath) && process.env.QMX_BUILD_UPDATE_FEED !== '1') {
+      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
+      const file = require('../electron/updater.cjs').verifyManifest(manifest, { publicKey: require('../electron/update-key.cjs'), runtimeVersion: version });
+      if (manifest.version !== pkg.version) throw new Error('Update feed version differs from package version; build a fresh feed first');
+      const bytes = fs.readFileSync(path.join(root, file.path));
+      if (bytes.length !== file.size || require('node:crypto').createHash('sha256').update(bytes).digest('hex') !== file.sha256) throw new Error('Signed application feed hash mismatch');
+      fs.writeFileSync(path.join(output, 'resources', 'app.asar'), bytes);
+    }
     for (const [name, flags] of [['启动.cmd', '--disable-gpu'], ['兼容启动.cmd', '--disable-gpu --no-sandbox']]) {
       fs.writeFileSync(path.join(output, name), `@echo off\r\nsetlocal\r\nset ELECTRON_RUN_AS_NODE=\r\ncd /d "%~dp0"\r\nstart "" "QMX-Notebook.exe" ${flags}\r\n`);
     }
