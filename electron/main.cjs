@@ -1,5 +1,5 @@
 'use strict';
-const { app, BrowserWindow, ipcMain, shell, safeStorage } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, safeStorage, net } = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
 const { GitHub, repoParts } = require('./github.cjs');
@@ -334,6 +334,7 @@ app.whenReady().then(() => {
   win.webContents.on('will-navigate', event => event.preventDefault());
   updater = createUpdater({
     currentVersion: APP_VERSION, runtimeVersion: process.versions.electron, downloadDir: path.join(dir, 'updates'),
+    fetcher: (url, options) => net.fetch(url, { ...options, bypassCustomProtocolHandlers: true }),
     onProgress: progress => { if (!win.isDestroyed()) win.webContents.send('update-progress', progress); }
   });
   win.on('close', event => {

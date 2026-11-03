@@ -32,7 +32,7 @@
   function append(parent, ...children) { children.filter(Boolean).forEach(child => parent.append(child)); return parent; }
   function button(label, className, action) { const node = element('button', className, label); node.type = 'button'; node.addEventListener('click', action); return node; }
   function toast(message) { $('#toast').textContent = message; $('#toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('#toast').hidden = true; }, 3400); }
-  function errorMessage(error) { return typeof error === 'string' ? error : error?.message || '操作未完成，请稍后重试'; }
+  function errorMessage(error) { const message = typeof error === 'string' ? error : error?.message || '操作未完成，请稍后重试'; return message.replace(/^Error invoking remote method '[^']+':\s*(?:Error:\s*)?/, ''); }
   function key(record) { return String(record.id ?? record.number ?? `${record.platform}:${record.pid}:${record.url}`); }
   function uuid() { return crypto.randomUUID(); }
   function accountId() { return s.account?.id == null ? null : String(s.account.id); }

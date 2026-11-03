@@ -7,6 +7,36 @@ const crypto = require('node:crypto');
 
 const COMMIT_URL = 'https://api.github.com/repos/qmx-acm-data/qmx-acm-notebook/commits/main';
 const RAW_ROOT = 'https://raw.githubusercontent.com/qmx-acm-data/qmx-acm-notebook/';
+function sourceUrls(sha, file) {
+  const raw = `${RAW_ROOT}${sha}/${file}`;
+  return [`https://api.github.com/repos/qmx-acm-data/qmx-acm-notebook/contents/${file}?ref=${sha}`, raw,
+    `https://cdn.jsdelivr.net/gh/qmx-acm-data/qmx-acm-notebook@${sha}/${file}`,
+    `https://gcore.jsdelivr.net/gh/qmx-acm-data/qmx-acm-notebook@${sha}/${file}`,
+    `https://gh-proxy.com/${raw}`];
+}
+function networkError(url, cause, code) {
+  const candidate = code || cause?.cause?.code || cause?.code;
+  const safeCode = typeof candidate === 'string' && /^[A-Z][A-Z0-9_]{0,63}$/.test(candidate) ? candidate : 'NETWORK_ERROR';
+  const error = new Error(`网络无法连接更新服务（${new URL(url).hostname}，${safeCode}）。请稍后重试，或下载完整安装包手动安装。`);
+  error.transient = true;
+  error.code = safeCode;
+  return error;
+}
+function aborted(signal) {
+  if (signal.aborted) throw signal.reason;
+}
+// Race only transport waits: a stalled injected fetch/iterator cannot continue writing
+// into a staging file after its source has been abandoned.
+async function transportWait(promise, signal) {
+  aborted(signal);
+  let listener;
+  const expiry = new Promise((_, reject) => {
+    listener = () => reject(signal.reason);
+    signal.addEventListener('abort', listener, { once: true });
+  });
+  try { return await Promise.race([promise, expiry]); }
+  finally { signal.removeEventListener('abort', listener); }
+}
 const MAX_MANIFEST = 256 * 1024;
 const MAX_FILE = 256 * 1024 * 1024;
 const SEMVER = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
@@ -32,7 +62,12 @@ function exactKeys(object, keys) {
 function validateResponse(response, expectedUrl) {
   // Native fetch reports the final URL. Minimal injected fetch responses may omit it.
   if (response.url && response.url !== expectedUrl) throw new Error('Unsafe update response URL');
-  if (response.redirected || !response.ok) throw new Error(`Update request failed (HTTP ${response.status})`);
+  if (response.redirected) throw new Error('Update request failed: redirects are forbidden');
+  if (!response.ok) {
+    const error = networkError(expectedUrl, null, `HTTP_${response.status}`);
+    error.transient = response.status === 408 || response.status === 429 || response.status >= 500 && response.status <= 599;
+    throw error;
+  }
 }
 async function streamResponse(response, limit, signal, consume, expectedSize) {
   if (!response.body?.[Symbol.asyncIterator]) throw new Error('Update response has no readable stream');
@@ -41,14 +76,24 @@ async function streamResponse(response, limit, signal, consume, expectedSize) {
     throw new Error('Update Content-Length exceeds limit or does not match expected size');
   }
   let size = 0;
-  for await (const value of response.body) {
-    if (signal.aborted) throw new Error('Update request timed out');
-    const chunk = Buffer.from(value);
-    size += chunk.length;
-    if (size > limit) throw new Error('Update response exceeds expected size limit');
-    await consume(chunk, size);
+  const iterator = response.body[Symbol.asyncIterator]();
+  try {
+    while (true) {
+      let part;
+      try { part = await transportWait(iterator.next(), signal); }
+      catch (error) { error.transportFailure = true; throw error; }
+      aborted(signal);
+      if (part.done) break;
+      const chunk = Buffer.from(part.value);
+      size += chunk.length;
+      if (size > limit) throw new Error('Update response exceeds expected size limit');
+      await consume(chunk, size);
+    }
+  } finally {
+    // Do not await return(): a broken/stalled iterator may never settle.
+    Promise.resolve(iterator.return?.()).catch(() => {});
   }
-  if (signal.aborted) throw new Error('Update request timed out');
+  aborted(signal);
   if (expectedSize !== undefined && size !== expectedSize) throw new Error('Update size verification failed');
 }
 
@@ -75,13 +120,14 @@ function verifyManifest(manifest, { publicKey, runtimeVersion, currentVersion } 
   return file;
 }
 
-function createUpdater({ currentVersion, downloadDir, fetcher = globalThis.fetch, onProgress = () => {}, timeoutMs = 120000, runtimeVersion = process.versions.electron, publicKey } = {}) {
+function createUpdater({ currentVersion, downloadDir, fetcher = globalThis.fetch, onProgress = () => {}, timeoutMs = 120000, attemptMs = 10000, runtimeVersion = process.versions.electron, publicKey } = {}) {
   const current = versionParts(currentVersion);
   if (!current) throw new Error('currentVersion must be a stable semantic version');
   if (!versionParts(runtimeVersion)) throw new Error('runtimeVersion must be the installed Electron semantic version');
   if (typeof downloadDir !== 'string' || !path.isAbsolute(downloadDir)) throw new Error('downloadDir must be an absolute directory');
   if (typeof fetcher !== 'function') throw new Error('fetcher must be a function');
   if (!Number.isSafeInteger(timeoutMs) || timeoutMs <= 0) throw new Error('timeoutMs must be positive');
+  if (!Number.isSafeInteger(attemptMs) || attemptMs <= 0) throw new Error('attemptMs must be positive');
   downloadDir = path.resolve(downloadDir);
   let state = { phase: 'idle', currentVersion, latestVersion: null, version: null, available: false, downloaded: 0, total: 0, percent: 0, message: '' };
   let selected = null;
@@ -99,21 +145,31 @@ function createUpdater({ currentVersion, downloadDir, fetcher = globalThis.fetch
     emit({ phase: 'error', available: false, message: error.message || String(error) });
     throw error;
   }
-  async function timed(action) {
-    const controller = new AbortController();
-    let timer;
-    const expiry = new Promise((_, reject) => {
-      timer = setTimeout(() => {
-        controller.abort();
-        reject(new Error('Update request timed out'));
-      }, timeoutMs);
-    });
-    try { return await Promise.race([action(controller.signal), expiry]); }
-    finally { clearTimeout(timer); controller.abort(); }
+  async function candidates(urls, deadline, action) {
+    let last;
+    for (const url of urls) {
+      const remaining = deadline - Date.now();
+      if (remaining <= 0) throw last || networkError(url, null, 'ETIMEDOUT');
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(networkError(url, null, 'ETIMEDOUT')), Math.min(10000, attemptMs, remaining));
+      try {
+        const result = await action(url, controller.signal);
+        aborted(controller.signal);
+        return result;
+      } catch (error) {
+        const failure = controller.signal.aborted ? controller.signal.reason : error.transportFailure ? networkError(url, error) : error;
+        if (!failure.transient) throw failure;
+        last = failure;
+      } finally { clearTimeout(timer); controller.abort(); }
+    }
+    throw last;
   }
   async function request(url, signal) {
-    const response = await fetcher(url, { headers: { Accept: 'application/json', 'User-Agent': 'QMX-Notebook-Updater' }, signal, redirect: 'error', credentials: 'omit' });
-    if (signal.aborted) throw new Error('Update request timed out');
+    let response;
+    try {
+      response = await transportWait(fetcher(url, { headers: { Accept: url.startsWith('https://api.github.com/repos/qmx-acm-data/qmx-acm-notebook/contents/') ? 'application/vnd.github.raw+json' : 'application/json', 'User-Agent': 'QMX-Notebook-Updater' }, signal, redirect: 'error', credentials: 'omit' }), signal);
+    } catch (error) { throw networkError(url, error); }
+    aborted(signal);
     validateResponse(response, url);
     return response;
   }
@@ -130,13 +186,13 @@ function createUpdater({ currentVersion, downloadDir, fetcher = globalThis.fetch
     selected = null;
     ready = null;
     try {
-      const selection = await timed(async signal => {
-        const commit = await json(COMMIT_URL, signal);
-        if (!commit || typeof commit.sha !== 'string' || !/^[a-f0-9]{40}$/.test(commit.sha)) throw new Error('Invalid main commit SHA');
-        const root = `${RAW_ROOT}${commit.sha}/`;
-        const manifest = await json(`${root}feed/manifest.json`, signal);
+      const deadline = Date.now() + timeoutMs;
+      const commit = await candidates([COMMIT_URL, COMMIT_URL, COMMIT_URL], deadline, json);
+      if (!commit || typeof commit.sha !== 'string' || !/^[a-f0-9]{40}$/.test(commit.sha)) throw new Error('Invalid main commit SHA');
+      const selection = await candidates(sourceUrls(commit.sha, 'feed/manifest.json'), deadline, async (url, signal) => {
+        const manifest = await json(url, signal);
         const file = validateManifest(manifest);
-        return { manifest, file, url: `${root}resources/app.asar` };
+        return { manifest, file, urls: sourceUrls(commit.sha, 'resources/app.asar') };
       });
       const { manifest, file } = selection;
       if (compare(versionParts(manifest.version), current) <= 0) return emit({ phase: 'idle', version: manifest.version, latestVersion: manifest.version, message: 'Already up to date' });
@@ -215,13 +271,21 @@ function createUpdater({ currentVersion, downloadDir, fetcher = globalThis.fetch
         temporary = path.join(ownDir, 'app.asar.part');
         handle = await fs.open(temporary, 'wx', 0o600);
         emit({ phase: 'downloading', version: selection.manifest.version, downloaded: 0, total: metadata.size, percent: 0, message: 'Downloading application update' });
-        await timed(async signal => {
-          const response = await request(selection.url, signal);
+        await candidates(selection.urls, Date.now() + timeoutMs, async (url, signal) => {
+          await handle.truncate(0);
+          emit({ downloaded: 0, percent: 0 });
+          const response = await request(url, signal);
           const hash = crypto.createHash('sha256');
           await streamResponse(response, metadata.size, signal, async (chunk, downloaded) => {
             hash.update(chunk);
-            await handle.writeFile(chunk);
-            if (signal.aborted) throw new Error('Update request timed out');
+            let offset = 0;
+            while (offset < chunk.length) {
+              aborted(signal);
+              const { bytesWritten } = await handle.write(chunk, offset, chunk.length - offset, downloaded - chunk.length + offset);
+              if (!bytesWritten) throw new Error('Update staging write failed');
+              offset += bytesWritten;
+            }
+            aborted(signal);
             emit({ downloaded, percent: Math.floor(downloaded / metadata.size * 100) });
           }, metadata.size);
           if (hash.digest('hex') !== metadata.sha256.toLowerCase()) throw new Error('Update SHA-256 verification failed');

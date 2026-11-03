@@ -1,16 +1,16 @@
 {
   "schema": 1,
-  "version": "0.3.4",
+  "version": "0.3.5",
   "runtimeVersion": "40.10.6",
   "base": "../",
-  "notes": "0.3.4：使用签名更新清单，校验并备份应用包后原位置替换，失败恢复，自动重启。",
-  "publishedAt": "2026-11-03T09:52:32.587Z",
+  "notes": "0.3.5：修复检查更新 fetch failed，使用 GitHub Contents API 与固定提交备用来源，有限重试并保留签名哈希校验。",
+  "publishedAt": "2026-11-03T11:49:26.343Z",
   "files": [
     {
       "path": "resources/app.asar",
-      "size": 7234710,
-      "sha256": "83b7a49766c41872fa1e66e8598f4a5e6da30e0ce0974aab0c043be2a764abe6"
+      "size": 7238090,
+      "sha256": "a2c6a7ea15de6f7787fd9cb8a4cb9a1c31b712e68cc9d0b83f7eeb5de1c9f098"
     }
   ],
-  "signature": "X8K++nOtzaUIL6+8zLBtUuGwmexRZykdQSWvn6aSeooksDCWCmPnojLkKPPiVtKRBuvQEgUAiTJgynsB7U6vAw=="
+  "signature": "mXU7Zm0v+w+7p2mLz36Y4TQXOOmZoeulWA/EADpFynVd7WLbXrCXyGufDNSlbgl77VbUCQO5vrS9xvoccRayBg=="
 }

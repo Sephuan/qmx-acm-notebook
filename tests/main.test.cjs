@@ -70,6 +70,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     loadFile() {}
   }
   const electron = {
+    net: { fetch: async (url, options) => ({ url, options }) },
     app: { isPackaged, disableHardwareAcceleration() {}, whenReady: () => ({ then(callback) { ready = callback; } }), getPath: () => root, on: (...args) => appEvents.on(...args), quit() { quitCalls++; } },
     BrowserWindow,
     ipcMain: { handle(name, callback) { assert.ok(!handlers.has(name)); handlers.set(name, callback); } },
@@ -375,6 +376,9 @@ test('updater initializes with the packaged version and private cache and allows
   assert.equal(h.updaterOptions.runtimeVersion, '40.0.0');
   assert.deepEqual(h.recoveryCalls, [[path.resolve('mock-user-data'), h.installDir]]);
   assert.equal(h.updaterOptions.downloadDir, path.resolve('mock-user-data', 'updates'));
+  const network = await h.updaterOptions.fetcher('https://api.github.com/example', { redirect: 'error' });
+  assert.equal(network.options.bypassCustomProtocolHandlers, true);
+  assert.equal(network.options.redirect, 'error');
   const initial = await h.invoke('bootstrap');
   assert.equal(initial.account, null); assert.equal(initial.appVersion, '0.3.0'); assert.equal(initial.update.phase, 'idle');
   assert.equal((await h.invoke('checkForUpdates')).phase, 'available');

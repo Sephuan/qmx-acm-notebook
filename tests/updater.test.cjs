@@ -15,6 +15,13 @@ const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519');
 const commit = 'a'.repeat(40);
 const api = 'https://api.github.com/repos/qmx-acm-data/qmx-acm-notebook/commits/main';
 const root = `https://raw.githubusercontent.com/qmx-acm-data/qmx-acm-notebook/${commit}/`;
+const sources = file => [
+  `https://api.github.com/repos/qmx-acm-data/qmx-acm-notebook/contents/${file}?ref=${commit}`,
+  root + file,
+  `https://cdn.jsdelivr.net/gh/qmx-acm-data/qmx-acm-notebook@${commit}/${file}`,
+  `https://gcore.jsdelivr.net/gh/qmx-acm-data/qmx-acm-notebook@${commit}/${file}`,
+  `https://gh-proxy.com/${root}${file}`
+];
 // Independent canonical serializer: tests do not sign using implementation exports.
 function canonical(value) {
   if (Array.isArray(value)) return '[' + value.map(canonical).join(',') + ']';
@@ -31,18 +38,18 @@ function response(data, extra = {}) {
   const body = Buffer.isBuffer(data) ? data : Buffer.from(JSON.stringify(data));
   return { ok: true, status: 200, body: Readable.from([body.subarray(0, 3), body.subarray(3)]), headers: new Headers(), ...extra };
 }
-async function setup(t, { manifest = sign(), commitResponse, manifestResponse, fileResponse, timeoutMs, onProgress, key = publicKey, runtimeVersion = '42.0.0' } = {}) {
+async function setup(t, { manifest = sign(), commitResponse, manifestResponse, fileResponse, timeoutMs, attemptMs, onProgress, key = publicKey, runtimeVersion = '42.0.0' } = {}) {
   const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'qmx-updater-test-'));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const calls = [];
   const events = [];
-  const updater = createUpdater({ currentVersion: '1.9.0', runtimeVersion, publicKey: key, downloadDir: dir, timeoutMs,
+  const updater = createUpdater({ currentVersion: '1.9.0', runtimeVersion, publicKey: key, downloadDir: dir, timeoutMs, attemptMs,
     onProgress: event => { events.push(event); onProgress?.(event); },
     fetcher: async (url, opts) => {
       calls.push({ url, opts });
       if (url === api) return commitResponse ? commitResponse(url, opts) : response({ sha: commit });
-      if (url === root + 'feed/manifest.json') return manifestResponse ? manifestResponse(url, opts) : response(manifest);
-      assert.equal(url, root + 'resources/app.asar');
+      if (sources('feed/manifest.json').includes(url)) return manifestResponse ? manifestResponse(url, opts) : response(manifest);
+      assert.ok(sources('resources/app.asar').includes(url));
       return fileResponse ? fileResponse(url, opts) : response(bytes);
     } });
   return { updater, calls, events, dir };
@@ -53,7 +60,7 @@ async function allFiles(dir) {
   return nested.flat();
 }
 
-test('signed manifest uses fixed production source, resolves once, and pins every raw request', async t => {
+test('signed manifest uses fixed production sources, resolves once, and pins every content request', async t => {
   const { updater, calls, events } = await setup(t);
   assert.equal((await updater.check()).phase, 'available');
   const ready = await updater.download();
@@ -62,7 +69,7 @@ test('signed manifest uses fixed production source, resolves once, and pins ever
   assert.deepEqual(ready.manifest, sign());
   assert.deepEqual(await fs.readFile(ready.path), bytes);
   assert.deepEqual(await updater.verifyReady(), ready);
-  assert.deepEqual(calls.map(call => call.url), [api, root + 'feed/manifest.json', root + 'resources/app.asar']);
+  assert.deepEqual(calls.map(call => call.url), [api, sources('feed/manifest.json')[0], sources('resources/app.asar')[0]]);
   for (const { opts } of calls) {
     assert.equal(opts.redirect, 'error');
     assert.equal(opts.credentials, 'omit');
@@ -111,7 +118,7 @@ test('equal and older versions never stage a downgrade; semver comparison is num
     const { updater, calls } = await setup(t, { manifest: sign({ version }) });
     assert.equal((await updater.check()).available, false);
     await assert.rejects(updater.download(), /No newer update/);
-    assert.ok(calls.every(call => !call.url.endsWith('app.asar')));
+    assert.ok(calls.every(call => !sources('resources/app.asar').includes(call.url)));
   }
   const { updater } = await setup(t);
   assert.equal((await updater.check()).version, '1.10.0');
@@ -132,7 +139,7 @@ test('stream verification rejects hash, short, oversized, disconnected and misma
     }) });
     const unrelated = path.join(dir, 'unrelated.part');
     await fs.writeFile(unrelated, 'keep');
-    await assert.rejects(updater.download(), /verification|size|disconnected|Content-Length/);
+    await assert.rejects(updater.download(), /verification|size|NETWORK_ERROR|Content-Length/);
     assert.deepEqual(await allFiles(dir), [unrelated]);
     assert.equal(await fs.readFile(unrelated, 'utf8'), 'keep');
   }
@@ -219,7 +226,7 @@ test('timeout aborts download, cleans partial files, and permits retry', async t
     if (++attempt === 1) return new Promise((_, reject) => signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true }));
     return response(bytes);
   } });
-  await assert.rejects(updater.download(), /timed out|aborted/);
+  await assert.rejects(updater.download(), /ETIMEDOUT/);
   assert.deepEqual(await allFiles(dir), []);
   assert.equal((await updater.download()).version, '1.10.0');
 });
@@ -227,10 +234,94 @@ test('timeout aborts download, cleans partial files, and permits retry', async t
 test('timeout covers stalled manifest and file streams without advertising ready', async t => {
   for (const option of ['manifestResponse', 'fileResponse']) {
     const { updater, dir } = await setup(t, { timeoutMs: 30, [option]: async () => response(bytes, { body: { async *[Symbol.asyncIterator]() { yield bytes.subarray(0, 2); await new Promise(() => {}); } } }) });
-    await assert.rejects(updater.download(), /timed out/);
+    await assert.rejects(updater.download(), /ETIMEDOUT/);
     assert.equal(updater.getState().phase, 'error');
     assert.deepEqual(await allFiles(dir), []);
   }
+});
+
+test('network and HTTP transient failures visit every SHA-pinned source in order', async t => {
+  for (const status of [408, 429, 500, 503]) {
+    const { updater, calls } = await setup(t, {
+      manifestResponse: async url => url === sources('feed/manifest.json').at(-1) ? response(sign()) : response({}, { ok: false, status }),
+      fileResponse: async url => {
+        if (url === sources('resources/app.asar').at(-1)) return response(bytes);
+        throw Object.assign(new TypeError('fetch failed secret-token C:\\private'), { cause: { code: 'ECONNRESET' } });
+      }
+    });
+    const ready = await updater.download();
+    assert.deepEqual(await fs.readFile(ready.path), bytes);
+    assert.deepEqual(calls.map(call => call.url), [api, ...sources('feed/manifest.json'), ...sources('resources/app.asar')]);
+    for (const { url, opts } of calls.slice(1)) {
+      assert.ok(url.includes(commit));
+      assert.equal(opts.headers.Accept, url.startsWith('https://api.github.com/') ? 'application/vnd.github.raw+json' : 'application/json');
+    }
+  }
+});
+
+test('a broken stream restarts at zero and truncates bytes from previous sources', async t => {
+  let attempt = 0;
+  const { updater, events } = await setup(t, { fileResponse: async () => {
+    if (++attempt < 3) return response(bytes, { body: Readable.from((async function* () {
+      yield Buffer.alloc(attempt === 1 ? bytes.length - 1 : 2, 88);
+      throw Object.assign(new Error('socket disconnected'), { code: 'ECONNRESET' });
+    })()) });
+    return response(bytes);
+  } });
+  const ready = await updater.download();
+  assert.equal(attempt, 3);
+  assert.deepEqual(await fs.readFile(ready.path), bytes);
+  assert.ok(events.filter(event => event.phase === 'downloading' && event.downloaded === 0).length >= 3);
+});
+
+test('content trust failures and permanent HTTP status never try another source', async t => {
+  for (const mode of ['signature', 'hash', 'json', '404']) {
+    const manifest = sign();
+    if (mode === 'signature') manifest.notes += 'tampered';
+    const { updater, calls } = await setup(t, { manifest,
+      ...(mode === 'json' ? { manifestResponse: async () => response(Buffer.from('{')) } : {}),
+      fileResponse: async () => mode === '404' ? response({}, { ok: false, status: 404 }) : response(Buffer.alloc(bytes.length))
+    });
+    await assert.rejects(updater.download());
+    assert.equal(calls.length, mode === 'hash' || mode === '404' ? 3 : 2);
+  }
+});
+
+test('commit resolver retries twice only on transient failures and hides sensitive causes', async t => {
+  let attempt = 0;
+  const { updater, calls } = await setup(t, { commitResponse: async () => {
+    if (++attempt < 3) throw Object.assign(new Error('fetch failed token=SECRET C:\\private'), { cause: { code: 'ECONNRESET' } });
+    return response({ sha: commit });
+  } });
+  await updater.check();
+  assert.deepEqual(calls.slice(0, 3).map(call => call.url), [api, api, api]);
+  const failed = await setup(t, { commitResponse: async () => { throw Object.assign(new Error('fetch failed token=SECRET C:\\private'), { cause: { code: 'ECONNRESET' } }); } });
+  await assert.rejects(failed.updater.check(), error => {
+    assert.match(error.message, /网络无法连接.*api.github.com.*ECONNRESET.*重试.*手动安装/);
+    assert.doesNotMatch(error.message, /fetch failed|SECRET|private/);
+    return true;
+  });
+  assert.equal(failed.calls.length, 3);
+});
+
+test('per-attempt timeout advances to next source and total timeout bounds all attempts', async t => {
+  let attempt = 0;
+  const { updater, calls } = await setup(t, { timeoutMs: 300, attemptMs: 20, manifestResponse: async () => {
+    if (++attempt === 1) return new Promise(() => {});
+    return response(sign());
+  } });
+  assert.equal((await updater.check()).phase, 'available');
+  assert.equal(calls.length, 3);
+  const stalled = await setup(t, { timeoutMs: 65, attemptMs: 20, fileResponse: async () => response(bytes, {
+    body: { async *[Symbol.asyncIterator]() { yield bytes.subarray(0, 2); await new Promise(() => {}); } }
+  }) });
+  await stalled.updater.check();
+  const started = Date.now();
+  await assert.rejects(stalled.updater.download(), /ETIMEDOUT/);
+  assert.ok(Date.now() - started < 250, 'all candidates share the operation deadline');
+  assert.ok(stalled.calls.length >= 4);
+  assert.deepEqual(await allFiles(stalled.dir), []);
+  assert.equal(stalled.updater.getState().phase, 'error');
 });
 
 test('invalid constructor options fail immediately', () => {
