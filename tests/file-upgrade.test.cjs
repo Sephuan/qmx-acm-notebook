@@ -40,7 +40,7 @@ function fixture(t) {
   fs.writeFileSync(stage, next);
   const manifest = { schema: 1, version: '2.0.0', runtimeVersion: '40.0.0', base: '../', notes: 'signed release', publishedAt: '2026-01-01T00:00:00Z', files: [{ path: 'resources/app.asar', size: next.length, sha256: crypto.createHash('sha256').update(next).digest('hex') }] };
   manifest.signature = crypto.sign(null, Buffer.from(helper.canonical(manifest)), privateKey).toString('base64');
-  const options = { userDataDir, installDir, version: '1.0.0', targetVersion: '2.0.0', runtimeVersion: '40.0.0', executablePath: path.join(installDir, 'QMX-Notebook.exe'), parentPid: DEAD_PID, ready: { path: stage, version: '2.0.0', manifest } };
+  const options = { userDataDir, installDir, version: '1.0.0', targetVersion: '2.0.0', runtimeVersion: '40.0.0', executablePath, parentPid: DEAD_PID, ready: { path: stage, version: '2.0.0', manifest } };
   const snapshot = Object.fromEntries(fs.readdirSync(userDataDir).map(name => [name, fs.readFileSync(path.join(userDataDir, name))]));
   return { options, old, next, target, stage, snapshot, userDataDir, installDir };
 }

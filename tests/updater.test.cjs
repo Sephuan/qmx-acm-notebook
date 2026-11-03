@@ -39,7 +39,7 @@ function response(data, extra = {}) {
   return { ok: true, status: 200, body: Readable.from([body.subarray(0, 3), body.subarray(3)]), headers: new Headers(), ...extra };
 }
 async function setup(t, { manifest = sign(), commitResponse, manifestResponse, fileResponse, timeoutMs, attemptMs, onProgress, key = publicKey, runtimeVersion = '42.0.0' } = {}) {
-  const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'qmx-updater-test-'));
+  const dir = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'qmx-updater-test-')));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const calls = [];
   const events = [];
