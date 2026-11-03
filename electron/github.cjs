@@ -287,6 +287,44 @@ class GitHub {
     return { id: `document:${path}`, path, repo: this.repo, deleted: true };
   }
 
+  async deleteIssue(record) {
+    this.checkScope(record);
+    const { number } = record;
+    if (!Number.isSafeInteger(number) || number < 1) throw new Error('无效 Issue 编号，必须为正整数');
+    if (!this.token) throw new Error('请先登录 GitHub');
+    const { data: user } = await this.request('/user');
+    if (!authorId(user.id) || !user.login) throw new Error('无法确认 GitHub 登录用户身份，请重新登录');
+    const { data: info } = await this.request(`/repos/${this.repo}`);
+    if (info.permissions?.admin !== true) throw new Error('只有仓库管理员（admin）可以永久删除 Issue');
+    const { data: issue } = await this.request(`/repos/${this.repo}/issues/${number}`);
+    if (issue?.pull_request) throw new Error('不能通过删除 Issue 操作删除 Pull Request');
+    if (issue?.number !== number || typeof issue.node_id !== 'string' || !issue.node_id.trim()) {
+      throw new Error('GitHub 未返回匹配的 Issue 编号和 node_id，请先同步后重试');
+    }
+    const permissionHint = '请检查令牌授权范围、组织策略及组织允许管理员删除 Issue 的设置（Allow members to delete issues）';
+    let data;
+    try {
+      ({ data } = await this.request('/graphql', {
+        method: 'POST', body: JSON.stringify({
+          query: 'mutation DeleteIssue($issueId: ID!) { deleteIssue(input: { issueId: $issueId }) { clientMutationId } }',
+          variables: { issueId: issue.node_id },
+        }),
+      }));
+    } catch (error) {
+      if (error.status === 403) throw new Error(`GitHub 拒绝删除 Issue；${permissionHint}`, { cause: error });
+      if (error.cause) throw new Error('GitHub 删除 Issue 结果未知（网络中断或超时）；请先同步确认结果，不要自动重试删除。', { cause: error });
+      throw error;
+    }
+    if (Array.isArray(data?.errors) && data.errors.length) {
+      const details = data.errors.map(error => String(error?.message || error?.type || '未知 GraphQL 错误')).join('；');
+      throw new Error(`GitHub 删除 Issue 失败：${details}；${permissionHint}`);
+    }
+    if (!data?.data?.deleteIssue || typeof data.data.deleteIssue !== 'object') {
+      throw new Error('GitHub 删除 Issue 结果未知；请先同步确认结果，不要自动重试删除。');
+    }
+    return { id: `issue:${number}`, number, repo: this.repo, deleted: true };
+  }
+
   async sync(previous = {}) {
     const { data: info } = await this.request(`/repos/${this.repo}`);
     const branch = info.default_branch;

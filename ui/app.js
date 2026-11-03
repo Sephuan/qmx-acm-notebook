@@ -164,6 +164,9 @@
     const edits = element('div', 'record-edit-actions');
     if (record.proposalUrl) edits.append(button('旧版已投稿副本 · 查看投稿 ↗', 'button secondary', () => openExternal(record.proposalUrl)));
     if (isLocal(record) && visibleLocal(record) || canEditRemote(record)) { const edit = button(isLocal(record) ? '编辑本地记录' : '编辑正式题解', 'button secondary', () => openSubmit(record)); edit.id = 'edit-record-button'; const remove = button(isLocal(record) ? '删除本地记录' : '删除正式题解', 'button danger', () => deleteRecord(record)); remove.id = 'delete-record-button'; append(edits, edit, remove); }
+    if (record.kind === 'issue' && sameRepo(record) && s.account && s.permissions.admin === true) {
+      const remove = button('永久删除讨论 Issue', 'button danger', () => deleteDiscussion(record)); remove.id = 'delete-issue-button'; edits.append(remove);
+    }
     panel.append(edits);
     if (record.kind !== 'issue' || !record.number) return;
     const comments = element('section', 'comments-section'); append(comments, append(element('div', 'section-heading'), element('h3', '', '一起讨论')));
@@ -286,6 +289,24 @@
       try { await persistLocal(); } catch (error) { if (wroteRemote) { toast('GitHub 已更新，本地清理未保存，请同步核实'); } else throw error; }
       form.reset(); $('#submit-dialog').close(); s.editor = null; s.view = 'mine'; refreshFilters(); render(); toast(remote ? '正式题解已保存到 GitHub' : '已保存本地记录');
     } catch (error) { if (!remote) s.local = previousLocal; editorError(error); await saveDraft(); }
+    finally { setBusy(false); }
+  }
+  async function deleteDiscussion(record) {
+    if (s.busy) return;
+    if (demo) { toast('浏览器演示不会删除 GitHub 讨论'); return; }
+    if (!sameRepo(record) || !s.account || s.permissions.admin !== true) { toast('永久删除讨论需要当前仓库管理员权限'); return; }
+    if (!window.confirm(`永久删除 GitHub 仓库 ${record.repo} 的 Issue #${record.number}「${record.title}」及其讨论？此操作不能撤销，不会删除正式题解文件。`)) return;
+    setBusy(true);
+    try {
+      const result = await call('deleteIssue', { number: record.number, repo: record.repo });
+      if (!result?.deleted) throw new Error('GitHub 未确认删除，请同步核实');
+      s.issues = s.issues.filter(item => !(item.repo === record.repo && item.number === record.number));
+      s.comments.delete(key(record));
+      s.local.favorites = s.local.favorites.filter(id => String(id) !== key(record));
+      delete s.local.mastery[key(record)];
+      try { await persistLocal(); } catch (_) { toast('讨论已删除，本地复习状态清理未保存，请同步'); }
+      s.selected = null; refreshFilters(); render(); toast('GitHub 讨论已永久删除');
+    } catch (error) { toast(`删除讨论失败：${errorMessage(error)}`); }
     finally { setBusy(false); }
   }
   async function deleteRecord(record) {

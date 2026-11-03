@@ -49,6 +49,132 @@ function fakeGitHub({ files = {}, user = { id: 42, login: 'alice', name: 'Alice'
   return { gh: new GitHub({ repo: 'a/b', token: 'secret', fetcher }), calls, store, writes: () => calls.filter(x => x.method !== 'GET') };
 }
 
+function fakeIssueDeletion({ token = 'secret', user = { id: 42, login: 'alice' }, admin = true,
+  issue = { number: 12, node_id: 'I_fresh_issue', user: { id: 999, login: 'bob' } }, issueStatus = 200,
+  graphql = { data: { deleteIssue: { clientMutationId: null } } }, graphqlStatus = 200, graphqlError } = {}) {
+  const calls = [];
+  const fetcher = async (url, opts) => {
+    const method = opts.method || 'GET';
+    const payload = opts.body ? JSON.parse(opts.body) : undefined;
+    calls.push({ url, method, payload });
+    assert.equal(opts.headers.Authorization, `Bearer ${token}`);
+    const response = (data, status = 200) => ({ ok: status >= 200 && status < 300, status, json: async () => data, headers: new Headers() });
+    if (url === 'https://api.github.com/user') {
+      assert.equal(method, 'GET');
+      return response(user);
+    }
+    if (url === 'https://api.github.com/repos/a/b') {
+      assert.equal(method, 'GET');
+      return response({ permissions: { push: true, admin } });
+    }
+    if (url === 'https://api.github.com/repos/a/b/issues/12') {
+      assert.equal(method, 'GET');
+      return response(issue, issueStatus);
+    }
+    assert.equal(url, 'https://api.github.com/graphql');
+    assert.equal(method, 'POST');
+    if (graphqlError) throw graphqlError;
+    return response(graphql, graphqlStatus);
+  };
+  return { gh: new GitHub({ repo: 'a/b', token, fetcher }), calls, writes: () => calls.filter(call => call.method !== 'GET') };
+}
+
+test('Issue deletion authenticates and verifies admin and fresh server identity before one GraphQL mutation', async () => {
+  const { gh, calls, writes } = fakeIssueDeletion();
+  const result = await gh.deleteIssue({ number: 12, repo: 'A/B', node_id: 'I_victim', nodeId: 'I_another_victim', authorId: 42, admin: true });
+  assert.deepEqual(result, { id: 'issue:12', number: 12, repo: 'a/b', deleted: true });
+  assert.deepEqual(calls.map(call => [call.method, call.url]), [
+    ['GET', 'https://api.github.com/user'],
+    ['GET', 'https://api.github.com/repos/a/b'],
+    ['GET', 'https://api.github.com/repos/a/b/issues/12'],
+    ['POST', 'https://api.github.com/graphql'],
+  ]);
+  assert.equal(writes().length, 1);
+  assert.deepEqual(writes()[0].payload.variables, { issueId: 'I_fresh_issue' });
+  assert.match(writes()[0].payload.query, /mutation.*\$issueId: ID!/);
+  assert.match(writes()[0].payload.query, /deleteIssue\(input: \{ issueId: \$issueId \}\)/);
+  assert.ok(!JSON.stringify(writes()[0].payload).includes('victim'));
+});
+
+test('Issue deletion rejects cross-repository targets and invalid numbers before any network request', async () => {
+  const { gh, calls } = fakeIssueDeletion();
+  await assert.rejects(gh.deleteIssue({ number: 12, repo: 'other/repo' }), /仓库不一致/);
+  for (const number of [undefined, null, 0, -1, 1.5, '12', '12/../13', NaN, Infinity, Number.MAX_SAFE_INTEGER + 1]) {
+    await assert.rejects(gh.deleteIssue({ number }), /正整数/);
+  }
+  assert.equal(calls.length, 0);
+});
+
+test('Issue deletion requires authenticated identity and actual admin permission, ignoring renderer claims', async () => {
+  const anonymous = fakeIssueDeletion({ token: '' });
+  await assert.rejects(anonymous.gh.deleteIssue({ number: 12 }), /先登录/);
+  assert.equal(anonymous.calls.length, 0);
+  for (const user of [{ id: '42', login: 'alice' }, { id: 0, login: 'alice' }, { id: 42 }]) {
+    const fake = fakeIssueDeletion({ user });
+    await assert.rejects(fake.gh.deleteIssue({ number: 12 }), /无法确认.*身份/);
+    assert.equal(fake.calls.length, 1);
+    assert.equal(fake.writes().length, 0);
+  }
+  for (const admin of [false, undefined, 1, 'true']) {
+    const fake = fakeIssueDeletion({ admin: admin === undefined ? null : admin });
+    await assert.rejects(fake.gh.deleteIssue({ number: 12, admin: true, permissions: { admin: true } }), /管理员/);
+    assert.equal(fake.calls.length, 2);
+    assert.equal(fake.writes().length, 0);
+  }
+});
+
+test('Issue deletion rejects fresh PRs, mismatched numbers, missing IDs and missing Issues without mutation', async () => {
+  for (const [issue, message] of [
+    [{ number: 12, node_id: 'PR_fresh', pull_request: {} }, /Pull Request/],
+    [{ number: 13, node_id: 'I_wrong_issue' }, /编号和 node_id/],
+    [{ number: 12 }, /node_id/],
+    [{ number: 12, node_id: '' }, /node_id/],
+    [{ number: 12, node_id: '  ' }, /node_id/],
+    [{ number: 12, node_id: 123 }, /node_id/],
+    [null, /编号和 node_id/],
+  ]) {
+    const fake = fakeIssueDeletion({ issue });
+    await assert.rejects(fake.gh.deleteIssue({ number: 12, node_id: 'I_client' }), message);
+    assert.equal(fake.calls.length, 3);
+    assert.equal(fake.writes().length, 0);
+  }
+  const missing = fakeIssueDeletion({ issueStatus: 404 });
+  await assert.rejects(missing.gh.deleteIssue({ number: 12 }), /找不到/);
+  assert.equal(missing.writes().length, 0);
+});
+
+test('Issue deletion reports HTTP 200 GraphQL errors and organization deletion policy without closing or retrying', async () => {
+  for (const graphql of [
+    { errors: [{ type: 'FORBIDDEN', message: 'Organization does not allow members to delete issues' }] },
+    { data: { deleteIssue: null }, errors: [{ message: 'Could not resolve to a node' }] },
+    { data: { deleteIssue: { clientMutationId: null } }, errors: [{ message: 'Mutation failed' }] },
+  ]) {
+    const fake = fakeIssueDeletion({ graphql });
+    await assert.rejects(fake.gh.deleteIssue({ number: 12 }), /删除 Issue 失败.*组织.*Allow members to delete issues/);
+    assert.equal(fake.writes().length, 1);
+    assert.equal(fake.calls.length, 4);
+  }
+  const forbidden = fakeIssueDeletion({ graphqlStatus: 403, graphql: { message: 'Forbidden' } });
+  await assert.rejects(forbidden.gh.deleteIssue({ number: 12 }), /拒绝删除.*组织.*Allow members to delete issues/);
+  assert.equal(forbidden.writes().length, 1);
+});
+
+test('Issue deletion treats timeout or incomplete mutation response as unknown and never retries automatically', async () => {
+  for (const options of [
+    { graphqlError: new DOMException('Response lost after commit', 'TimeoutError') },
+    { graphql: {} },
+    { graphql: { data: { deleteIssue: null } } },
+    { graphql: null },
+  ]) {
+    const fake = fakeIssueDeletion(options);
+    await assert.rejects(fake.gh.deleteIssue({ number: 12 }), /结果未知.*先同步.*不要自动重试/);
+    assert.equal(fake.calls.length, 4);
+    assert.equal(fake.writes().length, 1);
+    assert.equal(fake.writes()[0].method, 'POST');
+    assert.equal(fake.writes()[0].url, 'https://api.github.com/graphql');
+  }
+});
+
 test('recognize contest and platform URLs', () => {
   assert.deepEqual(identify('https://codeforces.com/contest/2277/problem/C'), { pid: 'CF2277C', platform: 'CF' });
   assert.equal(identify('https://codeforces.com/problemset/problem/2277/C').pid, 'CF2277C');

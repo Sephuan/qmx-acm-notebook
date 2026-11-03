@@ -272,6 +272,22 @@ function setup() {
     const result = await client().deleteDocument(record);
     rememberDocument(result, true); return result;
   }));
+  handle('deleteIssue', record => writeOperation(async () => {
+    if (record.repo !== settings().repo) throw new Error('讨论所属仓库已改变，请同步后重试');
+    const result = await client().deleteIssue(record);
+    const repo = settings().repo, cache = read('cache.json', {});
+    if (cache.repo === repo) {
+      cache.issues = (cache.issues || (cache.records || []).filter(r => r.kind === 'issue')).filter(r => r.number !== result.number);
+      cache.records = (cache.records || []).filter(r => r.kind !== 'issue' || r.number !== result.number);
+      save('cache.json', cache);
+    }
+    const personal = local();
+    personal.favorites = personal.favorites.filter(id => String(id) !== result.id);
+    delete personal.mastery[result.id];
+    personal.records = personal.records.filter(r => r.kind === 'local');
+    save('local.json', personal);
+    return result;
+  }));
   handle('comment', data => writeOperation(() => {
     if (data.repo !== settings().repo) throw new Error('讨论所属仓库已改变，请同步后重试');
     return client().comment(data);

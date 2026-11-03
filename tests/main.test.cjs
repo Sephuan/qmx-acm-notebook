@@ -61,7 +61,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
   class FakeGitHub {
     constructor(options) { this.options = options; }
   }
-  for (const method of ['saveDocument', 'deleteDocument', 'sync', 'profile', 'comment', 'comments']) {
+  for (const method of ['saveDocument', 'deleteDocument', 'deleteIssue', 'sync', 'profile', 'comment', 'comments']) {
     FakeGitHub.prototype[method] = async function (...args) {
       calls.push({ method, args: clone(args), options: clone(this.options) });
       if (backend[method]) return backend[method](...args, this.options);
@@ -113,6 +113,23 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     get updaterOptions() { return updaterOptions; }, get quitCalls() { return quitCalls; },
     stored: name => JSON.parse(disk.get(path.join(root, name)) || 'null') };
 }
+
+test('Issue deletion rejects foreign repositories and cleans only selected discussion cache after confirmed remote success', async () => {
+  const h = harness({ files: { 'cache.json': { repo: REPO, records: [documentRecord(), issueRecord()], issues: [issueRecord(), issueRecord({number:8,id:'issue:8'})] }, 'local.json': personal([localRecord()]) }, backend: { deleteIssue: async r => ({id:`issue:${r.number}`,number:r.number,repo:REPO,deleted:true}) } });
+  await assert.rejects(h.invoke('deleteIssue',{repo:'other/repo',number:7}), /仓库/);
+  assert.equal(h.calls.length,0);
+  await h.invoke('deleteIssue',{repo:REPO,number:7});
+  const state=await h.invoke('bootstrap');
+  assert.equal(state.records.length,1); assert.deepEqual(state.issues.map(r=>r.number),[8]);
+  assert.deepEqual(state.local.favorites,[]); assert.equal(state.local.records.length,1);
+  assert.equal(h.calls.filter(c=>c.method==='deleteIssue').length,1);
+});
+
+test('failed Issue deletion retains discussion cache', async () => {
+  const h=harness({files:{'cache.json':{repo:REPO,records:[],issues:[issueRecord()]}}, backend:{deleteIssue:async()=>{throw new Error('organization denied');}}});
+  await assert.rejects(h.invoke('deleteIssue',{repo:REPO,number:7}),/organization denied/);
+  assert.equal((await h.invoke('bootstrap')).issues.length,1);
+});
 
 test('bootstrap separates a pre-sync mixed legacy cache and scopes it to its repository', async () => {
   const doc = documentRecord({ repo: undefined }), issue = issueRecord();
