@@ -344,7 +344,7 @@
     $('#app-version').textContent = s.appVersion || (demo ? '浏览器预览（非桌面客户端）' : '尚未获取');
     const update = s.update || {};
     const latest = update.latestVersion ? ` ${update.latestVersion}` : '';
-    const labels = { checking: '正在检查更新…', available: `发现新版本${latest}，即将自动下载。`, downloading: `正在下载新版本${latest}…`, ready: `新版本${latest}已校验，正在准备启动安装。`, installing: '安装程序已启动，请完成安装后重新打开应用。', error: '更新失败，请点击检查更新重试。' };
+    const labels = { checking: '正在检查更新…', available: `发现新版本${latest}，即将自动下载。`, downloading: `正在下载新版本${latest}…`, ready: `新版本${latest}已校验，正在准备启动安装。`, installing: '本地记录已备份，正在原位置升级；完成后会自动重新启动。', error: '更新失败，请点击检查更新重试。' };
     let text = labels[update.phase] || (update.available === false && !!update.message ? `当前已是最新版本${latest}。` : '可随时检查更新，无需登录 GitHub。');
     if (update.phase === 'checking' || update.phase === 'available' || update.phase === 'downloading' || update.phase === 'ready' || update.phase === 'installing' || update.phase === 'error' || update.available === false) {
       if (update.message) text += ` ${update.message}`;

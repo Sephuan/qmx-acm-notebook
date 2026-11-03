@@ -23,7 +23,7 @@ async function main() {
         perMachine: false,
         allowElevation: false,
         allowToChangeInstallationDirectory: true,
-        createDesktopShortcut: 'always',
+        createDesktopShortcut: true,
         createStartMenuShortcut: true,
         shortcutName: '拾题 QMX Notebook',
         runAfterFinish: true,

@@ -6,6 +6,7 @@ const { GitHub, repoParts } = require('./github.cjs');
 const { randomUUID } = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { createUpdater } = require('./updater.cjs');
+const { prepareUpgrade } = require('./upgrade.cjs');
 const APP_VERSION = require('../package.json').version;
 app.disableHardwareAcceleration();
 let win, dir, token = '', account = null, permissions = null;
@@ -167,9 +168,10 @@ function setup() {
     updateBusy = true;
     try {
       const ready = await updater.verifyReady();
-      // No renderer-supplied executable or arguments are accepted.
+      const upgrade = prepareUpgrade({ userDataDir: dir, installDir: path.dirname(process.execPath), version: APP_VERSION, targetVersion: ready.version });
+      // Installer upgrades the exact existing installation; userData is separately backed up.
       await new Promise((resolve, reject) => {
-        const process = spawn(ready.path, [], { detached: true, stdio: 'ignore', windowsHide: false, env: { ...processEnvForInstaller() } });
+        const process = spawn(ready.path, upgrade.args, { detached: true, stdio: 'ignore', windowsHide: true, shell: false, env: { ...processEnvForInstaller() } });
         process.once('error', reject);
         process.once('spawn', () => { process.unref(); resolve(); });
       });

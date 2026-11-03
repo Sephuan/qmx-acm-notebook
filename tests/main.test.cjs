@@ -19,7 +19,7 @@ const personal = (records = []) => ({ records, favorites: ['issue:7'], mastery: 
 const clone = value => JSON.parse(JSON.stringify(value));
 function deferred() { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; }
 
-function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {}, updaterBackend = {}, isPackaged = true } = {}) {
+function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {}, updaterBackend = {}, upgradeBackend = {}, isPackaged = true } = {}) {
   const root = path.resolve('mock-user-data');
   const disk = new Map();
   const writes = [];
@@ -36,10 +36,22 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
   let ready, updaterOptions, quitCalls = 0, now = 0, timerId = 0;
   let updateState = { phase: 'idle', currentVersion: '0.3.0', available: false };
   const installerPath = path.join(root, 'updates', 'private-cache', 'QMX-Notebook-Setup-0.4.0.exe');
+  const execPath = path.resolve('mock-install', 'QMX-Notebook.exe');
+  const installDir = path.dirname(execPath);
+  const installerArgs = ['/S', '--updated', '--force-run', '--keep-shortcuts', '/currentuser', '/D=' + installDir];
+  const backupDir = path.join(root, 'upgrade-backups', 'mock-backup');
+  const upgradeCalls = [], installSteps = [];
+  const prepareUpgrade = options => {
+    installSteps.push('prepareUpgrade');
+    upgradeCalls.push(clone(options));
+    if (upgradeBackend.prepareUpgrade) return upgradeBackend.prepareUpgrade(options);
+    return { args: [...installerArgs], backupDir };
+  };
   const setUpdateState = patch => { updateState = { ...updateState, ...patch }; updaterOptions.onProgress(clone(updateState)); return clone(updateState); };
   const updater = {};
   for (const method of ['check', 'download', 'verifyReady', 'getState']) updater[method] = (...args) => {
     updaterCalls.push({ method, args: clone(args) });
+    if (method === 'verifyReady') installSteps.push('verifyReady');
     if (updaterBackend[method]) return updaterBackend[method](...args, { setState: setUpdateState, installerPath });
     if (method === 'getState') return clone(updateState);
     if (method === 'check') return Promise.resolve(setUpdateState({ phase: 'available', available: true, version: '0.4.0' }));
@@ -73,7 +85,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     };
   }
   const context = vm.createContext({ Buffer, URL, AbortSignal, console,
-    process: { argv: [], env: { ELECTRON_RUN_AS_NODE: '1', QMX_TEST_ENV: 'preserved' } },
+    process: { execPath, argv: [], env: { ELECTRON_RUN_AS_NODE: '1', QMX_TEST_ENV: 'preserved' } },
     setTimeout(callback, delay) { const id = ++timerId; timers.set(id, { callback, at: now + delay }); return id; },
     clearTimeout(id) { timers.delete(id); },
     fetch: async () => { throw new Error('NETWORK FORBIDDEN IN MAIN TESTS'); },
@@ -84,7 +96,9 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       if (name === 'node:crypto') return { randomUUID: () => '00000000-0000-4000-8000-000000000001' };
       if (name === '../package.json') return { version: '0.3.0' };
       if (name === './updater.cjs') return { createUpdater(options) { updaterOptions = options; return updater; } };
+      if (name === './upgrade.cjs') return { prepareUpgrade };
       if (name === 'node:child_process') return { spawn(file, args, options) {
+        installSteps.push('spawn');
         const child = new EventEmitter();
         child.unrefCalls = 0;
         child.unref = () => { child.unrefCalls++; };
@@ -109,7 +123,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     }
     now = end;
   };
-  return { invoke, calls, writes, handlers, windows, updaterCalls, spawnCalls, installerPath, advanceTimers,
+  return { invoke, calls, writes, handlers, windows, updaterCalls, upgradeCalls, installSteps, spawnCalls, installerPath, execPath, installDir, installerArgs, backupDir, advanceTimers,
     get updaterOptions() { return updaterOptions; }, get quitCalls() { return quitCalls; },
     stored: name => JSON.parse(disk.get(path.join(root, name)) || 'null') };
 }
@@ -338,12 +352,16 @@ test('updater initializes with the packaged version and private cache and allows
 test('installation ignores renderer paths, reverifies its internal artifact, sanitizes environment and quits after spawn', async () => {
   const h = harness({ account: null });
   await h.invoke('downloadUpdate');
-  const install = h.invoke('installUpdate', { path: 'C:\\attacker.exe', args: ['/malicious'] });
+  const install = h.invoke('installUpdate', { path: 'C:\\attacker.exe', execPath: 'C:\\attacker.exe', installDir: 'C:\\attacker', userDataDir: 'C:\\attacker-data', args: ['/malicious'] });
   await new Promise(setImmediate);
   assert.equal(h.spawnCalls.length, 1);
   const launch = h.spawnCalls[0];
-  assert.equal(launch.file, h.installerPath); assert.deepEqual(launch.args, []);
-  assert.deepEqual(launch.options, { detached: true, stdio: 'ignore', windowsHide: false, env: { QMX_TEST_ENV: 'preserved' } });
+  assert.equal(launch.file, h.installerPath);
+  assert.deepEqual(launch.args, ['/S', '--updated', '--force-run', '--keep-shortcuts', '/currentuser', '/D=' + h.installDir]);
+  assert.equal(launch.args.at(-1), '/D=' + path.dirname(h.execPath), 'the exact running installation must be the final NSIS argument');
+  assert.deepEqual(launch.options, { detached: true, stdio: 'ignore', windowsHide: true, shell: false, env: { QMX_TEST_ENV: 'preserved' } });
+  assert.deepEqual(h.upgradeCalls, [{ userDataDir: path.resolve('mock-user-data'), installDir: path.dirname(h.execPath), version: '0.3.0', targetVersion: '0.4.0' }]);
+  assert.deepEqual(h.installSteps, ['verifyReady', 'prepareUpgrade', 'spawn']);
   assert.deepEqual(h.updaterCalls.filter(call => call.method === 'verifyReady'), [{ method: 'verifyReady', args: [] }]);
   h.advanceTimers(1000); assert.equal(h.quitCalls, 0, 'must not quit before the child confirms spawn');
   launch.child.emit('spawn');
@@ -353,12 +371,63 @@ test('installation ignores renderer paths, reverifies its internal artifact, san
   h.advanceTimers(1); assert.equal(h.quitCalls, 1);
 });
 
+test('backup preparation waits for successful artifact verification and completes before installer spawn', async () => {
+  const verified = deferred();
+  const h = harness({
+    updaterBackend: { verifyReady: () => verified.promise },
+    upgradeBackend: { prepareUpgrade(options) {
+      assert.equal(h.spawnCalls.length, 0);
+      assert.equal(h.quitCalls, 0);
+      assert.equal(options.targetVersion, '0.4.0');
+      return { args: [...h.installerArgs], backupDir: h.backupDir };
+    } },
+  });
+  await h.invoke('downloadUpdate');
+  const install = h.invoke('installUpdate');
+  await new Promise(setImmediate);
+  assert.deepEqual(h.installSteps, ['verifyReady']);
+  assert.equal(h.upgradeCalls.length, 0); assert.equal(h.spawnCalls.length, 0);
+  verified.resolve({ path: h.installerPath, version: '0.4.0' });
+  await new Promise(setImmediate);
+  assert.deepEqual(h.installSteps, ['verifyReady', 'prepareUpgrade', 'spawn']);
+  h.spawnCalls[0].child.emit('spawn');
+  assert.deepEqual(await install, { installing: true });
+});
+
+test('backup preparation failure aborts installation, releases locks and retains a ready update for retry', async () => {
+  let attempts = 0;
+  const h = harness({ upgradeBackend: { prepareUpgrade() {
+    if (++attempts === 1) throw new Error('backup disk full');
+    return { args: [...h.installerArgs], backupDir: h.backupDir };
+  } } });
+  await h.invoke('downloadUpdate');
+  await assert.rejects(h.invoke('installUpdate'), /启动升级失败.*backup disk full.*重新尝试/);
+  assert.deepEqual(h.installSteps, ['verifyReady', 'prepareUpgrade']);
+  assert.equal((await h.invoke('bootstrap')).update.phase, 'ready');
+  h.advanceTimers(10000); assert.equal(h.spawnCalls.length, 0); assert.equal(h.quitCalls, 0);
+  await h.invoke('saveSettings', { theme: 'dark' });
+  assert.equal(h.stored('settings.json').theme, 'dark');
+  let prevented = 0;
+  h.windows[0].emit('close', { preventDefault() { prevented++; } });
+  assert.equal(prevented, 0, 'normal close resumes after backup failure');
+  const retry = h.invoke('installUpdate');
+  await new Promise(setImmediate);
+  assert.deepEqual(h.installSteps, ['verifyReady', 'prepareUpgrade', 'verifyReady', 'prepareUpgrade', 'spawn']);
+  assert.equal(h.upgradeCalls.length, 2);
+  assert.equal(h.spawnCalls.length, 1);
+  assert.deepEqual(h.spawnCalls[0].args, h.installerArgs);
+  h.spawnCalls[0].child.emit('spawn');
+  assert.deepEqual(await retry, { installing: true });
+  h.advanceTimers(400); assert.equal(h.quitCalls, 1);
+});
+
 test('install reverification detects tampering without spawning or quitting and releases its lock', async () => {
   const h = harness({ updaterBackend: { verifyReady({ setState }) { setState({ phase: 'error', message: 'Installer SHA-256 verification failed' }); throw new Error('Installer SHA-256 verification failed'); } } });
   await h.invoke('downloadUpdate');
   await assert.rejects(h.invoke('installUpdate', { path: h.installerPath }), /SHA-256/);
   assert.equal((await h.invoke('bootstrap')).update.phase, 'error');
   assert.equal(h.updaterCalls.filter(call => call.method === 'verifyReady').length, 1);
+  assert.equal(h.upgradeCalls.length, 0, 'tampered artifacts must not trigger backup preparation');
   h.advanceTimers(10000); assert.equal(h.spawnCalls.length, 0); assert.equal(h.quitCalls, 0);
   await h.invoke('saveSettings', { theme: 'dark' });
   assert.equal(h.stored('settings.json').theme, 'dark');

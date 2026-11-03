@@ -40,7 +40,7 @@ const { chromium } = require('playwright');
     assert.doesNotMatch(await page.locator('#update-status').innerText(), /最新版本/, 'initial idle state is not a completed check');
     assert(await page.locator('#account-login').isVisible());
     assert(await page.locator('#check-update-button').isEnabled(), 'signed out users may check');
-    assert.match(await page.locator('#update-notice').innerText(), /自动下载并启动安装/);
+    assert.match(await page.locator('#update-notice').innerText(), /备份本地记录.*原位置自动升级.*保留桌面快捷方式/);
     return page;
   }
   const calls = page => page.evaluate(() => fixture.calls);
@@ -65,7 +65,7 @@ const { chromium } = require('playwright');
     await page.evaluate(() => fixture.finishDownload());
     await page.waitForFunction(() => fixture.calls.includes('install'));
     assert.deepEqual(await calls(page), ['check', 'persist', 'download', 'persist', 'install']);
-    assert.match(await page.locator('#update-status').innerText(), /安装程序已启动/);
+    assert.match(await page.locator('#update-status').innerText(), /本地记录已备份.*原位置升级/);
     assert(await page.locator('#check-update-button').isDisabled(), 'keep controls locked while main exits');
     await page.close();
 
