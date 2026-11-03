@@ -19,7 +19,9 @@ function processEnvForInstaller() {
 function ensureIdle() {
   if (updateBusy || installing) throw new Error('客户端正在更新，请等待更新完成');
 }
-const defaults = { repo: 'qmx-acm-data/2026', clientId: '', theme: 'light' };
+// Public OAuth application identifier; never embed a client secret or user token.
+const TEAM_CLIENT_ID = 'Ov23likjqSdpkS6MYGzJ';
+const defaults = { repo: 'qmx-acm-data/2026', clientId: TEAM_CLIENT_ID, theme: 'light' };
 function read(name, fallback) {
   try { return JSON.parse(fs.readFileSync(path.join(dir, name), 'utf8')); } catch { return fallback; }
 }
@@ -28,7 +30,11 @@ function save(name, data) {
   fs.writeFileSync(file + '.tmp', JSON.stringify(data, null, 2));
   fs.renameSync(file + '.tmp', file);
 }
-function settings() { return { ...defaults, ...read('settings.json', {}) }; }
+function settings() {
+  const value = { ...defaults, ...read('settings.json', {}) };
+  value.clientId = typeof value.clientId === 'string' && value.clientId.trim() ? value.clientId.trim() : TEAM_CLIENT_ID;
+  return value;
+}
 function local() { return { records: [], favorites: [], mastery: {}, draft: {}, ...read('local.json', {}) }; }
 function client() { return new GitHub({ repo: settings().repo, token }); }
 function state(error) {
@@ -203,7 +209,7 @@ function setup() {
     if (data.repo !== undefined) { repoParts(data.repo); next.repo = data.repo; }
     if (data.clientId !== undefined) {
       if (!/^[A-Za-z0-9_.-]{0,100}$/.test(data.clientId)) throw new Error('Client ID 格式不正确');
-      next.clientId = data.clientId;
+      next.clientId = data.clientId.trim() || TEAM_CLIENT_ID;
     }
     if (data.theme !== undefined) next.theme = String(data.theme);
     if (data.displayName !== undefined) next.displayName = String(data.displayName).slice(0, 40);

@@ -12,7 +12,7 @@
 
 未登录也可查看公开资料、保存和编辑未绑定账号的本地题解。默认资料库是 `qmx-acm-data/2026`，程序源码库是 `qmx-acm-data/qmx-acm-notebook`。
 
-负责人先注册 GitHub OAuth App 并启用 Device Flow，客户端设置中填写公开的 Client ID。点击左下角账号入口，选择登录，在 [GitHub 官方设备授权页面](https://github.com/login/device)输入客户端显示的验证码。无需另注册客户端账号，不要填写 GitHub 密码、Client Secret 或个人 Token。
+0.3.3 起内置队伍公开 OAuth Client ID，队员无需注册 OAuth App 或填写 Client ID；旧设置缺失、为空或无效类型时自动使用队伍配置。点击左下角账号入口，选择登录，在 [GitHub 官方设备授权页面](https://github.com/login/device)输入客户端显示的验证码并授权。每人仍使用自己的 GitHub 账号。设置中的“高级：自定义 GitHub 登录应用”仅供自建应用使用，清空保存恢复默认。不要填写 GitHub 密码、Client Secret 或个人 Token。
 
 账号页显示昵称、用户名、唯一用户 ID 和当前资料库权限，可刷新权限、退出及切换账号。昵称只用于展示，归属按唯一用户 ID 判断，改 GitHub 用户名不会转移题解归属。头像由主进程从 GitHub 获取后以本地数据展示。
 
@@ -88,6 +88,6 @@ Markdown 经 DOMPurify 清洗；页面禁止网络连接和远端正文图片，
 
 ## 验收与当前限制
 
-新版支持直接文件增删改与账号身份归属；实际 OAuth 登录仍需负责人配置 Client ID 并进行真实队员账号验收。维护工具的 GitHub CLI 登录不能代替客户端 OAuth 验收。
+新版内置队伍 OAuth 配置；应用负责人仍需保持 Device Flow 启用并批准必要的组织访问。不同队员的真实账号登录和权限需各自验收。维护工具的 GitHub CLI 登录不能代替客户端 OAuth 验收。
 
 暂不支持图片附件、私人数据跨设备同步、备份界面导入、自动认领旧版无用户 ID 文档。直接打开源码的页面是浏览器演示，演示不会向 GitHub 投稿。

@@ -139,6 +139,22 @@ test('Issue deletion rejects foreign repositories and cleans only selected discu
   assert.equal(h.calls.filter(c=>c.method==='deleteIssue').length,1);
 });
 
+test('team OAuth app is available for new installs and legacy empty settings', async () => {
+  for (const clientId of [undefined, '', '   ', null, 123]) {
+    const h = harness({ account: null, files: { 'settings.json': { repo: REPO, ...(clientId === undefined ? {} : { clientId }) } } });
+    assert.equal((await h.invoke('bootstrap')).settings.clientId, 'Ov23likjqSdpkS6MYGzJ');
+  }
+});
+
+test('custom OAuth app remains available and clearing restores team default without losing settings', async () => {
+  const h = harness({ account: null, files: { 'settings.json': { repo: REPO, clientId: 'custom-app', theme: 'dark', displayName: 'test' } } });
+  assert.equal((await h.invoke('bootstrap')).settings.clientId, 'custom-app');
+  await h.invoke('saveSettings', { clientId: '' });
+  const state = await h.invoke('bootstrap');
+  assert.equal(state.settings.clientId, 'Ov23likjqSdpkS6MYGzJ');
+  assert.equal(state.settings.theme, 'dark'); assert.equal(state.settings.displayName, 'test');
+});
+
 test('failed Issue deletion retains discussion cache', async () => {
   const h=harness({files:{'cache.json':{repo:REPO,records:[],issues:[issueRecord()]}}, backend:{deleteIssue:async()=>{throw new Error('organization denied');}}});
   await assert.rejects(h.invoke('deleteIssue',{repo:REPO,number:7}),/organization denied/);
