@@ -212,6 +212,7 @@
       controls.forEach(node => { node.disabled = true; });
     }
     $('#check-update-button').disabled = value;
+    if (!value) queueMicrotask(showStartupUpdate);
   }
   function formDraft() { const data = new FormData($('#submit-form')); return Object.fromEntries(['url', 'title', 'pid', 'platform', 'tags', 'reason', 'body', 'trick', 'rating', 'difficulty'].map(name => [name, String(data.get(name) || '')])); }
   function fillForm(draft) { const form = $('#submit-form'); form.reset(); Object.entries(draft || {}).forEach(([name, value]) => { const input = form.elements.namedItem(name); if (input) input.value = String(value ?? ''); }); }
@@ -344,7 +345,7 @@
     $('#app-version').textContent = s.appVersion || (demo ? '浏览器预览（非桌面客户端）' : '尚未获取');
     const update = s.update || {};
     const latest = update.latestVersion ? ` ${update.latestVersion}` : '';
-    const labels = { checking: '正在检查更新…', available: `发现新版本${latest}，即将自动下载。`, downloading: `正在下载新版本${latest}…`, ready: `新版本${latest}的签名和文件已校验，正在准备更新。`, installing: '本地记录已备份，退出后将备份并替换程序文件，完成后自动重启。', error: '更新失败，请点击检查更新重试。' };
+    const labels = { checking: '正在检查更新…', available: `发现新版本${latest}，可点击检查更新进行升级。`, downloading: `正在下载新版本${latest}…`, ready: `新版本${latest}的签名和文件已校验，正在准备更新。`, installing: '本地记录已备份，退出后将备份并替换程序文件，完成后自动重启。', error: '更新失败，请点击检查更新重试。' };
     let text = labels[update.phase] || (update.available === false && !!update.message ? `当前已是最新版本${latest}。` : '可随时检查更新，无需登录 GitHub。');
     if (update.phase === 'checking' || update.phase === 'available' || update.phase === 'downloading' || update.phase === 'ready' || update.phase === 'installing' || update.phase === 'error' || update.available === false) {
       if (update.message) text += ` ${update.message}`;
@@ -401,6 +402,28 @@
     receiveUpdate(update);
   });
   $('#check-update-button').addEventListener('click', checkForUpdates);
+  let startupUpdatePending = null;
+  function showStartupUpdate() {
+    if (!startupUpdatePending || s.busy || updateRunning || document.querySelector('dialog[open]')) return;
+    $('#startup-update-version').textContent = startupUpdatePending.latestVersion || startupUpdatePending.version;
+    startupUpdatePending = null;
+    $('#startup-update-dialog').showModal();
+  }
+  async function checkStartupUpdates() {
+    if (demo || typeof bridge?.checkStartupUpdates !== 'function') return;
+    try {
+      const result = await call('checkStartupUpdates');
+      if (!result?.available || result.phase !== 'available') return;
+      startupUpdatePending = result;
+      showStartupUpdate();
+    } catch { /* Startup discovery stays quiet when offline. */ }
+  }
+  function dismissStartupUpdate() { startupUpdatePending = null; $('#startup-update-dialog').close(); }
+  $('#startup-update-close').addEventListener('click', dismissStartupUpdate);
+  $('#startup-update-later').addEventListener('click', dismissStartupUpdate);
+  $('#startup-update-dialog').addEventListener('click', event => { if (event.target !== event.currentTarget) return; const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) dismissStartupUpdate(); });
+  $('#startup-update-now').addEventListener('click', () => { dismissStartupUpdate(); renderAccount(); $('#account-dialog').showModal(); void checkForUpdates(); });
+  $$('dialog').forEach(dialog => dialog.addEventListener('close', showStartupUpdate));
   function renderAccount() {
     renderUpdate();
     const box = $('#account-details'); box.replaceChildren();
@@ -452,6 +475,7 @@
     if (demo) { s.permissions = { repo: 'qmx-acm-data/2026', push: false, admin: false }; s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo })); s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo })); s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} }); s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record); s.settings = cached?.settings || {}; applyTheme(s.settings.theme || readTheme()); }
     else { try { applyPayload(await call('bootstrap')); } catch (error) { s.error = errorMessage(error); } }
     s.loading = false; refreshFilters(); render();
+    void checkStartupUpdates();
     if (!demo && !s.error && s.settings.autoSync !== false && navigator.onLine) await sync();
   }
   bootstrap();

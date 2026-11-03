@@ -366,6 +366,20 @@ test('sync never supplies cached blobs from a different repository to the backen
   assert.equal(h.stored('cache.json').repo, REPO);
 });
 
+test('startup discovery never downloads, stays nonblocking and suppresses network errors', async () => {
+  const pending = deferred();
+  const h = harness({ updaterBackend: { check: () => pending.promise } });
+  const discovery = h.invoke('checkStartupUpdates');
+  const windowClose = { prevented: false, preventDefault() { this.prevented = true; } };
+  h.windows[0].emit('close', windowClose);
+  assert.equal(windowClose.prevented, false);
+  assert.equal((await h.invoke('bootstrap')).appVersion, '0.3.0');
+  assert.deepEqual(h.updaterCalls.map(c => c.method).filter(m => m !== 'getState'), ['check']);
+  pending.reject(new Error('offline'));
+  assert.equal(await discovery, null);
+  assert.equal(h.spawnCalls.length, 0);
+});
+
 test('packaged startup recovery fails before opening a window or exposing IPC', () => {
   assert.throws(() => harness({ upgradeBackend: { recoverFileUpgrade() { throw new Error('unsafe transaction requires manual recovery'); } } }), /unsafe transaction requires manual recovery/);
 });

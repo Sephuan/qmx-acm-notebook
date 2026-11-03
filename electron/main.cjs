@@ -134,7 +134,7 @@ async function writeOperation(fn) {
 function handle(name, fn) {
   ipcMain.handle(name, async (event, ...args) => {
     if (event.sender !== win.webContents) throw new Error('非法调用');
-    if (!['bootstrap', 'checkForUpdates', 'downloadUpdate', 'installUpdate', 'updateLocal', 'exportLocal'].includes(name)) ensureIdle();
+    if (!['bootstrap', 'checkStartupUpdates', 'checkForUpdates', 'downloadUpdate', 'installUpdate', 'updateLocal', 'exportLocal'].includes(name)) ensureIdle();
     return fn(...args);
   });
 }
@@ -158,6 +158,11 @@ function rememberDocument(result, removed = false) {
 }
 function setup() {
   handle('bootstrap', () => state());
+  handle('checkStartupUpdates', async () => {
+    // Discovery only: normal reading, editing and sync remain available.
+    if (updateBusy || installing) return null;
+    try { return await updater.check(); } catch { return null; }
+  });
   handle('checkForUpdates', async () => {
     if (writeBusy || syncBusy || updateBusy || installing) throw new Error('请等待当前操作完成后检查更新');
     updateBusy = true;

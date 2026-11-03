@@ -1,16 +1,16 @@
 {
   "schema": 1,
-  "version": "0.3.5",
+  "version": "0.3.6",
   "runtimeVersion": "40.10.6",
   "base": "../",
-  "notes": "0.3.5：修复检查更新 fetch failed，使用 GitHub Contents API 与固定提交备用来源，有限重试并保留签名哈希校验。",
-  "publishedAt": "2026-11-03T11:49:26.343Z",
+  "notes": "0.3.6：每次启动后台检查更新，发现新版本显示适中、可关闭的提示，确认后才下载升级。",
+  "publishedAt": "2026-11-03T13:31:59.821Z",
   "files": [
     {
       "path": "resources/app.asar",
-      "size": 7238090,
-      "sha256": "a2c6a7ea15de6f7787fd9cb8a4cb9a1c31b712e68cc9d0b83f7eeb5de1c9f098"
+      "size": 7241526,
+      "sha256": "111da9af21434adc146da619352bc62d23f963a5d93784a6787155aa33b6349e"
     }
   ],
-  "signature": "mXU7Zm0v+w+7p2mLz36Y4TQXOOmZoeulWA/EADpFynVd7WLbXrCXyGufDNSlbgl77VbUCQO5vrS9xvoccRayBg=="
+  "signature": "yEAb61SEfnriyyd7cUS5gfPBt9TBiMgzdPEj6GUFgxPRGNIlWBGohLS3kL6VDAN+xuLtr4DwsUKwSfoEJmLnBQ=="
 }
