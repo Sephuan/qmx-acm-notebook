@@ -3,6 +3,7 @@
 const nativeFs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { installationPaths } = require('./update-helper.cjs');
 
 const USER_FILES = ['local.json', 'settings.json', 'auth.json', 'cache.json'];
 const VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
@@ -47,7 +48,7 @@ function overlaps(a, b) {
  * args unchanged. NSIS requires /D= to remain last; never wrap this in cmd.exe.
  * Completed and partial backup directories are intentionally retained.
  */
-function prepareUpgrade({ userDataDir, installDir, version, targetVersion } = {}, { fs = nativeFs } = {}) {
+function prepareUpgrade({ userDataDir, installDir, version, targetVersion } = {}, { fs = nativeFs, platform = process.platform } = {}) {
   if (!VERSION.test(version) || !VERSION.test(targetVersion)) throw new Error('Upgrade versions must be stable semantic versions');
   const userPath = absoluteDirectory(userDataDir, 'userDataDir');
   const installPath = absoluteDirectory(installDir, 'installDir');
@@ -58,12 +59,17 @@ function prepareUpgrade({ userDataDir, installDir, version, targetVersion } = {}
   const realInstallDir = fs.realpathSync(installPath);
   if (overlaps(realUserData, realInstallDir)) throw new Error('installDir and userDataDir must not overlap');
 
-  for (const filename of ['QMX-Notebook.exe', 'Uninstall QMX-Notebook.exe']) {
+  const { executablePath } = installationPaths(realInstallDir, platform);
+  const requiredFiles = [executablePath];
+  if (platform === 'win32') requiredFiles.push(path.join(realInstallDir, 'Uninstall QMX-Notebook.exe'));
+  for (const filename of requiredFiles) {
     let info;
-    try { info = fs.lstatSync(path.join(realInstallDir, filename)); }
+    try { info = fs.lstatSync(filename); }
     catch (error) { if (error.code !== 'ENOENT') throw error; }
     if (!info || !info.isFile() || info.isSymbolicLink()) {
-      throw new Error('Portable upgrades are unsupported. Perform one manual installation of QMX Notebook, then retry; shortcuts are not migrated automatically.');
+      throw new Error(platform === 'win32'
+        ? 'Portable upgrades are unsupported. Perform one manual installation of QMX Notebook, then retry; shortcuts are not migrated automatically.'
+        : 'Installed QMX-Notebook executable is missing or unsafe; manual installation required.');
     }
   }
 
@@ -95,7 +101,7 @@ function prepareUpgrade({ userDataDir, installDir, version, targetVersion } = {}
     throw new Error('Upgrade backup failed; installer must not be launched. Existing data and any backup directory have been retained.');
   }
   return {
-    args: ['/S', '--updated', '--force-run', '--keep-shortcuts', '/currentuser', `/D=${realInstallDir}`],
+    args: platform === 'win32' ? ['/S', '--updated', '--force-run', '--keep-shortcuts', '/currentuser', `/D=${realInstallDir}`] : [],
     backupDir
   };
 }

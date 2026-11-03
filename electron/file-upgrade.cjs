@@ -28,6 +28,7 @@ function recoverFileUpgrade(userDataDir, installDir) {
   const pointerPath = path.join(updates, 'active.json');
   let pointer;
   try { pointer = helper.readJson(pointerPath); } catch (error) { if (error.code === 'ENOENT') return { phase: 'none' }; throw error; }
+  helper.assertFileUpgradeSupported();
   if (pointer.schema !== 1 || typeof pointer.transaction !== 'string' || !/^transaction-[a-f0-9]{32}$/.test(pointer.transaction)) throw new Error('Unsafe update recovery pointer; manual recovery required');
   const jobPath = path.join(updates, pointer.transaction, 'job.json');
   const job = helper.validateJob(jobPath, publicKeyPem());
@@ -40,11 +41,13 @@ function recoverFileUpgrade(userDataDir, installDir) {
  * spawn event before quitting Electron. The external helper waits for this PID.
  */
 function prepareFileUpgrade({ userDataDir, installDir, version, targetVersion, ready, runtimeVersion, executablePath, parentPid = process.pid, launchArgs = ['--disable-gpu'] } = {}) {
+  helper.assertFileUpgradeSupported();
   userDataDir = helper.absolute(userDataDir);
   installDir = helper.absolute(installDir);
   helper.directory(userDataDir); helper.directory(installDir);
   if (helper.overlaps(userDataDir, installDir)) throw new Error('Install and user data directories overlap');
-  if (executablePath !== path.join(installDir, 'QMX-Notebook.exe')) throw new Error('File upgrades require the installed application executable');
+  const { executablePath: expectedExecutable, resourcesDir } = helper.installationPaths(installDir);
+  if (executablePath !== expectedExecutable) throw new Error('File upgrades require the installed application executable');
   helper.regular(executablePath);
   if (!Number.isSafeInteger(parentPid) || parentPid <= 0 || !Array.isArray(launchArgs) || launchArgs.some(arg => typeof arg !== 'string' || /[\x00\r\n]/.test(arg))) throw new Error('Invalid upgrade parent PID or launch arguments');
   if (!ready || ready.version !== targetVersion || ready.manifest?.version !== targetVersion || typeof version !== 'string' || !/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version) || !helper.newer(targetVersion, version)) throw new Error('Update version mismatch');
@@ -52,7 +55,7 @@ function prepareFileUpgrade({ userDataDir, installDir, version, targetVersion, r
   const manifest = JSON.parse(JSON.stringify(ready.manifest));
   const file = helper.validateManifest(manifest, pem, runtimeVersion);
   helper.verifyFile(ready.path, file);
-  helper.metadata(path.join(installDir, 'resources', 'app.asar'));
+  helper.metadata(path.join(resourcesDir, 'app.asar'));
   // Never replace a pointer to an unfinished transaction.
   recoverFileUpgrade(userDataDir, installDir);
   const { backupDir } = prepareUpgrade({ userDataDir, installDir, version, targetVersion });
@@ -81,9 +84,9 @@ function prepareFileUpgrade({ userDataDir, installDir, version, targetVersion, r
     launchArgs: launchArgs.slice(), backupDir, stagePath, keyPath,
     backupPath: path.join(transactionDir, 'original.asar'),
     statePath: path.join(transactionDir, 'state.json'),
-    targetPath: path.join(installDir, 'resources', 'app.asar'),
-    newPath: path.join(installDir, 'resources', `app.asar.${id}.new`),
-    oldPath: path.join(installDir, 'resources', `app.asar.${id}.old`)
+    targetPath: path.join(resourcesDir, 'app.asar'),
+    newPath: path.join(resourcesDir, `app.asar.${id}.new`),
+    oldPath: path.join(resourcesDir, `app.asar.${id}.old`)
   };
   helper.writeJson(jobPath, job, true);
   helper.writeJson(job.statePath, { schema: 1, phase: 'prepared', mutationStarted: false, helperPid: null, updatedAt: new Date().toISOString() }, true);
@@ -91,4 +94,4 @@ function prepareFileUpgrade({ userDataDir, installDir, version, targetVersion, r
   helper.writeJson(path.join(updates, 'active.json'), { schema: 1, transaction: path.basename(transactionDir) });
   return { args: [helperPath, jobPath], env: { ELECTRON_RUN_AS_NODE: '1' }, backupDir };
 }
-module.exports = { prepareFileUpgrade, recoverFileUpgrade };
+module.exports = { prepareFileUpgrade, recoverFileUpgrade, getFileUpgradeCapability: helper.getFileUpgradeCapability };

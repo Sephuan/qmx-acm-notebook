@@ -1,16 +1,16 @@
 {
   "schema": 1,
-  "version": "0.3.6",
+  "version": "0.4.0",
   "runtimeVersion": "40.10.6",
   "base": "../",
-  "notes": "0.3.6：每次启动后台检查更新，发现新版本显示适中、可关闭的提示，确认后才下载升级。",
-  "publishedAt": "2026-11-03T13:31:59.821Z",
+  "notes": "Linux/macOS 构建适配；Linux原生运行与更新验证。",
+  "publishedAt": "2026-11-03T15:36:29.777Z",
   "files": [
     {
       "path": "resources/app.asar",
-      "size": 7241526,
-      "sha256": "111da9af21434adc146da619352bc62d23f963a5d93784a6787155aa33b6349e"
+      "size": 7244361,
+      "sha256": "f1b919a8adfecb343604fceeac65c12a73fffc2dd9d77fd853bfdcaa756c2cc2"
     }
   ],
-  "signature": "yEAb61SEfnriyyd7cUS5gfPBt9TBiMgzdPEj6GUFgxPRGNIlWBGohLS3kL6VDAN+xuLtr4DwsUKwSfoEJmLnBQ=="
+  "signature": "HHUVbJ7o11WjEajRvgAlmiSDTcYreDmh1wN0qn0/jClTmSH7IuzECh/itJWR2qjhba0rvuT3+nnVaYVvWYCEDA=="
 }

@@ -11,6 +11,26 @@ const crypto = require('node:crypto');
 const childProcess = require('node:child_process');
 const VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 const TERMINAL = new Set(['completed', 'rolled-back', 'cancelled', 'failed']);
+const EXECUTABLES = Object.freeze({ win32: 'QMX-Notebook.exe', linux: 'QMX-Notebook', darwin: 'QMX-Notebook' });
+
+function installationPaths(installDir, platform = process.platform) {
+  absolute(installDir);
+  if (!Object.hasOwn(EXECUTABLES, platform)) throw new Error('Unsupported update platform');
+  if (platform === 'darwin' && (path.basename(installDir) !== 'MacOS' || path.basename(path.dirname(installDir)) !== 'Contents' || !path.basename(path.dirname(path.dirname(installDir))).endsWith('.app'))) throw new Error('Invalid macOS application bundle path');
+  return {
+    executablePath: path.join(installDir, EXECUTABLES[platform]),
+    resourcesDir: platform === 'darwin' ? path.join(path.dirname(installDir), 'Resources') : path.join(installDir, 'resources')
+  };
+}
+function getFileUpgradeCapability(platform = process.platform) {
+  if (platform === 'darwin') return { supported: false, reason: 'macOS 暂不支持自动应用更新：替换 app.asar 会破坏应用签名。请下载最新版本的 macOS 安装包并手动安装，保留现有用户数据。' };
+  if (platform === 'win32' || platform === 'linux') return { supported: true, reason: '' };
+  return { supported: false, reason: '当前系统不支持自动应用更新，请下载适用于当前系统的安装包并手动安装。' };
+}
+function assertFileUpgradeSupported(platform = process.platform) {
+  const capability = getFileUpgradeCapability(platform);
+  if (!capability.supported) throw new Error(capability.reason);
+}
 
 function canonical(value) {
   if (Array.isArray(value)) return `[${value.map(canonical).join(',')}]`;
@@ -109,11 +129,13 @@ function validateJob(jobPath, publicKey) {
   if (job.schema !== 1 || job.transactionDir !== transactionDir || job.userDataDir !== path.dirname(updatesDir)) throw new Error('Invalid update job location');
   directory(job.userDataDir); directory(job.installDir);
   if (overlaps(job.userDataDir, job.installDir) || overlaps(fs.realpathSync(job.userDataDir), fs.realpathSync(job.installDir))) throw new Error('Update directories overlap');
-  const resources = directory(path.join(job.installDir, 'resources'));
+  const installation = installationPaths(job.installDir);
+  const resources = directory(installation.resourcesDir);
   const id = path.basename(transactionDir).slice('transaction-'.length);
-  const derived = { stagePath: path.join(transactionDir, 'app.asar'), backupPath: path.join(transactionDir, 'original.asar'), statePath: path.join(transactionDir, 'state.json'), keyPath: path.join(transactionDir, 'public-key.pem'), targetPath: path.join(resources, 'app.asar'), newPath: path.join(resources, `app.asar.${id}.new`), oldPath: path.join(resources, `app.asar.${id}.old`), executablePath: path.join(job.installDir, 'QMX-Notebook.exe') };
+  const derived = { stagePath: path.join(transactionDir, 'app.asar'), backupPath: path.join(transactionDir, 'original.asar'), statePath: path.join(transactionDir, 'state.json'), keyPath: path.join(transactionDir, 'public-key.pem'), targetPath: path.join(resources, 'app.asar'), newPath: path.join(resources, `app.asar.${id}.new`), oldPath: path.join(resources, `app.asar.${id}.old`), executablePath: installation.executablePath };
   for (const [key, value] of Object.entries(derived)) if (job[key] !== value) throw new Error(`Unsafe update ${key}`);
-  regular(job.executablePath); regular(path.join(job.installDir, 'Uninstall QMX-Notebook.exe'));
+  regular(job.executablePath);
+  if (process.platform === 'win32') regular(path.join(job.installDir, 'Uninstall QMX-Notebook.exe'));
   if (!VERSION.test(job.fromVersion) || !VERSION.test(job.toVersion) || !newer(job.toVersion, job.fromVersion) || job.manifest?.version !== job.toVersion || !Number.isSafeInteger(job.parentPid) || job.parentPid <= 0 || job.parentPid === process.pid || !Array.isArray(job.launchArgs) || job.launchArgs.some(a => typeof a !== 'string' || /[\x00\r\n]/.test(a))) throw new Error('Invalid update job');
   regular(job.keyPath);
   job.file = validateManifest(job.manifest, publicKey || fs.readFileSync(job.keyPath, 'utf8'), job.runtimeVersion);
@@ -161,6 +183,7 @@ function launch(job, spawn = childProcess.spawn) {
   });
 }
 async function applyJob(jobPath, { spawn = childProcess.spawn, io = fs, timeoutMs = 120000, publicKey } = {}) {
+  assertFileUpgradeSupported();
   const job = validateJob(jobPath, publicKey);
   const state = stateFor(job);
   if (state.phase !== 'prepared' || state.mutationStarted) throw new Error('Transaction already started; recovery required');
@@ -197,6 +220,7 @@ async function applyJob(jobPath, { spawn = childProcess.spawn, io = fs, timeoutM
   }
 }
 function recoverTransaction(jobPath, publicKey) {
+  assertFileUpgradeSupported();
   const job = validateJob(jobPath, publicKey);
   const state = stateFor(job);
   if (state.phase === 'completed') { verifyFile(job.targetPath, job.file); return { phase: 'completed' }; }
@@ -208,7 +232,7 @@ function recoverTransaction(jobPath, publicKey) {
   rollback(job, state);
   return { phase: 'rolled-back' };
 }
-module.exports = { canonical, validateManifest, absolute, directory, overlaps, regular, metadata, verifyFile, syncFile, writeJson, readJson, newer, validateJob, applyJob, recoverTransaction, waitForParent };
+module.exports = { installationPaths, getFileUpgradeCapability, assertFileUpgradeSupported, canonical, validateManifest, absolute, directory, overlaps, regular, metadata, verifyFile, syncFile, writeJson, readJson, newer, validateJob, applyJob, recoverTransaction, waitForParent };
 if (require.main === module) {
   if (process.argv.length !== 3) { process.stderr.write('Expected update job path\n'); process.exitCode = 1; }
   else applyJob(process.argv[2]).catch(() => { process.stderr.write('Application update failed; inspect transaction receipt\n'); process.exitCode = 1; });

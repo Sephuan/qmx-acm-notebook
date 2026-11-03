@@ -1,4 +1,4 @@
-name: Build Windows client
+name: Build desktop clients
 on:
   workflow_dispatch:
   push:
@@ -7,6 +7,47 @@ on:
 permissions:
   contents: read
 jobs:
+  unix:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            platform: linux
+            arch: x64
+          - os: ubuntu-24.04-arm
+            platform: linux
+            arch: arm64
+          - os: macos-15-intel
+            platform: darwin
+            arch: x64
+          - os: macos-15
+            platform: darwin
+            arch: arm64
+    runs-on: ${{ matrix.os }}
+    env:
+      QMX_PLATFORM: ${{ matrix.platform }}
+      QMX_ARCH: ${{ matrix.arch }}
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm test
+      - run: pnpm dist
+      - name: Linux packaged desktop persistence smoke
+        if: matrix.platform == 'linux'
+        run: QMX_SMOKE_NO_SANDBOX=1 xvfb-run -a node tests/linux-desktop-smoke.cjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: QMX-Notebook-${{ matrix.platform }}-${{ matrix.arch }}
+          path: release/installer/*
+      # Unix builds only upload CI artifacts; publishing remains an explicit action.
   windows:
     permissions:
       contents: write

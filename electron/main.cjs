@@ -6,7 +6,7 @@ const { GitHub, repoParts } = require('./github.cjs');
 const { randomUUID } = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { createUpdater } = require('./updater.cjs');
-const { prepareFileUpgrade, recoverFileUpgrade } = require('./file-upgrade.cjs');
+const { prepareFileUpgrade, recoverFileUpgrade, getFileUpgradeCapability } = require('./file-upgrade.cjs');
 const APP_VERSION = require('../package.json').version;
 app.disableHardwareAcceleration();
 let win, dir, token = '', account = null, permissions = null;
@@ -45,7 +45,7 @@ function state(error) {
     records: matching ? (cache.records || []).filter(r => r.kind === 'document').map(r => ({ ...r, repo: s.repo })) : [],
     issues: matching ? (cache.issues || (cache.records || []).filter(r => r.kind === 'issue')).map(r => ({ ...r, repo: s.repo })) : [],
     lastSync: matching ? cache.lastSync : null,
-    settings: s, account, appVersion: APP_VERSION, update: updater?.getState(), permissions: permissions?.repo === s.repo ? permissions : null,
+    settings: s, account, appVersion: APP_VERSION, update: updater?.getState(), updateCapability: getFileUpgradeCapability(), permissions: permissions?.repo === s.repo ? permissions : null,
     local: local(), error: error || null
   };
 }
@@ -176,6 +176,8 @@ function setup() {
   handle('installUpdate', async () => {
     if (writeBusy || syncBusy || updateBusy || installing) throw new Error('请等待当前操作完成后安装更新');
     if (!app.isPackaged) throw new Error('源码运行模式不能覆盖升级，请使用安装版客户端');
+    const capability = getFileUpgradeCapability();
+    if (!capability.supported) throw new Error(capability.reason);
     updateBusy = true;
     try {
       const ready = await updater.verifyReady();

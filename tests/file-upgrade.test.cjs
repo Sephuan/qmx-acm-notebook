@@ -1,6 +1,7 @@
 'use strict';
 
-const test = require('node:test');
+const nativeTest = require('node:test');
+const test = Object.assign((name, fn) => nativeTest(name, { skip: process.platform === 'darwin' ? 'macOS signed bundle application is disabled; covered in update-helper tests' : false }, fn), { after: nativeTest.after });
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const os = require('node:os');
@@ -19,14 +20,16 @@ require.cache[keyModule].exports = pem;
 const DEAD_PID = 2147483647;
 
 function fixture(t) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'qmx-file-upgrade-'));
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'qmx-file-upgrade-')));
   // root is generated directly by mkdtemp, so removal is restricted to this fixture.
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const userDataDir = path.join(root, 'user');
   const installDir = path.join(root, 'installed');
   const downloadDir = path.join(root, 'download');
   for (const directory of [userDataDir, installDir, downloadDir, path.join(installDir, 'resources')]) fs.mkdirSync(directory);
-  for (const name of ['QMX-Notebook.exe', 'Uninstall QMX-Notebook.exe']) fs.writeFileSync(path.join(installDir, name), 'fixture executable');
+  const executablePath = helper.installationPaths(installDir).executablePath;
+  fs.writeFileSync(executablePath, 'fixture executable', { mode: 0o751 });
+  if (process.platform === 'win32') fs.writeFileSync(path.join(installDir, 'Uninstall QMX-Notebook.exe'), 'fixture uninstaller');
   for (const name of ['local.json', 'settings.json', 'auth.json', 'cache.json']) fs.writeFileSync(path.join(userDataDir, name), `private user data ${name}`);
   fs.writeFileSync(path.join(userDataDir, 'extra.db'), 'untouched database');
   const old = Buffer.from('original installed archive');
@@ -55,6 +58,7 @@ function successfulSpawn(calls = []) {
 
 test('successful signed archive upgrade backs up user data and relaunches without Node mode', async t => {
   const f = fixture(t);
+  const executableBefore = { bytes: fs.readFileSync(f.options.executablePath), mode: fs.statSync(f.options.executablePath).mode };
   const prepared = prepareFileUpgrade(f.options);
   assert.deepEqual(prepared.env, { ELECTRON_RUN_AS_NODE: '1' });
   assert.equal(fs.readFileSync(prepared.args[0], 'utf8').includes("require('./"), false);
@@ -69,6 +73,12 @@ test('successful signed archive upgrade backs up user data and relaunches withou
   assert.deepEqual(fs.readFileSync(job.backupPath), f.old);
   assert.deepEqual(fs.readFileSync(job.oldPath), f.old);
   assert.equal(helper.readJson(job.statePath).phase, 'completed');
+  assert.deepEqual(fs.readFileSync(f.options.executablePath), executableBefore.bytes);
+  assert.equal(fs.statSync(f.options.executablePath).mode, executableBefore.mode);
+  if (process.platform === 'linux') {
+    assert.equal(executableBefore.mode & 0o777, 0o751);
+    assert.equal(fs.existsSync(path.join(f.installDir, 'Uninstall QMX-Notebook.exe')), false);
+  }
   assert.equal(calls[0].exe, f.options.executablePath);
   assert.deepEqual(calls[0].args, ['--disable-gpu']);
   assert.equal(calls[0].options.shell, false);

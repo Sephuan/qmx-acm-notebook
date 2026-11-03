@@ -8,6 +8,18 @@
 
 便携版需解压整个目录，运行「启动.cmd」，不能只复制 exe。普通启动失败时可试「兼容启动.cmd」；兼容模式另加 `--no-sandbox`，会降低 Chromium 进程隔离能力。当前验证机器曾需要兼容模式。程序未签名，Windows 可能提示未知发布者，请核对来源。GitHub 的 Source code 压缩包是源码，不是安装包。
 
+## Linux 与 macOS
+
+源码构建使用 Node.js 24 和 pnpm，安装依赖后运行 `pnpm start`。在目标系统执行 `pnpm dist`，默认按本机平台及架构打包；可用 `QMX_ARCH=x64` 或 `QMX_ARCH=arm64` 选择架构。Linux 生成 tar.gz，macOS 生成 DMG 和 ZIP；当前尚未发布这些系统的下载文件。
+
+Linux 解压完整目录后运行 `./QMX-Notebook`，必要时先赋予可执行权限。保持 Electron 沙箱启用，不建议以 root 运行；登录凭据加密需要系统钥匙环（如 GNOME Keyring/KWallet）。系统凭据加密不可用时会提示，不能保证所有桌面发行版都支持登录持久化。
+
+macOS 将 DMG 中的应用拖入“应用程序”再运行。当前构建未签名和公证，系统可能拒绝打开；维护者需配置 Apple 签名与公证后再正式分发。Intel 选择 x64，Apple Silicon 选择 arm64。
+
+个人数据默认由 Electron 保存：Linux 为 `$XDG_CONFIG_HOME/qmx-acm-notebook`（通常 `~/.config/qmx-acm-notebook`），macOS 为 `~/Library/Application Support/qmx-acm-notebook`，不会因替换程序包自动删除。
+
+更新影响：Windows 保持现有签名文件更新链路；Linux 使用相同签名清单及应用包，在可写、非符号链接的解压目录内备份替换并重启，不会安装 Windows EXE。macOS 可以检查更新，但禁止自动改写应用包，以免破坏代码签名；出现新版提示后需手动安装完整应用。文件升级不替换 Electron 运行时，运行时版本不匹配仍需完整安装包。
+
 ## 首次设置与 GitHub 登录
 
 未登录也可查看公开资料、保存和编辑未绑定账号的本地题解。默认资料库是 `qmx-acm-data/2026`，程序源码库是 `qmx-acm-data/qmx-acm-notebook`。

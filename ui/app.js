@@ -57,6 +57,7 @@
     if (!payload || typeof payload !== 'object') throw new Error('客户端未返回有效数据');
     if (typeof payload.appVersion === 'string') s.appVersion = payload.appVersion;
     if (payload.update && typeof payload.update === 'object') s.update = { ...payload.update };
+    if (payload.updateCapability) s.updateCapability = payload.updateCapability;
     renderUpdate();
     s.records = (Array.isArray(payload.records) ? payload.records : []).filter(record => record.kind === 'document');
     s.issues = (Array.isArray(payload.issues) ? payload.issues : []).filter(record => record.kind === 'issue');
@@ -344,6 +345,7 @@
   function renderUpdate() {
     $('#app-version').textContent = s.appVersion || (demo ? '浏览器预览（非桌面客户端）' : '尚未获取');
     const update = s.update || {};
+    if (s.updateCapability?.supported === false) $('#update-notice').textContent = s.updateCapability.reason;
     const latest = update.latestVersion ? ` ${update.latestVersion}` : '';
     const labels = { checking: '正在检查更新…', available: `发现新版本${latest}，可点击检查更新进行升级。`, downloading: `正在下载新版本${latest}…`, ready: `新版本${latest}的签名和文件已校验，正在准备更新。`, installing: '本地记录已备份，退出后将备份并替换程序文件，完成后自动重启。', error: '更新失败，请点击检查更新重试。' };
     let text = labels[update.phase] || (update.available === false && !!update.message ? `当前已是最新版本${latest}。` : '可随时检查更新，无需登录 GitHub。');
@@ -383,6 +385,7 @@
         if (!checked || checked.phase === 'error') throw new Error(checked?.message || '检查更新失败');
         receiveUpdate(checked);
         if (!checked.available) return;
+        if (s.updateCapability?.supported === false) { receiveUpdate({ ...checked, message: s.updateCapability.reason }); toast(s.updateCapability.reason); return; }
         await saveBeforeUpdate();
         receiveUpdate({ phase: 'downloading', percent: 0, downloaded: 0, total: 0 });
         const downloaded = await call('downloadUpdate');

@@ -105,6 +105,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       if (name === './updater.cjs') return { createUpdater(options) { updaterOptions = options; return updater; } };
       if (name === './file-upgrade.cjs') return {
         prepareFileUpgrade: prepareUpgrade,
+        getFileUpgradeCapability: () => upgradeBackend.capability || { supported: true, reason: '' },
         recoverFileUpgrade(...args) {
           recoveryCalls.push(clone(args));
           assert.equal(windows.length, 0, 'recover before opening a window or exposing IPC');
@@ -485,6 +486,14 @@ test('install reverification detects tampering without spawning or quitting and 
   h.advanceTimers(10000); assert.equal(h.spawnCalls.length, 0); assert.equal(h.quitCalls, 0);
   await h.invoke('saveSettings', { theme: 'dark' });
   assert.equal(h.stored('settings.json').theme, 'dark');
+});
+
+test('unsupported platform reports manual update capability and refuses helper launch', async () => {
+  const reason = 'macOS 请手动安装完整应用';
+  const h = harness({ upgradeBackend: { capability: { supported: false, reason } } });
+  assert.equal((await h.invoke('bootstrap')).updateCapability.reason, reason);
+  await assert.rejects(h.invoke('installUpdate'), /macOS 请手动安装/);
+  assert.equal(h.spawnCalls.length, 0);
 });
 
 test('source-mode installation is rejected before verification or process launch', async () => {

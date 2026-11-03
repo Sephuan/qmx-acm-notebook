@@ -6,10 +6,12 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const crypto = require('node:crypto');
-const { prepareUpgrade } = require('../electron/upgrade.cjs');
+const { prepareUpgrade: nativePrepareUpgrade } = require('../electron/upgrade.cjs');
+// Existing cases exercise the Windows installer contract on every test host.
+const prepareUpgrade = (options, dependencies) => nativePrepareUpgrade(options, { platform: 'win32', ...dependencies });
 
 function fixture(t) {
-  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'qmx-upgrade-'));
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'qmx-upgrade-')));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
   const installDir = path.join(root, 'QMX Notebook, 中文');
   const userDataDir = path.join(root, 'user data');
