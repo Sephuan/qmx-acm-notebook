@@ -1,8 +1,8 @@
 # 拾题 · QMX ACM Notebook
 
-面向 ACM 集训队的 Windows 本地错题与算法资料客户端，无需自建服务器、数据库或域名。默认资料来源：[qmx-acm-data/2026](https://github.com/qmx-acm-data/2026)。
+面向 ACM 集训队的 Windows、Linux 与 macOS 本地错题与算法资料客户端，无需自建服务器、数据库或域名。默认资料来源：[qmx-acm-data/2026](https://github.com/qmx-acm-data/2026)。
 
-**[下载 Windows x64 安装包 v0.3.3](https://github.com/qmx-acm-data/qmx-acm-notebook/releases/download/v0.3.3/QMX-Notebook-Setup-0.3.3.exe)** · [所有版本](https://github.com/qmx-acm-data/qmx-acm-notebook/releases)
+**[下载 Windows x64 安装包 v0.4.0](https://github.com/qmx-acm-data/qmx-acm-notebook/releases/download/v0.4.0/QMX-Notebook-Setup-0.4.0.exe)** · [所有版本](https://github.com/qmx-acm-data/qmx-acm-notebook/releases)
 
 下载后运行安装程序。首次配置、登录、数据备份与已知限制见 [使用指南](docs/USAGE.md)。当前为预览版，客户端 OAuth 在线投稿尚未完成验收。
 

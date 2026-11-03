@@ -10,7 +10,7 @@
 
 ## Linux 与 macOS
 
-源码构建使用 Node.js 24 和 pnpm，安装依赖后运行 `pnpm start`。在目标系统执行 `pnpm dist`，默认按本机平台及架构打包；可用 `QMX_ARCH=x64` 或 `QMX_ARCH=arm64` 选择架构。Linux 生成 tar.gz，macOS 生成 DMG 和 ZIP；当前尚未发布这些系统的下载文件。
+源码构建使用 Node.js 24 和 pnpm，安装依赖后运行 `pnpm start`。在目标系统执行 `pnpm dist`，默认按本机平台及架构打包；可用 `QMX_ARCH=x64` 或 `QMX_ARCH=arm64` 选择架构。Linux 生成 tar.gz，macOS 生成 DMG 和 ZIP；0.4.0 起在 Releases 提供这些系统的下载文件。
 
 Linux 解压完整目录后运行 `./QMX-Notebook`，必要时先赋予可执行权限。保持 Electron 沙箱启用，不建议以 root 运行；登录凭据加密需要系统钥匙环（如 GNOME Keyring/KWallet）。系统凭据加密不可用时会提示，不能保证所有桌面发行版都支持登录持久化。
 
