@@ -221,13 +221,14 @@ test('verifyReady rejects a junction in the staged path', async t => {
 });
 
 test('timeout aborts download, cleans partial files, and permits retry', async t => {
-  let attempt = 0;
+  let stall = true;
   const { updater, dir } = await setup(t, { timeoutMs: 30, fileResponse: async (_url, { signal }) => {
-    if (++attempt === 1) return new Promise((_, reject) => signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true }));
+    if (stall) return new Promise((_, reject) => signal.addEventListener('abort', () => reject(new Error('aborted')), { once: true }));
     return response(bytes);
   } });
   await assert.rejects(updater.download(), /ETIMEDOUT/);
   assert.deepEqual(await allFiles(dir), []);
+  stall = false;
   assert.equal((await updater.download()).version, '1.10.0');
 });
 
