@@ -82,46 +82,80 @@
     if (/^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(account?.avatarData || '')) { const image = element('img'); image.src = account.avatarData; image.alt = ''; avatar.append(image); } else avatar.textContent = String($('#account-name').textContent).slice(0, 1);
     $('#account-button').title = 'GitHub 账户'; $('#account-button').setAttribute('aria-label', $('#account-button').title);
   }
+  const facets = { platform: new Set(), tags: new Set(), authors: new Set(), native: new Set() };
+  const facetNames = { platform: '平台', tags: '标签', authors: '作者', native: '难度' };
+  const platformNames = { CF: 'Codeforces', LG: '洛谷', AT: 'AtCoder', NC: '牛客', LC: 'LeetCode', Oth: '其他平台' };
+  function facetValue(record, group) { return group === 'platform' ? NotebookSearch.normalizePlatform(record.platform) : group === 'authors' ? authorName(record.author || (isLocal(record) ? s.account?.login || '我（本地）' : '')) : ''; }
+  function fillFacetOptions(container, group, values, search = '') {
+    container.replaceChildren();
+    const counts = new Map(); values.forEach(value => counts.set(String(value), (counts.get(String(value)) || 0) + 1));
+    const options = [...new Set([...counts.keys(), ...facets[group]])].sort((a,b) => a.localeCompare(b, 'zh-CN'));
+    options.filter(value => (group === 'platform' ? platformNames[value] || value : value).toLowerCase().includes(search.toLowerCase())).forEach(value => {
+      const label = element('label', 'facet-option'); const input = element('input'); input.type = 'checkbox'; input.value = value; input.checked = facets[group].has(value);
+      input.addEventListener('change', () => { input.checked ? facets[group].add(value) : facets[group].delete(value); updateFacetCounts(); render(); });
+      append(label, input, element('span', '', group === 'platform' ? platformNames[value] || value : value), element('small', '', counts.get(value) || 0)); container.append(label);
+    });
+    if (!container.children.length) container.append(element('p', 'facet-help', '没有匹配的选项'));
+  }
   function refreshFilters() {
     const all = records();
-    for (const [selector, values, title] of [['#platform-filter', all.map(record => record.platform).filter(Boolean), '全部平台'], ['#tag-filter', all.flatMap(record => Array.isArray(record.tags) ? record.tags : []), '全部标签']]) {
-      const select = $(selector); const old = select.value; select.replaceChildren(element('option', '', title)); select.firstChild.value = '';
-      [...new Set(values.map(String))].sort().forEach(value => { const option = element('option', '', value); option.value = value; select.append(option); });
-      if ([...select.options].some(option => option.value === old)) select.value = old;
+    for (const group of ['platform', 'tags', 'authors']) {
+      const host = $(group === 'tags' ? '#tag-filter' : group === 'authors' ? '#author-filter' : '#platform-filter');
+      const values = group === 'tags' ? all.flatMap(r => Array.isArray(r.tags) ? r.tags : []) : all.map(r => facetValue(r, group));
+      const wasOpen = host.querySelector('details')?.open; const query = host.querySelector('input[type="search"]')?.value || '';
+      const details = element('details'); details.open = !!wasOpen; const summary = element('summary'); append(summary, document.createTextNode(facetNames[group]+' '), element('span', 'facet-count'), element('span', 'facet-chevron', '⌄'));
+      const popover = element('div', 'facet-popover'); const search = element('input', 'facet-search'); search.type = 'search'; search.placeholder = `查找${facetNames[group]}`; search.setAttribute('aria-label', `查找${facetNames[group]}`); search.value = query;
+      const options = element('div', 'facet-options'); search.addEventListener('input', () => fillFacetOptions(options, group, values, search.value));
+      append(popover, search, options, button('清除本组', 'facet-clear', () => { facets[group].clear(); fillFacetOptions(options, group, values, search.value); updateFacetCounts(); render(); })); append(details, summary, popover); host.replaceChildren(details); fillFacetOptions(options, group, values, query);
     }
+    const native = all.filter(r => !['CF','LG'].includes(NotebookSearch.normalizePlatform(r.platform))).map(r => String(r.difficulty || '').trim()).filter(Boolean);
+    fillFacetOptions($('#native-difficulty-options'), 'native', native); updateFacetCounts();
   }
+  function ranges() { return ['rating-min','rating-max','luogu-min','luogu-max'].map(id => { const v=$('#'+id).value; return v === '' ? null : Number(v); }); }
+  function updateFacetCounts() {
+    ['rating-min','rating-max'].forEach(id => colorRatingInput($('#'+id)));
+    for (const group of ['platform','tags','authors']) { const count = facets[group].size; const node = $(`[data-facet="${group}"] .facet-count`); if(node) node.textContent = count || ''; }
+    const range = ranges(); const count = range.filter(v=>v!==null).length + facets.native.size; $('#difficulty-count').textContent = count ? '已选' : '';
+    const chips=$('#active-filters'); chips.replaceChildren();
+    for(const group of Object.keys(facets)) for(const value of facets[group]) chips.append(button(`${facetNames[group]} · ${group === 'platform' ? platformNames[value] || value : value} ×`, 'filter-chip', () => { facets[group].delete(value); refreshFilters(); render(); }));
+    if(range.some(v=>v!==null)) chips.append(button('难度区间 ×','filter-chip',()=>{clearDifficulty();render();}));
+    chips.hidden=!chips.children.length;
+    $('#range-error').hidden = !((range[0]!==null && range[1]!==null && range[0]>range[1]) || (range[2]!==null && range[3]!==null && range[2]>range[3]));
+  }
+  function clearDifficulty() { ['rating-min','rating-max','luogu-min','luogu-max'].forEach(id=>$('#'+id).value=''); facets.native.clear(); ['luogu-min','luogu-max'].forEach(id=>colorLuoguSelection($('#'+id))); refreshFilters(); }
   function filteredRecords() {
-    const search = $('#search-input').value.trim().toLowerCase(); const platform = $('#platform-filter').value; const tag = $('#tag-filter').value; const status = $('#state-filter').value;
+    const search = $('#search-input').value.trim(); const status = $('#state-filter').value;
+    const [min,max,lgMin,lgMax] = ranges();
+    const scores = new Map();
+    const difficultyActive = [min,max,lgMin,lgMax].some(v=>v!==null) || facets.native.size>0;
     return records().filter(record => {
       if (s.view === 'public' && record.kind !== 'document') return false;
       if (s.view === 'discussion' && record.kind !== 'issue') return false;
       if (s.view === 'mine' && !isMine(record)) return false;
       if (s.view === 'favorites' && !favorite(record)) return false;
-      if (platform && record.platform !== platform) return false;
-      if (tag && !record.tags?.includes(tag)) return false;
+      if (facets.platform.size && !facets.platform.has(facetValue(record,'platform'))) return false;
+      if (facets.tags.size && !(record.tags || []).some(tag=>facets.tags.has(String(tag)))) return false;
+      if (facets.authors.size && !facets.authors.has(facetValue(record,'authors'))) return false;
+      if (difficultyActive) {
+        const code=NotebookSearch.normalizePlatform(record.platform), info=NotebookSearch.difficulty(record);
+        const cf=code==='CF' && (min!==null || max!==null) && info.level!==null && (min===null || info.level>=min) && (max===null || info.level<=max);
+        const lg=code==='LG' && (lgMin!==null || lgMax!==null) && info.level!==null && (lgMin===null || info.level>=lgMin) && (lgMax===null || info.level<=lgMax);
+        const native=!['CF','LG'].includes(code) && facets.native.has(String(record.difficulty || '').trim());
+        if(!cf && !lg && !native) return false;
+      }
       if (status === 'local' && !isLocal(record) || status === 'shared' && isLocal(record)) return false;
       if (stateLabels[status] && mastery(record) !== status) return false;
-      return !search || [record.title, record.pid, record.platform, record.rating, record.difficulty, record.body, ...(Array.isArray(record.tags) ? record.tags : [])].join(' ').toLowerCase().includes(search);
-    }).sort((a, b) => (new Date(b.updatedAt).getTime() || 0) - (new Date(a.updatedAt).getTime() || 0));
+      const score=NotebookSearch.match(record,search); scores.set(record,score); return score>0;
+    }).sort((a, b) => (search ? scores.get(b)-scores.get(a) : 0) || (new Date(b.updatedAt).getTime() || 0) - (new Date(a.updatedAt).getTime() || 0));
   }
   function badge(record) { return element('span', `badge ${isLocal(record) ? 'local' : 'shared'}`, isLocal(record) ? record.proposalUrl ? '旧版已投稿副本' : '仅本地 · 未上传' : record.kind === 'document' ? '正式题解' : '讨论 Issue'); }
-  function platformCode(value) { return ({ Codeforces: 'CF', AtCoder: 'AT', '洛谷': 'LG', '牛客': 'NC', LeetCode: 'LC' })[value] || value || 'Oth'; }
+  function platformCode(value) { return NotebookSearch.normalizePlatform(value); }
   function platformLabel(record) { const code = platformCode(record.platform); const label = element('span', 'platform-label', ({ CF: 'Codeforces', AT: 'AtCoder', LG: '洛谷', NC: '牛客', LC: 'LeetCode' })[code] || record.platform || '其他平台'); label.dataset.platform = ['CF', 'AT', 'LG', 'NC', 'LC'].includes(code) ? code : 'Oth'; return label; }
   function difficultyBadge(record) {
-    const hasRating = record.rating !== undefined && record.rating !== null && record.rating !== '' && Number.isFinite(Number(record.rating));
-    const native = String(record.difficulty || '').trim();
-    if (!hasRating && !native) return null;
-    const code = platformCode(record.platform); let tone = 'neutral'; let rank = '';
-    if (code === 'CF' && hasRating) {
-      const rating = Number(record.rating);
-      const tiers = [[1200, 'gray'], [1400, 'green'], [1600, 'cyan'], [1900, 'blue'], [2100, 'purple'], [2300, 'orange'], [2400, 'orange'], [2600, 'red'], [3000, 'red']];
-      const index = tiers.findIndex(([limit]) => rating < limit); tone = index < 0 ? 'red' : tiers[index][1]; rank = index < 0 ? 'legendary' : index === 8 ? 'grandmaster' : '';
-    } else if (code === 'LG' && native) {
-      const normalized = native.replace(/[−–—]/g, '-').replace(/\s/g, '');
-      const colors = { '入门': 'red', '普及-': 'orange', '普及/提高-': 'yellow', '普及+/提高': 'green', '提高+/省选-': 'blue', '省选/NOI-': 'purple', 'NOI/NOI+/CTSC': 'black', 'NOI+': 'black' };
-      tone = colors[normalized] || 'neutral';
-    }
-    const label = element('span', `difficulty-badge tone-${tone}${rank ? ` rank-${rank}` : ''}`, [hasRating ? `${code === 'CF' ? 'CF ' : 'Rating '}${record.rating}` : '', native].filter(Boolean).join(' · '));
+    const {tone,rank,label:text} = NotebookSearch.difficulty(record);
+    if(!text) return null;
+    const code=NotebookSearch.normalizePlatform(record.platform);
+    const label = element('span', `difficulty-badge tone-${tone}${rank ? ` rank-${rank}` : ''}`, text);
     label.title = `${demo ? '演示值 · ' : ''}${code === 'CF' ? 'Codeforces 原生 Rating 色阶' : code === 'LG' ? '洛谷原生难度名称 · 颜色仅用于界面展示' : '平台原始数值 / 难度'}，不跨平台换算`;
     return label;
   }
@@ -134,6 +168,7 @@
     $('#stats-panel').hidden = s.view !== 'stats'; $('#library-panel').hidden = s.view === 'stats'; updateStatus();
     if (s.view === 'stats') { renderStats(); return; }
     const items = filteredRecords(); $('#result-count').textContent = items.length;
+    $('.list-heading > span:last-child').textContent = $('#search-input').value.trim() ? '匹配程度 ↓' : '最近更新 ↓';
     if (!items.some(record => key(record) === s.selected)) s.selected = items[0] ? key(items[0]) : null;
     const list = $('#record-list'); list.replaceChildren();
     items.forEach(record => {
@@ -197,7 +232,7 @@
     Object.entries(stateLabels).forEach(([value, label]) => { const count = favorites.filter(record => mastery(record) === value).length; const fill = element('div', 'progress-fill'); fill.style.width = `${favorites.length ? count / favorites.length * 100 : 0}%`; progress.append(append(element('div', 'progress-row'), element('span', '', label), append(element('div', 'progress-track'), fill), element('span', '', count))); }); panel.append(progress);
     const topics = append(element('article', 'stat-card stat-wide'), element('div', 'stat-label', '我的算法足迹')); const counts = new Map(); mine.forEach(record => (Array.isArray(record.tags) ? record.tags : []).forEach(tag => counts.set(tag, (counts.get(tag) || 0) + 1))); [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5).forEach(([tag, count]) => topics.append(append(element('div', 'progress-row'), element('span', '', tag), element('span', 'tag', `${count} 道`)))); if (!counts.size) topics.append(element('p', 'settings-note', '记下第一道错题，开始积累你的算法地图。')); panel.append(topics, element('div', 'stats-note', demo ? '演示统计 · 基于 3 条明确标记的示例及你在浏览器中的本地操作，不代表真实学习记录。' : '统计来自当前已载入的题目与本地复习记录。'));
   }
-  function clearFilters() { $('#search-input').value = ''; ['#platform-filter', '#tag-filter', '#state-filter'].forEach(selector => { $(selector).value = ''; }); render(); }
+  function clearFilters() { $('#search-input').value = ''; $('#state-filter').value=''; Object.values(facets).forEach(set=>set.clear()); clearDifficulty(); render(); }
   async function openExternal(url) { try { const parsed = new URL(String(url)); if (!['https:', 'http:'].includes(parsed.protocol)) throw new Error('仅支持 http 或 https 题目链接'); if (demo) window.open(parsed.href, '_blank', 'noopener,noreferrer'); else await call('openExternal', parsed.href); } catch (error) { toast(errorMessage(error)); } }
   let updateLockedControls = null;
   function setBusy(value) {
@@ -332,7 +367,22 @@
   }
   $$('.nav-item').forEach(node => node.addEventListener('click', () => { s.view = node.dataset.view; clearFilters(); }));
   $('.brand').addEventListener('click', event => { event.preventDefault(); if (s.busy) return; s.view = 'public'; clearFilters(); });
-  $('#search-input').addEventListener('input', render); ['#platform-filter', '#tag-filter', '#state-filter'].forEach(selector => $(selector).addEventListener('change', render)); $('#clear-filters').addEventListener('click', clearFilters);
+  $('#search-input').addEventListener('input', render); $('#state-filter').addEventListener('change', render); $('#clear-filters').addEventListener('click', clearFilters);
+  const luoguLevels=['入门','普及-','普及','普及+/提高-','提高','提高+/省选-','省选/NOI-','NOI/NOI+/CTS'];
+  const luoguTones=['red','orange','yellow','green','cyan','blue','purple','black'];
+  function colorRatingInput(input) {
+    const valid = input.value !== '' && !input.validity.badInput && Number.isInteger(input.valueAsNumber) && input.valueAsNumber >= 0 && input.valueAsNumber <= 10000;
+    const info = valid ? NotebookSearch.difficulty({ platform:'CF', rating:input.valueAsNumber }) : null;
+    input.className = `rating-range${info ? ` tone-${info.tone}` : ''}`;
+    input.style.caretColor = info ? 'var(--difficulty-color)' : '';
+  }
+  function colorLuoguSelection(select) { select.className = select.value ? `luogu-range tone-${luoguTones[Number(select.value)-1]}` : 'luogu-range'; }
+  for(const id of ['luogu-min','luogu-max']) { const select=$('#'+id); const option=element('option','','不限');option.value='';select.append(option);luoguLevels.forEach((name,i)=>{const o=element('option',`tone-${luoguTones[i]}`,name);o.value=String(i+1);select.append(o);}); colorLuoguSelection(select);select.addEventListener('input',()=>colorLuoguSelection(select)); }
+  ['rating-min','rating-max','luogu-min','luogu-max'].forEach(id=>$('#'+id).addEventListener('input',()=>{updateFacetCounts();render();}));
+  $$('[data-rating]').forEach(node=>node.addEventListener('click',()=>{const [min,max]=node.dataset.rating.split(',');$('#rating-min').value=min;$('#rating-max').value=max;updateFacetCounts();render();}));
+  $('#clear-difficulty').addEventListener('click',()=>{clearDifficulty();render();});
+  document.addEventListener('click',event=>{ $$('.facet details[open],details.facet[open]').forEach(node=>{if(!node.contains(event.target))node.open=false;}); });
+  document.addEventListener('keydown',event=>{if(event.key==='Escape')$$('.facet details[open],details.facet[open]').forEach(node=>node.open=false);});
   $('#submit-button').addEventListener('click', () => openSubmit()); $('#sync-button').addEventListener('click', sync);
   $$('dialog').forEach(dialog => dialog.addEventListener('cancel', event => { if (s.busy) event.preventDefault(); }));
   $$('[data-close]').forEach(node => node.addEventListener('click', async () => { if (s.busy) return; if (node.dataset.close === 'submit-dialog') { clearTimeout(draftTimer); setBusy(true); await saveDraft(); setBusy(false); } document.getElementById(node.dataset.close).close(); }));

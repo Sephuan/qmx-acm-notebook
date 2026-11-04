@@ -1,16 +1,16 @@
 {
   "schema": 1,
-  "version": "0.4.0",
+  "version": "0.5.2",
   "runtimeVersion": "40.10.6",
   "base": "../",
-  "notes": "Linux/macOS 构建适配；Linux原生运行与更新验证。",
-  "publishedAt": "2026-11-03T15:36:29.777Z",
+  "notes": "搜索与多选筛选；洛谷八档难度；CF Rating实时配色。",
+  "publishedAt": "2026-11-04T08:51:22.370Z",
   "files": [
     {
       "path": "resources/app.asar",
-      "size": 7244361,
-      "sha256": "f1b919a8adfecb343604fceeac65c12a73fffc2dd9d77fd853bfdcaa756c2cc2"
+      "size": 7263595,
+      "sha256": "757450602a586b1d5ee94b2231c749105388002ec94647448055e1530a9751bb"
     }
   ],
-  "signature": "HHUVbJ7o11WjEajRvgAlmiSDTcYreDmh1wN0qn0/jClTmSH7IuzECh/itJWR2qjhba0rvuT3+nnVaYVvWYCEDA=="
+  "signature": "iUk5VBkEyHPCnI+rtO00BePhzMx/kvn159vFyFtDQKG7eu4w01SgsyLJoW68OmPLnQJZ6toao5vK/Ynwz+zYDw=="
 }
