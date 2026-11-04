@@ -32,7 +32,7 @@ macOS 将 DMG 中的应用拖入“应用程序”再运行。当前构建未签
 
 未登录也可查看公开资料、保存和编辑未绑定账号的本地题解。默认资料库是 `qmx-acm-data/2026`，程序源码库是 `qmx-acm-data/qmx-acm-notebook`。
 
-0.3.3 起内置队伍公开 OAuth Client ID，队员无需注册 OAuth App 或填写 Client ID；旧设置缺失、为空或无效类型时自动使用队伍配置。点击左下角账号入口，选择登录，在 [GitHub 官方设备授权页面](https://github.com/login/device)输入客户端显示的验证码并授权。每人仍使用自己的 GitHub 账号。设置中的“高级：自定义 GitHub 登录应用”仅供自建应用使用，清空保存恢复默认。不要填写 GitHub 密码、Client Secret 或个人 Token。
+0.3.3 起内置队伍公开 OAuth Client ID，队员无需注册 OAuth App 或填写 Client ID；旧设置缺失、为空或无效类型时自动使用队伍配置。点击左下角账号入口，选择登录，在 [GitHub 官方设备授权页面](https://github.com/login/device)输入客户端显示的验证码并授权。每人仍使用自己的 GitHub 账号。Linux 客户端优先通过 libsecret 使用系统钥匙环保存登录；在 niri、sway 等未自动识别后端的桌面，需要安装并运行 gnome-keyring 或 KWallet。设置中的“高级：自定义 GitHub 登录应用”仅供自建应用使用，清空保存恢复默认。不要填写 GitHub 密码、Client Secret 或个人 Token。
 
 账号页显示昵称、用户名、唯一用户 ID 和当前资料库权限，可刷新权限、退出及切换账号。昵称只用于展示，归属按唯一用户 ID 判断，改 GitHub 用户名不会转移题解归属。头像由主进程从 GitHub 获取后以本地数据展示。
 

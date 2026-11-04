@@ -71,7 +71,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
   }
   const electron = {
     net: { fetch: async (url, options) => ({ url, options }) },
-    app: { isPackaged, disableHardwareAcceleration() {}, whenReady: () => ({ then(callback) { ready = callback; } }), getPath: () => root, on: (...args) => appEvents.on(...args), quit() { quitCalls++; } },
+    app: { isPackaged, disableHardwareAcceleration() {}, commandLine: { appendSwitch() {} }, whenReady: () => ({ then(callback) { ready = callback; } }), getPath: () => root, on: (...args) => appEvents.on(...args), quit() { quitCalls++; } },
     BrowserWindow,
     ipcMain: { handle(name, callback) { assert.ok(!handlers.has(name)); handlers.set(name, callback); } },
     shell: { async openExternal() {} },
