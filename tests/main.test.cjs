@@ -80,7 +80,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
   class FakeGitHub {
     constructor(options) { this.options = options; }
   }
-  for (const method of ['saveDocument', 'deleteDocument', 'deleteIssue', 'sync', 'profile', 'comment', 'comments']) {
+  for (const method of ['saveDocument', 'deleteDocument', 'deleteIssue', 'sync', 'profile', 'comment', 'comments', 'getTagCatalog', 'requestTag', 'getTagReview', 'reviewTag']) {
     FakeGitHub.prototype[method] = async function (...args) {
       calls.push({ method, args: clone(args), options: clone(this.options) });
       if (backend[method]) return backend[method](...args, this.options);
@@ -88,6 +88,8 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       if (method === 'deleteDocument') return { id: args[0].id || `document:${args[0].path}`, path: args[0].path, repo: REPO, deleted: true };
       if (method === 'profile') return { account: { id: 42, login: 'alice', avatarUrl: '' }, permissions: { repo: this.options.repo, push: true } };
       if (method === 'sync') return { records: [], issues: [], blobs: {}, lastSync: '2026-11-02T00:00:00Z' };
+       if (method === 'getTagCatalog') return require('../ui/tag-presets.js');
+       if (method === 'getTagReview') return { canReview: false, requests: [] };
       return [];
     };
   }
@@ -102,7 +104,9 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       if (name === 'node:path') return path;
       if (name === 'node:crypto') return { randomUUID: () => '00000000-0000-4000-8000-000000000001' };
       if (name === '../package.json') return { version: '0.3.0' };
-      if (name === './updater.cjs') return { createUpdater(options) { updaterOptions = options; return updater; } };
+      if (name === './auth.cjs') return require('../electron/auth.cjs');
+       if (name === '../ui/tag-presets.js') return require('../ui/tag-presets.js');
+       if (name === './updater.cjs') return { createUpdater(options) { updaterOptions = options; return updater; } };
       if (name === './file-upgrade.cjs') return {
         prepareFileUpgrade: prepareUpgrade,
         getFileUpgradeCapability: () => upgradeBackend.capability || { supported: true, reason: '' },
@@ -154,6 +158,33 @@ test('Issue deletion rejects foreign repositories and cleans only selected discu
   assert.equal(state.records.length,1); assert.deepEqual(state.issues.map(r=>r.number),[8]);
   assert.deepEqual(state.local.favorites,[]); assert.equal(state.local.records.length,1);
   assert.equal(h.calls.filter(c=>c.method==='deleteIssue').length,1);
+});
+
+test('tag catalog is available offline and a refresh updates cache without erasing document data', async () => {
+  const catalog = { version: 'custom-test', source: 'fixture', categories: [] };
+  const h = harness({ files: { 'cache.json': { repo: REPO, records: [documentRecord()], issues: [issueRecord()] } }, backend: { getTagCatalog: async () => catalog } });
+  assert.equal((await h.invoke('bootstrap')).tagCatalog.categories.length, 22);
+  assert.deepEqual(await h.invoke('getTagCatalog'), catalog);
+  const state = await h.invoke('bootstrap');
+  assert.deepEqual(state.tagCatalog, catalog); assert.equal(state.records.length, 1); assert.equal(state.issues.length, 1);
+});
+test('tag review and application are forwarded under the write lock and approval refreshes catalog', async () => {
+  const gate = deferred(), catalog = { version: 'approved', categories: [] };
+  const h = harness({ backend: { requestTag: async () => gate.promise, reviewTag: async input => ({ number: input.number, approved: true }), getTagCatalog: async () => catalog } });
+  const pending = h.invoke('requestTag', { category: '3', name: '测试' });
+  await assert.rejects(h.invoke('saveSettings', { repo: 'other/repo' }), /等待|操作/);
+  gate.resolve({ number: 1 }); await pending;
+  assert.deepEqual(await h.invoke('getTagReview'), { canReview: false, requests: [] });
+  const decision = { number: 1, decision: 'approve', expected: { category: '3', name: '测试' } };
+  assert.equal((await h.invoke('reviewTag', decision)).approved, true);
+  assert.deepEqual((await h.invoke('bootstrap')).tagCatalog, catalog);
+  assert.deepEqual(h.calls.find(x => x.method === 'reviewTag').args[0], decision);
+});
+test('tag catalog failures do not discard successful document sync or existing cached tags', async () => {
+  const old = { version: 'cached', categories: [] };
+  const h = harness({ files: { 'cache.json': { repo: REPO, tagCatalog: old } }, backend: { getTagCatalog: async () => { throw new Error('Network unavailable'); } } });
+  const state = await h.invoke('sync');
+  assert.deepEqual(state.tagCatalog, old); assert.match(state.tagCatalogError, /缓存/); assert.ok(state.lastSync);
 });
 
 test('team OAuth app is available for new installs and legacy empty settings', async () => {

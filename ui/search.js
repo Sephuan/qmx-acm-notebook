@@ -127,5 +127,9 @@
     return score;
   }
 
-  return { normalizePlatform: normalizePlatform, difficulty: difficulty, match: match };
+  function tagHits(record, selected) {
+    const wanted = selected instanceof Set ? selected : new Set(selected || []);
+    return Array.from(new Set(Array.isArray(record?.tags) ? record.tags.map(String) : [])).filter(tag => wanted.has(tag)).length;
+  }
+  return { normalizePlatform: normalizePlatform, difficulty: difficulty, match: match, tagHits: tagHits };
 }));

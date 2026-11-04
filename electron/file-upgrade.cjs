@@ -33,7 +33,13 @@ function recoverFileUpgrade(userDataDir, installDir) {
   const jobPath = path.join(updates, pointer.transaction, 'job.json');
   const job = helper.validateJob(jobPath, publicKeyPem());
   if (job.userDataDir !== userDataDir || job.installDir !== installDir) throw new Error('Update recovery install location mismatch');
-  return helper.recoverTransaction(jobPath, publicKeyPem());
+  const result = helper.recoverTransaction(jobPath, publicKeyPem());
+  // Once recovery has verified a terminal transaction, retire its pointer.
+  // A later manual installation must not be compared with this old release forever.
+  if (['completed', 'completed-stale', 'rolled-back', 'failed', 'cancelled'].includes(result.phase)) {
+    fs.renameSync(pointerPath, path.join(updates, `${pointer.transaction}-resolved.json`));
+  }
+  return result;
 }
 
 /** Prepare synchronously, then spawn process.execPath with returned args and merged env.

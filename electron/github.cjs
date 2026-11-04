@@ -1,4 +1,5 @@
 const YAML = require('yaml');
+const { Tags } = require('./tags.cjs');
 
 const API = 'https://api.github.com';
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -351,7 +352,7 @@ class GitHub {
       })));
     }
     return {
-      records, issues: issues.filter(x => !x.pull_request).map(x => ({ ...issueRecord(x), repo: this.repo })),
+      records, issues: issues.filter(x => !x.pull_request && !/<!--\s*qmx-tag-request\s+[\s\S]*?-->/i.test(String(x.body || ''))).map(x => ({ ...issueRecord(x), repo: this.repo })),
       blobs: Object.fromEntries(docs.map(d => [d.sha, blobs[d.sha]])), branch, lastSync: new Date().toISOString(),
     };
   }
@@ -359,6 +360,11 @@ class GitHub {
   // Legacy entry points now publish Markdown directly instead of opening Issues or PRs.
   async submit(record) { return this.saveDocument(record); }
   async propose(record) { return this.saveDocument(record); }
+
+  async getTagCatalog() { return new Tags(this).getTagCatalog(); }
+  async requestTag(data) { return new Tags(this).requestTag(data); }
+  async getTagReview() { return new Tags(this).getTagReview(); }
+  async reviewTag(data) { return new Tags(this).reviewTag(data); }
 
   async comments(number) {
     if (!Number.isInteger(Number(number)) || Number(number) < 1) throw new Error('无效题目编号');

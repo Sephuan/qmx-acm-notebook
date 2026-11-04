@@ -223,7 +223,10 @@ function recoverTransaction(jobPath, publicKey) {
   assertFileUpgradeSupported();
   const job = validateJob(jobPath, publicKey);
   const state = stateFor(job);
-  if (state.phase === 'completed') { verifyFile(job.targetPath, job.file); return { phase: 'completed' }; }
+  if (state.phase === 'completed') {
+    try { verifyFile(job.targetPath, job.file); return { phase: 'completed' }; }
+    catch { return { phase: 'completed-stale' }; }
+  }
   if (state.phase === 'rolled-back') { verifyFile(job.targetPath, state.original); return { phase: 'rolled-back' }; }
   if (TERMINAL.has(state.phase) && !state.mutationStarted) return { phase: state.phase };
   if (Number.isSafeInteger(state.helperPid) && alive(state.helperPid)) throw new Error('Update helper is still active; recovery refused');

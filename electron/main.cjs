@@ -7,7 +7,17 @@ const { randomUUID } = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { createUpdater } = require('./updater.cjs');
 const { prepareFileUpgrade, recoverFileUpgrade, getFileUpgradeCapability } = require('./file-upgrade.cjs');
+const { createAuth, configureUserData } = require('./auth.cjs');
 const APP_VERSION = require('../package.json').version;
+configureUserData(app);
+const networkFetch = (url, options) => net.fetch(url, { ...options, bypassCustomProtocolHandlers: true });
+let auth;
+function authFailure(error, ticket) {
+  if (auth.failure(error, ticket)) {
+    token = auth.token; account = auth.account;
+    if (error.status === 401) permissions = null;
+  }
+}
 app.disableHardwareAcceleration();
 let win, dir, token = '', account = null, permissions = null;
 let loginGeneration = 0, writeBusy = false, syncBusy = false, updateBusy = false, installing = false, updater;
@@ -36,7 +46,20 @@ function settings() {
   return value;
 }
 function local() { return { records: [], favorites: [], mastery: {}, draft: {}, ...read('local.json', {}) }; }
-function client() { return new GitHub({ repo: settings().repo, token }); }
+function githubClient(currentToken = token, repo = settings().repo) {
+  const ticket = auth.capture();
+  const gh = new GitHub({ repo, token: currentToken, fetcher: networkFetch });
+  // All authenticated operations, including writes, invalidate only on a structured HTTP 401.
+  return new Proxy(gh, { get(target, name) {
+    const value = target[name];
+    if (typeof value !== 'function') return value;
+    return async (...args) => {
+      try { return await value.apply(target, args); }
+      catch (error) { if (currentToken && currentToken === ticket.token) authFailure(error, ticket); throw error; }
+    };
+  } });
+}
+function client() { return githubClient(); }
 function state(error) {
   const s = settings(), cache = read('cache.json', {});
   // Old caches mixed Issues into records. Keep the two sources separate even before first sync.
@@ -45,7 +68,9 @@ function state(error) {
     records: matching ? (cache.records || []).filter(r => r.kind === 'document').map(r => ({ ...r, repo: s.repo })) : [],
     issues: matching ? (cache.issues || (cache.records || []).filter(r => r.kind === 'issue')).map(r => ({ ...r, repo: s.repo })) : [],
     lastSync: matching ? cache.lastSync : null,
-    settings: s, account, appVersion: APP_VERSION, update: updater?.getState(), updateCapability: getFileUpgradeCapability(), permissions: permissions?.repo === s.repo ? permissions : null,
+    tagCatalog: matching && cache.tagCatalog ? cache.tagCatalog : require('../ui/tag-presets.js'),
+    tagCatalogError: matching ? cache.tagCatalogError || null : null,
+    settings: s, account, authStatus: auth?.status, appVersion: APP_VERSION, update: updater?.getState(), updateCapability: getFileUpgradeCapability(), permissions: permissions?.repo === s.repo ? permissions : null,
     local: local(), error: error || null
   };
 }
@@ -54,16 +79,15 @@ async function external(url) {
   if (u.protocol !== 'https:' || !['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com'].includes(u.hostname)) throw new Error('仅允许打开 GitHub 和受支持题目平台的 HTTPS 链接');
   await shell.openExternal(u.href);
 }
-function persistAuth(data) {
-  if (!safeStorage.isEncryptionAvailable()) throw new Error('系统凭据加密不可用，无法安全保存登录');
-  save('auth.json', { encrypted: safeStorage.encryptString(JSON.stringify(data)).toString('base64') });
+function persistAuth(data, ticket) {
+  auth.commit(data.token, data.account, ticket);
 }
 async function avatarData(url) {
   try {
     const u = new URL(url);
     if (u.protocol !== 'https:' || u.hostname !== 'avatars.githubusercontent.com') return null;
     u.searchParams.set('s', '80');
-    const response = await fetch(u, { signal: AbortSignal.timeout(7000), redirect: 'error' });
+    const response = await networkFetch(u, { signal: AbortSignal.timeout(7000), redirect: 'error' });
     const type = response.headers.get('content-type')?.split(';')[0];
     if (!response.ok || !['image/png', 'image/jpeg', 'image/webp'].includes(type)) return null;
     const reader = response.body.getReader(); const chunks = []; let length = 0;
@@ -77,16 +101,16 @@ async function avatarData(url) {
   } catch { return null; }
 }
 async function refreshIdentity(gh = client()) {
-  const gen = loginGeneration, repo = settings().repo;
+  const gen = loginGeneration, repo = settings().repo, ticket = auth.capture();
   const result = await gh.profile();
   const picture = await avatarData(result.account.avatarUrl);
   if (gen !== loginGeneration || repo !== settings().repo) throw new Error('账号或仓库已改变，请重试');
   const next = { ...result.account, avatarData: picture };
-  persistAuth({ token, account: next }); account = next; permissions = result.permissions;
+  persistAuth({ token: ticket.token, account: next }, ticket); account = next; permissions = result.permissions;
   return state();
 }
 async function oauth(endpoint, data) {
-  const response = await fetch(`https://github.com/login/${endpoint}`, {
+  const response = await networkFetch(`https://github.com/login/${endpoint}`, {
     method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
     body: JSON.stringify(data), signal: AbortSignal.timeout(20000)
   });
@@ -98,7 +122,7 @@ async function login() {
   if (writeBusy || syncBusy) throw new Error('请等待当前操作完成后再登录');
   const id = settings().clientId.trim();
   if (!id) throw new Error('请先在设置中填写队伍 GitHub OAuth 应用的 Client ID，并启用 Device Flow。未配置时仍可使用本地题解和公开题库。');
-  const gen = ++loginGeneration;
+  const gen = ++loginGeneration, ticket = auth.capture();
   const code = await oauth('device/code', { client_id: id, scope: 'public_repo' });
   if (gen !== loginGeneration) throw new Error('已取消登录');
   if (code.error) throw new Error(code.error_description || code.error);
@@ -115,12 +139,12 @@ async function login() {
     if (result.error) throw new Error(result.error_description || result.error);
     if (!result.access_token) throw new Error('GitHub 未返回凭据');
     const repo = settings().repo;
-    const gh = new GitHub({ token: result.access_token, repo });
+    const gh = githubClient(result.access_token, repo);
     const profile = await gh.profile();
     const picture = await avatarData(profile.account.avatarUrl);
     if (gen !== loginGeneration || repo !== settings().repo) throw new Error('登录已取消或仓库已改变');
     const next = { ...profile.account, avatarData: picture };
-    persistAuth({ token: result.access_token, account: next });
+    persistAuth({ token: result.access_token, account: next }, ticket);
     token = result.access_token; account = next; permissions = profile.permissions;
     return account;
   }
@@ -195,6 +219,26 @@ function setup() {
     } catch (error) { throw new Error(`启动升级失败：${error.message}。可重新尝试安装。`); }
     finally { updateBusy = false; }
   });
+  handle('getTagCatalog', () => writeOperation(async () => {
+    const repo = settings().repo;
+    const catalog = await client().getTagCatalog();
+    if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
+    const cache = read('cache.json', {});
+    save('cache.json', { ...(cache.repo === repo ? cache : {}), repo, tagCatalog: catalog, tagCatalogError: null });
+    return catalog;
+  }));
+  handle('requestTag', data => writeOperation(() => client().requestTag(data)));
+  handle('getTagReview', () => client().getTagReview());
+  handle('reviewTag', data => writeOperation(async () => {
+    const repo = settings().repo;
+    const result = await client().reviewTag(data);
+    if (repo === settings().repo && data.decision === 'approve') {
+      const cache = read('cache.json', {});
+      try { const tagCatalog = await client().getTagCatalog(); save('cache.json', { ...(cache.repo === repo ? cache : {}), repo, tagCatalog, tagCatalogError: null }); }
+      catch { /* Approval is already committed; preserve the successful result and refresh on next sync. */ }
+    }
+    return result;
+  }));
   handle('refreshAccount', async () => {
     if (!token) throw new Error('请先登录 GitHub');
     return writeOperation(() => refreshIdentity());
@@ -206,7 +250,11 @@ function setup() {
       const repo = settings().repo, old = read('cache.json', {});
       const result = await client().sync(old.repo === repo ? old : {});
       if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
-      save('cache.json', { ...result, repo });
+      let tagCatalog = old.repo === repo ? old.tagCatalog : null, tagCatalogError = null;
+      try { tagCatalog = await client().getTagCatalog(); }
+      catch (error) { tagCatalogError = error.status === 401 ? '标签目录授权已失效，请重新登录' : '标签目录暂未更新，继续使用已缓存的标签'; }
+      if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
+      save('cache.json', { ...result, repo, tagCatalog, tagCatalogError });
       if (token) { try { await refreshIdentity(); } catch (error) { permissions = null; return state(`资料已同步，账号权限刷新失败：${error.message}`); } }
       return state();
     } finally { syncBusy = false; }
@@ -261,7 +309,7 @@ function setup() {
   handle('login', login);
   handle('logout', () => {
     if (writeBusy || syncBusy) throw new Error('请等待当前操作完成后再退出');
-    loginGeneration++; token = ''; account = null; permissions = null; save('auth.json', {}); return state();
+    auth.logout(); loginGeneration++; token = ''; account = null; permissions = null; return state();
   });
   handle('cancelLogin', () => { loginGeneration++; });
   const saveDocument = record => writeOperation(async () => {
@@ -328,20 +376,19 @@ app.whenReady().then(() => {
     migrated = true; return { ...record, clientId: record.clientId || randomUUID(), ownerId };
   });
   if (migrated) save('local.json', personal);
-  try {
-    const saved = read('auth.json', {});
-    if (saved.encrypted) {
-      const data = JSON.parse(safeStorage.decryptString(Buffer.from(saved.encrypted, 'base64')));
-      token = data.token; account = data.account;
-    }
-  } catch { /* Local records stay available if credentials cannot be decrypted. */ }
+  auth = createAuth({ safeStorage,
+    // Do not use read(): credential read/parse failures must not be swallowed as signed-out.
+    readAuth: () => JSON.parse(fs.readFileSync(path.join(dir, 'auth.json'), 'utf8')),
+    saveAuth: data => save('auth.json', data)
+  });
+  auth.restore(); token = auth.token; account = auth.account;
   win = new BrowserWindow({ width: 1440, height: 940, minWidth: 1050, minHeight: 700, title: '拾题 · QMX Notebook', backgroundColor: '#f6f7fb', autoHideMenuBar: true,
     webPreferences: { preload: process.argv.includes('--preview') ? undefined : path.join(__dirname, 'preload.cjs'), contextIsolation: true, nodeIntegration: false, sandbox: true } });
   win.webContents.setWindowOpenHandler(() => ({ action: 'deny' }));
   win.webContents.on('will-navigate', event => event.preventDefault());
   updater = createUpdater({
     currentVersion: APP_VERSION, runtimeVersion: process.versions.electron, downloadDir: path.join(dir, 'updates'),
-    fetcher: (url, options) => net.fetch(url, { ...options, bypassCustomProtocolHandlers: true }),
+    fetcher: networkFetch,
     onProgress: progress => { if (!win.isDestroyed()) win.webContents.send('update-progress', progress); }
   });
   win.on('close', event => {

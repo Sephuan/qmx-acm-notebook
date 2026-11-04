@@ -156,7 +156,20 @@ test('interrupted swap is restored on next boot using durable backup', t => {
   assert.deepEqual(fs.readFileSync(f.target), f.next);
   assert.deepEqual(recoverFileUpgrade(f.userDataDir, f.installDir), { phase: 'rolled-back' });
   assert.deepEqual(fs.readFileSync(f.target), f.old);
-  assert.deepEqual(recoverFileUpgrade(f.userDataDir, f.installDir), { phase: 'rolled-back' });
+  assert.deepEqual(recoverFileUpgrade(f.userDataDir, f.installDir), { phase: 'none' });
+  assertUserData(f);
+});
+
+test('completed stale update is retired after manual install without blocking next boot', t => {
+  const f = fixture(t);
+  const prepared = prepareFileUpgrade(f.options);
+  const job = helper.readJson(prepared.args[1]);
+  helper.writeJson(job.statePath, { schema: 1, phase: 'completed', mutationStarted: true, helperPid: null, updatedAt: new Date().toISOString() });
+  fs.writeFileSync(f.target, 'a later verified manual installation');
+  assert.deepEqual(recoverFileUpgrade(f.userDataDir, f.installDir), { phase: 'completed-stale' });
+  assert.equal(fs.existsSync(path.join(f.userDataDir, 'updates', 'active.json')), false);
+  assert.equal(fs.existsSync(path.join(f.userDataDir, 'updates', `${path.basename(job.transactionDir)}-resolved.json`)), true);
+  assert.deepEqual(recoverFileUpgrade(f.userDataDir, f.installDir), { phase: 'none' });
   assertUserData(f);
 });
 

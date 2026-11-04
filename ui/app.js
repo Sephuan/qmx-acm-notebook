@@ -21,7 +21,7 @@
   ];
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(STORAGE) || 'null'); } catch (_) { /* Storage may be disabled. */ }
-  const s = { view: 'public', records: [], local: { records: [], favorites: [], mastery: {}, draft: {} }, settings: {}, account: null, permissions: {}, issues: [], editor: null, lastSync: null, error: '', selected: null, comments: new Map(), loading: true, busy: false };
+  const s = { view: 'public', records: [], local: { records: [], favorites: [], mastery: {}, draft: {} }, settings: {}, account: null, authStatus: { status: 'anonymous' }, permissions: {}, issues: [], editor: null, lastSync: null, error: '', selected: null, comments: new Map(), loading: true, busy: false, tagCatalog: window.QMX_TAG_PRESETS || { version: 'local', source: 'local', categories: [] }, tagReview: null };
   s.appVersion = ''; s.update = null;
   let updateRunning = false;
   let updateReady = false;
@@ -55,6 +55,8 @@
   async function persistLocal() { if (demo) { writeDemo(); return; } const snapshot = structuredClone(s.local); const write = localWrite.catch(() => {}).then(() => call('updateLocal', snapshot)); localWrite = write; await write; }
   function applyPayload(payload) {
     if (!payload || typeof payload !== 'object') throw new Error('客户端未返回有效数据');
+    if (payload.tagCatalog && Array.isArray(payload.tagCatalog.categories)) { s.tagCatalog = payload.tagCatalog; s.catalogFromPayload = true; }
+    if (payload.authStatus) s.authStatus = payload.authStatus;
     if (typeof payload.appVersion === 'string') s.appVersion = payload.appVersion;
     if (payload.update && typeof payload.update === 'object') s.update = { ...payload.update };
     if (payload.updateCapability) s.updateCapability = payload.updateCapability;
@@ -77,7 +79,7 @@
     $('#status-banner').textContent = offline ? '当前处于离线状态。你仍可浏览已载入的题目、整理收藏和保存本地草稿，联网后可再次同步。' : s.error ? `连接提示：${s.error}。可稍后点击「同步」重试。` : '';
     const account = s.account;
     $('#account-name').textContent = account?.name || account?.login || account?.username || s.settings.displayName || '本地学习者';
-    $('#account-caption').textContent = account ? '账户已连接' : demo ? '演示模式 · 数据仅在本机' : '未登录 · 可使用本地错题';
+    $('#account-caption').textContent = s.authStatus?.status === 'expired' ? '授权已过期 · 请重新登录' : s.authStatus?.status === 'recovery-required' ? '凭证恢复失败 · 请重新授权' : s.authStatus?.status === 'unverified' ? '账户尚未验证 · 请联网刷新' : account ? '账户已连接' : demo ? '演示模式 · 数据仅在本机' : '未登录 · 可使用本地错题';
     const avatar = $('.account-avatar'); avatar.replaceChildren();
     if (/^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(account?.avatarData || '')) { const image = element('img'); image.src = account.avatarData; image.alt = ''; avatar.append(image); } else avatar.textContent = String($('#account-name').textContent).slice(0, 1);
     $('#account-button').title = 'GitHub 账户'; $('#account-button').setAttribute('aria-label', $('#account-button').title);
@@ -102,14 +104,81 @@
     for (const group of ['platform', 'tags', 'authors']) {
       const host = $(group === 'tags' ? '#tag-filter' : group === 'authors' ? '#author-filter' : '#platform-filter');
       const values = group === 'tags' ? all.flatMap(r => Array.isArray(r.tags) ? r.tags : []) : all.map(r => facetValue(r, group));
-      const wasOpen = host.querySelector('details')?.open; const query = host.querySelector('input[type="search"]')?.value || '';
-      const details = element('details'); details.open = !!wasOpen; const summary = element('summary'); append(summary, document.createTextNode(facetNames[group]+' '), element('span', 'facet-count'), element('span', 'facet-chevron', '⌄'));
-      const popover = element('div', 'facet-popover'); const search = element('input', 'facet-search'); search.type = 'search'; search.placeholder = `查找${facetNames[group]}`; search.setAttribute('aria-label', `查找${facetNames[group]}`); search.value = query;
-      const options = element('div', 'facet-options'); search.addEventListener('input', () => fillFacetOptions(options, group, values, search.value));
-      append(popover, search, options, button('清除本组', 'facet-clear', () => { facets[group].clear(); fillFacetOptions(options, group, values, search.value); updateFacetCounts(); render(); })); append(details, summary, popover); host.replaceChildren(details); fillFacetOptions(options, group, values, query);
+      if (group === 'tags') {
+        const trigger = button('', 'facet-trigger', () => openTagPicker('filter'));
+        append(trigger, document.createTextNode(facetNames[group] + ' '), element('span', 'facet-chevron', '⌄'));
+        trigger.id = 'tag-filter-trigger'; trigger.setAttribute('aria-haspopup', 'dialog'); host.replaceChildren(trigger);
+      } else {
+        const wasOpen = host.querySelector('details')?.open; const query = host.querySelector('input[type="search"]')?.value || '';
+        const details = element('details'); details.open = !!wasOpen; const summary = element('summary'); append(summary, document.createTextNode(facetNames[group]+' '), element('span', 'facet-count'), element('span', 'facet-chevron', '⌄'));
+        const popover = element('div', 'facet-popover'); const search = element('input', 'facet-search'); search.type = 'search'; search.placeholder = `查找${facetNames[group]}`; search.setAttribute('aria-label', `查找${facetNames[group]}`); search.value = query;
+        const options = element('div', 'facet-options'); search.addEventListener('input', () => fillFacetOptions(options, group, values, search.value));
+        append(popover, search, options, button('清除本组', 'facet-clear', () => { facets[group].clear(); fillFacetOptions(options, group, values, search.value); updateFacetCounts(); render(); })); append(details, summary, popover); host.replaceChildren(details); fillFacetOptions(options, group, values, query);
+      }
     }
     const native = all.filter(r => !['CF','LG'].includes(NotebookSearch.normalizePlatform(r.platform))).map(r => String(r.difficulty || '').trim()).filter(Boolean);
     fillFacetOptions($('#native-difficulty-options'), 'native', native); updateFacetCounts();
+  }
+  function tagGroups(extra = []) {
+    const groups = (s.tagCatalog?.categories || []).map(c => ({ id: String(c.id), name: String(c.name), tags: (c.tags || []).map(t => String(t.name)) }));
+    const known = new Set(groups.flatMap(c => c.tags));
+    const historical = [...new Set([...records().flatMap(r => Array.isArray(r.tags) ? r.tags.map(String) : []), ...extra])].filter(t => !known.has(t));
+    if (historical.length) groups.push({ id: 'history', name: '历史标签', tags: historical, historical: true });
+    return groups;
+  }
+  function fillTagOptions(container, selected, query, onChange) {
+    container.replaceChildren();
+    const counts = new Map(); records().forEach(r => new Set(r.tags || []).forEach(t => counts.set(t, (counts.get(t) || 0) + 1)));
+    tagGroups([...selected]).forEach(group => {
+      const matching = group.tags.filter(t => `${group.name} ${t}`.toLowerCase().includes(query.toLowerCase())); if (!matching.length) return;
+      container.append(element('strong', 'tag-category-heading', group.name));
+      matching.forEach(value => { const label = element('label', 'facet-option'); const input = element('input'); input.type = 'checkbox'; input.value = value; input.checked = selected.has(value); input.disabled = s.busy;
+        input.addEventListener('change', () => { input.checked ? selected.add(value) : selected.delete(value); $$('input[type="checkbox"]', container).filter(n => n.value === value).forEach(n => n.checked = input.checked); onChange(); });
+        append(label, input, element('span', '', value + (group.historical ? ' · 历史' : '')), element('small', '', counts.get(value) || 0)); container.append(label);
+      });
+    });
+    if (!container.children.length) container.append(element('p', 'facet-help', '没有匹配的标签'));
+  }
+  let tagPickerContext = null;
+  function openTagPicker(mode) {
+    if (s.busy) return;
+    const source = mode === 'filter' ? facets.tags : new Set($('#submit-form').elements.tags.value.split(/[,，、]/).map(t => t.trim()).filter(Boolean));
+    tagPickerContext = { mode, original: new Set(source), selected: new Set(source) };
+    $('#tag-picker-title').textContent = mode === 'filter' ? '筛选算法标签' : '选择算法标签';
+    $('#tag-picker-hint').textContent = mode === 'filter' ? '命中任一已选标签的题目将显示；确定后应用筛选。' : '选择一个或多个标签，点击确定后加入错题。';
+    $('#tag-picker-search').value = '';
+    fillTagOptions($('#tag-picker-dialog-options'), tagPickerContext.selected, '', () => {});
+    $('#tag-picker-dialog').showModal(); $('#tag-picker-search').focus();
+  }
+  function closeTagPicker(apply) {
+    if (!tagPickerContext) return;
+    const context = tagPickerContext; tagPickerContext = null; $('#tag-picker-dialog').close();
+    if (!apply) return;
+    if (context.mode === 'filter') {
+      facets.tags.clear(); context.selected.forEach(tag => facets.tags.add(tag)); refreshFilters(); render();
+    } else {
+      const field = $('#submit-form').elements.tags; field.value = [...context.selected].join(', '); renderEditorTags(); field.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }
+  function renderEditorTags() {
+    const field = $('#submit-form').elements.tags;
+    const selected = new Set(field.value.split(/[,，、]/).map(t => t.trim()).filter(Boolean));
+    const host = $('#record-tag-selected'); host.replaceChildren();
+    selected.forEach(t => host.append(button(t + ' ×', 'filter-chip', () => { if(s.busy)return; selected.delete(t); field.value = [...selected].join(', '); renderEditorTags(); field.dispatchEvent(new Event('input', { bubbles: true })); })));
+    $('#record-tag-open').textContent = selected.size ? `选择标签…（已选 ${selected.size}）` : '选择标签…';
+  }
+  async function openTagDialog() {
+    const select = $('#request-tag-category'); select.replaceChildren();
+    (s.tagCatalog?.categories || []).forEach(c => { const option = element('option', '', c.name); option.value = c.id; select.append(option); });
+    $('#tag-review-section').hidden = true; $('#tag-review-dialog').showModal();
+    if (demo || typeof bridge?.getTagReview !== 'function') return;
+    try { const result = await call('getTagReview'); s.tagReview = result; if (!result?.canReview) return; $('#tag-review-section').hidden = false; const list = $('#tag-review-list'); list.replaceChildren();
+      (result.requests || []).forEach(request => { const row = element('article', 'tag-request-row'); append(row, element('strong', '', `${request.category} / ${request.name}`), element('p', 'facet-help', `#${request.number} · ${authorName(request.author)} · ${request.state || 'open'}`));
+        if(request.url) row.append(button('查看申请 ↗', 'button subtle', () => openExternal(request.url)));
+        ['approve','reject'].forEach(decision => row.append(button(decision === 'approve' ? '批准' : '拒绝', 'button secondary', async () => { if (s.busy || !s.tagReview?.canReview || demo) return; setBusy(true); try { await call('reviewTag', { number: request.number, decision, expected: request.expected || { category: request.category, name: request.name } }); if (typeof bridge.getTagCatalog === 'function') { const catalog = await call('getTagCatalog'); if (Array.isArray(catalog?.categories)) s.tagCatalog = catalog; } $('#tag-review-dialog').close(); refreshFilters(); if ($('#submit-dialog').open) renderEditorTags(); toast('标签申请已处理'); } catch(error) { toast(errorMessage(error)); } finally { setBusy(false); } })));
+        list.append(row);
+      }); if (!list.children.length) list.append(element('p', 'facet-help', '暂无待审核申请'));
+    } catch(error) { toast(errorMessage(error)); }
   }
   function ranges() { return ['rating-min','rating-max','luogu-min','luogu-max'].map(id => { const v=$('#'+id).value; return v === '' ? null : Number(v); }); }
   function updateFacetCounts() {
@@ -146,7 +215,7 @@
       if (status === 'local' && !isLocal(record) || status === 'shared' && isLocal(record)) return false;
       if (stateLabels[status] && mastery(record) !== status) return false;
       const score=NotebookSearch.match(record,search); scores.set(record,score); return score>0;
-    }).sort((a, b) => (search ? scores.get(b)-scores.get(a) : 0) || (new Date(b.updatedAt).getTime() || 0) - (new Date(a.updatedAt).getTime() || 0));
+    }).sort((a, b) => NotebookSearch.tagHits(b, facets.tags) - NotebookSearch.tagHits(a, facets.tags) || (search ? scores.get(b)-scores.get(a) : 0) || (new Date(b.updatedAt).getTime() || 0) - (new Date(a.updatedAt).getTime() || 0));
   }
   function badge(record) { return element('span', `badge ${isLocal(record) ? 'local' : 'shared'}`, isLocal(record) ? record.proposalUrl ? '旧版已投稿副本' : '仅本地 · 未上传' : record.kind === 'document' ? '正式题解' : '讨论 Issue'); }
   function platformCode(value) { return NotebookSearch.normalizePlatform(value); }
@@ -161,18 +230,33 @@
   }
   function tags(record) { const row = element('div', 'tag-row'); (Array.isArray(record.tags) ? record.tags : []).forEach(tag => { let hash = 0; for (const char of String(tag)) hash = (hash + char.codePointAt(0)) % 5; row.append(element('span', `tag tag-color-${hash}`, tag)); }); return row; }
   function empty(title, description, action) { const box = element('div', 'empty-state'); append(box, element('div', 'empty-icon', '⌑'), element('h3', '', title), element('p', '', description)); if (action) box.append(button(action.label, 'button secondary', action.fn)); return box; }
+  let focusedDetail = false;
+  let readerPosition = null;
+  function openDetail(record) {
+    if (focusedDetail) return;
+    s.selected = key(record); readerPosition = { window: window.scrollY, list: $('#record-list').scrollTop, panel: $('#detail-panel').scrollTop, focus: document.activeElement };
+    focusedDetail = true; document.body.classList.add('reading-detail'); render(); $('#detail-back-button')?.focus(); window.scrollTo(0, 0);
+  }
+  function closeDetail() {
+    focusedDetail = false; document.body.classList.remove('reading-detail'); render();
+    if (readerPosition) { $('#record-list').scrollTop = readerPosition.list; $('#detail-panel').scrollTop = readerPosition.panel; window.scrollTo(0, readerPosition.window); const card = $$('.record-card').find(n => n.dataset.key === s.selected); card?.focus({ preventScroll: true }); }
+  }
   function render() {
+    updateStateFacet();
+    document.body.dataset.view = s.view;
     const [title, description, eyebrow] = views[s.view]; $('#page-title').replaceChildren(document.createTextNode(title), element('span', 'heading-dot', '.')); $('#breadcrumb-view').textContent = title; $('#page-description').textContent = description; $('#page-eyebrow').textContent = eyebrow;
     $$('.nav-item').forEach(node => { node.classList.toggle('active', node.dataset.view === s.view); if (node.dataset.view === s.view) node.setAttribute('aria-current', 'page'); else node.removeAttribute('aria-current'); });
     const all = records(); $('#count-public').textContent = all.filter(record => record.kind === 'document').length; $('#count-discussion').textContent = all.filter(record => record.kind === 'issue').length; $('#count-mine').textContent = all.filter(isMine).length; $('#count-favorites').textContent = all.filter(favorite).length;
     $('#stats-panel').hidden = s.view !== 'stats'; $('#library-panel').hidden = s.view === 'stats'; updateStatus();
     if (s.view === 'stats') { renderStats(); return; }
     const items = filteredRecords(); $('#result-count').textContent = items.length;
-    $('.list-heading > span:last-child').textContent = $('#search-input').value.trim() ? '匹配程度 ↓' : '最近更新 ↓';
+    $('.list-heading > span:last-child').textContent = facets.tags.size ? '标签命中数 ↓ · 相关度 / 更新时间' : $('#search-input').value.trim() ? '匹配程度 ↓' : '最近更新 ↓';
     if (!items.some(record => key(record) === s.selected)) s.selected = items[0] ? key(items[0]) : null;
     const list = $('#record-list'); list.replaceChildren();
     items.forEach(record => {
-      const card = button('', `record-card${key(record) === s.selected ? ' selected' : ''}`, () => { s.selected = key(record); render(); }); card.setAttribute('aria-pressed', key(record) === s.selected ? 'true' : 'false');
+      const card = button('', `record-card${key(record) === s.selected ? ' selected' : ''}`, () => { s.selected = key(record); $$('.record-card').forEach(n => { const active = n.dataset.key === s.selected; n.classList.toggle('selected', active); n.setAttribute('aria-pressed', String(active)); }); renderDetail(record); }); card.dataset.key = key(record); card.title = '单击预览，双击打开详情；Enter 打开详情'; card.setAttribute('aria-pressed', key(record) === s.selected ? 'true' : 'false');
+      card.addEventListener('dblclick', () => openDetail(record));
+      card.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); openDetail(record); } });
       append(card, append(element('div', 'card-meta'), platformLabel(record), element('span', '', record.pid || `#${record.number || '本地'}`), difficultyBadge(record), badge(record)), element('h2', 'card-title', record.title || '未命名错题'), element('p', 'card-excerpt', String(record.body || '尚未补充思考过程').replace(/[#>*`]/g, '').trim()), tags(record), append(element('div', 'card-footer'), element('span', `card-state ${mastery(record)}`, stateLabels[mastery(record)]), element('span', '', `${favorite(record) ? '★ · ' : ''}${date(record.updatedAt)}`)));
       list.append(card);
     });
@@ -189,7 +273,8 @@
   }
   async function changeLocal(change) { if (s.busy) return; setBusy(true); const before = structuredClone(s.local); change(); render(); try { await persistLocal(); } catch (error) { s.local = before; render(); toast(`未能保存：${errorMessage(error)}`); } finally { setBusy(false); } }
   function renderDetail(record) {
-    const panel = $('#detail-panel'); panel.replaceChildren();
+    const panel = $('#detail-panel'); const scroll = panel.scrollTop; panel.replaceChildren();
+    if (focusedDetail) { const back = button('← 返回题目网格', 'button secondary detail-back', closeDetail); back.id = 'detail-back-button'; panel.append(back); } else { const open = button('打开详情 ↗', 'button primary detail-open', () => openDetail(record)); open.id = 'open-detail-button'; panel.append(open); }
     const actions = append(element('div', 'detail-actions'), button(favorite(record) ? '★ 已收藏' : '☆ 收藏', 'button secondary', () => changeLocal(() => { s.local.favorites = favorite(record) ? s.local.favorites.filter(value => String(value) !== key(record)) : [...s.local.favorites, key(record)]; })), button('原题 ↗', 'button subtle', () => openExternal(record.problemUrl || record.url)));
     append(panel, append(element('div', 'detail-top'), append(element('div', 'detail-meta'), platformLabel(record), element('span', '', record.pid || `#${record.number || '本地'}`), difficultyBadge(record), badge(record)), actions), element('h2', 'detail-title', record.title || '未命名错题'));
     const author = authorName(record.author); append(panel, append(element('div', 'author-row'), element('span', 'mini-avatar', author.slice(0, 1)), element('span', '', author), element('span', 'separator', '·'), element('span', '', `更新于 ${date(record.updatedAt)}`), record.kind === 'document' ? element('span', 'badge document', '正式题解') : null));
@@ -203,7 +288,7 @@
     if (record.kind === 'issue' && sameRepo(record) && s.account && s.permissions.admin === true) {
       const remove = button('永久删除讨论 Issue', 'button danger', () => deleteDiscussion(record)); remove.id = 'delete-issue-button'; edits.append(remove);
     }
-    panel.append(edits);
+    panel.append(edits); panel.scrollTop = scroll;
     if (record.kind !== 'issue' || !record.number) return;
     const comments = element('section', 'comments-section'); append(comments, append(element('div', 'section-heading'), element('h3', '', '一起讨论')));
     const commentList = element('div'); comments.append(commentList); panel.append(comments);
@@ -265,6 +350,7 @@
     s.editor = { source, ownerId, clientId: saved?.clientId || record?.clientId || uuid(), record: original };
     const data = record ? { url: record.problemUrl || record.url, title: record.title, pid: record.pid, platform: platformCode(record.platform), tags: (record.tags || []).join(', '), body: record.body || '', rating: record.rating ?? '', difficulty: record.difficulty || '' } : {};
     fillForm(saved?.source === source && saved.ownerId === ownerId ? saved.data : data);
+    renderEditorTags();
     const editing = !!record;
     $('#creation-extras').hidden = editing;
     $('#save-local-button').disabled = record?.kind === 'document';
@@ -362,11 +448,32 @@
   async function sync() {
     if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭当前编辑'); return; }
     setBusy(true);
-    try { if (demo) { toast('演示模式：本地记录已保留，未连接公共题库'); return; } if (!navigator.onLine) throw new Error('当前离线，请连接网络后重试'); applyPayload(await call('sync')); s.comments.clear(); refreshFilters(); render(); toast('学习空间已同步'); }
-    catch (error) { s.error = errorMessage(error); updateStatus(); toast(s.error); } finally { setBusy(false); }
+    try { if (demo) { toast('演示模式：本地记录已保留，未连接公共题库'); return; } if (!navigator.onLine) throw new Error('当前离线，请连接网络后重试'); applyPayload(await call('sync')); s.comments.clear(); refreshFilters(); render(); toast('学习空间已同步'); } catch (error) { const message = errorMessage(error); try { applyPayload(await call('bootstrap')); } catch (_) {} s.error = message; refreshFilters(); render(); toast(`同步失败：${message}`); } finally { setBusy(false); }
   }
-  $$('.nav-item').forEach(node => node.addEventListener('click', () => { s.view = node.dataset.view; clearFilters(); }));
-  $('.brand').addEventListener('click', event => { event.preventDefault(); if (s.busy) return; s.view = 'public'; clearFilters(); });
+  $$('.nav-item').forEach(node => node.addEventListener('click', () => { if (focusedDetail) { focusedDetail = false; document.body.classList.remove('reading-detail'); } s.view = node.dataset.view; clearFilters(); }));
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && focusedDetail && !document.querySelector('dialog[open]')) { event.preventDefault(); closeDetail(); } });
+  $('#record-tag-open').addEventListener('click', () => openTagPicker('editor'));
+  $('#tag-picker-search').addEventListener('input', event => { if (tagPickerContext) fillTagOptions($('#tag-picker-dialog-options'), tagPickerContext.selected, event.target.value, () => {}); });
+  $('#tag-picker-confirm').addEventListener('click', () => closeTagPicker(true));
+  $('#tag-picker-cancel').addEventListener('click', () => closeTagPicker(false));
+  $('#tag-picker-close').addEventListener('click', () => closeTagPicker(false));
+  $('#tag-picker-dialog').addEventListener('cancel', event => { event.preventDefault(); closeTagPicker(false); });
+  $('#request-tag-open').addEventListener('click', openTagDialog);
+  const tagEntry = button('＋ 添加标签', 'button subtle', openTagDialog); tagEntry.id = 'tag-manager-button'; $('.topbar-actions').insertBefore(tagEntry, $('#sync-button'));
+  $('#tag-request-form').addEventListener('submit', async event => { event.preventDefault(); if (s.busy) return; const category = $('#request-tag-category').value, name = $('#request-tag-dialog-name').value.trim(); if (!category || !name) return;
+    if (demo) { toast('演示模式：未发送标签申请，不会写入外部'); return; }
+    setBusy(true); try { await call('requestTag', { category, name }); $('#request-tag-dialog-name').value = ''; $('#tag-review-dialog').close(); toast('标签申请已提交，审核后加入公共标签'); } catch(error) { toast(errorMessage(error)); } finally { setBusy(false); }
+  });
+  $('.brand').addEventListener('click', event => { event.preventDefault(); if (s.busy) return; focusedDetail = false; document.body.classList.remove('reading-detail'); s.view = 'public'; clearFilters(); });
+  const stateSelect = $('#state-filter');
+  const stateFacet = element('details', 'facet state-facet'); stateFacet.id = 'state-facet';
+  const stateSummary = element('summary'); const stateLabel = element('span');
+  append(stateSummary, stateLabel, element('span', 'facet-chevron', '⌄'));
+  const stateOptions = element('div', 'facet-popover'); stateOptions.setAttribute('aria-label', '状态筛选');
+  [...stateSelect.options].forEach(option => { const label = element('label', 'facet-option'); const input = element('input'); input.type = 'radio'; input.name = 'state-choice'; input.value = option.value;
+    input.addEventListener('change', () => { stateSelect.value = input.value; stateFacet.open = false; render(); }); append(label, input, element('span', '', option.textContent)); stateOptions.append(label); });
+  append(stateFacet, stateSummary, stateOptions); stateSelect.hidden = true; stateSelect.after(stateFacet);
+  function updateStateFacet() { stateLabel.textContent = stateSelect.selectedOptions[0]?.textContent || '全部状态'; $$('input', stateOptions).forEach(input => { input.checked = input.value === stateSelect.value; }); }
   $('#search-input').addEventListener('input', render); $('#state-filter').addEventListener('change', render); $('#clear-filters').addEventListener('click', clearFilters);
   const luoguLevels=['入门','普及-','普及','普及+/提高-','提高','提高+/省选-','省选/NOI-','NOI/NOI+/CTS'];
   const luoguTones=['red','orange','yellow','green','cyan','blue','purple','black'];
@@ -481,7 +588,10 @@
     renderUpdate();
     const box = $('#account-details'); box.replaceChildren();
     for (const [label, value] of [['姓名', s.account?.name || '未设置'], ['GitHub 登录名', s.account?.login || '未登录'], ['GitHub ID', s.account?.id ?? '未登录'], ['当前仓库', repo() || '未配置'], ['权限', s.account ? s.permissions.admin ? '管理员 · 可直接维护自己的题解' : s.permissions.push ? '可推送 · 可直接维护自己的题解' : '只读 · 可使用本地记录' : '未登录 · 仅本地编辑']]) append(box, element('dt', '', label), element('dd', '', value));
-    $('#account-login').hidden = !!s.account; ['account-switch', 'account-logout', 'account-refresh'].forEach(id => { document.getElementById(id).hidden = !s.account; });
+    const authLabel = { anonymous: '未登录', restored: '已恢复，等待验证', verified: '已验证', expired: '授权已过期，请重新登录', unverified: '尚未验证，请联网刷新', 'recovery-required': '凭证恢复失败，请重新授权' }[s.authStatus?.status];
+    if (authLabel) append(box, element('dt', '', '认证状态'), element('dd', '', authLabel));
+    $('#account-login').textContent = ['expired','recovery-required'].includes(s.authStatus?.status) ? '重新授权 GitHub' : '登录 GitHub';
+    $('#account-login').hidden = !!s.account && !['expired','recovery-required'].includes(s.authStatus?.status); ['account-switch', 'account-logout', 'account-refresh'].forEach(id => { document.getElementById(id).hidden = !s.account; });
   }
   $('#account-button').addEventListener('click', () => { if (s.busy) return; if ($('#submit-dialog').open) { toast('请先完成或关闭编辑，草稿不会跨账户恢复'); return; } renderAccount(); $('#account-error').hidden = true; $('#account-dialog').showModal(); });
   async function accountAction(action) {
@@ -527,6 +637,7 @@
     applyTheme(readTheme()); render();
     if (demo) { s.permissions = { repo: 'qmx-acm-data/2026', push: false, admin: false }; s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo })); s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo })); s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} }); s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record); s.settings = cached?.settings || {}; applyTheme(s.settings.theme || readTheme()); }
     else { try { applyPayload(await call('bootstrap')); } catch (error) { s.error = errorMessage(error); } }
+    if (!demo && !s.catalogFromPayload && typeof bridge?.getTagCatalog === 'function') { try { const catalog = await call('getTagCatalog'); if (Array.isArray(catalog?.categories)) s.tagCatalog = catalog; } catch (_) { /* Presets remain available offline. */ } }
     s.loading = false; refreshFilters(); render();
     void checkStartupUpdates();
     if (!demo && !s.error && s.settings.autoSync !== false && navigator.onLine) await sync();
