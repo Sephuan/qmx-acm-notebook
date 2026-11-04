@@ -21,7 +21,7 @@ git push -u origin main
 
 ## 构建与版本发布
 
-版本说明按版本保存在 [`docs/releases/`](releases/)；[v0.6.0 更新说明](releases/v0.6.0.md) 当前是待发布草稿，源码已推送但 Release 和签名更新尚未发布。
+版本说明按版本保存在 [`docs/releases/`](releases/)；[v0.6.0 更新说明](releases/v0.6.0.md) 记录当前草稿 Release、构建和签名更新状态。
 
 本地安装依赖、检查和构建的完整命令集中在 [CONTRIBUTING](../CONTRIBUTING.md#环境与命令)。发布构建使用 `pnpm dist`，同时生成便携目录与 NSIS 安装程序；仅需便携目录时使用该文档列出的独立打包命令。
 
