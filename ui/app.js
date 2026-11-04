@@ -524,6 +524,12 @@
   $('#theme-select').addEventListener('change', async event => { const previous = { ...s.settings }; s.settings.theme = event.target.value; applyTheme(s.settings.theme); try { if (demo) writeDemo(); else await call('saveSettings', { ...s.settings }); } catch (error) { s.settings = previous; toast(`当前风格已预览，设置未保存：${errorMessage(error)}`); } });
   $('#settings-button').addEventListener('click', () => { if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; } const form = $('#settings-form'); form.elements.theme.value = document.body.dataset.theme; form.elements.repo.value = s.settings.repo || 'qmx-acm-data/2026'; form.elements.clientId.value = s.settings.clientId || ''; form.elements.displayName.value = s.settings.displayName || ''; form.elements.autoSync.checked = s.settings.autoSync !== false; $('#settings-dialog').showModal(); });
   $('#settings-form').addEventListener('submit', async event => { event.preventDefault(); const form = event.currentTarget; const settings = { ...s.settings, theme: form.elements.theme.value, repo: form.elements.repo.value.trim() || 'qmx-acm-data/2026', clientId: form.elements.clientId.value.trim(), displayName: form.elements.displayName.value.trim(), autoSync: form.elements.autoSync.checked }; const control = $('button[type="submit"]', form); if (s.busy) return; setBusy(true); try { if (!demo) { await call('saveSettings', settings); applyPayload(await call('bootstrap')); } else s.settings = settings; applyTheme(settings.theme); writeDemo(); $('#settings-dialog').close(); refreshFilters(); render(); toast('设置已保存'); } catch (error) { toast(errorMessage(error)); } finally { setBusy(false); } });
+  $('#settings-login-button').addEventListener('click', async () => {
+    if (s.busy) return;
+    if (demo) { toast('浏览器演示不连接 GitHub，账户功能请在桌面客户端使用'); return; }
+    $('#settings-dialog').close();
+    await startLoginFromBanner();
+  });
   function renderUpdate() {
     $('#app-version').textContent = s.appVersion || (demo ? '浏览器预览（非桌面客户端）' : '尚未获取');
     const update = s.update || {};
@@ -639,7 +645,7 @@
       if (action === 'refresh') applyPayload(await call('refreshAccount'));
       else {
         if (action === 'logout' || action === 'switch') await call('logout');
-        if (action === 'login' || action === 'switch') { $('#auth-message').textContent = '正在请求设备授权…'; $('#auth-code').textContent = ''; $('#auth-open-button').hidden = true; $('#auth-dialog').showModal(); await call('login'); loggedIn = true; }
+        if (action === 'login' || action === 'switch') { $('#auth-message').textContent = '正在请求设备授权…'; $('#auth-code').textContent = ''; $('#auth-open-button').hidden = true; $('#auth-copy-button').hidden = true; $('#auth-dialog').showModal(); await call('login'); loggedIn = true; }
         applyPayload(await call('bootstrap'));
       }
       s.comments.clear(); refreshFilters(); render(); renderAccount(); toast('账户与仓库权限已更新');
@@ -662,9 +668,15 @@
     $('#auth-code').textContent = progress?.userCode || progress?.user_code || '';
     authUrl = progress?.verificationUri || progress?.verification_uri || progress?.verificationUrl || progress?.url || '';
     $('#auth-open-button').hidden = !authUrl;
+    $('#auth-copy-button').hidden = !authUrl;
     if (!$('#auth-dialog').open) $('#auth-dialog').showModal();
   });
-  $('#auth-open-button').addEventListener('click', () => openExternal(authUrl));
+  $('#auth-open-button').addEventListener('click', () => { if (authUrl) void call('openAuthUrl', authUrl); });
+  $('#auth-copy-button').addEventListener('click', async () => {
+    if (!authUrl) return;
+    try { await navigator.clipboard.writeText(authUrl); toast('授权链接已复制，可粘贴到浏览器打开'); }
+    catch (_) { toast('复制失败，请手动复制链接'); }
+  });
   async function cancelLogin() { try { if (!demo) await call('cancelLogin'); } catch (error) { toast(errorMessage(error)); } $('#auth-dialog').close(); }
   $('#cancel-login-button').addEventListener('click', cancelLogin);
   $('#auth-dialog').addEventListener('cancel', event => { event.preventDefault(); cancelLogin(); });

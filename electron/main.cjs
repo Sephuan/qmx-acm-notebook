@@ -74,10 +74,41 @@ function state(error) {
     local: local(), error: error || null
   };
 }
-async function external(url) {
+function assertExternal(url) {
   const u = new URL(url);
   if (u.protocol !== 'https:' || !['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com'].includes(u.hostname)) throw new Error('仅允许打开 GitHub 和受支持题目平台的 HTTPS 链接');
+  return u;
+}
+async function external(url) {
+  const u = assertExternal(url);
   await shell.openExternal(u.href);
+}
+// Prefer Chrome for the device-flow page so authorizing does not depend on the system default browser;
+// fall back to the default handler when Chrome is not installed.
+function chromePath() {
+  const candidates = process.platform === 'win32'
+    ? [process.env.PROGRAMFILES, process.env['PROGRAMFILES(X86)'], process.env.LOCALAPPDATA].map(base => base && path.join(base, 'Google\\Chrome\\Application\\chrome.exe'))
+    : process.platform === 'darwin'
+      ? ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome']
+      : ['/usr/bin/google-chrome', '/usr/bin/google-chrome-stable', '/usr/bin/chromium', '/usr/bin/chromium-browser'];
+  return candidates.find(candidate => candidate && fs.existsSync(candidate)) || null;
+}
+async function openAuthUrl(url) {
+  const u = assertExternal(url);
+  if (u.hostname !== 'github.com') throw new Error('仅允许打开 GitHub 授权链接');
+  const chrome = chromePath();
+  if (chrome) {
+    const launched = await new Promise(resolve => {
+      let child;
+      try { child = spawn(chrome, [u.href], { detached: true, stdio: 'ignore' }); }
+      catch { return resolve(false); }
+      child.once('error', () => resolve(false));
+      child.once('spawn', () => { child.unref(); resolve(true); });
+    });
+    if (launched) return true;
+  }
+  await shell.openExternal(u.href);
+  return false;
 }
 function persistAuth(data, ticket) {
   auth.commit(data.token, data.account, ticket);
@@ -127,7 +158,7 @@ async function login() {
   if (gen !== loginGeneration) throw new Error('已取消登录');
   if (code.error) throw new Error(code.error_description || code.error);
   win.webContents.send('auth-progress', { userCode: code.user_code, url: code.verification_uri, expiresIn: code.expires_in });
-  await external(code.verification_uri);
+  await openAuthUrl(code.verification_uri);
   let interval = Math.max(5, code.interval || 5) * 1000;
   const deadline = Date.now() + code.expires_in * 1000;
   while (Date.now() < deadline) {
@@ -358,6 +389,7 @@ function setup() {
   }));
   handle('getComments', async number => (await client().comments(number)).map(x => ({ id: x.id, body: x.body, author: x.user?.login || '', createdAt: x.created_at, url: x.html_url })));
   handle('openExternal', external);
+  handle('openAuthUrl', openAuthUrl);
   handle('exportLocal', async () => {
     const { dialog } = require('electron');
     const result = await dialog.showSaveDialog(win, { defaultPath: '我的题解备份.json', filters: [{ name: 'JSON', extensions: ['json'] }] });
