@@ -23,6 +23,15 @@
 - [参与开发](CONTRIBUTING.md)：开发环境、检查与构建命令、贡献约定。
 - [维护与发布](docs/RELEASING.md)：源码上传、版本发布、验收状态及应用归属。
 
+## 管理员发布新版本
+
+1. 更新 `package.json` 中的版本号并编写版本说明。将改动合并到 `main` 后，在对应提交上创建并推送同版本的新标签，例如 `0.6.1` 对应 `v0.6.1`。
+2. 在 GitHub [Actions](https://github.com/qmx-acm-data/qmx-acm-notebook/actions) → **Build desktop clients** → **Run workflow** 中选择 `main`，填写已推送的标签，保持 `verify_signing_only` 未勾选，然后运行。GitHub Actions 会使用仓库 Secret 签名，管理员无需获取私钥。
+3. 构建成功后，在 [Releases](https://github.com/qmx-acm-data/qmx-acm-notebook/releases) 中打开生成的草稿，核对版本说明、安装包和 `SHA256SUMS.txt`，验收通过后点击 **Publish release**。
+4. 发布后，在 Actions → **Prepare published update channel** → **Run workflow** 中选择 `main`，填写同一个标签。审核并合并生成的更新通道 PR；若工作流只生成了分支，按运行摘要中的链接手动开 PR。
+
+**发布 Release 只开放下载；更新通道 PR 合并后，现有客户端下次检查更新时才会发现新版本。** 如更换了 Electron 运行时，仍需用完整安装包升级。更多验收和故障处理见[维护与发布](docs/RELEASING.md#构建与版本发布)。
+
 ## 源码目录
 
 | 目录 | 职责 |
