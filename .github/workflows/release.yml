@@ -1,15 +1,195 @@
 name: Build desktop clients
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
+    inputs:
+      tag:
+        description: Existing stable tag to build (for example v0.6.1); leave empty for signing check only
+        required: false
+        type: string
+      verify_signing_only:
+        description: Only verify that the signing Secret matches the installed-client public key
+        type: boolean
+        default: false
 permissions:
   contents: read
+concurrency:
+  group: release-${{ inputs.tag || github.ref }}
+  cancel-in-progress: false
 jobs:
+  trust:
+    runs-on: ubuntu-latest
+    outputs:
+      tag_release: ${{ steps.guard.outputs.tag_release }}
+      release_tag: ${{ steps.guard.outputs.release_tag }}
+      release_sha: ${{ steps.guard.outputs.release_sha }}
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Require trusted main workflow and validated stable tag
+        id: guard
+        env:
+          TAG_INPUT: ${{ inputs.tag }}
+          VERIFY_ONLY: ${{ inputs.verify_signing_only }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF" == refs/heads/main ]] || { echo 'Release workflow must be dispatched from main'; exit 1; }
+          gh auth setup-git --hostname github.com
+          git fetch origin main --tags
+          if [[ "$VERIFY_ONLY" == true ]]; then
+            echo 'tag_release=false' >> "$GITHUB_OUTPUT"
+            echo 'release_tag=' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          [[ "$TAG_INPUT" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo 'Provide an existing stable version tag such as v0.6.1'; exit 1; }
+          git rev-parse -q --verify "refs/tags/$TAG_INPUT^{commit}" >/dev/null || { echo 'Requested tag does not exist'; exit 1; }
+          TAG_COMMIT=$(git rev-parse "refs/tags/$TAG_INPUT^{commit}")
+          git merge-base --is-ancestor "$TAG_COMMIT" origin/main || { echo 'Release tag must point to reviewed source already in main'; exit 1; }
+          for TOOL in tools/package.cjs tools/installer.cjs tools/release-feed.cjs electron/updater.cjs electron/update-key.cjs; do
+            git diff --quiet "$GITHUB_SHA" "$TAG_COMMIT" -- "$TOOL" || { echo "Release tag must contain the reviewed release tooling: $TOOL"; exit 1; }
+          done
+          VERSION=$(git show "$TAG_COMMIT:package.json" | node -e "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>process.stdout.write(JSON.parse(s).version))")
+          [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ && "$TAG_INPUT" == "v$VERSION" ]] || { echo 'Tag must match stable package version'; exit 1; }
+          if gh release view "$TAG_INPUT" --json isDraft > release-state.json 2>/dev/null; then
+            node -e "const r=require('./release-state.json');if(!r.isDraft)throw Error('Refusing to replace an already published release')"
+          fi
+          echo 'tag_release=true' >> "$GITHUB_OUTPUT"
+          echo "release_tag=$TAG_INPUT" >> "$GITHUB_OUTPUT"
+          echo "release_sha=$TAG_COMMIT" >> "$GITHUB_OUTPUT"
+  signing-check:
+    needs: trust
+    if: needs.trust.outputs.tag_release == 'true' || inputs.verify_signing_only == true
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify Secret matches installed-client public key
+        env:
+          QMX_UPDATE_SIGNING_KEY_PEM: ${{ secrets.QMX_UPDATE_SIGNING_KEY_PEM }}
+        run: node tools/release-feed.cjs verify-signing
+  verify-complete:
+    needs: [trust, signing-check]
+    if: needs.trust.outputs.tag_release == 'false' && inputs.verify_signing_only == true
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Signing Secret verified; no release was built or published.'
+  windows-build:
+    needs: [trust, signing-check]
+    if: needs.trust.outputs.tag_release == 'true'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.trust.outputs.release_sha }}
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check
+      - run: pnpm test
+      - name: Build unsigned application from reviewed release source
+        run: pnpm package
+        env:
+          QMX_BUILD_UPDATE_FEED: '1'
+      - name: Prepare data-only signing input
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force release/sign-input/node_modules/electron,release/sign-input/release/QMX-Notebook-win32-x64/resources | Out-Null
+          Copy-Item package.json release/sign-input/package.json
+          Copy-Item node_modules/electron/package.json release/sign-input/node_modules/electron/package.json
+          Copy-Item release/QMX-Notebook-win32-x64/resources/app.asar release/sign-input/release/QMX-Notebook-win32-x64/resources/app.asar
+      - uses: actions/upload-artifact@v4
+        with:
+          name: unsigned-sign-input
+          if-no-files-found: error
+          path: release/sign-input/**
+  sign-feed:
+    needs: [trust, windows-build]
+    if: needs.trust.outputs.tag_release == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      # This is the trusted workflow revision, never source checked out from the release tag.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: unsigned-sign-input
+          path: signing-root
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Sign using trusted main-branch tooling only
+        env:
+          QMX_UPDATE_SIGNING_KEY_PEM: ${{ secrets.QMX_UPDATE_SIGNING_KEY_PEM }}
+        run: node tools/update-manifest.cjs --root-dir signing-root
+      - name: Verify signed artifact before publishing it to other jobs
+        run: node tools/release-feed.cjs verify signing-root
+      - uses: actions/upload-artifact@v4
+        with:
+          name: signed-update-feed
+          if-no-files-found: error
+          path: |
+            signing-root/feed/manifest.json
+            signing-root/resources/app.asar
+  windows-package:
+    needs: [trust, windows-build, sign-feed]
+    if: needs.trust.outputs.tag_release == 'true'
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.trust.outputs.release_sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: signed-update-feed
+          path: incoming-signed
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Verify and install signed application feed
+        shell: pwsh
+        run: |
+          node tools/release-feed.cjs verify incoming-signed --root-dir .
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          New-Item -ItemType Directory -Force feed,resources | Out-Null
+          Copy-Item incoming-signed/feed/manifest.json feed/manifest.json -Force
+          Copy-Item incoming-signed/resources/app.asar resources/app.asar -Force
+      - name: Build installer and portable archive from verified application
+        shell: pwsh
+        run: |
+          pnpm dist
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Compress-Archive -Path release/QMX-Notebook-win32-x64 -DestinationPath release/QMX-Notebook-Windows-x64.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: QMX-Notebook-Windows-x64
+          if-no-files-found: error
+          path: |
+            release/QMX-Notebook-Windows-x64.zip
+            release/installer/QMX-Notebook-Setup-*.exe
   unix:
-    permissions:
-      contents: write
+    needs: [trust, sign-feed]
+    if: needs.trust.outputs.tag_release == 'true'
     strategy:
       fail-fast: false
       matrix:
@@ -33,6 +213,13 @@ jobs:
       CSC_IDENTITY_AUTO_DISCOVERY: 'false'
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.trust.outputs.release_sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
+        with:
+          name: signed-update-feed
+          path: incoming
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -41,53 +228,56 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm test
-      - run: pnpm dist
+      - name: Build platform app and inject the exact signed archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p feed resources
+          cp incoming/feed/manifest.json feed/manifest.json
+          cp incoming/resources/app.asar resources/app.asar
+          node tools/release-feed.cjs verify .
+          pnpm dist
       - name: Linux packaged desktop persistence smoke
         if: matrix.platform == 'linux'
         run: QMX_SMOKE_NO_SANDBOX=1 xvfb-run -a node tests/linux-desktop-smoke.cjs
       - uses: actions/upload-artifact@v4
         with:
           name: QMX-Notebook-${{ matrix.platform }}-${{ matrix.arch }}
+          if-no-files-found: error
           path: release/installer/*
-      - name: Attach platform packages to draft release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
-        with:
-          draft: true
-          files: |
-            release/installer/*.tar.gz
-            release/installer/*.dmg
-            release/installer/*.zip
-  windows:
+  draft:
+    needs: [trust, windows-package, unix]
+    if: needs.trust.outputs.tag_release == 'true'
     permissions:
       contents: write
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
         with:
-          node-version: '24'
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm check
-      - run: pnpm test
-      - run: pnpm dist
-      - name: Create portable archive
-        shell: pwsh
-        run: Compress-Archive -Path release/QMX-Notebook-win32-x64 -DestinationPath release/QMX-Notebook-Windows-x64.zip
-      - uses: actions/upload-artifact@v4
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - uses: actions/download-artifact@v4
         with:
-          name: QMX-Notebook-Windows-x64
-          path: |
-            release/QMX-Notebook-Windows-x64.zip
-            release/installer/QMX-Notebook-Setup-*.exe
-      - name: Attach to draft GitHub release
-        if: startsWith(github.ref, 'refs/tags/')
+          pattern: QMX-Notebook-*
+          path: artifacts
+      - uses: actions/download-artifact@v4
+        with:
+          name: signed-update-feed
+          path: artifacts/signed-update-feed
+      - name: Prepare flat release attachments and checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir release-assets
+          find artifacts -type f \( -name '*.exe' -o -name '*.zip' -o -name '*.dmg' -o -name '*.tar.gz' \) -exec cp -n {} release-assets/ \;
+          cp artifacts/signed-update-feed/feed/manifest.json release-assets/update-manifest.json
+          cp artifacts/signed-update-feed/resources/app.asar release-assets/update-app.asar
+          (cd release-assets && sha256sum * > SHA256SUMS.txt)
+      - name: Attach verified builds to draft only
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ needs.trust.outputs.release_tag }}
           draft: true
           generate_release_notes: true
-          files: |
-            release/QMX-Notebook-Windows-x64.zip
-            release/installer/QMX-Notebook-Setup-*.exe
+          overwrite_files: true
+          files: release-assets/*

@@ -1,0 +1,77 @@
+name: Prepare published update channel
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Published stable release tag (for example v0.6.1)
+        required: true
+        type: string
+permissions:
+  contents: read
+concurrency:
+  group: update-channel
+  cancel-in-progress: false
+jobs:
+  prepare:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      RELEASE_TAG: ${{ inputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Require a published stable release from main history
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo 'Stable version tag required'; exit 1; }
+          gh release view "$RELEASE_TAG" --json isDraft,isPrerelease | node -e "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>{const r=JSON.parse(s);if(r.isDraft||r.isPrerelease)process.exit(1)})"
+          gh auth setup-git --hostname github.com
+          git fetch origin "refs/tags/$RELEASE_TAG:refs/tags/$RELEASE_TAG" main
+          git merge-base --is-ancestor "$RELEASE_TAG^{commit}" origin/main
+      - name: Download release feed, never the private key
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p incoming/feed incoming/resources
+          gh release download "$RELEASE_TAG" --pattern update-manifest.json --pattern update-app.asar --dir incoming
+          mv incoming/update-manifest.json incoming/feed/manifest.json
+          mv incoming/update-app.asar incoming/resources/app.asar
+      - name: Verify signature, version and content before preparing channel
+        shell: bash
+        run: |
+          set -euo pipefail
+          node tools/release-feed.cjs verify incoming --version "${RELEASE_TAG#v}" --runtime-version manifest
+          node -e "const fs=require('fs');const m=JSON.parse(fs.readFileSync('incoming/feed/manifest.json'));if('v'+m.version!==process.env.RELEASE_TAG)throw Error('Release version mismatch');const old=JSON.parse(fs.readFileSync('feed/manifest.json'));const parts=v=>v.split('.').map(Number);const a=parts(m.version),b=parts(old.version);const cmp=a.reduce((r,x,i)=>r||(x>b[i]?1:x<b[i]?-1:0),0);if(cmp<=0)throw Error('Channel already has this or a newer version; refusing downgrade or replacement');"
+      - name: Create review branch without modifying main
+        shell: bash
+        run: |
+          set -euo pipefail
+          BRANCH="update-channel/$RELEASE_TAG"
+          if git ls-remote --exit-code origin "refs/heads/$BRANCH" >/dev/null 2>&1; then
+            echo 'Channel review branch already exists; inspect it instead of overwriting'; exit 1
+          fi
+          git switch -c "$BRANCH"
+          cp incoming/feed/manifest.json feed/manifest.json
+          cp incoming/resources/app.asar resources/app.asar
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add feed/manifest.json resources/app.asar
+          git commit -m "Activate signed update $RELEASE_TAG after release acceptance"
+          gh auth setup-git --hostname github.com
+          git push origin "HEAD:refs/heads/$BRANCH"
+          printf '## Update channel requires review\n\nPublished installers do not change the client update feed until this branch is merged.\n\nOpen/merge the channel PR: https://github.com/%s/compare/main...%s\n' "$GH_REPO" "$BRANCH" >> "$GITHUB_STEP_SUMMARY"
+          if ! gh pr create --base main --head "$BRANCH" --title "Activate signed update $RELEASE_TAG" --body "Published release $RELEASE_TAG has passed signature, version and SHA-256 verification. Merge after acceptance to notify existing clients. This changes only the signed update manifest and application archive."; then
+            echo '::warning::Repository policy may forbid Actions-created pull requests. The review branch was pushed successfully; use the compare link above to open the PR manually.'
+          fi

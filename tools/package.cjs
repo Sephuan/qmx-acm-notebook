@@ -32,18 +32,24 @@ async function main() {
   };
   // Optional local runtime archive; clean GitHub runners download automatically.
   if (fs.existsSync(archive)) options.electronZipDir = archiveDir;
+  // Supply signed bytes before packager computes macOS/Windows ASAR integrity metadata.
+  // Replacing app.asar after packager returns leaves embedded integrity hashes stale.
+  const manifestPath = path.join(root, 'feed', 'manifest.json');
+  let signedHash;
+  if (fs.existsSync(manifestPath) && process.env.QMX_BUILD_UPDATE_FEED !== '1') {
+    const { manifest, file, archivePath } = require('./release-feed.cjs').verifyFeed(root);
+    if (manifest.version !== pkg.version) throw new Error('Update feed version differs from package version; build a fresh feed first');
+    options.prebuiltAsar = archivePath;
+    delete options.asar;
+    delete options.prune;
+    signedHash = file.sha256.toLowerCase();
+  }
   const outputs = await packager(options);
   for (const output of outputs) {
-    // Publish exactly the signed application bytes when a release feed is present.
-    const manifestPath = path.join(root, 'feed', 'manifest.json');
-    if (fs.existsSync(manifestPath) && process.env.QMX_BUILD_UPDATE_FEED !== '1') {
-      const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
-      const file = require('../electron/updater.cjs').verifyManifest(manifest, { publicKey: require('../electron/update-key.cjs'), runtimeVersion: version });
-      if (manifest.version !== pkg.version) throw new Error('Update feed version differs from package version; build a fresh feed first');
-      const bytes = fs.readFileSync(path.join(root, file.path));
-      if (bytes.length !== file.size || require('node:crypto').createHash('sha256').update(bytes).digest('hex') !== file.sha256) throw new Error('Signed application feed hash mismatch');
+    if (signedHash) {
       const resources = platform === 'darwin' ? path.join(output, 'QMX-Notebook.app', 'Contents', 'Resources') : path.join(output, 'resources');
-      fs.writeFileSync(path.join(resources, 'app.asar'), bytes);
+      const hash = require('node:crypto').createHash('sha256').update(fs.readFileSync(path.join(resources, 'app.asar'))).digest('hex');
+      if (hash !== signedHash) throw new Error('Packaged application differs from the signed feed');
     }
     if (platform === 'win32') for (const [name, flags] of [['启动.cmd', '--disable-gpu'], ['兼容启动.cmd', '--disable-gpu --no-sandbox']]) {
       fs.writeFileSync(path.join(output, name), `@echo off\r\nsetlocal\r\nset ELECTRON_RUN_AS_NODE=\r\ncd /d "%~dp0"\r\nstart "" "QMX-Notebook.exe" ${flags}\r\n`);
@@ -53,4 +59,5 @@ async function main() {
   console.log('Build output:', outputs.join('\n'));
   console.log('Temporary build directory:', stage);
 }
-main().catch(error => { console.error(error); process.exitCode = 1; });
+if (require.main === module) main().catch(error => { console.error(error); process.exitCode = 1; });
+module.exports = { main };
