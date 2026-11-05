@@ -6,6 +6,7 @@
   const demo = !bridge;
   const STORAGE = 'acm-notebook.demo.v1';
   const THEME_STORAGE = 'acm-notebook.theme';
+  const SIDEBAR_STORAGE = 'acm-notebook.sidebar';
   const stateLabels = { unreviewed: '待复习', reviewing: '复习中', mastered: '已掌握' };
   const views = {
     public: ['公共题库', '在他人的思路里，找到自己的突破口。', 'A LITTLE BETTER, EVERY DAY'],
@@ -68,9 +69,13 @@
     s.local = normalizeLocal(payload.local);
     s.account = payload.account || null; s.lastSync = payload.lastSync || null; s.error = payload.error ? errorMessage(payload.error) : '';
     applyTheme(s.settings.theme || readTheme());
+    applyCodeSettings();
   }
   function readTheme() { try { return localStorage.getItem(THEME_STORAGE) || 'light'; } catch (_) { return 'light'; } }
   function applyTheme(theme) { theme = ['light', 'dark', 'cards'].includes(theme) ? theme : 'light'; document.body.dataset.theme = theme; $('#theme-select').value = theme; try { localStorage.setItem(THEME_STORAGE, theme); } catch (_) {} }
+  function applyCodeSettings() { const size = Math.round(Number(s.settings.codeFontSize)); document.body.style.setProperty('--code-font-size', (Number.isFinite(size) && size >= 10 && size <= 18 ? size : 11) + 'px'); }
+  function readSidebar() { try { return localStorage.getItem(SIDEBAR_STORAGE) === 'collapsed'; } catch (_) { return false; } }
+  function applySidebar(collapsed) { document.body.classList.toggle('sidebar-collapsed', !!collapsed); const toggle = $('#sidebar-toggle'); if (toggle) { toggle.title = collapsed ? '展开侧边栏' : '收起侧边栏'; toggle.setAttribute('aria-label', toggle.title); toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true'); } try { localStorage.setItem(SIDEBAR_STORAGE, collapsed ? 'collapsed' : 'expanded'); } catch (_) {} }
   function updateStatus() {
     $('#demo-label').hidden = !demo;
     $('#sync-status').textContent = s.loading ? '正在载入…' : demo ? '浏览器预览 · 本地保存' : s.lastSync ? `最近同步 ${date(s.lastSync)}` : '尚未同步';
@@ -269,7 +274,7 @@
     if (window.marked && window.DOMPurify) {
       try { const parse = typeof window.marked.parse === 'function' ? window.marked.parse.bind(window.marked) : window.marked; const safe = window.DOMPurify.sanitize(parse(source), { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button'], FORBID_ATTR: ['style'] }); container.innerHTML = safe; if (window.renderMathInElement) window.renderMathInElement(container, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,trust:false});
         // Prism runs after sanitizing and reads textContent only, so highlighting cannot inject markup.
-        $$('pre code', container).forEach(code => { try { window.Prism?.highlightElement(code); } catch (_) { /* Unknown language: keep the readable plain code block. */ } });
+        $$('pre code', container).forEach(code => { if (code.parentElement && s.settings.codeLineNumbers) code.parentElement.classList.add('line-numbers'); try { window.Prism?.highlightElement(code); } catch (_) { /* Unknown language: keep the readable plain code block. */ } });
         container.classList.add('rendered'); $$('a', container).forEach(link => link.addEventListener('click', event => { event.preventDefault(); openExternal(link.getAttribute('href')); })); return; } catch (_) { /* Plain text is the secure fallback. */ }
     }
     container.textContent = source;
@@ -500,8 +505,11 @@
   $('#submit-form').addEventListener('input', () => { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 650); });
   $('#save-local-button').addEventListener('click', () => saveRecord(false)); $('#submit-form').addEventListener('submit', event => { event.preventDefault(); saveRecord(true); });
   $('#theme-select').addEventListener('change', async event => { const previous = { ...s.settings }; s.settings.theme = event.target.value; applyTheme(s.settings.theme); try { if (demo) writeDemo(); else await call('saveSettings', { ...s.settings }); } catch (error) { s.settings = previous; toast(`当前风格已预览，设置未保存：${errorMessage(error)}`); } });
-  $('#settings-button').addEventListener('click', () => { if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; } const form = $('#settings-form'); form.elements.theme.value = document.body.dataset.theme; form.elements.repo.value = s.settings.repo || 'qmx-acm-data/2026'; form.elements.clientId.value = s.settings.clientId || ''; form.elements.displayName.value = s.settings.displayName || ''; form.elements.autoSync.checked = s.settings.autoSync !== false; $('#settings-dialog').showModal(); });
-  $('#settings-form').addEventListener('submit', async event => { event.preventDefault(); const form = event.currentTarget; const settings = { ...s.settings, theme: form.elements.theme.value, repo: form.elements.repo.value.trim() || 'qmx-acm-data/2026', clientId: form.elements.clientId.value.trim(), displayName: form.elements.displayName.value.trim(), autoSync: form.elements.autoSync.checked }; const control = $('button[type="submit"]', form); if (s.busy) return; setBusy(true); try { if (!demo) { await call('saveSettings', settings); applyPayload(await call('bootstrap')); } else s.settings = settings; applyTheme(settings.theme); writeDemo(); $('#settings-dialog').close(); refreshFilters(); render(); toast('设置已保存'); } catch (error) { toast(errorMessage(error)); } finally { setBusy(false); } });
+  $('#settings-button').addEventListener('click', () => { if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; } const form = $('#settings-form'); form.elements.theme.value = document.body.dataset.theme; form.elements.repo.value = s.settings.repo || 'qmx-acm-data/2026'; form.elements.clientId.value = s.settings.clientId || ''; form.elements.displayName.value = s.settings.displayName || ''; form.elements.autoSync.checked = s.settings.autoSync !== false; form.elements.codeFontSize.value = String(s.settings.codeFontSize || 11); $('#code-font-size-value').textContent = (s.settings.codeFontSize || 11) + 'px'; form.elements.codeLineNumbers.checked = s.settings.codeLineNumbers === true; $('#settings-dialog').showModal(); });
+  $('#settings-form').addEventListener('submit', async event => { event.preventDefault(); const form = event.currentTarget; const settings = { ...s.settings, theme: form.elements.theme.value, repo: form.elements.repo.value.trim() || 'qmx-acm-data/2026', clientId: form.elements.clientId.value.trim(), displayName: form.elements.displayName.value.trim(), autoSync: form.elements.autoSync.checked, codeFontSize: Number(form.elements.codeFontSize.value), codeLineNumbers: form.elements.codeLineNumbers.checked }; const control = $('button[type="submit"]', form); if (s.busy) return; setBusy(true); try { if (!demo) { await call('saveSettings', settings); applyPayload(await call('bootstrap')); } else { s.settings = settings; applyCodeSettings(); } applyTheme(settings.theme); writeDemo(); $('#settings-dialog').close(); refreshFilters(); render(); toast('设置已保存'); } catch (error) { toast(errorMessage(error)); } finally { setBusy(false); } });
+  $('#settings-form').elements.codeFontSize.addEventListener('input', () => { const size = Number($('#settings-form').elements.codeFontSize.value); document.body.style.setProperty('--code-font-size', size + 'px'); $('#code-font-size-value').textContent = size + 'px'; });
+  $('#settings-form').elements.codeLineNumbers.addEventListener('change', () => { s.settings.codeLineNumbers = $('#settings-form').elements.codeLineNumbers.checked; render(); });
+  $('#sidebar-toggle').addEventListener('click', () => applySidebar(!document.body.classList.contains('sidebar-collapsed')));
   function renderUpdate() {
     $('#app-version').textContent = s.appVersion || (demo ? '浏览器预览（非桌面客户端）' : '尚未获取');
     const update = s.update || {};
@@ -637,8 +645,8 @@
   window.addEventListener('online', updateStatus); window.addEventListener('offline', updateStatus);
   document.addEventListener('keydown', event => { if (event.key === '/' && !event.ctrlKey && !event.metaKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) && !document.querySelector('dialog[open]')) { event.preventDefault(); if (s.view === 'stats') { s.view = 'public'; render(); } $('#search-input').focus(); } });
   async function bootstrap() {
-    applyTheme(readTheme()); render();
-    if (demo) { s.permissions = { repo: 'qmx-acm-data/2026', push: false, admin: false }; s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo })); s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo })); s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} }); s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record); s.settings = cached?.settings || {}; applyTheme(s.settings.theme || readTheme()); }
+    applyTheme(readTheme()); applySidebar(readSidebar()); render();
+    if (demo) { s.permissions = { repo: 'qmx-acm-data/2026', push: false, admin: false }; s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo })); s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo })); s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} }); s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record); s.settings = cached?.settings || {}; applyTheme(s.settings.theme || readTheme()); applyCodeSettings(); }
     else { try { applyPayload(await call('bootstrap')); } catch (error) { s.error = errorMessage(error); } }
     if (!demo && !s.catalogFromPayload && typeof bridge?.getTagCatalog === 'function') { try { const catalog = await call('getTagCatalog'); if (Array.isArray(catalog?.categories)) s.tagCatalog = catalog; } catch (_) { /* Presets remain available offline. */ } }
     s.loading = false; refreshFilters(); render();

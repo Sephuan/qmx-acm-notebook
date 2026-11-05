@@ -270,6 +270,12 @@ function setup() {
     if (data.theme !== undefined) next.theme = String(data.theme);
     if (data.displayName !== undefined) next.displayName = String(data.displayName).slice(0, 40);
     if (data.autoSync !== undefined) next.autoSync = !!data.autoSync;
+    if (data.codeFontSize !== undefined) {
+      const size = Math.round(Number(data.codeFontSize));
+      if (!Number.isFinite(size) || size < 10 || size > 18) throw new Error('代码字号需在 10 到 18 之间');
+      next.codeFontSize = size;
+    }
+    if (data.codeLineNumbers !== undefined) next.codeLineNumbers = !!data.codeLineNumbers;
     if (next.repo !== old.repo) permissions = null;
     if (next.clientId !== old.clientId || next.repo !== old.repo) loginGeneration++;
     save('settings.json', next); return state();
