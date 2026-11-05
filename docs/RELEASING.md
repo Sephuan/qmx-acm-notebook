@@ -34,7 +34,7 @@ git push -u origin main
 
 Actions → **Build desktop clients** → **Run workflow** 也可只运行签名 Secret 自检（不填标签并勾选 `verify_signing_only`），不会构建或创建 Release。私钥 Secret 只会传给 main 上已审核的签名工具，不传入 PR 检查工作流。
 
-Actions 使用仓库提供的 `GITHUB_TOKEN`，无需个人 Token。构建任务的发布作业使用 `contents: write`；更新通道作业需要 `pull-requests: write`。若仓库策略禁止 Actions 创建 PR，工作流会推送已验证分支并在摘要中给出比较链接，由维护者手动创建 PR。由 `GITHUB_TOKEN` 创建的通道分支/PR 不会自动触发普通 push/PR 检查；若未来启用必需状态检查，应另配手动检查或 GitHub App Token，不能绕过保护强行合并。组织如禁用 Actions 或限制第三方 Actions，需负责人调整策略。
+Actions 使用仓库提供的 `GITHUB_TOKEN`，无需个人 Token。构建任务的发布作业使用 `contents: write`；更新通道作业需要 `pull-requests: write`。若仓库策略禁止 Actions 创建 PR，工作流会推送已验证分支并在摘要中给出比较链接，由维护者手动创建 PR。由 `GITHUB_TOKEN` 创建的通道分支/PR 不会自动触发普通 push/PR 检查，因此激活工作流会显式派发该分支的 **Source checks** 并等待结果，所需权限为 `actions: write`。若派发失败，在 Actions → Source checks → Run workflow 选择该更新通道分支重跑；必须等 `check` 通过后才能合并，不能绕过保护。组织如禁用 Actions 或限制第三方 Actions，需负责人调整策略。
 
 ## 0.3.4 起的签名更新清单
 
@@ -45,6 +45,10 @@ GitHub 仓库 Actions Secret `QMX_UPDATE_SIGNING_KEY_PEM` 保存与客户端内�
 Windows 构建作业生成应用包，独立的受信任签名作业生成唯一签名清单。Windows 安装包、便携 ZIP 与 Linux/macOS 包均注入同一份签名应用字节；发布前验证清单签名、版本、Electron runtime 和 SHA-256。工作流先创建草稿 Release，供维护者验收。发布草稿后，从 `main` 手动运行 `activate-update.yml`，校验 Release 附件并创建仅修改 `feed/manifest.json` 与 `resources/app.asar` 的更新通道 PR；只有该 PR 审核合并后，现有客户端才会收到该更新。运行时版本变动仍需完整安装程序升级。
 
 私钥绝不能加入源码、Release、构建 Artifact 或普通构建日志。轮换或丢失私钥无法替代已安装客户端信任的公钥；必须通过完整安装程序发布带新公钥的版本。
+
+## main 分支保护
+
+`main` 禁止强制推送和删除；包括管理员在内，源码改动须走 PR，取得至少一位其他维护者批准、解决所有审查讨论，并通过 GitHub Actions 的 `check` 检查后再合并。合并前分支须同步最新 main；追加提交会使旧批准失效。发布标签和手动发布工作流仍照常使用，不需要直接推送 main。
 
 ## 发布验收与交接
 

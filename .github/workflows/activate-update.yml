@@ -18,6 +18,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+      actions: write
     env:
       GH_TOKEN: ${{ github.token }}
       GH_REPO: ${{ github.repository }}
@@ -75,3 +76,20 @@ jobs:
           if ! gh pr create --base main --head "$BRANCH" --title "Activate signed update $RELEASE_TAG" --body "Published release $RELEASE_TAG has passed signature, version and SHA-256 verification. Merge after acceptance to notify existing clients. This changes only the signed update manifest and application archive."; then
             echo '::warning::Repository policy may forbid Actions-created pull requests. The review branch was pushed successfully; use the compare link above to open the PR manually.'
           fi
+      - name: Run required source checks for the channel branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          BRANCH="update-channel/$RELEASE_TAG"
+          HEAD_SHA=$(git rev-parse HEAD)
+          # Bot pushes/PRs do not trigger ordinary CI; workflow_dispatch is explicit.
+          gh workflow run ci.yml --ref "$BRANCH"
+          RUN_ID=''
+          for ATTEMPT in {1..12}; do
+            RUN_ID=$(gh run list --workflow ci.yml --branch "$BRANCH" --event workflow_dispatch --limit 20 --json databaseId,headSha --jq ".[] | select(.headSha == \"$HEAD_SHA\") | .databaseId" | head -n 1)
+            [[ -n "$RUN_ID" ]] && break
+            sleep 5
+          done
+          [[ -n "$RUN_ID" ]] || { echo 'Unable to locate source-check run; dispatch Source checks on the channel branch manually'; exit 1; }
+          printf '\nSource checks: https://github.com/%s/actions/runs/%s\n' "$GH_REPO" "$RUN_ID" >> "$GITHUB_STEP_SUMMARY"
+          gh run watch "$RUN_ID" --exit-status --interval 10

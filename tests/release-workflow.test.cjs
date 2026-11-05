@@ -50,4 +50,9 @@ test('published update-channel activation needs GitHub token and never receives 
   assert.match(steps.find(step => step.name?.includes('Require a published')).run, /gh auth setup-git/);
   assert.match(steps.find(step => step.name?.includes('Verify signature')).run, /--runtime-version manifest/);
   assert.doesNotMatch(JSON.stringify(workflow), /secrets\.QMX_UPDATE_SIGNING_KEY_PEM/);
+  assert.equal(workflow.jobs.prepare.permissions.actions, 'write');
+  assert.ok(Object.hasOwn(readWorkflow('ci.yml').on, 'workflow_dispatch'));
+  const checks = steps.find(step => step.name === 'Run required source checks for the channel branch');
+  assert.match(checks.run, /gh workflow run ci\.yml --ref/);
+  assert.match(checks.run, /gh run watch .*--exit-status/);
 });
