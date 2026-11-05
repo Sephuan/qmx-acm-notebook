@@ -19,6 +19,12 @@ function authFailure(error, ticket) {
   }
 }
 app.disableHardwareAcceleration();
+// On Linux desktops without a recognized keyring (niri, sway, ...), Chromium picks the plaintext
+// backend and safeStorage reports unavailable, which blocks login persistence. Prefer libsecret so a
+// running secret service (gnome-keyring/KWallet) can be used; GNOME and KDE keep native detection.
+if (process.platform === 'linux' && !/gnome|kde/i.test(process.env.XDG_CURRENT_DESKTOP || '')) {
+  app.commandLine.appendSwitch('password-store', 'gnome-libsecret');
+}
 let win, dir, token = '', account = null, permissions = null;
 let loginGeneration = 0, writeBusy = false, syncBusy = false, updateBusy = false, installing = false, updater;
 function processEnvForInstaller() {
