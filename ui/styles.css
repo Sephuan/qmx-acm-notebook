@@ -35,3 +35,22 @@ body:not([data-view="discussion"]) .detail-panel{width:auto;padding:24px;positio
 .app-update{border-top:1px solid var(--line);margin-top:24px;padding-top:20px}.update-heading{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:10px}.update-heading h3{font-size:15px;margin:0}.update-heading>span{font-size:12px;color:var(--muted)}#app-version{color:var(--text);font-variant-numeric:tabular-nums}.update-status{font-size:12px;line-height:1.8;overflow-wrap:anywhere;color:var(--accent);margin:14px 0 0}.update-status.update-error{color:var(--tone-red)}#update-progress{display:block;width:100%;height:9px;margin-top:12px;accent-color:var(--accent)}
 /* Account wrapper and explicit document/local actions. */
 .account-avatar img{width:100%;height:100%;object-fit:cover;border-radius:inherit}.account-details{display:grid;grid-template-columns:100px minmax(0,1fr);gap:10px 14px;margin:24px 0;font-size:13px}.account-details dt{color:var(--muted)}.account-details dd{margin:0;overflow-wrap:anywhere}.account-actions,.record-edit-actions{display:flex;flex-wrap:wrap;gap:9px}.record-edit-actions{margin-top:24px}.button.danger{background:transparent;border:1px solid color-mix(in srgb,var(--tone-red) 40%,var(--line));color:var(--tone-red)}#record-body{font-family:Consolas,"SFMono-Regular",monospace;line-height:1.7;min-height:260px;tab-size:2}#creation-extras{border:1px solid var(--line);border-radius:8px;padding:12px;margin:0 0 22px;font-size:12px}#creation-extras summary{cursor:pointer;color:var(--muted);margin-bottom:10px}.form-error{color:var(--tone-red);background:color-mix(in srgb,var(--tone-red) 7%,var(--surface));border:1px solid color-mix(in srgb,var(--tone-red) 25%,var(--line));padding:12px;border-radius:7px;line-height:1.7;margin:14px 0}.dialog-footer{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:10px;margin-top:22px}.sidebar-bottom #account-button{display:block}.account-details+.settings-note{line-height:1.8}.sidebar{overflow-y:auto}.sidebar-note{min-height:0;flex-shrink:1;margin-top:28px;margin-bottom:22px}.sidebar-bottom{flex-shrink:0;margin-top:auto}
+/* Prism syntax colors, driven by the app's theme tones so light/dark/cards all read well. */
+.markdown-body .token.comment,.markdown-body .token.prolog,.markdown-body .token.doctype,.markdown-body .token.cdata{color:var(--muted);font-style:italic}
+.markdown-body .token.keyword,.markdown-body .token.rule,.markdown-body .token.important{color:var(--tone-blue)}
+.markdown-body .token.string,.markdown-body .token.char,.markdown-body .token.attr-value,.markdown-body .token.regex{color:var(--tone-green)}
+.markdown-body .token.number,.markdown-body .token.symbol,.markdown-body .token.bullet{color:var(--tone-orange)}
+.markdown-body .token.function,.markdown-body .token.class-name,.markdown-body .token.maybe-class-name,.markdown-body .token.generic-function{color:var(--tone-cyan)}
+.markdown-body .token.boolean,.markdown-body .token.constant{color:var(--tone-red)}
+.markdown-body .token.builtin,.markdown-body .token.type{color:var(--tone-purple)}
+.markdown-body .token.operator{color:var(--text)}
+.markdown-body .token.punctuation{color:var(--muted)}
+.markdown-body .token.attr-name,.markdown-body .token.property,.markdown-body .token.property-access{color:var(--tone-blue)}
+.markdown-body .token.tag,.markdown-body .token.selector,.markdown-body .token.namespace{color:var(--tone-red)}
+.markdown-body .token.atrule{color:var(--tone-purple)}
+.markdown-body .token.variable,.markdown-body .token.parameter{color:var(--text)}
+.markdown-body .token.entity,.markdown-body .token.url{color:var(--tone-cyan)}
+.markdown-body .token.deleted{color:var(--tone-red);background:color-mix(in srgb,var(--tone-red) 12%,transparent)}
+.markdown-body .token.inserted{color:var(--tone-green);background:color-mix(in srgb,var(--tone-green) 12%,transparent)}
+.markdown-body .token.italic{font-style:italic}
+.markdown-body .token.bold{font-weight:700}

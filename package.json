@@ -21,6 +21,7 @@
     "dompurify": "^3.2.7",
     "katex": "^0.16.22",
     "marked": "^15.0.12",
+    "prismjs": "^1.30.0",
     "yaml": "^2.8.0"
   },
   "devDependencies": {
