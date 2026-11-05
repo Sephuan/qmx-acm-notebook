@@ -326,6 +326,7 @@
     ['sync-button', 'account-button', 'settings-button', 'theme-select', 'submit-button', 'save-local-button', 'publish-button', 'account-login', 'account-logout', 'account-switch', 'account-refresh'].forEach(id => { const node = document.getElementById(id); if (node) node.disabled = value; });
     $$('[data-close], #settings-form input, #settings-form select, #settings-form button').forEach(node => { node.disabled = value; });
     $$('#submit-form input, #submit-form textarea').forEach(node => { node.readOnly = value; });
+    $$('#submit-form select, #editor-difficulty-picker select, #editor-difficulty-picker button').forEach(node => { node.disabled = value; });
     if (!value && s.editor?.record?.kind === 'document') $('#save-local-button').disabled = true;
     if (value && updateRunning) {
       const controls = $$('button, input, select, textarea');
@@ -335,8 +336,59 @@
     $('#check-update-button').disabled = value;
     if (!value) queueMicrotask(showStartupUpdate);
   }
-  function formDraft() { const data = new FormData($('#submit-form')); return Object.fromEntries(['url', 'title', 'pid', 'platform', 'tags', 'reason', 'body', 'trick', 'rating', 'difficulty'].map(name => [name, String(data.get(name) || '')])); }
+  function formDraft() { const form = $('#submit-form'); return Object.fromEntries(['url', 'title', 'pid', 'platform', 'tags', 'reason', 'body', 'trick', 'rating', 'difficulty'].map(name => [name, String(form.elements.namedItem(name)?.value || '')])); }
   function fillForm(draft) { const form = $('#submit-form'); form.reset(); Object.entries(draft || {}).forEach(([name, value]) => { const input = form.elements.namedItem(name); if (input) input.value = String(value ?? ''); }); }
+  const editorLuoguLevels = ['入门','普及-','普及','普及+/提高-','提高','提高+/省选-','省选/NOI-','NOI/NOI+/CTS'];
+  const editorLuoguTones = ['red','orange','yellow','green','cyan','blue','purple','black'];
+  function renderEditorDifficulty() {
+    const form = $('#submit-form'), host = $('#editor-difficulty-picker');
+    const platform = platformCode(form.elements.platform.value);
+    const rating = form.elements.rating, native = form.elements.difficulty;
+    const wrapper = element('div', 'editor-difficulty-controls');
+    if (platform === 'CF') {
+      const ratingField = element('label', 'range-field'); ratingField.append(element('span', '', 'Codeforces Rating'));
+      const input = element('input', 'rating-range'); input.type = 'number'; input.min = '0'; input.max = '10000'; input.step = '1'; input.placeholder = '未指定'; input.setAttribute('aria-label', 'Codeforces Rating'); input.value = rating.value;
+      const color = () => colorRatingInput(input);
+      input.addEventListener('input', () => { rating.value = input.value; color(); }); color(); ratingField.append(input);
+      const presets = element('div', 'range-presets');
+      [['800–1200','800'],['1300–1900','1300'],['2000+','2000']].forEach(([label,value]) => { const option = button(label, '', () => { input.value = value; rating.value = value; input.dispatchEvent(new Event('input', { bubbles: true })); }); option.title = `设置 Codeforces Rating ${value}`; presets.append(option); });
+      const nativeField = element('label', 'editor-native-difficulty'); nativeField.append(element('span', '', '其他原生难度（可选）'));
+      const nativeInput = element('input'); nativeInput.type = 'text'; nativeInput.maxLength = '60'; nativeInput.placeholder = '如 ABC D'; nativeInput.value = native.value; nativeInput.setAttribute('aria-label', 'Codeforces 其他原生难度'); nativeInput.addEventListener('input', () => { native.value = nativeInput.value; }); nativeField.append(nativeInput);
+      wrapper.append(ratingField, presets, nativeField);
+    } else if (platform === 'LG') {
+      const select = element('select', 'luogu-range'); select.setAttribute('aria-label', '洛谷原生难度');
+      [['','未指定'], ...editorLuoguLevels.map(name => [name,name])].forEach(([value,label], index) => { const option = element('option', index ? `tone-${editorLuoguTones[index - 1]}` : '', label); option.value = value; select.append(option); });
+      const current = NotebookSearch.difficulty({ platform:'LG', difficulty:native.value });
+      const known = current.level ? editorLuoguLevels[current.level - 1] : editorLuoguLevels.find(level => level === native.value);
+      if (known) select.value = known; else if (native.value) { const legacy = element('option', '', native.value); legacy.value = native.value; select.append(legacy); select.value = native.value; }
+      const color = () => { const level = editorLuoguLevels.indexOf(select.value); select.className = `luogu-range${level >= 0 ? ` tone-${editorLuoguTones[level]}` : ''}`; };
+      select.addEventListener('change', () => { native.value = select.value; color(); }); color(); wrapper.append(select);
+    } else if (platform === 'LC') {
+      const select = element('select', 'luogu-range'); select.setAttribute('aria-label', 'LeetCode 原生难度');
+      [['','未指定',''],['Easy','Easy / 简单','green'],['Medium','Medium / 中等','yellow'],['Hard','Hard / 困难','red']].forEach(([value,label,tone]) => { const option = element('option', tone ? `tone-${tone}` : '', label); option.value = value; select.append(option); });
+      const level = NotebookSearch.difficulty({ platform:'LC', difficulty:native.value }).level;
+      const known = ['Easy','Medium','Hard'][level - 1];
+      if (known) select.value = known;
+      else if (native.value) { const legacy = element('option', '', native.value); legacy.value = native.value; select.append(legacy); select.value = native.value; }
+      const color = () => { const tone = { Easy:'green', Medium:'yellow', Hard:'red' }[select.value]; select.className = `luogu-range${tone ? ` tone-${tone}` : ''}`; };
+      select.addEventListener('change', () => { native.value = select.value; color(); }); color(); wrapper.append(select);
+    } else {
+      const input = element('input'); input.type = 'text'; input.maxLength = 60; input.placeholder = '原生难度，如 ABC D / 3'; input.setAttribute('aria-label', '平台原生难度'); input.value = native.value;
+      const datalist = element('datalist'); datalist.id = 'editor-native-difficulties';
+      const values = platform === 'AT' ? ['ABC A','ABC B','ABC C','ABC D','ABC E','ABC F','ARC A','ARC B','ARC C','ARC D','ARC E','ARC F'] : platform === 'NC' ? ['简单','中等','困难'] : [];
+      values.forEach(value => { const option = element('option'); option.value = value; datalist.append(option); }); input.setAttribute('list', datalist.id);
+      input.addEventListener('input', () => { native.value = input.value; }); wrapper.append(input, datalist);
+    }
+    host.replaceChildren(wrapper);
+  }
+  function setEditorPlatform(value, clearDifficulty = true) {
+    const form = $('#submit-form'), next = platformCode(value);
+    if (form.elements.platform.value !== next) {
+      form.elements.platform.value = next;
+      if (clearDifficulty) { form.elements.rating.value = ''; form.elements.difficulty.value = ''; }
+    }
+    renderEditorDifficulty();
+  }
   function draftKey(source, ownerId) { return JSON.stringify([source || 'new', ownerId]); }
   function editorError(error) { $('#submit-error').textContent = errorMessage(error); $('#submit-error').hidden = false; }
   function openSubmit(record) {
@@ -350,6 +402,7 @@
     s.editor = { source, ownerId, clientId: saved?.clientId || record?.clientId || uuid(), record: original };
     const data = record ? { url: record.problemUrl || record.url, title: record.title, pid: record.pid, platform: platformCode(record.platform), tags: (record.tags || []).join(', '), body: record.body || '', rating: record.rating ?? '', difficulty: record.difficulty || '' } : {};
     fillForm(saved?.source === source && saved.ownerId === ownerId ? saved.data : data);
+    renderEditorDifficulty();
     renderEditorTags();
     const editing = !!record;
     $('#creation-extras').hidden = editing;
@@ -495,6 +548,7 @@
   $$('[data-close]').forEach(node => node.addEventListener('click', async () => { if (s.busy) return; if (node.dataset.close === 'submit-dialog') { clearTimeout(draftTimer); setBusy(true); await saveDraft(); setBusy(false); } document.getElementById(node.dataset.close).close(); }));
   $('#submit-dialog').addEventListener('cancel', async event => { event.preventDefault(); if (s.busy) return; clearTimeout(draftTimer); setBusy(true); await saveDraft(); setBusy(false); $('#submit-dialog').close(); });
   $('#submit-form').addEventListener('input', () => { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 650); });
+  $('#submit-form').elements.platform.addEventListener('change', () => { const form = $('#submit-form'); form.elements.rating.value = ''; form.elements.difficulty.value = ''; setEditorPlatform(form.elements.platform.value, false); });
   $('#save-local-button').addEventListener('click', () => saveRecord(false)); $('#submit-form').addEventListener('submit', event => { event.preventDefault(); saveRecord(true); });
   $('#theme-select').addEventListener('change', async event => { const previous = { ...s.settings }; s.settings.theme = event.target.value; applyTheme(s.settings.theme); try { if (demo) writeDemo(); else await call('saveSettings', { ...s.settings }); } catch (error) { s.settings = previous; toast(`当前风格已预览，设置未保存：${errorMessage(error)}`); } });
   $('#settings-button').addEventListener('click', () => { if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; } const form = $('#settings-form'); form.elements.theme.value = document.body.dataset.theme; form.elements.repo.value = s.settings.repo || 'qmx-acm-data/2026'; form.elements.clientId.value = s.settings.clientId || ''; form.elements.displayName.value = s.settings.displayName || ''; form.elements.autoSync.checked = s.settings.autoSync !== false; $('#settings-dialog').showModal(); });
@@ -625,10 +679,10 @@
   $('#export-local-button').addEventListener('click', async () => { try { if (demo) { const blob = new Blob([JSON.stringify(s.local, null, 2)], { type: 'application/json' }); const href = URL.createObjectURL(blob); const link = element('a'); link.href = href; link.download = 'acm-notebook-demo-local.json'; link.click(); setTimeout(() => URL.revokeObjectURL(href), 1000); toast('演示本地数据已导出'); } else { const result = await call('exportLocal'); if (result !== false && !result?.canceled) toast('本地数据已导出'); } } catch (error) { toast(errorMessage(error)); } });
   $('#submit-form').elements.url.addEventListener('blur', event => {
     try { const url = new URL(event.target.value); const form = $('#submit-form'); let match;
-      if (url.hostname.endsWith('codeforces.com') && (match = url.pathname.match(/(?:problemset\/problem\/(\d+)\/([A-Za-z0-9]+)|contest\/(\d+)\/problem\/([A-Za-z0-9]+))/))) { form.elements.platform.value = 'CF'; form.elements.pid.value = `CF${match[1] || match[3]}${(match[2] || match[4]).toUpperCase()}`; }
-      else if (url.hostname.endsWith('atcoder.jp') && (match = url.pathname.match(/\/tasks\/([^/]+)/))) { form.elements.platform.value = 'AT'; form.elements.pid.value = match[1]; }
-      else if (url.hostname.endsWith('luogu.com.cn') && (match = url.pathname.match(/\/problem\/([^/]+)/))) { form.elements.platform.value = 'LG'; form.elements.pid.value = match[1]; }
-      else if (url.hostname.endsWith('nowcoder.com')) { form.elements.platform.value = 'NC'; if ((match = url.pathname.match(/\/acm\/problem\/(\d+)/))) form.elements.pid.value = match[1]; }
+      if (url.hostname.endsWith('codeforces.com') && (match = url.pathname.match(/(?:problemset\/problem\/(\d+)\/([A-Za-z0-9]+)|contest\/(\d+)\/problem\/([A-Za-z0-9]+))/))) { setEditorPlatform('CF'); form.elements.pid.value = `CF${match[1] || match[3]}${(match[2] || match[4]).toUpperCase()}`; }
+      else if (url.hostname.endsWith('atcoder.jp') && (match = url.pathname.match(/\/tasks\/([^/]+)/))) { setEditorPlatform('AT'); form.elements.pid.value = match[1]; }
+      else if (url.hostname.endsWith('luogu.com.cn') && (match = url.pathname.match(/\/problem\/([^/]+)/))) { setEditorPlatform('LG'); form.elements.pid.value = match[1]; }
+      else if (url.hostname.endsWith('nowcoder.com')) { setEditorPlatform('NC'); if ((match = url.pathname.match(/\/acm\/problem\/(\d+)/))) form.elements.pid.value = match[1]; }
     } catch (_) { /* Validation is shown when saving. */ }
   });
   window.addEventListener('online', updateStatus); window.addEventListener('offline', updateStatus);

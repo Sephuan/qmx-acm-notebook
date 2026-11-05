@@ -16,7 +16,7 @@ const { chromium } = require('playwright');
     await page.addInitScript(() => {
       const repo = 'test/notebook';
       let account = { id: 101, login: 'same-name', name: 'Same Name' };
-      const documentRecord = { id: 'document:docs/original.md', kind: 'document', path: 'docs/original.md', sha: 'original-sha', repo, authorId: 101, author: 'Same Name', title: 'Owned formal document', body: '## Full raw body\n\nOriginal **Markdown**', problemUrl: 'https://example.com/problem', updatedAt: '2026-01-01' };
+      const documentRecord = { id: 'document:docs/original.md', kind: 'document', path: 'docs/original.md', sha: 'original-sha', repo, authorId: 101, author: 'Same Name', title: 'Owned formal document', body: '## Full raw body\n\nOriginal **Markdown**', platform: 'CF', rating: 1900, difficulty: 'ABC D', problemUrl: 'https://example.com/problem', updatedAt: '2026-01-01' };
       const fixture = window.fixture = {
         docs: [documentRecord], calls: [], failSave: false,
         local: { records: [
@@ -56,6 +56,14 @@ const { chromium } = require('playwright');
     await page.click('#submit-button');
     await page.fill('[name="url"]', 'https://example.com/local');
     await page.fill('[name="title"]', 'New local CRUD');
+    assert.equal(await page.locator('#editor-difficulty-picker .rating-range').count(), 1, 'Codeforces uses the search-style rating control');
+    await page.fill('#editor-difficulty-picker .rating-range', '1900');
+    assert.equal(await page.locator('#editor-difficulty-picker .rating-range').evaluate(node => node.classList.contains('tone-purple')), true, 'Rating keeps the search difficulty color');
+    await page.fill('[name="url"]', 'https://www.luogu.com.cn/problem/P1001');
+    await page.locator('[name="title"]').focus();
+    assert.equal(await page.inputValue('[name="platform"]'), 'LG', 'URL detection updates the difficulty platform');
+    await page.selectOption('#editor-difficulty-picker select[aria-label="洛谷原生难度"]', '提高');
+    assert.equal(await page.locator('#editor-difficulty-picker select').evaluate(node => node.classList.contains('tone-cyan')), true, 'Luogu selection uses the native difficulty color');
     const rawBody = '## Untouched raw\n\nA **complete** solution.\n\n```cpp\nint x = 1;\n```';
     await page.fill('#record-body', rawBody);
     await page.click('#save-local-button');
@@ -63,6 +71,12 @@ const { chromium } = require('playwright');
     let local = await page.evaluate(() => fixture.local);
     const created = local.records.find(record => record.title === 'New local CRUD');
     assert.equal(created.ownerId, '101');
+    assert.equal(created.difficulty, '提高', 'platform-native selection is saved to the existing difficulty field');
+    assert.equal(created.rating, null, 'switching platforms clears the unrelated Codeforces rating');
+    await page.click('#edit-record-button');
+    assert.equal(await page.locator('#editor-difficulty-picker select').inputValue(), '提高', 'editing restores the saved native difficulty');
+    await page.click('[data-close="submit-dialog"]');
+    await page.waitForSelector('#submit-dialog', { state: 'hidden' });
     assert.match(created.clientId, /^[0-9a-f-]{36}$/i);
     assert(local.records.some(record => record.id === 'legacy-foreign-id'), 'foreign record must survive persistence');
     assert(local.records.some(record => record.id === 'legacy-unbound-id'), 'legacy ID must remain stable');
@@ -79,6 +93,8 @@ const { chromium } = require('playwright');
     await page.getByRole('button', { name: /Owned formal document/ }).click();
     await page.click('#edit-record-button');
     assert(await page.locator('#save-local-button').isDisabled());
+    assert.equal(await page.inputValue('#editor-difficulty-picker .rating-range'), '1900', 'editing restores Codeforces Rating');
+    assert.equal(await page.inputValue('#editor-difficulty-picker input[aria-label="Codeforces 其他原生难度"]'), 'ABC D', 'editing preserves Codeforces native difficulty');
     await page.fill('#record-body', '## Edited remote\n\nFull new body');
     await page.evaluate(() => { fixture.failSave = true; });
     await page.click('#publish-button');
