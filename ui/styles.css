@@ -57,10 +57,26 @@ body:not([data-view="discussion"]) .detail-panel{width:auto;padding:24px;positio
 /* Code reading preferences and a collapsible sidebar. */
 body{--code-font-size:11px}
 .field input[type="range"]{padding:0;border:0;background:transparent;accent-color:var(--accent);cursor:pointer}
-.markdown-body pre.line-numbers{white-space:pre;position:relative;padding-left:3.8em;counter-reset:linenumber}
+.markdown-body pre.line-numbers{white-space:pre;position:relative;padding-left:3.8em;counter-reset:linenumber;font-size:var(--code-font-size,11px)}
 .markdown-body pre.line-numbers>code{position:relative}
 .markdown-body .line-numbers-rows{position:absolute;pointer-events:none;top:0;font-size:100%;left:-3.8em;width:3em;letter-spacing:-1px;border-right:1px solid var(--line);user-select:none}
 .markdown-body .line-numbers-rows>span{display:block;counter-increment:linenumber}
 .markdown-body .line-numbers-rows>span::before{content:counter(linenumber);color:var(--muted);display:block;padding-right:.8em;text-align:right}
 @media(min-width:651px){body.sidebar-collapsed .app-shell{grid-template-columns:0 minmax(0,1fr)}body.sidebar-collapsed .sidebar{visibility:hidden;overflow:hidden}}
 @media(max-width:650px){body.sidebar-collapsed .sidebar{display:none}}
+/* Code block actions (copy / format). The wrapper keeps the buttons anchored
+   while the pre scrolls; the buttons are app chrome, not sanitized Markdown. */
+.markdown-body .code-block{position:relative;margin:1em 0}
+.markdown-body .code-block pre{margin:0}
+.code-actions{position:absolute;top:8px;right:8px;z-index:2;display:flex;align-items:center;gap:6px;max-width:calc(100% - 12px);padding:3px;background:var(--surface);border:1px solid var(--line);border-radius:6px;box-shadow:0 1px 4px color-mix(in srgb,var(--text) 16%,transparent);opacity:0;pointer-events:none;transition:opacity .15s ease}
+.code-block:hover .code-actions,.code-block:focus-within .code-actions,.code-actions:focus-visible{opacity:1;pointer-events:auto}
+@media (hover:none),(pointer:coarse){.code-actions{opacity:1;pointer-events:auto}}
+.code-action-button{min-width:52px;padding:4px 9px;font:inherit;font-size:10px;line-height:1.4;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:5px;white-space:nowrap;text-align:center;cursor:pointer}
+.code-action-button:hover:not(:disabled){color:var(--accent);border-color:var(--accent)}
+.code-action-button:active:not(:disabled){transform:translateY(1px)}
+.code-action-button:disabled{opacity:.55;cursor:not-allowed}
+.code-action-button.is-copied{color:var(--accent);border-color:var(--accent)}
+.code-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0}
+.clipboard-helper{position:fixed;top:0;left:-9999px;width:1px;height:1px;opacity:0;border:0;padding:0;resize:none}
+@media (prefers-reduced-motion:reduce){.code-actions{transition:none}}
+@media print{.code-actions{display:none}}

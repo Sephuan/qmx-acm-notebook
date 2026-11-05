@@ -269,12 +269,115 @@
     const record = items.find(item => key(item) === s.selected);
     if (record) renderDetail(record); else $('#detail-panel').replaceChildren(empty('给思考留一个位置', s.error ? '客户端连接暂不可用。你可以重试同步，或先保存一道本地错题。' : s.view === 'favorites' ? '点击题目详情中的收藏，把想反复理解的思路留在这里。' : '从左侧选择题目，阅读分析、记录理解，再迈进一步。', { label: '＋ 记一道错题', fn: openSubmit }));
   }
+  // ----- Code block actions (copy / format) ---------------------------------
+  // DOMPurify forbids <button> in Markdown, so these actions are app chrome created
+  // after sanitizing. The wrapper keeps the buttons anchored while the pre scrolls.
+  function codeLanguage(pre) {
+    const node = pre.querySelector('code') || pre;
+    const match = /\blanguage-([\w#+.-]+)/.exec(node.className || '');
+    return match ? match[1] : '';
+  }
+  function codeBlockText(pre) {
+    const code = pre.querySelector('code');
+    if (!code) return pre.textContent || '';
+    // Prism's line-number plugin leaves helper spans inside <code>; clone and drop
+    // them so the clipboard always receives the exact source text.
+    const clone = code.cloneNode(true);
+    $$('.line-numbers-rows, .line-numbers-sizer', clone).forEach(node => node.remove());
+    return clone.textContent || '';
+  }
+  function highlightCodeBlock(code) { try { window.Prism?.highlightElement(code); } catch (_) { /* Keep plain text if Prism fails. */ } }
+  function announceCodeStatus(pre, message) { const status = pre.closest('.code-block')?.querySelector('.code-status'); if (status) status.textContent = message; }
+  function preserveCodeScroll(pre, mutate) {
+    const scroller = pre.closest('.detail-panel');
+    const outerTop = scroller ? scroller.scrollTop : 0, preTop = pre.scrollTop, preLeft = pre.scrollLeft;
+    mutate();
+    if (scroller) scroller.scrollTop = Math.min(outerTop, Math.max(0, scroller.scrollHeight - scroller.clientHeight));
+    pre.scrollTop = Math.min(preTop, Math.max(0, pre.scrollHeight - pre.clientHeight));
+    pre.scrollLeft = preLeft;
+  }
+  function legacyCopyText(text) {
+    const area = element('textarea', 'clipboard-helper');
+    area.value = text; area.setAttribute('readonly', ''); area.setAttribute('aria-hidden', 'true');
+    document.body.append(area);
+    let ok = false;
+    try { area.focus({ preventScroll: true }); area.select(); ok = document.execCommand('copy'); } catch (_) {}
+    area.remove();
+    return ok;
+  }
+  async function copyCodeBlock(pre, actionButton) {
+    const text = codeBlockText(pre);
+    if (!text) { toast('代码块为空'); return; }
+    let copied = false;
+    try { await navigator.clipboard.writeText(text); copied = true; } catch (_) { copied = legacyCopyText(text); }
+    clearTimeout(actionButton._codeResetTimer);
+    if (copied) {
+      actionButton.textContent = '已复制'; actionButton.setAttribute('aria-label', '已复制');
+      actionButton.classList.add('is-copied'); actionButton.dataset.state = 'copied'; announceCodeStatus(pre, '已复制');
+    } else {
+      actionButton.textContent = '失败'; actionButton.setAttribute('aria-label', '复制失败');
+      actionButton.dataset.state = 'error'; announceCodeStatus(pre, '复制失败，请手动选择代码复制'); toast('复制失败，请手动复制');
+    }
+    actionButton._codeResetTimer = setTimeout(() => {
+      actionButton.textContent = '复制'; actionButton.setAttribute('aria-label', '复制代码');
+      actionButton.classList.remove('is-copied'); delete actionButton.dataset.state; announceCodeStatus(pre, '');
+    }, 1600);
+  }
+  async function formatCodeBlock(pre, actionButton) {
+    if (actionButton.disabled) return;
+    const code = pre.querySelector('code') || pre;
+    const language = codeLanguage(pre), source = codeBlockText(pre);
+    const format = typeof window.notebook?.formatCode === 'function'
+      ? (text, lang) => window.notebook.formatCode(text, lang)
+      : typeof window.formatCode === 'function' ? (text, lang) => Promise.resolve(window.formatCode(text, lang)) : null;
+    if (!format) { toast('格式化功能尚未启用'); return; }
+    actionButton.disabled = true; actionButton.setAttribute('aria-busy', 'true');
+    const original = actionButton.textContent; actionButton.textContent = '格式化中…';
+    try {
+      const result = await format(source, language);
+      const formatted = typeof result === 'string' ? result : result?.code;
+      if (typeof formatted !== 'string' || !formatted.trim()) {
+        toast(language ? `暂不支持 ${language} 代码的格式化` : '未能识别代码语言，无法格式化');
+        return;
+      }
+      if (formatted === source) { toast('代码格式已是最新'); return; }
+      preserveCodeScroll(pre, () => { code.textContent = formatted; highlightCodeBlock(code); });
+      toast('已格式化代码块'); announceCodeStatus(pre, '已格式化');
+    } catch (error) { toast('格式化失败：' + (error?.message || '未知错误')); }
+    finally { actionButton.disabled = false; actionButton.removeAttribute('aria-busy'); actionButton.textContent = original; }
+  }
+  function decorateCodeBlocks(container) {
+    $$('pre', container).forEach(pre => {
+      if (pre.closest('.code-block')) return; // idempotent
+      const block = element('div', 'code-block');
+      pre.replaceWith(block); block.append(pre);
+      const actions = element('div', 'code-actions');
+      actions.setAttribute('role', 'group'); actions.setAttribute('aria-label', '代码块操作');
+      const copy = element('button', 'code-action-button', '复制');
+      copy.type = 'button'; copy.dataset.action = 'copy'; copy.title = '复制代码'; copy.setAttribute('aria-label', '复制代码');
+      const format = element('button', 'code-action-button', '格式化');
+      format.type = 'button'; format.dataset.action = 'format'; format.title = '格式化代码'; format.setAttribute('aria-label', '格式化代码');
+      const status = element('span', 'code-status'); status.setAttribute('role', 'status');
+      append(actions, copy, format, status); block.append(actions);
+    });
+  }
+  function codeBlockClick(event) {
+    if (!(event.target instanceof Element)) return;
+    const actionButton = event.target.closest('.code-action-button');
+    if (!actionButton) return;
+    const pre = actionButton.closest('.code-block')?.querySelector('pre');
+    if (!pre) return;
+    if (actionButton.dataset.action === 'copy') void copyCodeBlock(pre, actionButton);
+    else if (actionButton.dataset.action === 'format') void formatCodeBlock(pre, actionButton);
+  }
   function renderMarkdown(container, body) {
     const source = String(body || '还没有题解内容。可以从记录错因开始。');
     if (window.marked && window.DOMPurify) {
       try { const parse = typeof window.marked.parse === 'function' ? window.marked.parse.bind(window.marked) : window.marked; const safe = window.DOMPurify.sanitize(parse(source), { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button'], FORBID_ATTR: ['style'] }); container.innerHTML = safe; if (window.renderMathInElement) window.renderMathInElement(container, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,trust:false});
         // Prism runs after sanitizing and reads textContent only, so highlighting cannot inject markup.
         $$('pre code', container).forEach(code => { if (code.parentElement && s.settings.codeLineNumbers) code.parentElement.classList.add('line-numbers'); try { window.Prism?.highlightElement(code); } catch (_) { /* Unknown language: keep the readable plain code block. */ } });
+        // Decorate after Prism: the buttons are app chrome, not sanitized Markdown.
+        decorateCodeBlocks(container);
         container.classList.add('rendered'); $$('a', container).forEach(link => link.addEventListener('click', event => { event.preventDefault(); openExternal(link.getAttribute('href')); })); return; } catch (_) { /* Plain text is the secure fallback. */ }
     }
     container.textContent = source;
@@ -497,6 +600,7 @@
   $$('[data-rating]').forEach(node=>node.addEventListener('click',()=>{const [min,max]=node.dataset.rating.split(',');$('#rating-min').value=min;$('#rating-max').value=max;updateFacetCounts();render();}));
   $('#clear-difficulty').addEventListener('click',()=>{clearDifficulty();render();});
   document.addEventListener('click',event=>{ $$('.facet details[open],details.facet[open]').forEach(node=>{if(!node.contains(event.target))node.open=false;}); });
+  document.addEventListener('click', codeBlockClick);
   document.addEventListener('keydown',event=>{if(event.key==='Escape')$$('.facet details[open],details.facet[open]').forEach(node=>node.open=false);});
   $('#submit-button').addEventListener('click', () => openSubmit()); $('#sync-button').addEventListener('click', sync);
   $$('dialog').forEach(dialog => dialog.addEventListener('cancel', event => { if (s.busy) event.preventDefault(); }));

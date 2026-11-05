@@ -12,6 +12,25 @@ const APP_VERSION = require('../package.json').version;
 configureUserData(app);
 const networkFetch = (url, options) => net.fetch(url, { ...options, bypassCustomProtocolHandlers: true });
 let auth;
+// Lazy offline code formatter (WASM in the main process; the renderer CSP blocks wasm).
+// clang-format covers C/C++/Java/JS/TS, Ruff covers Python. Loaded on first use.
+let clangFormatterPromise, ruffWorkspacePromise;
+async function formatCode(source, lang) {
+  const text = String(source == null ? '' : source);
+  const language = String(lang || '').toLowerCase();
+  if (language === 'python' || language === 'py') {
+    if (!ruffWorkspacePromise) ruffWorkspacePromise = Promise.resolve().then(() => {
+      const { Workspace, PositionEncoding } = require('@astral-sh/ruff-wasm-nodejs');
+      return new Workspace({}, PositionEncoding.UTF16);
+    });
+    return { code: (await ruffWorkspacePromise).format(text) };
+  }
+  const filename = { cpp: 'main.cpp', 'c++': 'main.cpp', c: 'main.c', java: 'Main.java', javascript: 'main.js', js: 'main.js', cs: 'main.cs', objc: 'main.m' }[language] || 'main.cpp';
+  if (!clangFormatterPromise) clangFormatterPromise = import('@wasm-fmt/clang-format');
+  const { format } = await clangFormatterPromise;
+  const style = JSON.stringify({ BasedOnStyle: 'Chromium', IndentWidth: 4, ColumnLimit: 100, PointerAlignment: 'Left' });
+  return { code: format(text, filename, style) };
+}
 function authFailure(error, ticket) {
   if (auth.failure(error, ticket)) {
     token = auth.token; account = auth.account;
@@ -370,6 +389,7 @@ function setup() {
   }));
   handle('getComments', async number => (await client().comments(number)).map(x => ({ id: x.id, body: x.body, author: x.user?.login || '', createdAt: x.created_at, url: x.html_url })));
   handle('openExternal', external);
+  handle('formatCode', (source, lang) => formatCode(source, lang).catch(error => ({ code: source, error: error.message })));
   handle('exportLocal', async () => {
     const { dialog } = require('electron');
     const result = await dialog.showSaveDialog(win, { defaultPath: '我的题解备份.json', filters: [{ name: 'JSON', extensions: ['json'] }] });

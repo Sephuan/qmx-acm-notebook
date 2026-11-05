@@ -18,6 +18,8 @@
     "dist": "node tools/package.cjs && node tools/installer.cjs"
   },
   "dependencies": {
+    "@astral-sh/ruff-wasm-nodejs": "^0.17.3",
+    "@wasm-fmt/clang-format": "^23.1.1",
     "dompurify": "^3.2.7",
     "katex": "^0.16.22",
     "marked": "^15.0.12",
