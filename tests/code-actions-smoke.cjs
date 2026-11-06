@@ -19,8 +19,9 @@ const { chromium } = require('playwright');
       ['ts', 'typescript', 'const answer:number=1;'],
       ['cs', 'csharp', 'class Answer{}'],
       ['objc', 'objectivec', 'int answer=1;'],
+      ['rust', 'rust', 'fn main() { println!("hello"); }'],
+      ['rs', 'rust', 'fn main(){println!("你好");}'],
       ['go', null, 'package main'],
-      ['rust', null, 'fn main() {}'],
       ['unknown', null, 'leave this alone'],
       ['', null, 'unlabelled source'],
     ];
@@ -31,8 +32,9 @@ const { chromium } = require('playwright');
       }));
     }, cases);
     await page.goto(pathToFileURL(path.resolve(__dirname, '../ui/index.html')).href);
-    await page.waitForSelector('.record-card');
-    await page.click('[data-view="mine"]');
+    await page.locator('.sidebar').hover();
+    await page.locator('.nav-item[data-view="home"]').click();
+    await page.locator('#home-panel .home-shortcut[data-view="mine"]').click();
     await page.waitForSelector('.code-block .code-action-button');
     const blocks = page.locator('.markdown-body .code-block');
     assert.equal(await blocks.count(), cases.length);

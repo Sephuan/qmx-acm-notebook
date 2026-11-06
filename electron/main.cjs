@@ -13,8 +13,8 @@ configureUserData(app);
 const networkFetch = (url, options) => net.fetch(url, { ...options, bypassCustomProtocolHandlers: true });
 let auth;
 // Lazy offline code formatter (WASM in the main process; the renderer CSP blocks wasm).
-// clang-format covers C/C++/Java/JS/TS, Ruff covers Python. Loaded on first use.
-let clangFormatterPromise, ruffWorkspacePromise;
+// clang-format covers C-family languages, Ruff covers Python, rustfmt covers Rust.
+let clangFormatterPromise, ruffWorkspacePromise, rustFormatterPromise;
 async function formatCode(source, lang) {
   const text = String(source == null ? '' : source);
   if (text.length > 200000) throw new Error('代码过长，格式化仅支持不超过 200000 个字符');
@@ -25,6 +25,11 @@ async function formatCode(source, lang) {
       return new Workspace({}, PositionEncoding.UTF16);
     });
     return { code: (await ruffWorkspacePromise).format(text) };
+  }
+  if (language === 'rust' || language === 'rs') {
+    if (!rustFormatterPromise) rustFormatterPromise = import('@scalar/rust-fmt');
+    const { format } = await rustFormatterPromise;
+    return { code: await format(text, { edition: '2021', maxWidth: 100 }) };
   }
   const filenames = new Map([
     ['cpp', 'main.cpp'], ['c++', 'main.cpp'], ['c', 'main.c'], ['java', 'Main.java'],

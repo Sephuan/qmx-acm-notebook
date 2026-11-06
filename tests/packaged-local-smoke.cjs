@@ -9,9 +9,9 @@ const fs = require('node:fs'), os = require('node:os'), path = require('node:pat
   try {
     assert.equal(await app.evaluate(({ app }) => app.getPath('userData')), profile);
     const page = await app.firstWindow(); const errors = []; page.on('pageerror', error => errors.push(error.message));
-    await page.waitForSelector('#record-list');
+    await page.waitForSelector('#home-panel');
     const state = await page.evaluate(() => window.notebook.bootstrap()); assert.equal(state.appVersion, '0.6.0'); assert.equal(state.tagCatalog.categories.length, 22); assert.equal(state.account, null);
-    await page.click('[data-view="mine"]'); await page.click('#submit-button');
+    await page.locator('.sidebar').hover(); await page.locator('.nav-item[data-view="home"]').click(); await page.locator('#home-panel .home-shortcut[data-view="mine"]').click(); await page.click('#submit-button');
     await page.fill('[name="title"]', '隔离桌面验证'); await page.fill('[name="url"]', 'https://www.luogu.com.cn/problem/P1001'); await page.fill('[name="body"]', '# 完整题解\n\n仅隔离数据目录'); await page.click('#save-local-button');
     await page.waitForSelector('.record-card'); await page.locator('.record-card').first().dblclick(); await page.waitForSelector('#detail-back-button'); await page.click('#detail-back-button');
     await page.locator('#state-facet summary').click(); await page.locator('#state-facet input[value="unreviewed"]').check(); assert.equal(await page.locator('.record-card').count(), 1);

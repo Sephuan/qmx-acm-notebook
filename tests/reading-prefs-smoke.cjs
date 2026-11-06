@@ -5,6 +5,12 @@ const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright');
 
+async function navigate(page, view) {
+  await page.locator('.sidebar').hover();
+  await page.locator('.nav-item[data-view="home"]').click();
+  await page.locator(`#home-panel .home-shortcut[data-view="${view}"]`).click();
+}
+
 (async () => {
   const browser = await chromium.launch({ channel: 'msedge', headless: true });
   try {
@@ -14,8 +20,7 @@ const { chromium } = require('playwright');
     page.on('pageerror', error => errors.push(error.message));
     const url = pathToFileURL(path.resolve(__dirname, '../ui/index.html')).href;
     await page.goto(url);
-    await page.waitForSelector('.record-card');
-    await page.click('[data-view="discussion"]');
+    await navigate(page, 'discussion');
     await page.waitForSelector('.markdown-body pre code');
     const range = page.locator('#settings-form [name="codeFontSize"]');
     const numbers = page.locator('#settings-form [name="codeLineNumbers"]');
@@ -61,8 +66,7 @@ const { chromium } = require('playwright');
     const rows = await page.locator('.markdown-body pre .line-numbers-rows').evaluate(node => node.children.length);
     assert.ok(rows >= 1, 'line numbers rendered');
     await page.reload();
-    await page.waitForSelector('.record-card');
-    await page.click('[data-view="discussion"]');
+    await navigate(page, 'discussion');
     await page.waitForSelector('.markdown-body pre.line-numbers .line-numbers-rows');
     assert.equal(await page.locator('.markdown-body pre code').evaluate(node => getComputedStyle(node).fontSize), '16px');
 
@@ -78,14 +82,22 @@ const { chromium } = require('playwright');
     assert.equal(await numbers.isChecked(), true);
     await page.keyboard.press('Escape');
 
-    // Sidebar collapses and expands.
-    await page.click('#sidebar-toggle');
-    assert.equal(await page.evaluate(() => document.body.classList.contains('sidebar-collapsed')), true);
-    assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.sidebar')).visibility), 'hidden');
-    assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.app-shell')).gridTemplateColumns), '0px 1440px');
-    await page.click('#sidebar-toggle');
-    assert.equal(await page.evaluate(() => document.body.classList.contains('sidebar-collapsed')), false);
+    // The compact rail stays visible; pinning reserves room for expanded navigation.
+    await page.mouse.move(700, 200);
+    await page.keyboard.press('Escape');
+    await page.waitForFunction(() => Math.round(document.querySelector('.sidebar').getBoundingClientRect().width) === 72);
     assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.sidebar')).visibility), 'visible');
+    assert.equal(await page.locator('#sidebar-toggle').getAttribute('aria-pressed'), 'false');
+    await page.locator('.sidebar').hover();
+    await page.click('#sidebar-toggle');
+    await page.mouse.move(700, 200);
+    await page.waitForFunction(() => document.body.classList.contains('sidebar-pinned') && Math.round(document.querySelector('.sidebar').getBoundingClientRect().width) === 232);
+    assert.equal(await page.locator('#sidebar-toggle').getAttribute('aria-pressed'), 'true');
+    assert.equal(await page.evaluate(() => localStorage.getItem('acm-notebook.sidebar')), 'pinned');
+    await page.click('#sidebar-toggle');
+    await page.mouse.move(700, 200);
+    await page.waitForFunction(() => !document.body.classList.contains('sidebar-pinned') && Math.round(document.querySelector('.sidebar').getBoundingClientRect().width) === 72);
+    assert.equal(await page.locator('#sidebar-toggle').getAttribute('aria-pressed'), 'false');
 
     // A rejected desktop save leaves the preview open, and closing restores committed settings.
     const desktop = await browser.newPage({ viewport: { width: 1440, height: 940 } });
@@ -98,8 +110,8 @@ const { chromium } = require('playwright');
       };
     });
     await desktop.goto(url);
-    await desktop.waitForSelector('.nav-item');
-    await desktop.click('[data-view="mine"]');
+    await desktop.waitForSelector('.rail-nav-item');
+    await navigate(desktop, 'mine');
     await desktop.waitForSelector('.markdown-body pre.line-numbers');
     await desktop.click('#settings-button');
     await desktop.locator('[name="codeFontSize"]').fill('18');

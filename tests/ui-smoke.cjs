@@ -5,6 +5,12 @@ const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright');
 
+async function navigate(page, view) {
+  await page.locator('.sidebar').hover();
+  await page.locator(`.nav-item[data-view="${['mine', 'discussion', 'stats'].includes(view) ? 'home' : view}"]`).click();
+  if (['mine', 'discussion', 'stats'].includes(view)) await page.locator(`#home-panel .home-shortcut[data-view="${view}"]`).click();
+}
+
 (async () => {
   const browser = await chromium.launch({ channel: 'msedge', headless: true });
   try {
@@ -47,15 +53,16 @@ const { chromium } = require('playwright');
       window.notebook.onAuthProgress = callback => { fixture.authProgress = callback; return () => {}; };
     });
     await page.goto(pathToFileURL(path.resolve(__dirname, '../ui/index.html')).href);
+    await navigate(page, 'public');
     await page.waitForSelector('.record-card');
     assert.match(await page.locator('#record-list').innerText(), /Owned formal document/);
     assert.doesNotMatch(await page.locator('#record-list').innerText(), /STALE LOCAL COPY|Existing discussion/);
-    await page.click('[data-view="discussion"]');
+    await navigate(page, 'discussion');
     assert.match(await page.locator('#record-list').innerText(), /Existing discussion/);
     assert.equal(await page.locator('#edit-record-button').count(), 0);
-    await page.click('[data-view="favorites"]');
+    await navigate(page, 'favorites');
     assert.match(await page.locator('#record-list').innerText(), /Unbound existing local/);
-    await page.click('[data-view="mine"]');
+    await navigate(page, 'mine');
     assert.doesNotMatch(await page.locator('#record-list').innerText(), /Foreign private local/);
     await page.click('#submit-button');
     await page.fill('[name="url"]', 'https://example.com/local');
@@ -136,7 +143,7 @@ const { chromium } = require('playwright');
     const deletion = await page.evaluate(() => fixture.calls.find(call => call.method === 'deleteDocument').input);
     assert.deepEqual(deletion, { path: 'docs/original.md', sha: 'updated-sha', repo: 'test/notebook' });
     await page.click('#sync-button');
-    await page.click('[data-view="public"]');
+    await navigate(page, 'public');
     assert.equal(await page.locator('.record-card').count(), 0, 'sync must not resurrect deleted doc from stale local data');
 
     // Persist the new document identity before any remote write; retry/reopen uses that identity.
@@ -159,7 +166,7 @@ const { chromium } = require('playwright');
     assert.equal(retryCreate.clientId, firstCreate.clientId, 'new document retries must reuse persisted identity');
     await page.click('[data-close="submit-dialog"]');
 
-    await page.click('[data-view="mine"]');
+    await navigate(page, 'mine');
     await page.getByRole('button', { name: /Unbound existing local/ }).click();
     await page.click('#edit-record-button');
     await page.click('#publish-button');
@@ -167,14 +174,14 @@ const { chromium } = require('playwright');
     assert.equal(await page.evaluate(() => fixture.local.records.find(item => item.id === 'legacy-unbound-id').ownerId), '101', 'confirmed first upload must bind before failed remote request');
     await page.click('[data-close="submit-dialog"]');
 
-    await page.click('#account-button'); await page.click('#account-switch');
+    await page.hover('.sidebar'); await page.click('#account-button'); await page.click('#account-switch');
     await page.waitForFunction(() => document.querySelector('#account-details').textContent.includes('202'));
-    await page.click('[data-close="account-dialog"]'); await page.click('[data-view="mine"]');
+    await page.click('[data-close="account-dialog"]'); await navigate(page, 'mine');
     assert.match(await page.locator('#record-list').innerText(), /Foreign private local/);
     assert.doesNotMatch(await page.locator('#record-list').innerText(), /Unbound existing local/, 'failed upload must keep confirmed ownership after account switch');
 
     // Anonymous quota exhaustion offers the existing device-flow login and retries the pull after authorizing.
-    await page.click('#account-button');
+    await page.hover('.sidebar'); await page.click('#account-button');
     await page.click('#account-logout');
     await page.waitForFunction(() => document.querySelector('#account-details').textContent.includes('未登录'));
     await page.click('[data-close="account-dialog"]');
@@ -206,7 +213,7 @@ const { chromium } = require('playwright');
     assert.match(await page.locator('#account-name').innerText(), /Rate Limited/);
 
     // Logging in from the account dialog retries the blocked pull too.
-    await page.click('#account-button');
+    await page.hover('.sidebar'); await page.click('#account-button');
     await page.click('#account-logout');
     await page.waitForFunction(() => document.querySelector('#account-details').textContent.includes('未登录'));
     await page.click('[data-close="account-dialog"]');
@@ -225,7 +232,7 @@ const { chromium } = require('playwright');
         return fixture.payload();
       };
     });
-    await page.click('#account-button');
+    await page.hover('.sidebar'); await page.click('#account-button');
     await page.click('#account-login');
     await page.waitForFunction(() => fixture.loginCalls === 1);
     await page.waitForFunction(() => fixture.syncCalls >= 2);
@@ -263,7 +270,7 @@ const { chromium } = require('playwright');
     await page.waitForFunction(() => !document.querySelector('#account-dialog').open);
 
     // Auth dialog offers a copyable link and a Chrome-preferred open action.
-    await page.click('#account-button');
+    await page.hover('.sidebar'); await page.click('#account-button');
     await page.click('#account-logout');
     await page.waitForFunction(() => document.querySelector('#account-details').textContent.includes('未登录'));
     await page.click('[data-close="account-dialog"]');
@@ -271,7 +278,7 @@ const { chromium } = require('playwright');
       fixture.authUrls = [];
       window.notebook.login = () => new Promise(resolve => { fixture.resolveLogin = resolve; });
     });
-    await page.click('#account-button');
+    await page.hover('.sidebar'); await page.click('#account-button');
     await page.click('#account-login');
     await page.evaluate(() => fixture.authProgress({ userCode: 'TEST-CODE', verificationUri: 'https://github.com/login/device' }));
     await page.waitForSelector('#auth-copy-button:not([hidden])');

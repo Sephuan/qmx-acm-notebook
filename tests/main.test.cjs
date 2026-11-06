@@ -287,7 +287,8 @@ test('formatter uses each supported language and aliases, including TypeScript, 
     { aliases: ['typescript', 'ts', ' TS '], source: 'const value:{count:number}={count:1};', expected: 'const value: {count: number} = {\n    count: 1\n};' },
     { aliases: ['csharp', 'cs', 'c#'], source: 'class Main{static void Main(){int x=1;}}' },
     { aliases: ['objectivec', 'objc', 'objective-c'], source: '@interface Foo:NSObject\n-(void)bar;\n@end' },
-    { aliases: ['python', 'py'], source: 'def f(x):\n return [x,1,2]', expected: 'def f(x):\n    return [x, 1, 2]\n' }
+    { aliases: ['python', 'py'], source: 'def f(x):\n return [x,1,2]', expected: 'def f(x):\n    return [x, 1, 2]\n' },
+    { aliases: ['rust', 'rs', ' Rust '], source: 'fn main() { println!("hello"); }', expected: 'fn main() {\n    println!("hello");\n}\n' }
   ];
   for (const { aliases, source, expected } of cases) {
     let canonical;
@@ -306,7 +307,7 @@ test('formatter uses each supported language and aliases, including TypeScript, 
 
 test('formatter refuses oversized code before running either WASM engine and preserves the source', async () => {
   const h = harness(), source = 'x'.repeat(200001);
-  for (const language of ['cpp', 'python', 'typescript']) {
+  for (const language of ['cpp', 'python', 'typescript', 'rust']) {
     const result = await h.invoke('formatCode', source, language);
     assert.equal(result.code, source);
     assert.match(result.error, /代码过长.*200000/);
@@ -317,11 +318,21 @@ test('formatter refuses oversized code before running either WASM engine and pre
 
 test('unsupported and missing formatter languages return errors while preserving the original source', async () => {
   const h = harness(), source = 'int main(){return 0;}';
-  for (const language of ['', null, undefined, 'text', 'go', 'rust', 'shell', 'toString', '__proto__']) {
+  for (const language of ['', null, undefined, 'text', 'go', 'shell', 'toString', '__proto__']) {
     const result = await h.invoke('formatCode', source, language);
     assert.equal(result.code, source);
     assert.match(result.error, /不支持|未能识别/, `expected language error for ${language}`);
   }
+});
+
+test('Rust parse failures preserve source and do not break subsequent formatting', async () => {
+  const h = harness(), source = 'fn main( { println!("hello"); }';
+  const result = await h.invoke('formatCode', source, 'rust');
+  assert.equal(result.code, source);
+  assert.ok(result.error, 'invalid Rust must report a failure');
+  const next = await h.invoke('formatCode', 'fn main(){let text = "你好"; println!("{}", text);}', 'rust');
+  assert.equal(next.error, undefined);
+  assert.match(next.code, /你好/);
 });
 
 test('Issue deletion rejects foreign repositories and cleans only selected discussion cache after confirmed remote success', async () => {

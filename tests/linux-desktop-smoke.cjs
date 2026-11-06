@@ -81,7 +81,7 @@ async function bounded(promise, milliseconds, message) {
     page.on('pageerror', error => rendererErrors.push(error.message));
     page.on('console', message => { if (message.type() === 'error') diagnostics.push(message.text()); });
     await page.waitForFunction(() => typeof window.notebook?.bootstrap === 'function');
-    await page.waitForSelector('#record-list');
+    await page.waitForSelector('#home-panel');
     return page.evaluate(() => window.notebook.bootstrap());
   }
   async function close() {
@@ -108,7 +108,9 @@ async function bounded(promise, milliseconds, message) {
     const ready = await launch();
     assert.equal(ready.settings.autoSync, false);
     assert.equal(ready.account, null);
-    await page.click('[data-view="mine"]');
+    await page.locator('.sidebar').hover();
+    await page.locator('.nav-item[data-view="home"]').click();
+    await page.locator('#home-panel .home-shortcut[data-view="mine"]').click();
     await page.click('#submit-button');
     await page.fill('[name="url"]', 'https://codeforces.com/problemset/problem/1/A');
     await page.fill('[name="title"]', title);
@@ -140,7 +142,8 @@ async function bounded(promise, milliseconds, message) {
     assert.equal(restored.settings.autoSync, false);
     assert.deepEqual(restored.local.records, saved.local.records, 'Full local content and identity must survive relaunch');
     assert.deepEqual(restored.local.favorites, [record.id]);
-    await page.click('[data-view="favorites"]');
+    await page.locator('.sidebar').hover();
+    await page.locator('.nav-item[data-view="favorites"]').click();
     await page.locator('.record-card').filter({ hasText: title }).click();
     await page.getByRole('button', { name: '★ 已收藏', exact: true }).waitFor();
     await page.click('#edit-record-button');

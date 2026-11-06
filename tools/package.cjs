@@ -7,6 +7,26 @@ const root = path.resolve(__dirname, '..');
 const platform = process.env.QMX_PLATFORM || process.platform;
 const arch = process.env.QMX_ARCH || process.arch;
 if (!['win32', 'linux', 'darwin'].includes(platform) || !['x64', 'arm64'].includes(arch)) throw new Error('Unsupported QMX_PLATFORM or QMX_ARCH');
+// Preserve each package's own dependency resolution, including pnpm's indirect links.
+function stageDependency(name, from, destination, ancestors = new Set()) {
+  let search = from, manifest;
+  while (true) {
+    const candidate = path.join(search, 'node_modules', name, 'package.json');
+    if (fs.existsSync(candidate)) { manifest = candidate; break; }
+    const parent = path.dirname(search);
+    if (parent === search) throw new Error(`Missing production dependency: ${name}`);
+    search = parent;
+  }
+  const source = fs.realpathSync(manifest);
+  const sourceDir = path.dirname(source);
+  if (ancestors.has(sourceDir)) throw new Error(`Cyclic production dependency: ${name}`);
+  fs.cpSync(sourceDir, destination, { recursive: true, dereference: true, filter: file => path.basename(file) !== 'node_modules' });
+  const metadata = JSON.parse(fs.readFileSync(source, 'utf8'));
+  const next = new Set(ancestors).add(sourceDir);
+  for (const child of Object.keys(metadata.dependencies || {})) {
+    stageDependency(child, sourceDir, path.join(destination, 'node_modules', child), next);
+  }
+}
 async function main() {
   // A fresh temporary directory prevents old source or private data entering releases.
   const stage = fs.mkdtempSync(path.join(os.tmpdir(), 'qmx-notebook-build-'));
@@ -18,8 +38,7 @@ async function main() {
     name: pkg.name, version: pkg.version, main: pkg.main, dependencies: pkg.dependencies
   }, null, 2));
   for (const name of Object.keys(pkg.dependencies)) {
-    fs.cpSync(fs.realpathSync(path.join(root, 'node_modules', name)),
-      path.join(stage, 'node_modules', name), { recursive: true, dereference: true });
+    stageDependency(name, root, path.join(stage, 'node_modules', name));
   }
   const version = require('electron/package.json').version;
   const archiveDir = path.join(root, '.electron-zip');

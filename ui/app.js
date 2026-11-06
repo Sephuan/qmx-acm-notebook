@@ -9,10 +9,13 @@
   const SIDEBAR_STORAGE = 'acm-notebook.sidebar';
   const stateLabels = { unreviewed: '待复习', reviewing: '复习中', mastered: '已掌握' };
   const views = {
+    home: ['主页', '从这里开始，继续积累今天的理解。', 'WELCOME TO YOUR LEARNING SPACE'],
+    tricks: ['tricks', '把灵光一现，留给下一次解题。', 'SMALL IDEAS, NEW POSSIBILITIES'],
+    algorithms: ['算法笔记', '整理知识，连接思路。', 'BUILD YOUR KNOWLEDGE'],
     public: ['公共题库', '在他人的思路里，找到自己的突破口。', 'A LITTLE BETTER, EVERY DAY'],
     discussion: ['讨论 Issues', '阅读已有讨论，与学习者交流观察。', 'DISCUSS AND LEARN'],
     mine: ['我的错题', '每个没有想通的瞬间，都有重新理解的机会。', 'TURN MISTAKES INTO INSIGHT'],
-    favorites: ['收藏复习', '再想一遍，让解题思路真正成为自己的。', 'REVISIT. UNDERSTAND. REMEMBER.'],
+    favorites: ['个人收藏', '再想一遍，让解题思路真正成为自己的。', 'REVISIT. UNDERSTAND. REMEMBER.'],
     stats: ['学习统计', '看见积累，也看见下一步的方向。', 'SMALL STEPS, REAL PROGRESS']
   };
   const examples = [
@@ -22,7 +25,7 @@
   ];
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(STORAGE) || 'null'); } catch (_) { /* Storage may be disabled. */ }
-  const s = { view: 'public', records: [], local: { records: [], favorites: [], mastery: {}, draft: {} }, settings: {}, account: null, authStatus: { status: 'anonymous' }, permissions: {}, issues: [], editor: null, lastSync: null, error: '', selected: null, comments: new Map(), loading: true, busy: false, tagCatalog: window.QMX_TAG_PRESETS || { version: 'local', source: 'local', categories: [] }, tagReview: null };
+  const s = { view: 'home', records: [], local: { records: [], favorites: [], mastery: {}, draft: {} }, settings: {}, account: null, authStatus: { status: 'anonymous' }, permissions: {}, issues: [], editor: null, lastSync: null, error: '', selected: null, comments: new Map(), loading: true, busy: false, tagCatalog: window.QMX_TAG_PRESETS || { version: 'local', source: 'local', categories: [] }, tagReview: null };
   s.appVersion = ''; s.update = null;
   let updateRunning = false;
   let updateReady = false;
@@ -79,8 +82,25 @@
   function reauthNeeded() { return !demo && (['expired', 'recovery-required'].includes(s.authStatus?.status) || /登录已失效|重新授权|请重新登录/i.test(s.error || '')); }
   let settingsPreview = null;
   function applyCodeSettings(settings = settingsPreview || s.settings) { const size = Math.round(Number(settings.codeFontSize)); document.body.style.setProperty('--code-font-size', (Number.isFinite(size) && size >= 10 && size <= 18 ? size : 11) + 'px'); }
-  function readSidebar() { try { return localStorage.getItem(SIDEBAR_STORAGE) === 'collapsed'; } catch (_) { return false; } }
-  function applySidebar(collapsed) { document.body.classList.toggle('sidebar-collapsed', !!collapsed); const toggle = $('#sidebar-toggle'); if (toggle) { toggle.title = collapsed ? '展开侧边栏' : '收起侧边栏'; toggle.setAttribute('aria-label', toggle.title); toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true'); } try { localStorage.setItem(SIDEBAR_STORAGE, collapsed ? 'collapsed' : 'expanded'); } catch (_) {} }
+  function readSidebar() { try { return localStorage.getItem(SIDEBAR_STORAGE) === 'pinned'; } catch (_) { return false; } }
+  let sidebarPinned = readSidebar(), sidebarHovered = false, sidebarFocused = false;
+  let sidebarOpenTimer;
+  function clearSidebarTimers() { clearTimeout(sidebarOpenTimer); }
+  function updateSidebar() {
+    const expanded = sidebarPinned || sidebarHovered || sidebarFocused;
+    $('.sidebar-drawer').inert = !expanded;
+    $('.sidebar-rail').inert = false;
+    document.body.classList.toggle('sidebar-pinned', sidebarPinned);
+    document.body.classList.toggle('sidebar-open', expanded);
+    const toggle = $('#sidebar-toggle');
+    toggle.title = sidebarPinned ? '取消固定，恢复悬浮展开' : '固定展开导航栏';
+    toggle.setAttribute('aria-label', toggle.title);
+    toggle.setAttribute('aria-pressed', String(sidebarPinned));
+    toggle.setAttribute('aria-expanded', String(expanded));
+    const railToggle = $('#sidebar-rail-toggle');
+    if (railToggle) { railToggle.title = toggle.title; railToggle.setAttribute('aria-label', toggle.title); railToggle.setAttribute('aria-pressed', String(sidebarPinned)); }
+  }
+  function applySidebar(pinned) { clearSidebarTimers(); sidebarPinned = !!pinned; updateSidebar(); try { localStorage.setItem(SIDEBAR_STORAGE, sidebarPinned ? 'pinned' : 'auto'); } catch (_) {} }
   function updateStatus() {
     $('#demo-label').hidden = !demo;
     $('#sync-status').textContent = s.loading ? '正在载入…' : demo ? '浏览器预览 · 本地保存' : s.lastSync ? `最近同步 ${date(s.lastSync)}` : '尚未同步';
@@ -105,8 +125,10 @@
     const account = s.account;
     $('#account-name').textContent = account?.name || account?.login || account?.username || s.settings.displayName || '本地学习者';
     $('#account-caption').textContent = s.authStatus?.status === 'expired' ? '授权已过期 · 请重新登录' : s.authStatus?.status === 'recovery-required' ? '凭证恢复失败 · 请重新授权' : s.authStatus?.status === 'unverified' ? '账户尚未验证 · 请联网刷新' : account ? '账户已连接' : demo ? '演示模式 · 数据仅在本机' : quotaBlocked() ? '未登录 · 点此登录提升额度' : '未登录 · 可使用本地错题';
-    const avatar = $('.account-avatar'); avatar.replaceChildren();
-    if (/^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(account?.avatarData || '')) { const image = element('img'); image.src = account.avatarData; image.alt = ''; avatar.append(image); } else avatar.textContent = String($('#account-name').textContent).slice(0, 1);
+    for (const avatar of $$('.account-avatar')) {
+      avatar.replaceChildren();
+      if (/^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(account?.avatarData || '')) { const image = element('img'); image.src = account.avatarData; image.alt = ''; avatar.append(image); } else avatar.textContent = String($('#account-name').textContent).slice(0, 1);
+    }
     const accountButton = $('#account-button');
     accountButton.title = account ? 'GitHub 账户' : '登录 GitHub 账户';
     if (account) accountButton.removeAttribute('aria-label'); else accountButton.setAttribute('aria-label', accountButton.title);
@@ -285,13 +307,39 @@
     focusedDetail = false; document.body.classList.remove('reading-detail'); render();
     if (readerPosition) { $('#record-list').scrollTop = readerPosition.list; $('#detail-panel').scrollTop = readerPosition.panel; window.scrollTo(0, readerPosition.window); const card = $$('.record-card').find(n => n.dataset.key === s.selected); card?.focus({ preventScroll: true }); }
   }
+  function navigate(view) {
+    if (!views[view]) return;
+    focusedDetail = false; document.body.classList.remove('reading-detail'); s.view = view; clearFilters();
+  }
+  function renderHome() {
+    const panel = $('#home-panel'); panel.replaceChildren();
+    const hero = element('div', 'home-welcome');
+    append(hero, element('div', 'eyebrow', 'ONE IDEA AT A TIME'), element('h2', '', '今天，也拾起一点新理解。'), element('p', '', '阅读题解，记录观察，让每一次卡住都有回响。'), button('浏览公共题库 ↗', 'button primary', () => navigate('public')));
+    const shortcuts = element('div', 'home-shortcuts');
+    const all = records();
+    for (const [view, title, caption, count] of [
+      ['mine', '我的题解', '继续整理本地记录与自己的题解', all.filter(isMine).length],
+      ['favorites', '个人收藏', '重访值得再想一遍的思路', all.filter(favorite).length],
+      ['discussion', '讨论交流', '阅读题库中的已有讨论', all.filter(record => record.kind === 'issue').length],
+      ['stats', '学习统计', '看见复习与积累的进度', null]
+    ]) {
+      const card = button('', 'home-shortcut', () => navigate(view)); card.dataset.view = view;
+      append(card, element('span', 'home-shortcut-title', title), element('span', 'home-shortcut-caption', caption), element('span', 'home-shortcut-count', count === null ? '查看 →' : `${count} 条 · 查看 →`)); shortcuts.append(card);
+    }
+    append(panel, hero, shortcuts);
+  }
   function render() {
     updateStateFacet();
     document.body.dataset.view = s.view;
     const [title, description, eyebrow] = views[s.view]; $('#page-title').replaceChildren(document.createTextNode(title), element('span', 'heading-dot', '.')); $('#breadcrumb-view').textContent = title; $('#page-description').textContent = description; $('#page-eyebrow').textContent = eyebrow;
-    $$('.nav-item').forEach(node => { node.classList.toggle('active', node.dataset.view === s.view); if (node.dataset.view === s.view) node.setAttribute('aria-current', 'page'); else node.removeAttribute('aria-current'); });
-    const all = records(); $('#count-public').textContent = all.filter(record => record.kind === 'document').length; $('#count-discussion').textContent = all.filter(record => record.kind === 'issue').length; $('#count-mine').textContent = all.filter(isMine).length; $('#count-favorites').textContent = all.filter(favorite).length;
-    $('#stats-panel').hidden = s.view !== 'stats'; $('#library-panel').hidden = s.view === 'stats'; updateStatus();
+    $$('.nav-item,.rail-nav-item').forEach(node => { node.classList.toggle('active', node.dataset.view === s.view); if (node.dataset.view === s.view) node.setAttribute('aria-current', 'page'); else node.removeAttribute('aria-current'); });
+    const all = records(); $('#count-public').textContent = all.filter(record => record.kind === 'document').length; $('#count-favorites').textContent = all.filter(favorite).length;
+    $('#home-panel').hidden = s.view !== 'home';
+    const placeholder = ['tricks', 'algorithms'].includes(s.view);
+    $('#section-placeholder').hidden = !placeholder;
+    $('#stats-panel').hidden = s.view !== 'stats'; $('#library-panel').hidden = s.view === 'home' || s.view === 'stats' || placeholder; updateStatus();
+    if (s.view === 'home') { renderHome(); return; }
+    if (placeholder) { $('#section-placeholder').replaceChildren(empty(s.view === 'tricks' ? '留住解题的灵感' : '给知识一个安放的地方', '这个分区已就位，内容将在后续完善。')); return; }
     if (s.view === 'stats') { renderStats(); return; }
     const items = filteredRecords(); $('#result-count').textContent = items.length;
     $('.list-heading > span:last-child').textContent = facets.tags.size ? '标签命中数 ↓ · 相关度 / 更新时间' : $('#search-input').value.trim() ? '匹配程度 ↓' : '最近更新 ↓';
@@ -316,7 +364,7 @@
   // DOMPurify forbids <button> in Markdown, so these actions are app chrome created
   // after sanitizing. The wrapper keeps the buttons anchored while the pre scrolls.
   const codeLanguageAliases = { 'c++': 'cpp', cc: 'cpp', cxx: 'cpp', hpp: 'cpp', py: 'python', python3: 'python', js: 'javascript', node: 'javascript', nodejs: 'javascript', ts: 'typescript', 'c#': 'csharp', cs: 'csharp', objc: 'objectivec', 'objective-c': 'objectivec', golang: 'go', rs: 'rust', sh: 'bash', shell: 'bash', yml: 'yaml', html: 'markup', xml: 'markup' };
-  const formattableLanguages = new Set(['c', 'cpp', 'java', 'javascript', 'typescript', 'csharp', 'objectivec', 'python']);
+  const formattableLanguages = new Set(['c', 'cpp', 'java', 'javascript', 'typescript', 'csharp', 'objectivec', 'python', 'rust']);
   function normalizeCodeLanguage(language) { const name = String(language || '').toLowerCase(); return codeLanguageAliases[name] || name; }
   function codeLanguage(pre) {
     const node = pre.querySelector('code') || pre;
@@ -675,7 +723,7 @@
     setBusy(true);
     try { if (demo) { toast('演示模式：本地记录已保留，未连接公共题库'); return; } if (!navigator.onLine) throw new Error('当前离线，请连接网络后重试'); applyPayload(await call('sync')); s.comments.clear(); refreshFilters(); render(); toast('学习空间已同步'); } catch (error) { const message = errorMessage(error); try { applyPayload(await call('bootstrap')); } catch (_) {} s.error = message; refreshFilters(); render(); toast(`同步失败：${message}`); } finally { setBusy(false); }
   }
-  $$('.nav-item').forEach(node => node.addEventListener('click', () => { if (focusedDetail) { focusedDetail = false; document.body.classList.remove('reading-detail'); } s.view = node.dataset.view; clearFilters(); }));
+  $$('.nav-item').forEach(node => node.addEventListener('click', event => { navigate(node.dataset.view); if (event.pointerType === 'touch') { sidebarHovered = false; sidebarFocused = false; updateSidebar(); } }));
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && focusedDetail && !document.querySelector('dialog[open]')) { event.preventDefault(); closeDetail(); } });
   $('#record-tag-open').addEventListener('click', () => openTagPicker('editor'));
   $('#tag-picker-search').addEventListener('input', event => { if (tagPickerContext) fillTagOptions($('#tag-picker-dialog-options'), tagPickerContext.selected, event.target.value, () => {}); });
@@ -689,7 +737,7 @@
     if (demo) { toast('演示模式：未发送标签申请，不会写入外部'); return; }
     setBusy(true); try { await call('requestTag', { category, name }); $('#request-tag-dialog-name').value = ''; $('#tag-review-dialog').close(); toast('标签申请已提交，审核后加入公共标签'); } catch(error) { toast(errorMessage(error)); } finally { setBusy(false); }
   });
-  $('.brand').addEventListener('click', event => { event.preventDefault(); if (s.busy) return; focusedDetail = false; document.body.classList.remove('reading-detail'); s.view = 'public'; clearFilters(); });
+  $('.brand').addEventListener('click', event => { event.preventDefault(); if (s.busy) return; focusedDetail = false; document.body.classList.remove('reading-detail'); s.view = 'home'; clearFilters(); });
   const stateSelect = $('#state-filter');
   const stateFacet = element('details', 'facet state-facet'); stateFacet.id = 'state-facet';
   const stateSummary = element('summary'); const stateLabel = element('span');
@@ -730,7 +778,44 @@
   $('#settings-form').elements.codeFontSize.addEventListener('input', () => { if (!settingsPreview) return; const size = Number($('#settings-form').elements.codeFontSize.value); settingsPreview.codeFontSize = size; applyCodeSettings(); $('#code-font-size-value').textContent = size + 'px'; });
   $('#settings-form').elements.codeLineNumbers.addEventListener('change', () => { if (!settingsPreview) return; settingsPreview.codeLineNumbers = $('#settings-form').elements.codeLineNumbers.checked; render(); });
   $('#settings-dialog').addEventListener('close', () => { if (!settingsPreview) return; settingsPreview = null; applyCodeSettings(); render(); });
-  $('#sidebar-toggle').addEventListener('click', () => applySidebar(!document.body.classList.contains('sidebar-collapsed')));
+  $('#sidebar-toggle').addEventListener('click', event => {
+    const wasPinned = sidebarPinned; applySidebar(!wasPinned);
+    if (wasPinned) { sidebarHovered = false; sidebarFocused = false; event.currentTarget.blur(); updateSidebar(); }
+  });
+  const sidebar = $('.sidebar');
+  // The compact controls stay stationary beneath the translating full drawer.
+  const rail = $('.sidebar-rail');
+  for (const source of $$('.sidebar-drawer > *')) {
+    const copy = source.cloneNode(true);
+    for (const node of [copy, ...$$('[id]', copy)]) { if (node.id) node.removeAttribute('id'); }
+    for (const node of [copy, ...$$('button,a', copy)]) {
+      if (!node.matches('button,a')) continue;
+      if (node.classList.contains('sidebar-toggle')) { node.id = 'sidebar-rail-toggle'; node.addEventListener('click', event => { const wasPinned = sidebarPinned; applySidebar(!wasPinned); if (wasPinned) { sidebarHovered = false; sidebarFocused = false; event.currentTarget.blur(); updateSidebar(); } }); }
+      else if (node.classList.contains('nav-item')) { node.classList.replace('nav-item', 'rail-nav-item'); node.addEventListener('click', () => navigate(node.dataset.view)); }
+      else if (node.classList.contains('brand')) { node.classList.replace('brand', 'rail-brand'); node.addEventListener('click', event => { event.preventDefault(); navigate('home'); }); }
+      else if (node.classList.contains('sidebar-bottom')) node.addEventListener('click', () => $('#account-button').click());
+    }
+    // Avoid duplicate live account labels in the compact rail.
+    rail.append(copy);
+  }
+  // The pin control belongs to the stationary rail and never travels with the text.
+  rail.querySelector('.sidebar-toggle').replaceWith($('#sidebar-toggle'));
+  sidebar.addEventListener('pointerenter', event => {
+    if (event.pointerType === 'touch') return;
+    clearSidebarTimers();
+    sidebarOpenTimer = setTimeout(() => { sidebarHovered = true; updateSidebar(); }, 100);
+  });
+  sidebar.addEventListener('pointerleave', () => {
+    clearSidebarTimers();
+    sidebarHovered = false; sidebarFocused = false; updateSidebar();
+  });
+  sidebar.addEventListener('focusin', event => {
+    if (!event.target.matches(':focus-visible')) return;
+    clearTimeout(sidebarOpenTimer); sidebarFocused = true;
+    updateSidebar();
+  });
+  sidebar.addEventListener('focusout', () => { queueMicrotask(() => { if (!sidebar.contains(document.activeElement)) { sidebarFocused = false; updateSidebar(); } }); });
+  document.addEventListener('keydown', event => { if (event.key === 'Escape' && !sidebarPinned && !document.querySelector('dialog[open]')) { clearSidebarTimers(); sidebarHovered = false; sidebarFocused = false; if (sidebar.contains(document.activeElement)) document.activeElement.blur(); updateSidebar(); } });
   $('#settings-login-button').addEventListener('click', async () => {
     if (s.busy) return;
     if (demo) { toast('浏览器演示不连接 GitHub，账户功能请在桌面客户端使用'); return; }
@@ -899,7 +984,7 @@
     } catch (_) { /* Validation is shown when saving. */ }
   });
   window.addEventListener('online', updateStatus); window.addEventListener('offline', updateStatus);
-  document.addEventListener('keydown', event => { if (event.key === '/' && !event.ctrlKey && !event.metaKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) && !document.querySelector('dialog[open]')) { event.preventDefault(); if (s.view === 'stats') { s.view = 'public'; render(); } $('#search-input').focus(); } });
+  document.addEventListener('keydown', event => { if (event.key === '/' && !event.ctrlKey && !event.metaKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) && !document.querySelector('dialog[open]')) { event.preventDefault(); if (['home', 'stats', 'tricks', 'algorithms'].includes(s.view)) { navigate('public'); } $('#search-input').focus(); } });
   async function bootstrap() {
     applyTheme(readTheme()); applySidebar(readSidebar()); render();
     if (demo) { s.permissions = { repo: 'qmx-acm-data/2026', push: false, admin: false }; s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo })); s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo })); s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} }); s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record); s.settings = cached?.settings || {}; applyTheme(s.settings.theme || readTheme()); applyCodeSettings(); }

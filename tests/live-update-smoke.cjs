@@ -10,7 +10,7 @@ const assert = require('node:assert/strict');
   const env = { ...process.env }; delete env.ELECTRON_RUN_AS_NODE;
   const app = await electron.launch({ executablePath: path.resolve('release/QMX-Notebook-win32-x64/QMX-Notebook.exe'), args: ['--disable-gpu', '--no-sandbox', '--user-data-dir=' + profile], env, timeout: 30000 });
   try {
-    const page = await app.firstWindow(); await page.waitForSelector('#record-list');
+    const page = await app.firstWindow(); await page.waitForSelector('#home-panel');
     // Exercise the packaged updater with the same Chromium transport used by main.
     const result = await app.evaluate(async ({ net, app }) => {
       const load = process.mainModule.require.bind(process.mainModule);

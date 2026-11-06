@@ -1,6 +1,6 @@
 {
   "name": "qmx-acm-notebook",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "description": "启明星 ACM 共享错题与算法资料客户端",
   "main": "electron/main.cjs",
   "private": true,
@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@astral-sh/ruff-wasm-nodejs": "^0.17.3",
+    "@scalar/rust-fmt": "0.3.0",
     "@wasm-fmt/clang-format": "^23.1.1",
     "dompurify": "^3.2.7",
     "katex": "^0.16.22",
