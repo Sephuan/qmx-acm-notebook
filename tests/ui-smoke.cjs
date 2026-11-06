@@ -25,7 +25,7 @@ const { chromium } = require('playwright');
           { id: documentRecord.id, kind: 'document', ...documentRecord, title: 'STALE LOCAL COPY' }
         ], favorites: ['legacy-unbound-id'], mastery: { 'legacy-unbound-id': 'mastered' }, draft: {} }
       };
-      const payload = () => structuredClone({ records: fixture.docs, issues: [{ id: 'issue:1', kind: 'issue', number: 1, repo, title: 'Existing discussion', body: 'Discussion' }], account, permissions: { repo, push: true, admin: false }, settings: { repo, autoSync: false }, local: fixture.local });
+      const payload = () => structuredClone({ records: fixture.docs, issues: [{ id: 'issue:1', kind: 'issue', number: 1, repo, title: 'Existing discussion', body: 'Discussion' }], account, authStatus: { status: fixture.authStatus || (account ? 'verified' : 'anonymous') }, permissions: { repo, push: true, admin: false }, settings: { repo, autoSync: false }, local: fixture.local });
       fixture.payload = payload;
       fixture.getAccount = () => account;
       fixture.setAccount = value => { account = value; };
@@ -233,6 +233,26 @@ const { chromium } = require('playwright');
     assert.match(await page.locator('#account-name').innerText(), /Dialog User/);
     await page.click('[data-close="account-dialog"]');
 
+    // An expired token retains identity but must still offer reauthorization and retry the anonymous pull.
+    await page.evaluate(() => {
+      fixture.authStatus = 'expired'; fixture.loginCalls = 0; fixture.syncCalls = 0;
+      window.notebook.sync = async () => { fixture.syncCalls++; if (fixture.authStatus === 'expired') throw new Error('GitHub 请求额度已用完'); return fixture.payload(); };
+      window.notebook.login = async () => { fixture.loginCalls++; fixture.authStatus = 'verified'; };
+    });
+    await page.click('#sync-button');
+    await page.waitForSelector('#banner-login-button');
+    assert.match(await page.locator('#banner-login-button').innerText(), /重新登录/);
+    await page.click('#banner-login-button');
+    await page.waitForFunction(() => fixture.loginCalls === 1 && fixture.syncCalls >= 2 && document.querySelector('#status-banner').hidden);
+    // Recovery can be required even when no network error text exists.
+    await page.evaluate(() => { fixture.authStatus = 'recovery-required'; window.notebook.sync = async () => fixture.payload(); });
+    await page.click('#sync-button');
+    await page.waitForSelector('#banner-login-button');
+    assert.match(await page.locator('#status-banner').innerText(), /授权需要恢复/);
+    await page.evaluate(() => { fixture.authStatus = 'verified'; });
+    await page.click('#sync-button');
+    await page.waitForFunction(() => document.querySelector('#status-banner').hidden);
+
     // Settings dialog exposes a GitHub login entry that starts the same device flow.
     await page.click('#settings-button');
     await page.waitForSelector('#settings-dialog[open]');
@@ -256,11 +276,15 @@ const { chromium } = require('playwright');
     await page.evaluate(() => fixture.authProgress({ userCode: 'TEST-CODE', verificationUri: 'https://github.com/login/device' }));
     await page.waitForSelector('#auth-copy-button:not([hidden])');
     assert.equal(await page.locator('#auth-code').innerText(), 'TEST-CODE');
+    assert.equal(await page.locator('#auth-url').innerText(), 'https://github.com/login/device');
     await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
     await page.click('#auth-copy-button');
     assert.equal(await page.evaluate(() => navigator.clipboard.readText()), 'https://github.com/login/device');
     await page.click('#auth-open-button');
     assert.deepEqual(await page.evaluate(() => fixture.authUrls), ['https://github.com/login/device']);
+    await page.evaluate(() => { window.notebook.openAuthUrl = async () => { throw new Error('Browser unavailable'); }; });
+    await page.click('#auth-open-button');
+    await page.waitForFunction(() => document.querySelector('#toast').textContent.includes('Browser unavailable'));
     await page.evaluate(() => fixture.resolveLogin());
     await page.waitForFunction(() => !document.querySelector('#auth-dialog').open);
 

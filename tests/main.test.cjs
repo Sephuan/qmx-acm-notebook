@@ -19,7 +19,7 @@ const personal = (records = []) => ({ records, favorites: ['issue:7'], mastery: 
 const clone = value => JSON.parse(JSON.stringify(value));
 function deferred() { let resolve, reject; const promise = new Promise((yes, no) => { resolve = yes; reject = no; }); return { promise, resolve, reject }; }
 
-function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {}, updaterBackend = {}, upgradeBackend = {}, isPackaged = true } = {}) {
+function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {}, updaterBackend = {}, upgradeBackend = {}, browserBackend = {}, networkBackend, platform = 'win32', env = {}, switches = {}, isPackaged = true } = {}) {
   const root = path.resolve('mock-user-data');
   const disk = new Map();
   const writes = [];
@@ -31,8 +31,10 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     writeFileSync(file, text) { disk.set(file, String(text)); writes.push(file); },
     renameSync(from, to) { if (!disk.has(from)) throw new Error('ENOENT'); disk.set(to, disk.get(from)); disk.delete(from); },
     mkdirSync() {},
+    existsSync(file) { return browserBackend.existsSync?.(file) || false; },
   };
   const handlers = new Map(), calls = [], windows = [], updaterCalls = [], spawnCalls = [], timers = new Map(), appEvents = new EventEmitter();
+  const commandLineSwitches = new Map(Object.entries(switches)), appendedSwitches = [], externalCalls = [], networkCalls = [];
   let ready, updaterOptions, quitCalls = 0, now = 0, timerId = 0;
   let updateState = { phase: 'idle', currentVersion: '0.3.0', available: false };
   const installerPath = path.join(root, 'updates', 'private-cache', 'app.asar');
@@ -70,11 +72,14 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     loadFile() {}
   }
   const electron = {
-    net: { fetch: async (url, options) => ({ url, options }) },
-    app: { isPackaged, disableHardwareAcceleration() {}, commandLine: { appendSwitch() {}, getSwitchValue: () => '' }, whenReady: () => ({ then(callback) { ready = callback; } }), getPath: () => root, on: (...args) => appEvents.on(...args), quit() { quitCalls++; } },
+    net: { fetch: async (url, options) => { networkCalls.push({ url: String(url), options }); return networkBackend ? networkBackend(url, options) : { url, options }; } },
+    app: { isPackaged, disableHardwareAcceleration() {}, commandLine: {
+      appendSwitch(name, value) { appendedSwitches.push({ name, value }); commandLineSwitches.set(name, value); },
+      hasSwitch: name => commandLineSwitches.has(name), getSwitchValue: name => commandLineSwitches.get(name) || ''
+    }, whenReady: () => ({ then(callback) { ready = callback; } }), getPath: () => root, on: (...args) => appEvents.on(...args), quit() { quitCalls++; } },
     BrowserWindow,
     ipcMain: { handle(name, callback) { assert.ok(!handlers.has(name)); handlers.set(name, callback); } },
-    shell: { async openExternal() {} },
+    shell: { async openExternal(url) { externalCalls.push(url); return browserBackend.openExternal?.(url); } },
     safeStorage: { isEncryptionAvailable: () => true, encryptString: encrypted, decryptString: value => { const text = value.toString(); assert.ok(text.startsWith('fake-encrypted:')); return text.slice('fake-encrypted:'.length); } },
   };
   class FakeGitHub {
@@ -94,7 +99,8 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     };
   }
   const context = vm.createContext({ Buffer, URL, AbortSignal, console,
-    process: { execPath, versions: { electron: '40.0.0' }, argv: [], env: { ELECTRON_RUN_AS_NODE: '1', QMX_TEST_ENV: 'preserved' } },
+    process: { execPath, platform, versions: { electron: '40.0.0' }, argv: [], env: { ELECTRON_RUN_AS_NODE: '1', QMX_TEST_ENV: 'preserved', ...env } },
+    Date: class extends Date { static now() { return now; } },
     setTimeout(callback, delay) { const id = ++timerId; timers.set(id, { callback, at: now + delay }); return id; },
     clearTimeout(id) { timers.delete(id); },
     fetch: async () => { throw new Error('NETWORK FORBIDDEN IN MAIN TESTS'); },
@@ -105,6 +111,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       if (name === 'node:crypto') return { randomUUID: () => '00000000-0000-4000-8000-000000000001' };
       if (name === '../package.json') return { version: '0.3.0' };
       if (name === './auth.cjs') return require('../electron/auth.cjs');
+      if (name === '@astral-sh/ruff-wasm-nodejs') return require(name);
        if (name === '../ui/tag-presets.js') return require('../ui/tag-presets.js');
        if (name === './updater.cjs') return { createUpdater(options) { updaterOptions = options; return updater; } };
       if (name === './file-upgrade.cjs') return {
@@ -124,13 +131,14 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
         child.unrefCalls = 0;
         child.unref = () => { child.unrefCalls++; };
         spawnCalls.push({ file, args: clone(args), options: clone(options), child });
+        if (browserBackend.spawn) return browserBackend.spawn(file, args, options, child);
         return child;
       } };
       if (name === './github.cjs') return { GitHub: FakeGitHub, repoParts(repo) { if (!/^[\w.-]+\/[\w.-]+$/.test(repo || '')) throw new Error('Invalid repo'); return repo.split('/'); } };
       throw new Error(`Unexpected dependency ${name}`);
     }, __dirname: path.dirname(MAIN),
   });
-  vm.runInContext(SOURCE, context, { filename: MAIN });
+  vm.runInContext(SOURCE, context, { filename: MAIN, importModuleDynamically: vm.constants.USE_MAIN_CONTEXT_DEFAULT_LOADER });
   assert.equal(handlers.size, 0, 'main must wait for app readiness');
   assert.equal(typeof ready, 'function');
   ready();
@@ -145,9 +153,176 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     now = end;
   };
   return { invoke, calls, writes, handlers, windows, updaterCalls, upgradeCalls, recoveryCalls, installSteps, spawnCalls, installerPath, readyUpdate, helperPath, jobPath, execPath, installDir, installerArgs, backupDir, advanceTimers,
+    appendedSwitches, commandLineSwitches, externalCalls, networkCalls, timers,
     get updaterOptions() { return updaterOptions; }, get quitCalls() { return quitCalls; },
     stored: name => JSON.parse(disk.get(path.join(root, name)) || 'null') };
 }
+
+test('Linux keyring default respects explicit password stores and native desktop detection', () => {
+  for (const desktop of ['niri', 'sway', '']) {
+    const h = harness({ platform: 'linux', env: { XDG_CURRENT_DESKTOP: desktop } });
+    assert.deepEqual(h.appendedSwitches, [{ name: 'password-store', value: 'gnome-libsecret' }]);
+  }
+  for (const value of ['basic', 'kwallet6', 'gnome-libsecret', '']) {
+    const h = harness({ platform: 'linux', env: { XDG_CURRENT_DESKTOP: 'niri' }, switches: { 'password-store': value } });
+    assert.deepEqual(h.appendedSwitches, []);
+    assert.equal(h.commandLineSwitches.get('password-store'), value);
+  }
+  for (const [platform, desktop] of [['linux', 'GNOME'], ['linux', 'ubuntu:GNOME'], ['linux', 'KDE'], ['win32', 'niri'], ['darwin', '']]) {
+    assert.deepEqual(harness({ platform, env: { XDG_CURRENT_DESKTOP: desktop } }).appendedSwitches, []);
+  }
+});
+
+const AUTH_URL = 'https://github.com/login/device';
+const chromeBrowser = extra => ({ existsSync: file => file === '/usr/bin/google-chrome', ...extra });
+
+test('auth browser waits through a bounded grace period and detaches a running Chrome', async () => {
+  const h = harness({ platform: 'linux', browserBackend: chromeBrowser() });
+  let settled = false;
+  const opened = h.invoke('openAuthUrl', AUTH_URL).then(value => { settled = true; return value; });
+  const launch = h.spawnCalls[0];
+  assert.equal(launch.file, '/usr/bin/google-chrome');
+  assert.deepEqual(launch.args, [AUTH_URL]);
+  assert.deepEqual(launch.options, { detached: true, stdio: 'ignore' });
+  launch.child.emit('spawn');
+  await new Promise(setImmediate);
+  assert.equal(settled, false, 'spawn alone does not establish a successful browser launch');
+  h.advanceTimers(999);
+  await new Promise(setImmediate);
+  assert.equal(settled, false);
+  h.advanceTimers(1);
+  assert.equal(await opened, true);
+  assert.equal(launch.child.unrefCalls, 1);
+  assert.deepEqual(h.externalCalls, []);
+  assert.equal(h.timers.size, 0);
+  launch.child.emit('exit', 1, null);
+  launch.child.emit('error', new Error('late process error'));
+  assert.deepEqual(h.externalCalls, [], 'events after the bounded startup window do not reopen the page');
+});
+
+test('early nonzero or signaled Chrome exits use the default browser exactly once', async () => {
+  for (const [code, signal] of [[1, null], [127, null], [null, 'SIGTERM']]) {
+    const h = harness({ platform: 'linux', browserBackend: chromeBrowser() });
+    const opened = h.invoke('openAuthUrl', AUTH_URL);
+    h.spawnCalls[0].child.emit('spawn');
+    h.advanceTimers(100);
+    h.spawnCalls[0].child.emit('exit', code, signal);
+    assert.equal(await opened, false);
+    assert.deepEqual(h.externalCalls, [AUTH_URL]);
+    h.advanceTimers(5000);
+    assert.deepEqual(h.externalCalls, [AUTH_URL]);
+    assert.equal(h.timers.size, 0);
+  }
+});
+
+test('Chrome URL handoff with a zero exit is successful without default fallback', async () => {
+  const h = harness({ platform: 'linux', browserBackend: chromeBrowser() });
+  const opened = h.invoke('openAuthUrl', AUTH_URL);
+  h.spawnCalls[0].child.emit('spawn');
+  h.spawnCalls[0].child.emit('exit', 0, null);
+  assert.equal(await opened, true);
+  assert.deepEqual(h.externalCalls, []);
+  assert.equal(h.timers.size, 0);
+});
+
+test('missing Chrome, synchronous launch failure, spawn error and missing spawn confirmation fall back', async () => {
+  for (const failure of ['missing', 'throw', 'error', 'timeout']) {
+    const browserBackend = failure === 'missing' ? {} : chromeBrowser(failure === 'throw' ? { spawn() { throw new Error('launch denied'); } } : {});
+    const h = harness({ platform: 'linux', browserBackend });
+    const opened = h.invoke('openAuthUrl', AUTH_URL);
+    if (failure === 'error') h.spawnCalls[0].child.emit('error', new Error('ENOENT'));
+    if (failure === 'timeout') h.advanceTimers(1000);
+    assert.equal(await opened, false);
+    assert.deepEqual(h.externalCalls, [AUTH_URL]);
+    assert.equal(h.timers.size, 0);
+  }
+});
+
+test('auth browser validates URLs before launching and reports explicit default-browser failures', async () => {
+  const h = harness({ browserBackend: { openExternal() { throw new Error('no browser available'); } } });
+  for (const url of ['http://github.com/login/device', 'https://example.com/', 'https://codeforces.com/']) {
+    await assert.rejects(h.invoke('openAuthUrl', url), /仅允许/);
+  }
+  assert.deepEqual(h.externalCalls, []);
+  assert.equal(h.spawnCalls.length, 0);
+  await assert.rejects(h.invoke('openAuthUrl', AUTH_URL), /no browser available/);
+});
+
+test('automatic browser failures preserve the device code and keep polling through authorization success', async () => {
+  let polls = 0;
+  const h = harness({ account: null, platform: 'linux',
+    browserBackend: chromeBrowser({ openExternal() { throw new Error('no default browser'); } }),
+    networkBackend: async url => ({ ok: true, json: async () => String(url).endsWith('/device/code')
+      ? { user_code: 'ABCD-1234', verification_uri: AUTH_URL, device_code: 'device-code', expires_in: 60, interval: 5 }
+      : ++polls === 1 ? { error: 'authorization_pending' } : { access_token: 'NEW_TEST_TOKEN' } })
+  });
+  const login = h.invoke('login');
+  await new Promise(setImmediate);
+  assert.deepEqual(h.windows[0].sent, [['auth-progress', { userCode: 'ABCD-1234', url: AUTH_URL, expiresIn: 60 }]]);
+  h.spawnCalls[0].child.emit('spawn');
+  h.spawnCalls[0].child.emit('exit', 1, null);
+  await new Promise(setImmediate);
+  assert.deepEqual(h.externalCalls, [AUTH_URL]);
+  assert.equal(polls, 0);
+  h.advanceTimers(5000);
+  await new Promise(setImmediate);
+  assert.equal(polls, 1, 'browser failure must not abort polling');
+  h.advanceTimers(5000);
+  const account = await login;
+  assert.equal(polls, 2);
+  assert.equal(account.login, 'alice');
+  assert.equal((await h.invoke('bootstrap')).account.login, 'alice');
+  assert.ok(h.stored('auth.json').encrypted, 'successful device authorization is persisted');
+  const request = h.networkCalls.find(call => call.url.endsWith('/oauth/access_token'));
+  assert.equal(JSON.parse(request.options.body).device_code, 'device-code');
+});
+
+test('formatter uses each supported language and aliases, including TypeScript, with real offline engines', async () => {
+  const h = harness();
+  const cases = [
+    { aliases: ['cpp', 'c++'], source: 'int main(){return 0;}', expected: 'int main() {\n    return 0;\n}' },
+    { aliases: ['c'], source: 'int main(){return 0;}' },
+    { aliases: ['java'], source: 'class Main{public static void main(String[] args){int x=1;}}' },
+    { aliases: ['javascript', 'js'], source: 'const x={a:1,b:2};' },
+    { aliases: ['typescript', 'ts', ' TS '], source: 'const value:{count:number}={count:1};', expected: 'const value: {count: number} = {\n    count: 1\n};' },
+    { aliases: ['csharp', 'cs', 'c#'], source: 'class Main{static void Main(){int x=1;}}' },
+    { aliases: ['objectivec', 'objc', 'objective-c'], source: '@interface Foo:NSObject\n-(void)bar;\n@end' },
+    { aliases: ['python', 'py'], source: 'def f(x):\n return [x,1,2]', expected: 'def f(x):\n    return [x, 1, 2]\n' }
+  ];
+  for (const { aliases, source, expected } of cases) {
+    let canonical;
+    for (const alias of aliases) {
+      const result = await h.invoke('formatCode', source, alias);
+      assert.equal(result.error, undefined, `${alias}: ${result.error}`);
+      assert.equal(typeof result.code, 'string');
+      assert.notEqual(result.code, source, `${alias} must actually format the fixture`);
+      if (canonical === undefined) canonical = result.code;
+      assert.equal(result.code, canonical, `${alias} must use the same language as its canonical name`);
+      if (expected) assert.equal(result.code, expected);
+      assert.deepEqual(await h.invoke('formatCode', result.code, alias), result, `${alias} formatting is stable`);
+    }
+  }
+});
+
+test('formatter refuses oversized code before running either WASM engine and preserves the source', async () => {
+  const h = harness(), source = 'x'.repeat(200001);
+  for (const language of ['cpp', 'python', 'typescript']) {
+    const result = await h.invoke('formatCode', source, language);
+    assert.equal(result.code, source);
+    assert.match(result.error, /代码过长.*200000/);
+  }
+  const boundary = await h.invoke('formatCode', ' '.repeat(200000), 'cpp');
+  assert.equal(boundary.error, undefined, 'the documented maximum is inclusive');
+});
+
+test('unsupported and missing formatter languages return errors while preserving the original source', async () => {
+  const h = harness(), source = 'int main(){return 0;}';
+  for (const language of ['', null, undefined, 'text', 'go', 'rust', 'shell', 'toString', '__proto__']) {
+    const result = await h.invoke('formatCode', source, language);
+    assert.equal(result.code, source);
+    assert.match(result.error, /不支持|未能识别/, `expected language error for ${language}`);
+  }
+});
 
 test('Issue deletion rejects foreign repositories and cleans only selected discussion cache after confirmed remote success', async () => {
   const h = harness({ files: { 'cache.json': { repo: REPO, records: [documentRecord(), issueRecord()], issues: [issueRecord(), issueRecord({number:8,id:'issue:8'})] }, 'local.json': personal([localRecord()]) }, backend: { deleteIssue: async r => ({id:`issue:${r.number}`,number:r.number,repo:REPO,deleted:true}) } });
