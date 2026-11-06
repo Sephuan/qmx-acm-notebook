@@ -18,14 +18,17 @@ const { chromium } = require('playwright');
       let account = { id: 101, login: 'same-name', name: 'Same Name' };
       const documentRecord = { id: 'document:docs/original.md', kind: 'document', path: 'docs/original.md', sha: 'original-sha', repo, authorId: 101, author: 'Same Name', title: 'Owned formal document', body: '## Full raw body\n\nOriginal **Markdown**', platform: 'CF', rating: 1900, luoguDifficulty: '提高', problemUrl: 'https://example.com/problem', updatedAt: '2026-01-01' };
       const fixture = window.fixture = {
-        docs: [documentRecord], calls: [], failSave: false,
+        docs: [documentRecord], calls: [], failSave: false, authUrls: [],
         local: { records: [
           { id: 'legacy-foreign-id', clientId: 'foreign-client', kind: 'local', ownerId: '202', title: 'Foreign private local', body: 'private', problemUrl: 'https://example.com/foreign' },
           { id: 'legacy-unbound-id', kind: 'local', ownerId: null, title: 'Unbound existing local', body: 'unbound', problemUrl: 'https://example.com/free' },
           { id: documentRecord.id, kind: 'document', ...documentRecord, title: 'STALE LOCAL COPY' }
         ], favorites: ['legacy-unbound-id'], mastery: { 'legacy-unbound-id': 'mastered' }, draft: {} }
       };
-      const payload = () => structuredClone({ records: fixture.docs, issues: [{ id: 'issue:1', kind: 'issue', number: 1, repo, title: 'Existing discussion', body: 'Discussion' }], account, permissions: { repo, push: true, admin: false }, settings: { repo, autoSync: false }, local: fixture.local });
+      const payload = () => structuredClone({ records: fixture.docs, issues: [{ id: 'issue:1', kind: 'issue', number: 1, repo, title: 'Existing discussion', body: 'Discussion' }], account, authStatus: { status: fixture.authStatus || (account ? 'verified' : 'anonymous') }, permissions: { repo, push: true, admin: false }, settings: { repo, autoSync: false }, local: fixture.local });
+      fixture.payload = payload;
+      fixture.getAccount = () => account;
+      fixture.setAccount = value => { account = value; };
       window.notebook = {
         bootstrap: async () => payload(), sync: async () => payload(),
         updateLocal: async local => { fixture.calls.push({ method: 'updateLocal', local: structuredClone(local) }); fixture.local = structuredClone(local); },
@@ -39,8 +42,9 @@ const { chromium } = require('playwright');
         deleteDocument: async input => { fixture.calls.push({ method: 'deleteDocument', input }); fixture.docs = fixture.docs.filter(item => item.path !== input.path); return { deleted: true }; },
         logout: async () => { account = null; },
         login: async () => { account = { id: 202, login: 'same-name', name: 'Same Name' }; return account; },
-        refreshAccount: async () => payload(), getComments: async () => [], openExternal: async () => {}
+        refreshAccount: async () => payload(), getComments: async () => [], openExternal: async () => {}, openAuthUrl: async url => { fixture.authUrls.push(url); }
       };
+      window.notebook.onAuthProgress = callback => { fixture.authProgress = callback; return () => {}; };
     });
     await page.goto(pathToFileURL(path.resolve(__dirname, '../ui/index.html')).href);
     await page.waitForSelector('.record-card');
@@ -168,7 +172,123 @@ const { chromium } = require('playwright');
     await page.click('[data-close="account-dialog"]'); await page.click('[data-view="mine"]');
     assert.match(await page.locator('#record-list').innerText(), /Foreign private local/);
     assert.doesNotMatch(await page.locator('#record-list').innerText(), /Unbound existing local/, 'failed upload must keep confirmed ownership after account switch');
+
+    // Anonymous quota exhaustion offers the existing device-flow login and retries the pull after authorizing.
+    await page.click('#account-button');
+    await page.click('#account-logout');
+    await page.waitForFunction(() => document.querySelector('#account-details').textContent.includes('未登录'));
+    await page.click('[data-close="account-dialog"]');
+    await page.evaluate(() => {
+      fixture.loginCalls = 0;
+      fixture.syncCalls = 0;
+      window.notebook.sync = async () => { fixture.syncCalls++; throw new Error('GitHub 请求额度已用完，预计 20:16:57 恢复，缓存仍可使用'); };
+    });
+    await page.click('#sync-button');
+    await page.waitForSelector('#banner-login-button');
+    assert.match(await page.locator('#status-banner').innerText(), /登录 GitHub 后，同步额度/);
+    assert.equal(await page.locator('#account-caption').innerText(), '未登录 · 点此登录提升额度');
+    // The whole sidebar account row is the login target now, not just the small arrow.
+    await page.click('.account-avatar');
+    await page.waitForSelector('#account-dialog[open]');
+    await page.click('[data-close="account-dialog"]');
+    await page.evaluate(() => {
+      window.notebook.login = async () => { fixture.loginCalls++; fixture.setAccount({ id: 303, login: 'rate-limited-user', name: 'Rate Limited' }); };
+      window.notebook.sync = async () => {
+        fixture.syncCalls++;
+        if (!fixture.getAccount()) throw new Error('GitHub 请求额度已用完，预计 20:16:57 恢复，缓存仍可使用');
+        return fixture.payload();
+      };
+    });
+    await page.click('#banner-login-button');
+    await page.waitForFunction(() => fixture.loginCalls === 1);
+    await page.waitForFunction(() => fixture.syncCalls >= 2);
+    await page.waitForFunction(() => document.querySelector('#status-banner').hidden);
+    assert.match(await page.locator('#account-name').innerText(), /Rate Limited/);
+
+    // Logging in from the account dialog retries the blocked pull too.
+    await page.click('#account-button');
+    await page.click('#account-logout');
+    await page.waitForFunction(() => document.querySelector('#account-details').textContent.includes('未登录'));
+    await page.click('[data-close="account-dialog"]');
+    await page.evaluate(() => {
+      fixture.loginCalls = 0;
+      fixture.syncCalls = 0;
+      window.notebook.sync = async () => { fixture.syncCalls++; throw new Error('GitHub 请求额度已用完，预计 20:16:57 恢复，缓存仍可使用'); };
+    });
+    await page.click('#sync-button');
+    await page.waitForSelector('#banner-login-button');
+    await page.evaluate(() => {
+      window.notebook.login = async () => { fixture.loginCalls++; fixture.setAccount({ id: 404, login: 'dialog-user', name: 'Dialog User' }); };
+      window.notebook.sync = async () => {
+        fixture.syncCalls++;
+        if (!fixture.getAccount()) throw new Error('GitHub 请求额度已用完，预计 20:16:57 恢复，缓存仍可使用');
+        return fixture.payload();
+      };
+    });
+    await page.click('#account-button');
+    await page.click('#account-login');
+    await page.waitForFunction(() => fixture.loginCalls === 1);
+    await page.waitForFunction(() => fixture.syncCalls >= 2);
+    await page.waitForFunction(() => document.querySelector('#status-banner').hidden);
+    assert.match(await page.locator('#account-name').innerText(), /Dialog User/);
+    await page.click('[data-close="account-dialog"]');
+
+    // An expired token retains identity but must still offer reauthorization and retry the anonymous pull.
+    await page.evaluate(() => {
+      fixture.authStatus = 'expired'; fixture.loginCalls = 0; fixture.syncCalls = 0;
+      window.notebook.sync = async () => { fixture.syncCalls++; if (fixture.authStatus === 'expired') throw new Error('GitHub 请求额度已用完'); return fixture.payload(); };
+      window.notebook.login = async () => { fixture.loginCalls++; fixture.authStatus = 'verified'; };
+    });
+    await page.click('#sync-button');
+    await page.waitForSelector('#banner-login-button');
+    assert.match(await page.locator('#banner-login-button').innerText(), /重新登录/);
+    await page.click('#banner-login-button');
+    await page.waitForFunction(() => fixture.loginCalls === 1 && fixture.syncCalls >= 2 && document.querySelector('#status-banner').hidden);
+    // Recovery can be required even when no network error text exists.
+    await page.evaluate(() => { fixture.authStatus = 'recovery-required'; window.notebook.sync = async () => fixture.payload(); });
+    await page.click('#sync-button');
+    await page.waitForSelector('#banner-login-button');
+    assert.match(await page.locator('#status-banner').innerText(), /授权需要恢复/);
+    await page.evaluate(() => { fixture.authStatus = 'verified'; });
+    await page.click('#sync-button');
+    await page.waitForFunction(() => document.querySelector('#status-banner').hidden);
+
+    // Settings dialog exposes a GitHub login entry that starts the same device flow.
+    await page.click('#settings-button');
+    await page.waitForSelector('#settings-dialog[open]');
+    const loginsBefore = await page.evaluate(() => fixture.loginCalls);
+    await page.click('#settings-login-button');
+    await page.waitForFunction(before => fixture.loginCalls > before, loginsBefore);
+    await page.waitForFunction(() => !document.querySelector('#settings-dialog').open);
+    await page.waitForFunction(() => !document.querySelector('#account-dialog').open);
+
+    // Auth dialog offers a copyable link and a Chrome-preferred open action.
+    await page.click('#account-button');
+    await page.click('#account-logout');
+    await page.waitForFunction(() => document.querySelector('#account-details').textContent.includes('未登录'));
+    await page.click('[data-close="account-dialog"]');
+    await page.evaluate(() => {
+      fixture.authUrls = [];
+      window.notebook.login = () => new Promise(resolve => { fixture.resolveLogin = resolve; });
+    });
+    await page.click('#account-button');
+    await page.click('#account-login');
+    await page.evaluate(() => fixture.authProgress({ userCode: 'TEST-CODE', verificationUri: 'https://github.com/login/device' }));
+    await page.waitForSelector('#auth-copy-button:not([hidden])');
+    assert.equal(await page.locator('#auth-code').innerText(), 'TEST-CODE');
+    assert.equal(await page.locator('#auth-url').innerText(), 'https://github.com/login/device');
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write']);
+    await page.click('#auth-copy-button');
+    assert.equal(await page.evaluate(() => navigator.clipboard.readText()), 'https://github.com/login/device');
+    await page.click('#auth-open-button');
+    assert.deepEqual(await page.evaluate(() => fixture.authUrls), ['https://github.com/login/device']);
+    await page.evaluate(() => { window.notebook.openAuthUrl = async () => { throw new Error('Browser unavailable'); }; });
+    await page.click('#auth-open-button');
+    await page.waitForFunction(() => document.querySelector('#toast').textContent.includes('Browser unavailable'));
+    await page.evaluate(() => fixture.resolveLogin());
+    await page.waitForFunction(() => !document.querySelector('#auth-dialog').open);
+
     assert.deepEqual(errors, []);
-    console.log('UI PASS: local CRUD, legacy IDs, foreign isolation, canonical Markdown, original path/SHA update/delete, failed edit draft, sync deletion, discussion and accounts');
+    console.log('UI PASS: local CRUD, legacy IDs, foreign isolation, canonical Markdown, original path/SHA update/delete, failed edit draft, sync deletion, discussion, accounts and rate-limit login retry');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

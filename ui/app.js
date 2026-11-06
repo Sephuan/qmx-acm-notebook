@@ -6,6 +6,7 @@
   const demo = !bridge;
   const STORAGE = 'acm-notebook.demo.v1';
   const THEME_STORAGE = 'acm-notebook.theme';
+  const SIDEBAR_STORAGE = 'acm-notebook.sidebar';
   const stateLabels = { unreviewed: '待复习', reviewing: '复习中', mastered: '已掌握' };
   const views = {
     public: ['公共题库', '在他人的思路里，找到自己的突破口。', 'A LITTLE BETTER, EVERY DAY'],
@@ -68,21 +69,47 @@
     s.local = normalizeLocal(payload.local);
     s.account = payload.account || null; s.lastSync = payload.lastSync || null; s.error = payload.error ? errorMessage(payload.error) : '';
     applyTheme(s.settings.theme || readTheme());
+    applyCodeSettings();
   }
   function readTheme() { try { return localStorage.getItem(THEME_STORAGE) || 'light'; } catch (_) { return 'light'; } }
   function applyTheme(theme) { theme = ['light', 'dark', 'cards'].includes(theme) ? theme : 'light'; document.body.dataset.theme = theme; $('#theme-select').value = theme; try { localStorage.setItem(THEME_STORAGE, theme); } catch (_) {} }
+  // Anonymous GitHub API is capped at 60 requests/hour; a device-flow login raises it to 5000. These two
+  // helpers keep the banner, sidebar caption, empty state and account recovery on one source of truth.
+  function quotaBlocked() { return !demo && (!s.account || ['anonymous', 'expired', 'recovery-required'].includes(s.authStatus?.status)) && /额度已用完|rate limit/i.test(s.error || ''); }
+  function reauthNeeded() { return !demo && (['expired', 'recovery-required'].includes(s.authStatus?.status) || /登录已失效|重新授权|请重新登录/i.test(s.error || '')); }
+  let settingsPreview = null;
+  function applyCodeSettings(settings = settingsPreview || s.settings) { const size = Math.round(Number(settings.codeFontSize)); document.body.style.setProperty('--code-font-size', (Number.isFinite(size) && size >= 10 && size <= 18 ? size : 11) + 'px'); }
+  function readSidebar() { try { return localStorage.getItem(SIDEBAR_STORAGE) === 'collapsed'; } catch (_) { return false; } }
+  function applySidebar(collapsed) { document.body.classList.toggle('sidebar-collapsed', !!collapsed); const toggle = $('#sidebar-toggle'); if (toggle) { toggle.title = collapsed ? '展开侧边栏' : '收起侧边栏'; toggle.setAttribute('aria-label', toggle.title); toggle.setAttribute('aria-expanded', collapsed ? 'false' : 'true'); } try { localStorage.setItem(SIDEBAR_STORAGE, collapsed ? 'collapsed' : 'expanded'); } catch (_) {} }
   function updateStatus() {
     $('#demo-label').hidden = !demo;
     $('#sync-status').textContent = s.loading ? '正在载入…' : demo ? '浏览器预览 · 本地保存' : s.lastSync ? `最近同步 ${date(s.lastSync)}` : '尚未同步';
     const offline = !navigator.onLine;
-    $('#status-banner').hidden = !(offline || s.error);
-    $('#status-banner').textContent = offline ? '当前处于离线状态。你仍可浏览已载入的题目、整理收藏和保存本地草稿，联网后可再次同步。' : s.error ? `连接提示：${s.error}。可稍后点击「同步」重试。` : '';
+    const banner = $('#status-banner');
+    banner.replaceChildren();
+    if (offline || s.error || reauthNeeded()) {
+      banner.append(document.createTextNode(offline ? '当前处于离线状态。你仍可浏览已载入的题目、整理收藏和保存本地草稿，联网后可再次同步。' : s.error ? `连接提示：${s.error}。可稍后点击「同步」重试。` : 'GitHub 授权需要恢复。'));
+      // Anonymous sync is limited to 60 requests/hour; a GitHub login raises it to 5000. Offer the
+      // existing device-flow authorization right where the quota runs out, and re-authorize a stale token.
+      const reauth = reauthNeeded();
+      const quota = quotaBlocked();
+      if (!demo && !offline && (reauth || quota)) {
+        banner.append(document.createTextNode(reauth ? ' 请重新登录 GitHub 以恢复同步。' : ' 登录 GitHub 后，同步额度可由每小时 60 次提升至 5000 次。'));
+        const login = button(reauth ? '重新登录 GitHub' : '使用 GitHub 登录', 'button secondary', startLoginFromBanner);
+        login.id = 'banner-login-button';
+        login.disabled = s.busy;
+        banner.append(login);
+      }
+      banner.hidden = false;
+    } else banner.hidden = true;
     const account = s.account;
     $('#account-name').textContent = account?.name || account?.login || account?.username || s.settings.displayName || '本地学习者';
-    $('#account-caption').textContent = s.authStatus?.status === 'expired' ? '授权已过期 · 请重新登录' : s.authStatus?.status === 'recovery-required' ? '凭证恢复失败 · 请重新授权' : s.authStatus?.status === 'unverified' ? '账户尚未验证 · 请联网刷新' : account ? '账户已连接' : demo ? '演示模式 · 数据仅在本机' : '未登录 · 可使用本地错题';
+    $('#account-caption').textContent = s.authStatus?.status === 'expired' ? '授权已过期 · 请重新登录' : s.authStatus?.status === 'recovery-required' ? '凭证恢复失败 · 请重新授权' : s.authStatus?.status === 'unverified' ? '账户尚未验证 · 请联网刷新' : account ? '账户已连接' : demo ? '演示模式 · 数据仅在本机' : quotaBlocked() ? '未登录 · 点此登录提升额度' : '未登录 · 可使用本地错题';
     const avatar = $('.account-avatar'); avatar.replaceChildren();
     if (/^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(account?.avatarData || '')) { const image = element('img'); image.src = account.avatarData; image.alt = ''; avatar.append(image); } else avatar.textContent = String($('#account-name').textContent).slice(0, 1);
-    $('#account-button').title = 'GitHub 账户'; $('#account-button').setAttribute('aria-label', $('#account-button').title);
+    const accountButton = $('#account-button');
+    accountButton.title = account ? 'GitHub 账户' : '登录 GitHub 账户';
+    if (account) accountButton.removeAttribute('aria-label'); else accountButton.setAttribute('aria-label', accountButton.title);
   }
   const facets = { platform: new Set(), tags: new Set(), authors: new Set(), native: new Set() };
   const facetNames = { platform: '平台', tags: '标签', authors: '作者', native: '难度' };
@@ -279,12 +306,133 @@
     });
     if (!items.length) list.append(empty(s.loading ? '正在载入题库' : '这里还没有题目', s.loading ? '等待客户端返回你的学习数据。' : '试试调整筛选，或记下第一道值得回顾的错题。', { label: '清空筛选', fn: clearFilters }));
     const record = items.find(item => key(item) === s.selected);
-    if (record) renderDetail(record); else $('#detail-panel').replaceChildren(empty('给思考留一个位置', s.error ? '客户端连接暂不可用。你可以重试同步，或先保存一道本地错题。' : s.view === 'favorites' ? '点击题目详情中的收藏，把想反复理解的思路留在这里。' : '从左侧选择题目，阅读分析、记录理解，再迈进一步。', { label: '＋ 记一道错题', fn: openSubmit }));
+    if (record) renderDetail(record);
+    else {
+      const quota = quotaBlocked();
+      $('#detail-panel').replaceChildren(empty('给思考留一个位置', quota ? 'GitHub 请求额度已用完，登录 GitHub 账户后即可同步题库，或先保存一道本地错题。' : s.error ? '客户端连接暂不可用。你可以重试同步，或先保存一道本地错题。' : s.view === 'favorites' ? '点击题目详情中的收藏，把想反复理解的思路留在这里。' : '从左侧选择题目，阅读分析、记录理解，再迈进一步。', { label: '＋ 记一道错题', fn: openSubmit }));
+    }
+  }
+  // ----- Code block actions (copy / format) ---------------------------------
+  // DOMPurify forbids <button> in Markdown, so these actions are app chrome created
+  // after sanitizing. The wrapper keeps the buttons anchored while the pre scrolls.
+  const codeLanguageAliases = { 'c++': 'cpp', cc: 'cpp', cxx: 'cpp', hpp: 'cpp', py: 'python', python3: 'python', js: 'javascript', node: 'javascript', nodejs: 'javascript', ts: 'typescript', 'c#': 'csharp', cs: 'csharp', objc: 'objectivec', 'objective-c': 'objectivec', golang: 'go', rs: 'rust', sh: 'bash', shell: 'bash', yml: 'yaml', html: 'markup', xml: 'markup' };
+  const formattableLanguages = new Set(['c', 'cpp', 'java', 'javascript', 'typescript', 'csharp', 'objectivec', 'python']);
+  function normalizeCodeLanguage(language) { const name = String(language || '').toLowerCase(); return codeLanguageAliases[name] || name; }
+  function codeLanguage(pre) {
+    const node = pre.querySelector('code') || pre;
+    const match = /\blanguage-([\w#+.-]+)/i.exec(node.className || '');
+    return normalizeCodeLanguage(match ? match[1] : '');
+  }
+  function codeBlockText(pre) {
+    const code = pre.querySelector('code');
+    if (!code) return pre.textContent || '';
+    // Prism's line-number plugin leaves helper spans inside <code>; clone and drop
+    // them so the clipboard always receives the exact source text.
+    const clone = code.cloneNode(true);
+    $$('.line-numbers-rows, .line-numbers-sizer', clone).forEach(node => node.remove());
+    return clone.textContent || '';
+  }
+  function highlightCodeBlock(code) {
+    const language = codeLanguage(code.parentElement || code);
+    if (language) { Array.from(code.classList).filter(name => /^language-/i.test(name)).forEach(name => code.classList.remove(name)); code.classList.add('language-' + language); }
+    try { window.Prism?.highlightElement(code); } catch (_) { /* Keep plain text if Prism fails. */ }
+  }
+  function announceCodeStatus(pre, message) { const status = pre.closest('.code-block')?.querySelector('.code-status'); if (status) status.textContent = message; }
+  function preserveCodeScroll(pre, mutate) {
+    const scroller = pre.closest('.detail-panel');
+    const outerTop = scroller ? scroller.scrollTop : 0, preTop = pre.scrollTop, preLeft = pre.scrollLeft;
+    mutate();
+    if (scroller) scroller.scrollTop = Math.min(outerTop, Math.max(0, scroller.scrollHeight - scroller.clientHeight));
+    pre.scrollTop = Math.min(preTop, Math.max(0, pre.scrollHeight - pre.clientHeight));
+    pre.scrollLeft = preLeft;
+  }
+  function legacyCopyText(text) {
+    const area = element('textarea', 'clipboard-helper');
+    area.value = text; area.setAttribute('readonly', ''); area.setAttribute('aria-hidden', 'true');
+    document.body.append(area);
+    let ok = false;
+    try { area.focus({ preventScroll: true }); area.select(); ok = document.execCommand('copy'); } catch (_) {}
+    area.remove();
+    return ok;
+  }
+  async function copyCodeBlock(pre, actionButton) {
+    const text = codeBlockText(pre);
+    if (!text) { toast('代码块为空'); return; }
+    let copied = false;
+    try { await navigator.clipboard.writeText(text); copied = true; } catch (_) { copied = legacyCopyText(text); }
+    clearTimeout(actionButton._codeResetTimer);
+    if (copied) {
+      actionButton.textContent = '已复制'; actionButton.setAttribute('aria-label', '已复制');
+      actionButton.classList.add('is-copied'); actionButton.dataset.state = 'copied'; announceCodeStatus(pre, '已复制');
+    } else {
+      actionButton.textContent = '失败'; actionButton.setAttribute('aria-label', '复制失败');
+      actionButton.dataset.state = 'error'; announceCodeStatus(pre, '复制失败，请手动选择代码复制'); toast('复制失败，请手动复制');
+    }
+    actionButton._codeResetTimer = setTimeout(() => {
+      actionButton.textContent = '复制'; actionButton.setAttribute('aria-label', '复制代码');
+      actionButton.classList.remove('is-copied'); delete actionButton.dataset.state; announceCodeStatus(pre, '');
+    }, 1600);
+  }
+  async function formatCodeBlock(pre, actionButton) {
+    if (actionButton.disabled) return;
+    const code = pre.querySelector('code') || pre;
+    const language = codeLanguage(pre), source = codeBlockText(pre);
+    if (!formattableLanguages.has(language)) { toast(language ? `暂不支持 ${language} 代码的格式化` : '未能识别代码语言，无法格式化'); return; }
+    const format = typeof window.notebook?.formatCode === 'function'
+      ? (text, lang) => window.notebook.formatCode(text, lang)
+      : typeof window.formatCode === 'function' ? (text, lang) => Promise.resolve(window.formatCode(text, lang)) : null;
+    if (!format) { toast('格式化功能尚未启用'); return; }
+    actionButton.disabled = true; actionButton.setAttribute('aria-busy', 'true');
+    const original = actionButton.textContent; actionButton.textContent = '格式化中…';
+    try {
+      const result = await format(source, language);
+      if (result?.error) throw new Error(errorMessage(result.error));
+      const formatted = typeof result === 'string' ? result : result?.code;
+      if (typeof formatted !== 'string' || !formatted.trim()) {
+        toast(language ? `暂不支持 ${language} 代码的格式化` : '未能识别代码语言，无法格式化');
+        return;
+      }
+      if (formatted === source) { toast('代码格式已是最新'); return; }
+      preserveCodeScroll(pre, () => { code.textContent = formatted; highlightCodeBlock(code); });
+      toast('已格式化代码块'); announceCodeStatus(pre, '已格式化');
+    } catch (error) { const message = '格式化失败：' + errorMessage(error); toast(message); announceCodeStatus(pre, message); }
+    finally { actionButton.disabled = false; actionButton.removeAttribute('aria-busy'); actionButton.textContent = original; }
+  }
+  function decorateCodeBlocks(container) {
+    $$('pre', container).forEach(pre => {
+      if (pre.closest('.code-block')) return; // idempotent
+      const block = element('div', 'code-block');
+      pre.replaceWith(block); block.append(pre);
+      const actions = element('div', 'code-actions');
+      actions.setAttribute('role', 'group'); actions.setAttribute('aria-label', '代码块操作');
+      const copy = element('button', 'code-action-button', '复制');
+      copy.type = 'button'; copy.dataset.action = 'copy'; copy.title = '复制代码'; copy.setAttribute('aria-label', '复制代码');
+      const format = element('button', 'code-action-button', '格式化');
+      format.type = 'button'; format.dataset.action = 'format'; format.title = '格式化代码'; format.setAttribute('aria-label', '格式化代码');
+      const language = codeLanguage(pre);
+      if (!formattableLanguages.has(language)) { format.disabled = true; format.title = language ? `暂不支持 ${language} 代码的格式化` : '未能识别代码语言，无法格式化'; format.setAttribute('aria-label', format.title); }
+      const status = element('span', 'code-status'); status.setAttribute('role', 'status');
+      append(actions, copy, format, status); block.append(actions);
+    });
+  }
+  function codeBlockClick(event) {
+    if (!(event.target instanceof Element)) return;
+    const actionButton = event.target.closest('.code-action-button');
+    if (!actionButton) return;
+    const pre = actionButton.closest('.code-block')?.querySelector('pre');
+    if (!pre) return;
+    if (actionButton.dataset.action === 'copy') void copyCodeBlock(pre, actionButton);
+    else if (actionButton.dataset.action === 'format') void formatCodeBlock(pre, actionButton);
   }
   function renderMarkdown(container, body) {
     const source = String(body || '还没有题解内容。可以从记录错因开始。');
     if (window.marked && window.DOMPurify) {
-      try { const parse = typeof window.marked.parse === 'function' ? window.marked.parse.bind(window.marked) : window.marked; const safe = window.DOMPurify.sanitize(parse(source), { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button'], FORBID_ATTR: ['style'] }); container.innerHTML = safe; if (window.renderMathInElement) window.renderMathInElement(container, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,trust:false}); container.classList.add('rendered'); $$('a', container).forEach(link => link.addEventListener('click', event => { event.preventDefault(); openExternal(link.getAttribute('href')); })); return; } catch (_) { /* Plain text is the secure fallback. */ }
+      try { const parse = typeof window.marked.parse === 'function' ? window.marked.parse.bind(window.marked) : window.marked; const safe = window.DOMPurify.sanitize(parse(source), { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button'], FORBID_ATTR: ['style'] }); container.innerHTML = safe; if (window.renderMathInElement) window.renderMathInElement(container, {delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false,trust:false});
+        // Prism runs after sanitizing and reads textContent only, so highlighting cannot inject markup.
+        $$('pre code', container).forEach(code => { if (code.parentElement && (settingsPreview || s.settings).codeLineNumbers) code.parentElement.classList.add('line-numbers'); highlightCodeBlock(code); });
+        // Decorate after Prism: the buttons are app chrome, not sanitized Markdown.
+        decorateCodeBlocks(container);
+        container.classList.add('rendered'); $$('a', container).forEach(link => link.addEventListener('click', event => { event.preventDefault(); openExternal(link.getAttribute('href')); })); return; } catch (_) { /* Plain text is the secure fallback. */ }
     }
     container.textContent = source;
   }
@@ -340,7 +488,7 @@
   function setBusy(value) {
     if (!value && updateLockedControls) { updateLockedControls.forEach(([node, disabled]) => { node.disabled = disabled; }); updateLockedControls = null; }
     s.busy = value;
-    ['sync-button', 'account-button', 'settings-button', 'theme-select', 'submit-button', 'save-local-button', 'publish-button', 'account-login', 'account-logout', 'account-switch', 'account-refresh'].forEach(id => { const node = document.getElementById(id); if (node) node.disabled = value; });
+    ['sync-button', 'account-button', 'settings-button', 'theme-select', 'submit-button', 'save-local-button', 'publish-button', 'account-login', 'account-logout', 'account-switch', 'account-refresh', 'banner-login-button'].forEach(id => { const node = document.getElementById(id); if (node) node.disabled = value; });
     $$('[data-close], #settings-form input, #settings-form select, #settings-form button').forEach(node => { node.disabled = value; });
     $$('#submit-form input, #submit-form textarea').forEach(node => { node.readOnly = value; });
     $$('#submit-form select, #editor-difficulty-picker select, #editor-difficulty-picker button').forEach(node => { node.disabled = value; });
@@ -567,6 +715,7 @@
   $$('[data-rating]').forEach(node=>node.addEventListener('click',()=>{const [min,max]=node.dataset.rating.split(',');$('#rating-min').value=min;$('#rating-max').value=max;updateFacetCounts();render();}));
   $('#clear-difficulty').addEventListener('click',()=>{clearDifficulty();render();});
   document.addEventListener('click',event=>{ $$('.facet details[open],details.facet[open]').forEach(node=>{if(!node.contains(event.target))node.open=false;}); });
+  document.addEventListener('click', codeBlockClick);
   document.addEventListener('keydown',event=>{if(event.key==='Escape')$$('.facet details[open],details.facet[open]').forEach(node=>node.open=false);});
   $('#submit-button').addEventListener('click', () => openSubmit()); $('#sync-button').addEventListener('click', sync);
   $$('dialog').forEach(dialog => dialog.addEventListener('cancel', event => { if (s.busy) event.preventDefault(); }));
@@ -576,8 +725,18 @@
   $('#submit-form').elements.platform.addEventListener('change', () => { const form = $('#submit-form'); form.elements.rating.value = ''; form.elements.difficulty.value = ''; setEditorPlatform(form.elements.platform.value, false); });
   $('#save-local-button').addEventListener('click', () => saveRecord(false)); $('#submit-form').addEventListener('submit', event => { event.preventDefault(); saveRecord(true); });
   $('#theme-select').addEventListener('change', async event => { const previous = { ...s.settings }; s.settings.theme = event.target.value; applyTheme(s.settings.theme); try { if (demo) writeDemo(); else await call('saveSettings', { ...s.settings }); } catch (error) { s.settings = previous; toast(`当前风格已预览，设置未保存：${errorMessage(error)}`); } });
-  $('#settings-button').addEventListener('click', () => { if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; } const form = $('#settings-form'); form.elements.theme.value = document.body.dataset.theme; form.elements.repo.value = s.settings.repo || 'qmx-acm-data/2026'; form.elements.clientId.value = s.settings.clientId || ''; form.elements.displayName.value = s.settings.displayName || ''; form.elements.autoSync.checked = s.settings.autoSync !== false; $('#settings-dialog').showModal(); });
-  $('#settings-form').addEventListener('submit', async event => { event.preventDefault(); const form = event.currentTarget; const settings = { ...s.settings, theme: form.elements.theme.value, repo: form.elements.repo.value.trim() || 'qmx-acm-data/2026', clientId: form.elements.clientId.value.trim(), displayName: form.elements.displayName.value.trim(), autoSync: form.elements.autoSync.checked }; const control = $('button[type="submit"]', form); if (s.busy) return; setBusy(true); try { if (!demo) { await call('saveSettings', settings); applyPayload(await call('bootstrap')); } else s.settings = settings; applyTheme(settings.theme); writeDemo(); $('#settings-dialog').close(); refreshFilters(); render(); toast('设置已保存'); } catch (error) { toast(errorMessage(error)); } finally { setBusy(false); } });
+  $('#settings-button').addEventListener('click', () => { if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; } settingsPreview = { ...s.settings, theme: document.body.dataset.theme }; const form = $('#settings-form'); form.elements.theme.value = settingsPreview.theme; form.elements.repo.value = s.settings.repo || 'qmx-acm-data/2026'; form.elements.clientId.value = s.settings.clientId || ''; form.elements.displayName.value = s.settings.displayName || ''; form.elements.autoSync.checked = s.settings.autoSync !== false; form.elements.codeFontSize.value = String(s.settings.codeFontSize || 11); $('#code-font-size-value').textContent = (s.settings.codeFontSize || 11) + 'px'; form.elements.codeLineNumbers.checked = s.settings.codeLineNumbers === true; $('#settings-dialog').showModal(); });
+  $('#settings-form').addEventListener('submit', async event => { event.preventDefault(); const form = event.currentTarget; const settings = { ...s.settings, theme: form.elements.theme.value, repo: form.elements.repo.value.trim() || 'qmx-acm-data/2026', clientId: form.elements.clientId.value.trim(), displayName: form.elements.displayName.value.trim(), autoSync: form.elements.autoSync.checked, codeFontSize: Number(form.elements.codeFontSize.value), codeLineNumbers: form.elements.codeLineNumbers.checked }; if (s.busy) return; setBusy(true); try { if (!demo) { await call('saveSettings', settings); applyPayload(await call('bootstrap')); } else { s.settings = settings; } settingsPreview = null; applyCodeSettings(); applyTheme(settings.theme); writeDemo(); $('#settings-dialog').close(); refreshFilters(); render(); toast('设置已保存'); } catch (error) { toast(errorMessage(error)); } finally { setBusy(false); } });
+  $('#settings-form').elements.codeFontSize.addEventListener('input', () => { if (!settingsPreview) return; const size = Number($('#settings-form').elements.codeFontSize.value); settingsPreview.codeFontSize = size; applyCodeSettings(); $('#code-font-size-value').textContent = size + 'px'; });
+  $('#settings-form').elements.codeLineNumbers.addEventListener('change', () => { if (!settingsPreview) return; settingsPreview.codeLineNumbers = $('#settings-form').elements.codeLineNumbers.checked; render(); });
+  $('#settings-dialog').addEventListener('close', () => { if (!settingsPreview) return; settingsPreview = null; applyCodeSettings(); render(); });
+  $('#sidebar-toggle').addEventListener('click', () => applySidebar(!document.body.classList.contains('sidebar-collapsed')));
+  $('#settings-login-button').addEventListener('click', async () => {
+    if (s.busy) return;
+    if (demo) { toast('浏览器演示不连接 GitHub，账户功能请在桌面客户端使用'); return; }
+    $('#settings-dialog').close();
+    await startLoginFromBanner();
+  });
   function renderUpdate() {
     $('#app-version').textContent = s.appVersion || (demo ? '浏览器预览（非桌面客户端）' : '尚未获取');
     const update = s.update || {};
@@ -673,20 +832,41 @@
     $('#account-login').hidden = !!s.account && !['expired','recovery-required'].includes(s.authStatus?.status); ['account-switch', 'account-logout', 'account-refresh'].forEach(id => { document.getElementById(id).hidden = !s.account; });
   }
   $('#account-button').addEventListener('click', () => { if (s.busy) return; if ($('#submit-dialog').open) { toast('请先完成或关闭编辑，草稿不会跨账户恢复'); return; } renderAccount(); $('#account-error').hidden = true; $('#account-dialog').showModal(); });
+  async function startLoginFromBanner() {
+    if (s.busy || demo) return;
+    renderAccount();
+    $('#account-error').hidden = true;
+    $('#account-dialog').showModal();
+    const ok = await accountAction('login');
+    if (ok) $('#account-dialog').close();
+  }
   async function accountAction(action) {
-    if (s.busy) return;
-    if (demo) { $('#account-error').hidden = false; $('#account-error').textContent = '浏览器演示不连接 GitHub，账户功能请在桌面客户端使用'; return; }
+    if (s.busy) return false;
+    if (demo) { $('#account-error').hidden = false; $('#account-error').textContent = '浏览器演示不连接 GitHub，账户功能请在桌面客户端使用'; return false; }
     setBusy(true); $('#account-error').hidden = true;
+    // Both the banner and the account dialog must retry the pull that was blocked, not just the banner path.
+    const resumeSync = action === 'login' || action === 'switch' ? reauthNeeded() || quotaBlocked() : false;
+    const previousError = s.error;
+    let loggedIn = false;
     try {
       if (action === 'refresh') applyPayload(await call('refreshAccount'));
       else {
         if (action === 'logout' || action === 'switch') await call('logout');
-        if (action === 'login' || action === 'switch') { $('#auth-message').textContent = '正在请求设备授权…'; $('#auth-code').textContent = ''; $('#auth-open-button').hidden = true; $('#auth-dialog').showModal(); await call('login'); }
+        if (action === 'login' || action === 'switch') { $('#auth-message').textContent = '正在请求设备授权…'; $('#auth-code').textContent = ''; $('#auth-open-button').hidden = true; $('#auth-copy-button').hidden = true; $('#auth-dialog').showModal(); await call('login'); loggedIn = true; }
         applyPayload(await call('bootstrap'));
       }
       s.comments.clear(); refreshFilters(); render(); renderAccount(); toast('账户与仓库权限已更新');
-    } catch (error) { $('#account-error').hidden = false; $('#account-error').textContent = errorMessage(error); try { applyPayload(await call('bootstrap')); refreshFilters(); render(); renderAccount(); } catch (_) {} }
-    finally { $('#auth-dialog').close(); setBusy(false); }
+      return true;
+    } catch (error) {
+      $('#account-error').hidden = false; $('#account-error').textContent = errorMessage(error);
+      try { applyPayload(await call('bootstrap')); refreshFilters(); render(); renderAccount(); } catch (_) {}
+      // A cancelled or failed device flow must not silently clear the banner that offered the login.
+      if (!loggedIn && previousError && (action === 'login' || action === 'switch')) { s.error = previousError; updateStatus(); }
+      return false;
+    } finally {
+      $('#auth-dialog').close(); setBusy(false);
+      if (loggedIn && resumeSync) void sync();
+    }
   }
   ['login', 'logout', 'switch', 'refresh'].forEach(action => { document.getElementById(`account-${action}`).addEventListener('click', () => accountAction(action)); });
   let authUrl = '';
@@ -695,9 +875,17 @@
     $('#auth-code').textContent = progress?.userCode || progress?.user_code || '';
     authUrl = progress?.verificationUri || progress?.verification_uri || progress?.verificationUrl || progress?.url || '';
     $('#auth-open-button').hidden = !authUrl;
+    $('#auth-copy-button').hidden = !authUrl;
+    $('#auth-url').textContent = authUrl;
+    $('#auth-url').hidden = !authUrl;
     if (!$('#auth-dialog').open) $('#auth-dialog').showModal();
   });
-  $('#auth-open-button').addEventListener('click', () => openExternal(authUrl));
+  $('#auth-open-button').addEventListener('click', async () => { if (!authUrl) return; try { await call('openAuthUrl', authUrl); } catch (error) { toast(`无法打开浏览器：${errorMessage(error)}。可复制下方链接手动授权`); } });
+  $('#auth-copy-button').addEventListener('click', async () => {
+    if (!authUrl) return;
+    try { await navigator.clipboard.writeText(authUrl); toast('授权链接已复制，可粘贴到浏览器打开'); }
+    catch (_) { toast('复制失败，请手动复制链接'); }
+  });
   async function cancelLogin() { try { if (!demo) await call('cancelLogin'); } catch (error) { toast(errorMessage(error)); } $('#auth-dialog').close(); }
   $('#cancel-login-button').addEventListener('click', cancelLogin);
   $('#auth-dialog').addEventListener('cancel', event => { event.preventDefault(); cancelLogin(); });
@@ -713,8 +901,8 @@
   window.addEventListener('online', updateStatus); window.addEventListener('offline', updateStatus);
   document.addEventListener('keydown', event => { if (event.key === '/' && !event.ctrlKey && !event.metaKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) && !document.querySelector('dialog[open]')) { event.preventDefault(); if (s.view === 'stats') { s.view = 'public'; render(); } $('#search-input').focus(); } });
   async function bootstrap() {
-    applyTheme(readTheme()); render();
-    if (demo) { s.permissions = { repo: 'qmx-acm-data/2026', push: false, admin: false }; s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo })); s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo })); s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} }); s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record); s.settings = cached?.settings || {}; applyTheme(s.settings.theme || readTheme()); }
+    applyTheme(readTheme()); applySidebar(readSidebar()); render();
+    if (demo) { s.permissions = { repo: 'qmx-acm-data/2026', push: false, admin: false }; s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo })); s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo })); s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} }); s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record); s.settings = cached?.settings || {}; applyTheme(s.settings.theme || readTheme()); applyCodeSettings(); }
     else { try { applyPayload(await call('bootstrap')); } catch (error) { s.error = errorMessage(error); } }
     if (!demo && !s.catalogFromPayload && typeof bridge?.getTagCatalog === 'function') { try { const catalog = await call('getTagCatalog'); if (Array.isArray(catalog?.categories)) s.tagCatalog = catalog; } catch (_) { /* Presets remain available offline. */ } }
     s.loading = false; refreshFilters(); render();

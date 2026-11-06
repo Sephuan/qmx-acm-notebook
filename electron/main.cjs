@@ -12,6 +12,33 @@ const APP_VERSION = require('../package.json').version;
 configureUserData(app);
 const networkFetch = (url, options) => net.fetch(url, { ...options, bypassCustomProtocolHandlers: true });
 let auth;
+// Lazy offline code formatter (WASM in the main process; the renderer CSP blocks wasm).
+// clang-format covers C/C++/Java/JS/TS, Ruff covers Python. Loaded on first use.
+let clangFormatterPromise, ruffWorkspacePromise;
+async function formatCode(source, lang) {
+  const text = String(source == null ? '' : source);
+  if (text.length > 200000) throw new Error('代码过长，格式化仅支持不超过 200000 个字符');
+  const language = String(lang || '').trim().toLowerCase();
+  if (language === 'python' || language === 'py') {
+    if (!ruffWorkspacePromise) ruffWorkspacePromise = Promise.resolve().then(() => {
+      const { Workspace, PositionEncoding } = require('@astral-sh/ruff-wasm-nodejs');
+      return new Workspace({}, PositionEncoding.UTF16);
+    });
+    return { code: (await ruffWorkspacePromise).format(text) };
+  }
+  const filenames = new Map([
+    ['cpp', 'main.cpp'], ['c++', 'main.cpp'], ['c', 'main.c'], ['java', 'Main.java'],
+    ['javascript', 'main.js'], ['js', 'main.js'], ['typescript', 'main.ts'], ['ts', 'main.ts'],
+    ['cs', 'main.cs'], ['csharp', 'main.cs'], ['c#', 'main.cs'],
+    ['objc', 'main.m'], ['objectivec', 'main.m'], ['objective-c', 'main.m']
+  ]);
+  const filename = filenames.get(language);
+  if (!filename) throw new Error(language ? `暂不支持 ${language} 代码的格式化` : '未能识别代码语言，无法格式化');
+  if (!clangFormatterPromise) clangFormatterPromise = import('@wasm-fmt/clang-format');
+  const { format } = await clangFormatterPromise;
+  const style = JSON.stringify({ BasedOnStyle: 'Chromium', IndentWidth: 4, ColumnLimit: 100, PointerAlignment: 'Left' });
+  return { code: format(text, filename, style) };
+}
 function authFailure(error, ticket) {
   if (auth.failure(error, ticket)) {
     token = auth.token; account = auth.account;
@@ -19,6 +46,12 @@ function authFailure(error, ticket) {
   }
 }
 app.disableHardwareAcceleration();
+// On Linux desktops without a recognized keyring (niri, sway, ...), Chromium picks the plaintext
+// backend and safeStorage reports unavailable, which blocks login persistence. Prefer libsecret so a
+// running secret service (gnome-keyring/KWallet) can be used; GNOME and KDE keep native detection.
+if (process.platform === 'linux' && !app.commandLine.hasSwitch('password-store') && !/gnome|kde/i.test(process.env.XDG_CURRENT_DESKTOP || '')) {
+  app.commandLine.appendSwitch('password-store', 'gnome-libsecret');
+}
 let win, dir, token = '', account = null, permissions = null;
 let loginGeneration = 0, writeBusy = false, syncBusy = false, updateBusy = false, installing = false, updater;
 function processEnvForInstaller() {
@@ -74,10 +107,54 @@ function state(error) {
     local: local(), error: error || null
   };
 }
-async function external(url) {
+function assertExternal(url) {
   const u = new URL(url);
   if (u.protocol !== 'https:' || !['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com'].includes(u.hostname)) throw new Error('仅允许打开 GitHub 和受支持题目平台的 HTTPS 链接');
+  return u;
+}
+async function external(url) {
+  const u = assertExternal(url);
   await shell.openExternal(u.href);
+}
+// Prefer Chrome for the device-flow page; fall back to the default handler if it is missing or
+// fails during startup. Existing Chrome instances may accept the URL and exit successfully.
+const AUTH_BROWSER_STARTUP_GRACE_MS = 1000;
+function chromePath() {
+  const candidates = process.platform === 'win32'
+    ? [process.env.PROGRAMFILES, process.env['PROGRAMFILES(X86)'], process.env.LOCALAPPDATA].map(base => base && path.join(base, 'Google\\Chrome\\Application\\chrome.exe'))
+    : process.platform === 'darwin'
+      ? ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome']
+      : ['/usr/bin/google-chrome', '/usr/bin/google-chrome-stable', '/usr/bin/chromium', '/usr/bin/chromium-browser'];
+  return candidates.find(candidate => candidate && fs.existsSync(candidate)) || null;
+}
+async function openAuthUrl(url) {
+  const u = assertExternal(url);
+  if (u.hostname !== 'github.com') throw new Error('仅允许打开 GitHub 授权链接');
+  const chrome = chromePath();
+  if (chrome) {
+    const launched = await new Promise(resolve => {
+      let child, timer, settled = false, spawned = false;
+      const finish = success => {
+        if (settled) return;
+        settled = true; clearTimeout(timer);
+        child?.removeListener('spawn', onSpawn);
+        child?.removeListener('exit', onExit);
+        resolve(success);
+      };
+      const onSpawn = () => { spawned = true; child.unref(); };
+      const onExit = (code, signal) => finish(code === 0 && !signal);
+      try { child = spawn(chrome, [u.href], { detached: true, stdio: 'ignore' }); }
+      catch { finish(false); return; }
+      // Keep the one-shot error handler after the grace period to consume late process errors.
+      child.once('error', () => finish(false));
+      child.once('spawn', onSpawn);
+      child.once('exit', onExit);
+      timer = setTimeout(() => finish(spawned), AUTH_BROWSER_STARTUP_GRACE_MS);
+    });
+    if (launched) return true;
+  }
+  await shell.openExternal(u.href);
+  return false;
 }
 function persistAuth(data, ticket) {
   auth.commit(data.token, data.account, ticket);
@@ -127,7 +204,8 @@ async function login() {
   if (gen !== loginGeneration) throw new Error('已取消登录');
   if (code.error) throw new Error(code.error_description || code.error);
   win.webContents.send('auth-progress', { userCode: code.user_code, url: code.verification_uri, expiresIn: code.expires_in });
-  await external(code.verification_uri);
+  // The code/link are already visible, so a failed automatic browser launch must not stop polling.
+  await openAuthUrl(code.verification_uri).catch(() => {});
   let interval = Math.max(5, code.interval || 5) * 1000;
   const deadline = Date.now() + code.expires_in * 1000;
   while (Date.now() < deadline) {
@@ -270,6 +348,12 @@ function setup() {
     if (data.theme !== undefined) next.theme = String(data.theme);
     if (data.displayName !== undefined) next.displayName = String(data.displayName).slice(0, 40);
     if (data.autoSync !== undefined) next.autoSync = !!data.autoSync;
+    if (data.codeFontSize !== undefined) {
+      const size = Math.round(Number(data.codeFontSize));
+      if (!Number.isFinite(size) || size < 10 || size > 18) throw new Error('代码字号需在 10 到 18 之间');
+      next.codeFontSize = size;
+    }
+    if (data.codeLineNumbers !== undefined) next.codeLineNumbers = !!data.codeLineNumbers;
     if (next.repo !== old.repo) permissions = null;
     if (next.clientId !== old.clientId || next.repo !== old.repo) loginGeneration++;
     save('settings.json', next); return state();
@@ -358,6 +442,8 @@ function setup() {
   }));
   handle('getComments', async number => (await client().comments(number)).map(x => ({ id: x.id, body: x.body, author: x.user?.login || '', createdAt: x.created_at, url: x.html_url })));
   handle('openExternal', external);
+  handle('openAuthUrl', openAuthUrl);
+  handle('formatCode', (source, lang) => formatCode(source, lang).catch(error => ({ code: source, error: error.message })));
   handle('exportLocal', async () => {
     const { dialog } = require('electron');
     const result = await dialog.showSaveDialog(win, { defaultPath: '我的题解备份.json', filters: [{ name: 'JSON', extensions: ['json'] }] });
