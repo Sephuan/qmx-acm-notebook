@@ -16,7 +16,7 @@ const { chromium } = require('playwright');
     await page.addInitScript(() => {
       const repo = 'test/notebook';
       let account = { id: 101, login: 'same-name', name: 'Same Name' };
-      const documentRecord = { id: 'document:docs/original.md', kind: 'document', path: 'docs/original.md', sha: 'original-sha', repo, authorId: 101, author: 'Same Name', title: 'Owned formal document', body: '## Full raw body\n\nOriginal **Markdown**', platform: 'CF', rating: 1900, difficulty: 'ABC D', problemUrl: 'https://example.com/problem', updatedAt: '2026-01-01' };
+      const documentRecord = { id: 'document:docs/original.md', kind: 'document', path: 'docs/original.md', sha: 'original-sha', repo, authorId: 101, author: 'Same Name', title: 'Owned formal document', body: '## Full raw body\n\nOriginal **Markdown**', platform: 'CF', rating: 1900, problemUrl: 'https://example.com/problem', updatedAt: '2026-01-01' };
       const fixture = window.fixture = {
         docs: [documentRecord], calls: [], failSave: false,
         local: { records: [
@@ -56,14 +56,20 @@ const { chromium } = require('playwright');
     await page.click('#submit-button');
     await page.fill('[name="url"]', 'https://example.com/local');
     await page.fill('[name="title"]', 'New local CRUD');
-    assert.equal(await page.locator('#editor-difficulty-picker .rating-range').count(), 1, 'Codeforces uses the search-style rating control');
-    await page.fill('#editor-difficulty-picker .rating-range', '1900');
+    assert.equal(await page.locator('#editor-difficulty-picker .rating-range').count(), 1, 'Codeforces has one difficulty value');
+    assert.equal(await page.locator('#editor-difficulty-picker .rating-range').getAttribute('step'), '100', 'Codeforces Rating changes in steps of 100');
+    assert.equal(await page.locator('#editor-difficulty-picker .range-presets, #editor-difficulty-picker .editor-native-difficulty').count(), 0, 'Codeforces has no ranges or second difficulty input');
+    await page.fill('#editor-difficulty-picker .rating-range', '2000');
+    assert.equal(await page.inputValue('[name="difficulty"]'), '', 'Codeforces stores only Rating, with no second native difficulty');
     assert.equal(await page.locator('#editor-difficulty-picker .rating-range').evaluate(node => node.classList.contains('tone-purple')), true, 'Rating keeps the search difficulty color');
+    assert.equal(await page.locator('#editor-difficulty-picker .rating-range').evaluate(node => getComputedStyle(node).fontWeight), '800', 'Rating remains bold like search difficulty controls');
     await page.fill('[name="url"]', 'https://www.luogu.com.cn/problem/P1001');
     await page.locator('[name="title"]').focus();
     assert.equal(await page.inputValue('[name="platform"]'), 'LG', 'URL detection updates the difficulty platform');
     await page.selectOption('#editor-difficulty-picker select[aria-label="洛谷原生难度"]', '提高');
     assert.equal(await page.locator('#editor-difficulty-picker select').evaluate(node => node.classList.contains('tone-cyan')), true, 'Luogu selection uses the native difficulty color');
+    assert.equal(await page.locator('#editor-difficulty-picker select').evaluate(node => getComputedStyle(node).fontWeight), '800', 'Luogu selection remains bold like search difficulty controls');
+    assert.equal(await page.locator('#editor-difficulty-picker input[type="text"]').count(), 0, 'Luogu difficulty cannot be entered as free text');
     const rawBody = '## Untouched raw\n\nA **complete** solution.\n\n```cpp\nint x = 1;\n```';
     await page.fill('#record-body', rawBody);
     await page.click('#save-local-button');
@@ -94,7 +100,7 @@ const { chromium } = require('playwright');
     await page.click('#edit-record-button');
     assert(await page.locator('#save-local-button').isDisabled());
     assert.equal(await page.inputValue('#editor-difficulty-picker .rating-range'), '1900', 'editing restores Codeforces Rating');
-    assert.equal(await page.inputValue('#editor-difficulty-picker input[aria-label="Codeforces 其他原生难度"]'), 'ABC D', 'editing preserves Codeforces native difficulty');
+    assert.equal(await page.inputValue('[name="difficulty"]'), '', 'Codeforces records do not carry a second difficulty value');
     await page.fill('#record-body', '## Edited remote\n\nFull new body');
     await page.evaluate(() => { fixture.failSave = true; });
     await page.click('#publish-button');

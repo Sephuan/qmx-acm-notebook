@@ -347,14 +347,11 @@
     const wrapper = element('div', 'editor-difficulty-controls');
     if (platform === 'CF') {
       const ratingField = element('label', 'range-field'); ratingField.append(element('span', '', 'Codeforces Rating'));
-      const input = element('input', 'rating-range'); input.type = 'number'; input.min = '0'; input.max = '10000'; input.step = '1'; input.placeholder = '未指定'; input.setAttribute('aria-label', 'Codeforces Rating'); input.value = rating.value;
+      const input = element('input', 'rating-range'); input.type = 'number'; input.min = '0'; input.max = '10000'; input.step = '100'; input.placeholder = '未指定'; input.setAttribute('aria-label', 'Codeforces Rating'); input.value = rating.value;
+      native.value = '';
       const color = () => colorRatingInput(input);
-      input.addEventListener('input', () => { rating.value = input.value; color(); }); color(); ratingField.append(input);
-      const presets = element('div', 'range-presets');
-      [['800–1200','800'],['1300–1900','1300'],['2000+','2000']].forEach(([label,value]) => { const option = button(label, '', () => { input.value = value; rating.value = value; input.dispatchEvent(new Event('input', { bubbles: true })); }); option.title = `设置 Codeforces Rating ${value}`; presets.append(option); });
-      const nativeField = element('label', 'editor-native-difficulty'); nativeField.append(element('span', '', '其他原生难度（可选）'));
-      const nativeInput = element('input'); nativeInput.type = 'text'; nativeInput.maxLength = '60'; nativeInput.placeholder = '如 ABC D'; nativeInput.value = native.value; nativeInput.setAttribute('aria-label', 'Codeforces 其他原生难度'); nativeInput.addEventListener('input', () => { native.value = nativeInput.value; }); nativeField.append(nativeInput);
-      wrapper.append(ratingField, presets, nativeField);
+      input.addEventListener('input', () => { rating.value = input.value; native.value = ''; color(); }); color(); ratingField.append(input);
+      wrapper.append(ratingField);
     } else if (platform === 'LG') {
       const select = element('select', 'luogu-range'); select.setAttribute('aria-label', '洛谷原生难度');
       [['','未指定'], ...editorLuoguLevels.map(name => [name,name])].forEach(([value,label], index) => { const option = element('option', index ? `tone-${editorLuoguTones[index - 1]}` : '', label); option.value = value; select.append(option); });
