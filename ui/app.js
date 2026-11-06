@@ -71,18 +71,39 @@
   }
   function readTheme() { try { return localStorage.getItem(THEME_STORAGE) || 'light'; } catch (_) { return 'light'; } }
   function applyTheme(theme) { theme = ['light', 'dark', 'cards'].includes(theme) ? theme : 'light'; document.body.dataset.theme = theme; $('#theme-select').value = theme; try { localStorage.setItem(THEME_STORAGE, theme); } catch (_) {} }
+  // Anonymous GitHub API is capped at 60 requests/hour; a device-flow login raises it to 5000. These two
+  // helpers keep the banner, sidebar caption, empty state and account recovery on one source of truth.
+  function quotaBlocked() { return !demo && !s.account && /额度已用完|rate limit/i.test(s.error || ''); }
+  function reauthNeeded() { return !demo && /登录已失效|重新授权|请重新登录/i.test(s.error || ''); }
   function updateStatus() {
     $('#demo-label').hidden = !demo;
     $('#sync-status').textContent = s.loading ? '正在载入…' : demo ? '浏览器预览 · 本地保存' : s.lastSync ? `最近同步 ${date(s.lastSync)}` : '尚未同步';
     const offline = !navigator.onLine;
-    $('#status-banner').hidden = !(offline || s.error);
-    $('#status-banner').textContent = offline ? '当前处于离线状态。你仍可浏览已载入的题目、整理收藏和保存本地草稿，联网后可再次同步。' : s.error ? `连接提示：${s.error}。可稍后点击「同步」重试。` : '';
+    const banner = $('#status-banner');
+    banner.replaceChildren();
+    if (offline || s.error) {
+      banner.append(document.createTextNode(offline ? '当前处于离线状态。你仍可浏览已载入的题目、整理收藏和保存本地草稿，联网后可再次同步。' : `连接提示：${s.error}。可稍后点击「同步」重试。`));
+      // Anonymous sync is limited to 60 requests/hour; a GitHub login raises it to 5000. Offer the
+      // existing device-flow authorization right where the quota runs out, and re-authorize a stale token.
+      const reauth = reauthNeeded();
+      const quota = quotaBlocked();
+      if (!demo && !offline && (reauth || quota)) {
+        banner.append(document.createTextNode(reauth ? ' 请重新登录 GitHub 以恢复同步。' : ' 登录 GitHub 后，同步额度可由每小时 60 次提升至 5000 次。'));
+        const login = button(reauth ? '重新登录 GitHub' : '使用 GitHub 登录', 'button secondary', startLoginFromBanner);
+        login.id = 'banner-login-button';
+        login.disabled = s.busy;
+        banner.append(login);
+      }
+      banner.hidden = false;
+    } else banner.hidden = true;
     const account = s.account;
     $('#account-name').textContent = account?.name || account?.login || account?.username || s.settings.displayName || '本地学习者';
-    $('#account-caption').textContent = s.authStatus?.status === 'expired' ? '授权已过期 · 请重新登录' : s.authStatus?.status === 'recovery-required' ? '凭证恢复失败 · 请重新授权' : s.authStatus?.status === 'unverified' ? '账户尚未验证 · 请联网刷新' : account ? '账户已连接' : demo ? '演示模式 · 数据仅在本机' : '未登录 · 可使用本地错题';
+    $('#account-caption').textContent = s.authStatus?.status === 'expired' ? '授权已过期 · 请重新登录' : s.authStatus?.status === 'recovery-required' ? '凭证恢复失败 · 请重新授权' : s.authStatus?.status === 'unverified' ? '账户尚未验证 · 请联网刷新' : account ? '账户已连接' : demo ? '演示模式 · 数据仅在本机' : quotaBlocked() ? '未登录 · 点此登录提升额度' : '未登录 · 可使用本地错题';
     const avatar = $('.account-avatar'); avatar.replaceChildren();
     if (/^data:image\/(?:png|jpeg|gif|webp);base64,/i.test(account?.avatarData || '')) { const image = element('img'); image.src = account.avatarData; image.alt = ''; avatar.append(image); } else avatar.textContent = String($('#account-name').textContent).slice(0, 1);
-    $('#account-button').title = 'GitHub 账户'; $('#account-button').setAttribute('aria-label', $('#account-button').title);
+    const accountButton = $('#account-button');
+    accountButton.title = account ? 'GitHub 账户' : '登录 GitHub 账户';
+    if (account) accountButton.removeAttribute('aria-label'); else accountButton.setAttribute('aria-label', accountButton.title);
   }
   const facets = { platform: new Set(), tags: new Set(), authors: new Set(), native: new Set() };
   const facetNames = { platform: '平台', tags: '标签', authors: '作者', native: '难度' };
@@ -279,7 +300,11 @@
     });
     if (!items.length) list.append(empty(s.loading ? '正在载入题库' : '这里还没有题目', s.loading ? '等待客户端返回你的学习数据。' : '试试调整筛选，或记下第一道值得回顾的错题。', { label: '清空筛选', fn: clearFilters }));
     const record = items.find(item => key(item) === s.selected);
-    if (record) renderDetail(record); else $('#detail-panel').replaceChildren(empty('给思考留一个位置', s.error ? '客户端连接暂不可用。你可以重试同步，或先保存一道本地错题。' : s.view === 'favorites' ? '点击题目详情中的收藏，把想反复理解的思路留在这里。' : '从左侧选择题目，阅读分析、记录理解，再迈进一步。', { label: '＋ 记一道错题', fn: openSubmit }));
+    if (record) renderDetail(record);
+    else {
+      const quota = quotaBlocked();
+      $('#detail-panel').replaceChildren(empty('给思考留一个位置', quota ? 'GitHub 请求额度已用完，登录 GitHub 账户后即可同步题库，或先保存一道本地错题。' : s.error ? '客户端连接暂不可用。你可以重试同步，或先保存一道本地错题。' : s.view === 'favorites' ? '点击题目详情中的收藏，把想反复理解的思路留在这里。' : '从左侧选择题目，阅读分析、记录理解，再迈进一步。', { label: '＋ 记一道错题', fn: openSubmit }));
+    }
   }
   function renderMarkdown(container, body) {
     const source = String(body || '还没有题解内容。可以从记录错因开始。');
@@ -340,7 +365,7 @@
   function setBusy(value) {
     if (!value && updateLockedControls) { updateLockedControls.forEach(([node, disabled]) => { node.disabled = disabled; }); updateLockedControls = null; }
     s.busy = value;
-    ['sync-button', 'account-button', 'settings-button', 'theme-select', 'submit-button', 'save-local-button', 'publish-button', 'account-login', 'account-logout', 'account-switch', 'account-refresh'].forEach(id => { const node = document.getElementById(id); if (node) node.disabled = value; });
+    ['sync-button', 'account-button', 'settings-button', 'theme-select', 'submit-button', 'save-local-button', 'publish-button', 'account-login', 'account-logout', 'account-switch', 'account-refresh', 'banner-login-button'].forEach(id => { const node = document.getElementById(id); if (node) node.disabled = value; });
     $$('[data-close], #settings-form input, #settings-form select, #settings-form button').forEach(node => { node.disabled = value; });
     $$('#submit-form input, #submit-form textarea').forEach(node => { node.readOnly = value; });
     $$('#submit-form select, #editor-difficulty-picker select, #editor-difficulty-picker button').forEach(node => { node.disabled = value; });
@@ -578,6 +603,12 @@
   $('#theme-select').addEventListener('change', async event => { const previous = { ...s.settings }; s.settings.theme = event.target.value; applyTheme(s.settings.theme); try { if (demo) writeDemo(); else await call('saveSettings', { ...s.settings }); } catch (error) { s.settings = previous; toast(`当前风格已预览，设置未保存：${errorMessage(error)}`); } });
   $('#settings-button').addEventListener('click', () => { if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; } const form = $('#settings-form'); form.elements.theme.value = document.body.dataset.theme; form.elements.repo.value = s.settings.repo || 'qmx-acm-data/2026'; form.elements.clientId.value = s.settings.clientId || ''; form.elements.displayName.value = s.settings.displayName || ''; form.elements.autoSync.checked = s.settings.autoSync !== false; $('#settings-dialog').showModal(); });
   $('#settings-form').addEventListener('submit', async event => { event.preventDefault(); const form = event.currentTarget; const settings = { ...s.settings, theme: form.elements.theme.value, repo: form.elements.repo.value.trim() || 'qmx-acm-data/2026', clientId: form.elements.clientId.value.trim(), displayName: form.elements.displayName.value.trim(), autoSync: form.elements.autoSync.checked }; const control = $('button[type="submit"]', form); if (s.busy) return; setBusy(true); try { if (!demo) { await call('saveSettings', settings); applyPayload(await call('bootstrap')); } else s.settings = settings; applyTheme(settings.theme); writeDemo(); $('#settings-dialog').close(); refreshFilters(); render(); toast('设置已保存'); } catch (error) { toast(errorMessage(error)); } finally { setBusy(false); } });
+  $('#settings-login-button').addEventListener('click', async () => {
+    if (s.busy) return;
+    if (demo) { toast('浏览器演示不连接 GitHub，账户功能请在桌面客户端使用'); return; }
+    $('#settings-dialog').close();
+    await startLoginFromBanner();
+  });
   function renderUpdate() {
     $('#app-version').textContent = s.appVersion || (demo ? '浏览器预览（非桌面客户端）' : '尚未获取');
     const update = s.update || {};
@@ -673,20 +704,41 @@
     $('#account-login').hidden = !!s.account && !['expired','recovery-required'].includes(s.authStatus?.status); ['account-switch', 'account-logout', 'account-refresh'].forEach(id => { document.getElementById(id).hidden = !s.account; });
   }
   $('#account-button').addEventListener('click', () => { if (s.busy) return; if ($('#submit-dialog').open) { toast('请先完成或关闭编辑，草稿不会跨账户恢复'); return; } renderAccount(); $('#account-error').hidden = true; $('#account-dialog').showModal(); });
+  async function startLoginFromBanner() {
+    if (s.busy || demo) return;
+    renderAccount();
+    $('#account-error').hidden = true;
+    $('#account-dialog').showModal();
+    const ok = await accountAction('login');
+    if (ok) $('#account-dialog').close();
+  }
   async function accountAction(action) {
-    if (s.busy) return;
-    if (demo) { $('#account-error').hidden = false; $('#account-error').textContent = '浏览器演示不连接 GitHub，账户功能请在桌面客户端使用'; return; }
+    if (s.busy) return false;
+    if (demo) { $('#account-error').hidden = false; $('#account-error').textContent = '浏览器演示不连接 GitHub，账户功能请在桌面客户端使用'; return false; }
     setBusy(true); $('#account-error').hidden = true;
+    // Both the banner and the account dialog must retry the pull that was blocked, not just the banner path.
+    const resumeSync = action === 'login' || action === 'switch' ? reauthNeeded() || quotaBlocked() : false;
+    const previousError = s.error;
+    let loggedIn = false;
     try {
       if (action === 'refresh') applyPayload(await call('refreshAccount'));
       else {
         if (action === 'logout' || action === 'switch') await call('logout');
-        if (action === 'login' || action === 'switch') { $('#auth-message').textContent = '正在请求设备授权…'; $('#auth-code').textContent = ''; $('#auth-open-button').hidden = true; $('#auth-dialog').showModal(); await call('login'); }
+        if (action === 'login' || action === 'switch') { $('#auth-message').textContent = '正在请求设备授权…'; $('#auth-code').textContent = ''; $('#auth-open-button').hidden = true; $('#auth-copy-button').hidden = true; $('#auth-dialog').showModal(); await call('login'); loggedIn = true; }
         applyPayload(await call('bootstrap'));
       }
       s.comments.clear(); refreshFilters(); render(); renderAccount(); toast('账户与仓库权限已更新');
-    } catch (error) { $('#account-error').hidden = false; $('#account-error').textContent = errorMessage(error); try { applyPayload(await call('bootstrap')); refreshFilters(); render(); renderAccount(); } catch (_) {} }
-    finally { $('#auth-dialog').close(); setBusy(false); }
+      return true;
+    } catch (error) {
+      $('#account-error').hidden = false; $('#account-error').textContent = errorMessage(error);
+      try { applyPayload(await call('bootstrap')); refreshFilters(); render(); renderAccount(); } catch (_) {}
+      // A cancelled or failed device flow must not silently clear the banner that offered the login.
+      if (!loggedIn && previousError && (action === 'login' || action === 'switch')) { s.error = previousError; updateStatus(); }
+      return false;
+    } finally {
+      $('#auth-dialog').close(); setBusy(false);
+      if (loggedIn && resumeSync) void sync();
+    }
   }
   ['login', 'logout', 'switch', 'refresh'].forEach(action => { document.getElementById(`account-${action}`).addEventListener('click', () => accountAction(action)); });
   let authUrl = '';
@@ -695,9 +747,15 @@
     $('#auth-code').textContent = progress?.userCode || progress?.user_code || '';
     authUrl = progress?.verificationUri || progress?.verification_uri || progress?.verificationUrl || progress?.url || '';
     $('#auth-open-button').hidden = !authUrl;
+    $('#auth-copy-button').hidden = !authUrl;
     if (!$('#auth-dialog').open) $('#auth-dialog').showModal();
   });
-  $('#auth-open-button').addEventListener('click', () => openExternal(authUrl));
+  $('#auth-open-button').addEventListener('click', () => { if (authUrl) void call('openAuthUrl', authUrl); });
+  $('#auth-copy-button').addEventListener('click', async () => {
+    if (!authUrl) return;
+    try { await navigator.clipboard.writeText(authUrl); toast('授权链接已复制，可粘贴到浏览器打开'); }
+    catch (_) { toast('复制失败，请手动复制链接'); }
+  });
   async function cancelLogin() { try { if (!demo) await call('cancelLogin'); } catch (error) { toast(errorMessage(error)); } $('#auth-dialog').close(); }
   $('#cancel-login-button').addEventListener('click', cancelLogin);
   $('#auth-dialog').addEventListener('cancel', event => { event.preventDefault(); cancelLogin(); });
