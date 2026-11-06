@@ -51,7 +51,7 @@ function parseDocument(path, text, extra = {}) {
     title: String(meta.title || path.split('/').pop().replace(/\.md$/i, '')),
     pid: String(meta.pid || ''), platform: String(meta.platform || (path.startsWith('algorithms/') ? '算法' : 'Oth')),
     rating: Number(meta.rating) > 0 && Number.isFinite(Number(meta.rating)) ? Number(meta.rating) : null,
-    difficulty: String(meta.difficulty || ''), tags: Array.isArray(meta.tags) ? meta.tags.map(String) : [],
+    difficulty: String(meta.difficulty || ''), luoguDifficulty: String(meta.luoguDifficulty || ''), tags: Array.isArray(meta.tags) ? meta.tags.map(String) : [],
     author: String(meta.author || '未知'), authorId: authorId(meta.author_id),
     problemUrl: String(meta.problem_url || meta.problemUrl || ''), clientId: String(meta.client_id || ''),
     managed: meta.schema === 2 && authorId(meta.author_id) !== null,
@@ -68,7 +68,7 @@ function issueRecord(x) {
     id: `issue:${x.number}`, kind: 'issue', number: x.number, title: x.title,
     pid: String(meta.pid || ''), platform: String(meta.platform || 'Oth'),
     rating: Number.isFinite(Number(meta.rating)) && Number(meta.rating) > 0 ? Number(meta.rating) : null,
-    difficulty: String(meta.difficulty || ''),
+    difficulty: String(meta.difficulty || ''), luoguDifficulty: String(meta.luoguDifficulty || ''),
     tags: [...new Set([...(Array.isArray(meta.tags) ? meta.tags.map(String) : []), ...(x.labels || []).map(l => typeof l === 'string' ? l : l.name)])],
     author: x.user?.login || '', authorId: authorId(x.user?.id),
     body: text.replace(/<!-- qmx-record[\s\S]*?-->/g, ''), url: x.html_url,
@@ -78,7 +78,7 @@ function issueRecord(x) {
 
 function issueBody(record) {
   const found = identify(record.problemUrl || record.url || '');
-  const meta = { schema: 1, pid: record.pid || found.pid, platform: record.platform || found.platform, tags: record.tags || [], problemUrl: record.problemUrl || '', cohort: record.cohort || '', rating: Number(record.rating) > 0 ? Number(record.rating) : null, difficulty: record.difficulty || '' };
+  const meta = { schema: 1, pid: record.pid || found.pid, platform: record.platform || found.platform, tags: record.tags || [], problemUrl: record.problemUrl || '', cohort: record.cohort || '', rating: Number(record.rating) > 0 ? Number(record.rating) : null, difficulty: record.difficulty || '', luoguDifficulty: record.luoguDifficulty || '' };
   const text = `<!-- qmx-record ${JSON.stringify(meta).replace(/-->/g, '')} -->\n\n${record.problemUrl ? `题目链接：${record.problemUrl}\n\n` : ''}## 错因\n\n${record.reason || ''}\n\n## 题解与代码\n\n${record.solution || ''}\n\n## 个人 trick\n\n${record.trick || ''}`;
   if (text.length > 60000) throw new Error('内容过长，请控制在 60000 字符以内');
   return text;
@@ -90,7 +90,7 @@ function documentContent(r, author) {
   const pid = r.pid || found.pid;
   if (!pid) throw new Error('正式题解需要题号，请补充题号');
   const platform = r.platform || found.platform;
-  return { platform, pid, text: `---\n${YAML.stringify({ pid, title: r.title || pid, platform, rating: Number(r.rating) > 0 ? Number(r.rating) : null, difficulty: r.difficulty || '', tags: r.tags || [], author, date: new Date().toISOString().slice(0, 10) })}---\n\n# 题意\n\n${r.problemUrl || ''}\n\n## 思路\n\n${r.solution || ''}\n\n## 正确性\n\n${r.proof || '待补充'}\n\n## 复杂度\n\n${r.complexity || '待补充'}\n\n## 易错点\n\n${r.reason || ''}\n\n## 个人 trick\n\n${r.trick || ''}\n` };
+  return { platform, pid, text: `---\n${YAML.stringify({ pid, title: r.title || pid, platform, rating: Number(r.rating) > 0 ? Number(r.rating) : null, difficulty: r.difficulty || '', luoguDifficulty: r.luoguDifficulty || '', tags: r.tags || [], author, date: new Date().toISOString().slice(0, 10) })}---\n\n# 题意\n\n${r.problemUrl || ''}\n\n## 思路\n\n${r.solution || ''}\n\n## 正确性\n\n${r.proof || '待补充'}\n\n## 复杂度\n\n${r.complexity || '待补充'}\n\n## 易错点\n\n${r.reason || ''}\n\n## 个人 trick\n\n${r.trick || ''}\n` };
 }
 
 function validatePath(path) {
@@ -249,6 +249,7 @@ class GitHub {
       pid: value('pid', previous.pid || found.pid), platform: value('platform', previous.platform || found.platform),
       tags: value('tags', previous.tags || []), rating: value('rating', previous.rating ?? null),
       difficulty: value('difficulty', previous.difficulty || ''),
+      luoguDifficulty: value('luoguDifficulty', previous.luoguDifficulty || ''),
       problem_url: value('problemUrl', previous.problem_url || previous.problemUrl || ''),
       client_id: record.path ? (previous.client_id || '') : clientId.toLowerCase(), updated_at: new Date().toISOString(),
     };

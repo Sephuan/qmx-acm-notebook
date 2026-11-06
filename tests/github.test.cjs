@@ -218,6 +218,17 @@ test('profile returns authenticated account and repository permissions', async (
   assert.equal(calls[0].url, 'https://api.github.com/user');
 });
 
+test('supplementary Luogu difficulty survives create, read and edit alongside CF Rating', async () => {
+  const { gh, store } = fakeGitHub();
+  const saved = await gh.saveDocument(record({ rating: 1900, luoguDifficulty: '提高' }));
+  assert.equal(saved.rating, 1900);
+  assert.equal(saved.luoguDifficulty, '提高');
+  assert.equal(parseDocument(PATH, store.get(PATH).text).luoguDifficulty, '提高');
+  const edited = await gh.saveDocument({ path: PATH, sha: saved.sha, rating: 2000, luoguDifficulty: '普及-' });
+  assert.equal(edited.rating, 2000);
+  assert.equal(edited.luoguDifficulty, '普及-');
+});
+
 test('create writes a deterministic direct path with authenticated metadata', async () => {
   const { gh, calls, store, writes } = fakeGitHub();
   const saved = await gh.saveDocument(record({ authorId: 999, author: 'mallory', problemUrl: 'https://codeforces.com/problemset/problem/1/A' }));
