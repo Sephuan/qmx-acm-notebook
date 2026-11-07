@@ -1,6 +1,6 @@
 {
   "name": "qmx-acm-notebook",
-  "version": "0.8.0",
+  "version": "0.9.3",
   "description": "启明星 ACM 共享错题与算法资料客户端",
   "main": "electron/main.cjs",
   "private": true,
@@ -12,7 +12,7 @@
   "scripts": {
     "start": "electron .",
     "test": "node --test --test-isolation=none tests/*.test.cjs",
-    "check": "node --check electron/main.cjs && node --check electron/preload.cjs && node --check electron/github.cjs && node --check electron/updater.cjs && node --check electron/upgrade.cjs && node --check electron/file-upgrade.cjs && node --check electron/update-helper.cjs && node --check electron/update-key.cjs && node --check tools/update-manifest.cjs && node --check tools/release-feed.cjs && node --check ui/app.js && node --check ui/search.js && node --check tools/package.cjs && node --check tools/installer.cjs",
+    "check": "node --check electron/main.cjs && node --check electron/preload.cjs && node --check electron/contests.cjs && node --check electron/contest-sources.cjs && node --check electron/github.cjs && node --check electron/updater.cjs && node --check electron/upgrade.cjs && node --check electron/file-upgrade.cjs && node --check electron/update-helper.cjs && node --check electron/update-key.cjs && node --check tools/update-manifest.cjs && node --check tools/release-feed.cjs && node --check ui/app.js && node --check ui/search.js && node --check tools/package.cjs && node --check tools/installer.cjs",
     "package": "node tools/package.cjs",
     "update:manifest": "node tools/update-manifest.cjs",
     "dist": "node tools/package.cjs && node tools/installer.cjs"

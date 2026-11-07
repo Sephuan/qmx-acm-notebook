@@ -32,6 +32,17 @@
   let toastTimer;
   let draftTimer;
   let commentRequest = 0;
+  const contestPlatforms = [
+    { id: 'luogu', name: '洛谷', url: 'https://www.luogu.com.cn/contest/list' },
+    { id: 'codeforces', name: 'Codeforces', url: 'https://codeforces.com/contests' },
+    { id: 'atcoder', name: 'AtCoder', url: 'https://atcoder.jp/contests/' },
+    { id: 'nowcoder', name: '牛客', url: 'https://ac.nowcoder.com/acm/contest/vip-index' }
+  ];
+  let contestData = null, contestsPending = false, contestsFailed = false, contestSignature = '', contestPreferencePending = false;
+  let contestRestoreEntries = [], contestRestoreSelection = new Set();
+  const contestRefreshPeriod = 10 * 60 * 1000;
+  let lastContestAttempt = null, contestRefreshTimer;
+  const contestTimeFormat = new Intl.DateTimeFormat('zh-CN', { timeZone: 'Asia/Shanghai', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
   function element(tag, className, text) { const node = document.createElement(tag); if (className) node.className = className; if (text !== undefined) node.textContent = String(text); return node; }
   function append(parent, ...children) { children.filter(Boolean).forEach(child => parent.append(child)); return parent; }
   function button(label, className, action) { const node = element('button', className, label); node.type = 'button'; node.addEventListener('click', action); return node; }
@@ -60,6 +71,7 @@
   function applyPayload(payload) {
     if (!payload || typeof payload !== 'object') throw new Error('客户端未返回有效数据');
     if (payload.tagCatalog && Array.isArray(payload.tagCatalog.categories)) { s.tagCatalog = payload.tagCatalog; s.catalogFromPayload = true; }
+    if (Object.prototype.hasOwnProperty.call(payload, 'contests')) acceptContests(payload.contests);
     if (payload.authStatus) s.authStatus = payload.authStatus;
     if (typeof payload.appVersion === 'string') s.appVersion = payload.appVersion;
     if (payload.update && typeof payload.update === 'object') s.update = { ...payload.update };
@@ -310,6 +322,238 @@
   function navigate(view) {
     if (!views[view]) return;
     focusedDetail = false; document.body.classList.remove('reading-detail'); s.view = view; clearFilters();
+    if (view === 'home') refreshVisibleContests();
+  }
+  function acceptContests(payload) {
+    if (!payload || !Array.isArray(payload.platforms)) return false;
+    const previous = contestData;
+    contestData = { ...payload, platforms: contestPlatforms.map(platform => {
+      const source = payload.platforms.find(item => item?.id === platform.id);
+      if (!source) return previous?.platforms.find(item => item.id === platform.id) || { ...platform, contests: [], updatedAt: null, stale: false, error: null };
+      const old = previous?.platforms.find(item => item.id === platform.id);
+      const contests = Array.isArray(source.contests) ? source.contests : [];
+      // A failed source must not erase a schedule that is already useful offline.
+      return { ...platform, ...source, contests: source.error && !contests.length && old?.contests.length ? old.contests : contests, updatedAt: source.updatedAt || (source.error ? old?.updatedAt : null), stale: !!source.stale || !!source.error };
+    }) };
+    return true;
+  }
+  function contestTimestamp(value) { const time = typeof value === 'string' ? Date.parse(value) : NaN; return Number.isFinite(time) ? time : null; }
+  function contestTime(value) { const time = contestTimestamp(value); return time === null ? '暂无更新时间' : contestTimeFormat.format(time); }
+  function contestDuration(milliseconds) {
+    const seconds = Math.max(0, Math.ceil(milliseconds / 1000));
+    const days = Math.floor(seconds / 86400), hours = Math.floor(seconds / 3600) % 24, minutes = Math.floor(seconds / 60) % 60, rest = seconds % 60;
+    return `${days ? `${days}天 ` : ''}${days || hours ? `${hours}小时 ` : ''}${days || hours || minutes ? `${minutes}分 ` : ''}${rest}秒`;
+  }
+  function atcoderContestType(platformId, contest) {
+    if (platformId !== 'atcoder') return null;
+    const definitions = [
+      ['ABC', 'AtCoder Beginner Contest'], ['ARC', 'AtCoder Regular Contest'],
+      ['AGC', 'AtCoder Grand Contest'], ['AHC', 'AtCoder Heuristic Contest']
+    ];
+    const idType = /^(abc|arc|agc|ahc)\d+$/i.exec(String(contest.id || ''))?.[1].toUpperCase();
+    const definition = definitions.find(([type]) => type === idType) || definitions.find(([, name]) => String(contest.title || '').toLowerCase().includes(name.toLowerCase()));
+    return definition ? { label: definition[0], name: definition[1] } : null;
+  }
+  function contestTypeBadge(platformId, contest) {
+    const type = atcoderContestType(platformId, contest);
+    if (!type) return null;
+    const badge = element('span', 'contest-type-badge', type.label); badge.title = type.name;
+    badge.setAttribute('aria-label', `${type.label} · ${type.name}`);
+    return badge;
+  }
+  function contestKey(platformId, contestId) { return `${platformId}:${String(contestId)}`; }
+  function optedOutContests() { return Array.isArray(s.settings?.contestOptOuts) ? s.settings.contestOptOuts.map(String) : []; }
+  function isContestOptedOut(platformId, contestId) { return optedOutContests().includes(contestKey(platformId, contestId)); }
+  async function setContestOptOut(platformId, contestId, optedOut) {
+    if (contestPreferencePending) return;
+    contestPreferencePending = true;
+    const key = contestKey(platformId, contestId), previous = optedOutContests();
+    const next = optedOut ? [...new Set([...previous, key])] : previous.filter(item => item !== key);
+    s.settings = { ...s.settings, contestOptOuts: next };
+    renderContestCards();
+    try {
+      if (demo) writeDemo();
+      else await call('saveSettings', { ...s.settings });
+      toast(optedOut ? '已标记为不参加，比赛已隐藏' : '已恢复这场比赛');
+    } catch (error) {
+      s.settings = { ...s.settings, contestOptOuts: previous };
+      renderContestCards();
+      toast(`比赛偏好未保存：${errorMessage(error)}`);
+    } finally { contestPreferencePending = false; updateContestPreferenceControls(); }
+  }
+  function visibleContests(platform, now) {
+    return (platform?.contests || []).map(contest => ({ ...contest, start: contestTimestamp(contest.startTime), end: contestTimestamp(contest.endTime) }))
+      .filter(contest => contest.start !== null && contest.end !== null && contest.end > contest.start && contest.end > now && !isContestOptedOut(platform.id, contest.id))
+      .sort((a, b) => a.start - b.start || String(a.id).localeCompare(String(b.id))).slice(0, 3);
+  }
+  function contestLink(label, url, className, focusKey) {
+    const link = element('a', className, label);
+    link.href = url; link.dataset.contestFocus = focusKey;
+    link.addEventListener('click', event => { event.preventDefault(); void openExternal(url); });
+    return link;
+  }
+  function updateContestStatus() {
+    const refresh = $('#contests-refresh'), status = $('#contests-status');
+    if (!refresh || !status) return;
+    const available = typeof bridge?.getContests === 'function';
+    refresh.disabled = contestsPending || !available;
+    refresh.textContent = contestsPending ? '刷新中…' : '刷新赛程';
+    refresh.setAttribute('aria-busy', String(contestsPending));
+    status.classList.toggle('contest-status-error', contestsFailed);
+    status.textContent = !available ? contestData ? '当前客户端暂不支持刷新赛程，正在显示已保存的安排。请以官方赛程为准。' : '当前预览或客户端未提供赛程，暂无可用日程。可前往各平台查看官方安排。' : contestsPending ? contestData ? '正在更新赛程，先显示已保存的安排。' : '正在获取各平台赛程…' : contestsFailed ? contestData ? '赛程刷新失败，已保留上次安排。请稍后重试，或查看官方赛程。' : '赛程获取失败，暂无可用日程。请稍后重试，或查看官方赛程。' : contestData ? '已显示最近的进行中与即将开始比赛；赛程以官方安排为准。' : '暂无可用赛程，请刷新或查看官方安排。';
+  }
+  function updateContestPreferenceControls() {
+    const restore = $('#contests-restore');
+    if (restore) {
+      const count = optedOutContests().length;
+      restore.hidden = count === 0;
+      restore.disabled = contestPreferencePending;
+      restore.textContent = `已隐藏 ${count} 场 · 恢复`;
+    }
+    $$('.contest-decline').forEach(node => { node.disabled = contestPreferencePending; });
+  }
+  function mergedContests(now) {
+    return contestPlatforms.flatMap(platform => visibleContests(contestData?.platforms.find(item => item.id === platform.id), now).map(contest => ({ ...contest, platform })))
+      .sort((a, b) => Number(b.start <= now) - Number(a.start <= now) || a.start - b.start || a.platform.id.localeCompare(b.platform.id) || String(a.id).localeCompare(String(b.id)));
+  }
+  function renderContestCards(now = Date.now()) {
+    const grid = $('#contest-platforms');
+    if (!grid) return;
+    const activeFocusNode = grid.contains(document.activeElement) ? document.activeElement : null;
+    const focus = activeFocusNode?.dataset.contestFocus || null;
+    grid.replaceChildren();
+    const sources = element('div', 'contest-sources');
+    for (const platform of contestPlatforms) {
+      const source = contestData?.platforms.find(item => item.id === platform.id);
+      const items = visibleContests(source, now);
+      const chip = element('div', 'contest-source'); chip.dataset.platform = platform.id;
+      const status = !source ? '尚未获取' : source.error ? items.length ? '更新失败 · 保留赛程' : '获取失败' : source.stale ? '缓存待更新' : items.length ? '已更新' : '暂无赛程';
+      chip.title = `${platform.name} · ${status} · ${source?.updatedAt ? `更新于 ${contestTime(source.updatedAt)} · 北京时间` : '尚无成功更新时间'}`;
+      append(chip, contestLink(`${platform.name} ↗`, platform.url, 'contest-official-link', `${platform.id}:official`), element('span', `contest-source-status${source?.error ? ' is-error' : source?.stale ? ' is-stale' : ''}`, status));
+      sources.append(chip);
+    }
+    const list = element('div', 'contest-list');
+    const items = mergedContests(now);
+    for (const contest of items) {
+      const { platform } = contest, active = contest.start <= now;
+      const row = element('article', `contest-card${active ? ' is-active' : ''}`); row.dataset.platform = platform.id; row.dataset.contestId = String(contest.id);
+      const label = element('span', 'contest-phase', active ? '正在进行' : '即将开始');
+      const title = contestLink(contest.title || '未命名比赛', contest.url, 'contest-title', `${platform.id}:${contest.id}`); title.title = contest.title;
+      const start = element('time', '', contestTime(contest.startTime)); start.dateTime = contest.startTime; start.title = `开始 ${contestTime(contest.startTime)} · 结束 ${contestTime(contest.endTime)} · 北京时间`;
+      const schedule = element('span', 'contest-schedule'); schedule.append(start);
+      const countdown = element('span', 'contest-countdown'); countdown.dataset.target = String(active ? contest.end : contest.start); countdown.dataset.phase = active ? 'active' : 'upcoming';
+      countdown.textContent = `${active ? '距结束' : '距开始'} ${contestDuration(Number(countdown.dataset.target) - now)}`;
+      const duration = element('span', 'contest-duration', `赛时 ${contestDuration(contest.end - contest.start).replace(/ 0秒$/, '').trim()}`);
+      const decline = button('不参加', 'contest-decline', () => { void setContestOptOut(platform.id, contest.id, true); });
+      decline.dataset.contestFocus = `${platform.id}:${contest.id}:decline`; decline.setAttribute('aria-label', `不参加：${contest.title}`);
+      const titleGroup = append(element('span', 'contest-title-group'), contestTypeBadge(platform.id, contest), title);
+      append(row, element('span', 'contest-platform-label', platform.name), titleGroup, label, schedule, duration, countdown, decline); list.append(row);
+    }
+    if (!items.length) list.append(element('p', 'contest-empty', contestsPending ? '正在载入比赛…' : '暂无可显示的比赛，可通过上方平台链接查看官方赛程。'));
+    grid.append(sources, list);
+    contestSignature = JSON.stringify(items.map(contest => [contest.platform.id, contest.id, contest.start <= now ? 'active' : 'upcoming']));
+    updateContestPreferenceControls();
+    if (focus) {
+      const target = $$('[data-contest-focus]', grid).find(node => node.dataset.contestFocus === focus) || $$('[data-contest-focus]', grid).find(node => node.dataset.contestFocus === `${focus.split(':')[0]}:official`);
+      target?.focus({ preventScroll: true });
+    }
+  }
+  function tickContests() {
+    if (s.view !== 'home' || !$('#contest-platforms')) return;
+    const now = Date.now();
+    const signature = JSON.stringify(mergedContests(now).map(contest => [contest.platform.id, contest.id, contest.start <= now ? 'active' : 'upcoming']));
+    if (signature !== contestSignature) { renderContestCards(now); return; }
+    $$('.contest-countdown').forEach(node => { node.textContent = `${node.dataset.phase === 'active' ? '距结束' : '距开始'} ${contestDuration(Number(node.dataset.target) - now)}`; });
+  }
+  function refreshVisibleContests() {
+    if (s.loading || s.view !== 'home' || document.hidden || typeof bridge?.getContests !== 'function') return;
+    if (lastContestAttempt === null || Date.now() - lastContestAttempt >= contestRefreshPeriod) void refreshContests(false);
+  }
+  async function refreshContests(force = false) {
+    if (contestsPending || typeof bridge?.getContests !== 'function') return;
+    lastContestAttempt = Date.now();
+    clearTimeout(contestRefreshTimer);
+    contestsPending = true; contestsFailed = false; updateContestStatus();
+    try { const payload = await call('getContests', force); if (!acceptContests(payload)) throw new Error('Invalid schedule'); }
+    catch (_) { contestsFailed = true; }
+    finally {
+      contestsPending = false;
+      contestRefreshTimer = setTimeout(refreshVisibleContests, contestRefreshPeriod);
+      if (s.view === 'home') { updateContestStatus(); renderContestCards(); }
+    }
+  }
+  function hiddenContestEntries() {
+    return [...new Set(optedOutContests())].map(key => {
+      const separator = key.indexOf(':'), platformId = key.slice(0, separator), id = key.slice(separator + 1);
+      const platform = contestPlatforms.find(item => item.id === platformId) || { id: platformId, name: platformId };
+      const contest = contestData?.platforms.find(source => source.id === platformId)?.contests.find(item => String(item.id) === id);
+      return { ...contest, id, platform, key, start: contestTimestamp(contest?.startTime), end: contestTimestamp(contest?.endTime) };
+    }).sort((a, b) => (a.start ?? Infinity) - (b.start ?? Infinity) || a.platform.id.localeCompare(b.platform.id) || a.id.localeCompare(b.id));
+  }
+  function updateContestRestoreCount() {
+    const count = $('#contest-restore-count');
+    if (count) count.textContent = `已选择 ${contestRestoreSelection.size} 场`;
+    const confirm = $('#contest-restore-confirm');
+    if (confirm) confirm.disabled = contestPreferencePending || contestRestoreSelection.size === 0;
+    ['contest-restore-all', 'contest-restore-none', 'contest-restore-close', 'contest-restore-cancel'].forEach(id => { const node = $('#' + id); if (node) node.disabled = contestPreferencePending; });
+    $$('#contest-restore-options input').forEach(node => { node.disabled = contestPreferencePending; });
+  }
+  function renderContestRestoreOptions() {
+    const options = $('#contest-restore-options');
+    if (!options) return;
+    options.replaceChildren();
+    for (const entry of contestRestoreEntries) {
+      const label = element('label', 'contest-restore-option');
+      const checkbox = element('input'); checkbox.type = 'checkbox'; checkbox.value = entry.key; checkbox.checked = contestRestoreSelection.has(entry.key);
+      checkbox.addEventListener('change', () => { if (checkbox.checked) contestRestoreSelection.add(entry.key); else contestRestoreSelection.delete(entry.key); updateContestRestoreCount(); });
+      const text = element('span', 'contest-restore-option-copy');
+      const details = entry.start !== null && entry.end !== null && entry.end > entry.start ? `${contestTime(entry.startTime)} · 赛时 ${contestDuration(entry.end - entry.start).replace(/ 0秒$/, '').trim()}${entry.end <= Date.now() ? ' · 已结束' : ''}` : '暂无赛程详情（可恢复隐藏偏好）';
+      const heading = append(element('span', 'contest-restore-option-heading'), contestTypeBadge(entry.platform.id, entry), element('strong', '', `${entry.platform.name} · ${entry.title || `比赛 ${entry.id}`}`));
+      append(text, heading, element('small', '', details));
+      label.title = `${entry.platform.name} · ${entry.title || `比赛 ${entry.id}`}`;
+      append(label, checkbox, text); options.append(label);
+    }
+    if (!contestRestoreEntries.length) options.append(element('p', 'contest-empty', '当前缓存中找不到已隐藏的比赛，刷新赛程后再试。'));
+    updateContestRestoreCount();
+  }
+  function openContestRestore() {
+    if (contestPreferencePending) return;
+    contestRestoreEntries = hiddenContestEntries();
+    contestRestoreSelection = new Set(contestRestoreEntries.map(entry => entry.key));
+    $('#contest-restore-error').hidden = true;
+    renderContestRestoreOptions();
+    $('#contest-restore-dialog').showModal();
+  }
+  async function restoreSelectedContests() {
+    if (contestPreferencePending) return;
+    const selected = new Set(contestRestoreSelection);
+    if (!selected.size) return;
+    contestPreferencePending = true;
+    const previous = optedOutContests();
+    const next = previous.filter(key => !selected.has(key));
+    s.settings = { ...s.settings, contestOptOuts: next };
+    renderContestCards(); updateContestRestoreCount();
+    try {
+      if (demo) writeDemo();
+      else await call('saveSettings', { ...s.settings });
+      $('#contest-restore-dialog').close();
+      toast(`已恢复 ${selected.size} 场比赛`);
+    } catch (error) {
+      s.settings = { ...s.settings, contestOptOuts: previous };
+      renderContestCards();
+      const errorNode = $('#contest-restore-error'); errorNode.textContent = `比赛偏好未保存：${errorMessage(error)}`; errorNode.hidden = false;
+    } finally { contestPreferencePending = false; updateContestPreferenceControls(); updateContestRestoreCount(); }
+  }
+  function renderHomeContests() {
+    const panel = element('section', 'home-contests'); panel.setAttribute('aria-labelledby', 'contests-title');
+    const title = element('h2', '', '比赛提醒'); title.id = 'contests-title';
+    const refresh = button('刷新赛程', 'button secondary', () => { void refreshContests(true); }); refresh.id = 'contests-refresh';
+    const restore = button('', 'button subtle contest-restore', openContestRestore); restore.id = 'contests-restore';
+    const actions = append(element('div', 'contest-actions'), restore, refresh);
+    const status = element('p', 'contests-status'); status.id = 'contests-status'; status.setAttribute('role', 'status');
+    const grid = element('div', 'contest-platforms'); grid.id = 'contest-platforms';
+    append(panel, append(element('div', 'contests-heading'), append(element('div'), element('div', 'eyebrow', 'CONTEST COUNTDOWN'), title, element('p', 'contest-timezone', '所有时间均为北京时间（UTC+8）')), actions), status, grid);
+    return panel;
   }
   function renderHome() {
     const panel = $('#home-panel'); panel.replaceChildren();
@@ -326,7 +570,8 @@
       const card = button('', 'home-shortcut', () => navigate(view)); card.dataset.view = view;
       append(card, element('span', 'home-shortcut-title', title), element('span', 'home-shortcut-caption', caption), element('span', 'home-shortcut-count', count === null ? '查看 →' : `${count} 条 · 查看 →`)); shortcuts.append(card);
     }
-    append(panel, hero, shortcuts);
+    append(panel, renderHomeContests(), hero, shortcuts);
+    updateContestStatus(); renderContestCards();
   }
   function render() {
     updateStateFacet();
@@ -766,6 +1011,12 @@
   document.addEventListener('click', codeBlockClick);
   document.addEventListener('keydown',event=>{if(event.key==='Escape')$$('.facet details[open],details.facet[open]').forEach(node=>node.open=false);});
   $('#submit-button').addEventListener('click', () => openSubmit()); $('#sync-button').addEventListener('click', sync);
+  $('#contest-restore-close').addEventListener('click', () => $('#contest-restore-dialog').close());
+  $('#contest-restore-cancel').addEventListener('click', () => $('#contest-restore-dialog').close());
+  $('#contest-restore-all').addEventListener('click', () => { contestRestoreSelection = new Set(contestRestoreEntries.map(entry => entry.key)); renderContestRestoreOptions(); });
+  $('#contest-restore-none').addEventListener('click', () => { contestRestoreSelection.clear(); renderContestRestoreOptions(); });
+  $('#contest-restore-confirm').addEventListener('click', () => { void restoreSelectedContests(); });
+  $('#contest-restore-dialog').addEventListener('cancel', event => { if (contestPreferencePending) event.preventDefault(); });
   $$('dialog').forEach(dialog => dialog.addEventListener('cancel', event => { if (s.busy) event.preventDefault(); }));
   $$('[data-close]').forEach(node => node.addEventListener('click', async () => { if (s.busy) return; if (node.dataset.close === 'submit-dialog') { clearTimeout(draftTimer); setBusy(true); await saveDraft(); setBusy(false); } document.getElementById(node.dataset.close).close(); }));
   $('#submit-dialog').addEventListener('cancel', async event => { event.preventDefault(); if (s.busy) return; clearTimeout(draftTimer); setBusy(true); await saveDraft(); setBusy(false); $('#submit-dialog').close(); });
@@ -989,10 +1240,14 @@
     applyTheme(readTheme()); applySidebar(readSidebar()); render();
     if (demo) { s.permissions = { repo: 'qmx-acm-data/2026', push: false, admin: false }; s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo })); s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo })); s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} }); s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record); s.settings = cached?.settings || {}; applyTheme(s.settings.theme || readTheme()); applyCodeSettings(); }
     else { try { applyPayload(await call('bootstrap')); } catch (error) { s.error = errorMessage(error); } }
-    if (!demo && !s.catalogFromPayload && typeof bridge?.getTagCatalog === 'function') { try { const catalog = await call('getTagCatalog'); if (Array.isArray(catalog?.categories)) s.tagCatalog = catalog; } catch (_) { /* Presets remain available offline. */ } }
     s.loading = false; refreshFilters(); render();
+    void refreshContests(false);
+    if (!demo && !s.catalogFromPayload && typeof bridge?.getTagCatalog === 'function') { try { const catalog = await call('getTagCatalog'); if (Array.isArray(catalog?.categories)) s.tagCatalog = catalog; } catch (_) { /* Presets remain available offline. */ } }
     void checkStartupUpdates();
     if (!demo && !s.error && s.settings.autoSync !== false && navigator.onLine) await sync();
   }
+  setInterval(tickContests, 1000);
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { tickContests(); refreshVisibleContests(); } });
+  window.addEventListener('focus', () => { tickContests(); refreshVisibleContests(); });
   bootstrap();
 })();

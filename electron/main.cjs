@@ -8,6 +8,7 @@ const { spawn } = require('node:child_process');
 const { createUpdater } = require('./updater.cjs');
 const { prepareFileUpgrade, recoverFileUpgrade, getFileUpgradeCapability } = require('./file-upgrade.cjs');
 const { createAuth, configureUserData } = require('./auth.cjs');
+const { createContestService } = require('./contests.cjs');
 const APP_VERSION = require('../package.json').version;
 configureUserData(app);
 const networkFetch = (url, options) => net.fetch(url, { ...options, bypassCustomProtocolHandlers: true });
@@ -57,7 +58,7 @@ app.disableHardwareAcceleration();
 if (process.platform === 'linux' && !app.commandLine.hasSwitch('password-store') && !/gnome|kde/i.test(process.env.XDG_CURRENT_DESKTOP || '')) {
   app.commandLine.appendSwitch('password-store', 'gnome-libsecret');
 }
-let win, dir, token = '', account = null, permissions = null;
+let win, dir, contestService, token = '', account = null, permissions = null;
 let loginGeneration = 0, writeBusy = false, syncBusy = false, updateBusy = false, installing = false, updater;
 function processEnvForInstaller() {
   const environment = { ...process.env };
@@ -109,7 +110,7 @@ function state(error) {
     tagCatalog: matching && cache.tagCatalog ? cache.tagCatalog : require('../ui/tag-presets.js'),
     tagCatalogError: matching ? cache.tagCatalogError || null : null,
     settings: s, account, authStatus: auth?.status, appVersion: APP_VERSION, update: updater?.getState(), updateCapability: getFileUpgradeCapability(), permissions: permissions?.repo === s.repo ? permissions : null,
-    local: local(), error: error || null
+    local: local(), contests: contestService?.snapshot(), error: error || null
   };
 }
 function assertExternal(url) {
@@ -264,7 +265,10 @@ function rememberDocument(result, removed = false) {
   save('local.json', personal);
 }
 function setup() {
+  // Public schedules use stateless Node fetch, separate from Chromium session cookies.
+  contestService = createContestService({ fetcher: (url, options) => fetch(url, options), readCache: () => read('contests.json', null), writeCache: value => save('contests.json', value) });
   handle('bootstrap', () => state());
+  handle('getContests', force => contestService.get(force));
   handle('checkStartupUpdates', async () => {
     // Discovery only: normal reading, editing and sync remain available.
     if (updateBusy || installing) return null;
@@ -359,6 +363,11 @@ function setup() {
       next.codeFontSize = size;
     }
     if (data.codeLineNumbers !== undefined) next.codeLineNumbers = !!data.codeLineNumbers;
+    if (data.contestOptOuts !== undefined) {
+      if (!Array.isArray(data.contestOptOuts) || data.contestOptOuts.length > 500) throw new Error('比赛偏好格式不正确');
+      if (data.contestOptOuts.some(item => typeof item !== 'string' || !/^[a-z0-9-]{1,40}:[^\s:]{1,120}$/i.test(item))) throw new Error('比赛偏好格式不正确');
+      next.contestOptOuts = [...new Set(data.contestOptOuts.map(item => item.trim()))];
+    }
     if (next.repo !== old.repo) permissions = null;
     if (next.clientId !== old.clientId || next.repo !== old.repo) loginGeneration++;
     save('settings.json', next); return state();

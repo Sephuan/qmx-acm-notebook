@@ -103,7 +103,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     Date: class extends Date { static now() { return now; } },
     setTimeout(callback, delay) { const id = ++timerId; timers.set(id, { callback, at: now + delay }); return id; },
     clearTimeout(id) { timers.delete(id); },
-    fetch: async () => { throw new Error('NETWORK FORBIDDEN IN MAIN TESTS'); },
+    fetch: async (url, options) => { if (!networkBackend) throw new Error('NETWORK FORBIDDEN IN MAIN TESTS'); networkCalls.push({ url: String(url), options }); return networkBackend(url, options); },
     require(name) {
       if (name === 'electron') return electron;
       if (name === 'node:fs') return fakeFs;
@@ -111,6 +111,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       if (name === 'node:crypto') return { randomUUID: () => '00000000-0000-4000-8000-000000000001' };
       if (name === '../package.json') return { version: '0.3.0' };
       if (name === './auth.cjs') return require('../electron/auth.cjs');
+       if (name === './contests.cjs') return require('../electron/contests.cjs');
       if (name === '@astral-sh/ruff-wasm-nodejs') return require(name);
        if (name === '../ui/tag-presets.js') return require('../ui/tag-presets.js');
        if (name === './updater.cjs') return { createUpdater(options) { updaterOptions = options; return updater; } };
@@ -157,6 +158,70 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     get updaterOptions() { return updaterOptions; }, get quitCalls() { return quitCalls; },
     stored: name => JSON.parse(disk.get(path.join(root, name)) || 'null') };
 }
+
+test('contest IPC reads cache without network at bootstrap and fetches only fixed official sources anonymously', async () => {
+  const h = harness({ account: null, networkBackend: async url => {
+    const host = new URL(url).hostname;
+    const bodies = {
+      'codeforces.com': JSON.stringify({status:'OK',result:[]}),
+      'atcoder.jp': '<div id="contest-table-upcoming"><table><tbody></tbody></table></div>',
+      'www.luogu.com.cn': '<script type="application/json" id="lentille-context">{"data":{"contests":{"result":[]}}}</script>',
+      'ac.nowcoder.com': '<div class="platform-mod js-current"></div>'
+    };
+    return new Response(bodies[host]);
+  } });
+  const initial = await h.invoke('bootstrap');
+  assert.equal(initial.contests.platforms.length, 4);
+  assert.equal(h.networkCalls.length, 0, 'startup must render cached schedule without waiting for websites');
+  await assert.rejects(h.invoke('getContests', {url:'https://evil.test'}), /参数/);
+  const result = await h.invoke('getContests', false);
+  assert(result.platforms.every(p => p.updatedAt && !p.error));
+  assert.equal(h.networkCalls.length, 4);
+  assert.deepEqual(h.networkCalls.map(c => new URL(c.url).hostname).sort(), ['ac.nowcoder.com','atcoder.jp','codeforces.com','www.luogu.com.cn']);
+  assert(h.networkCalls.every(c => !c.options.headers.Authorization && c.options.credentials === 'omit'));
+  assert.equal(h.stored('contests.json').schema, 1);
+  assert.equal(h.stored('local.json'), null, 'schedule refresh must not change personal records');
+});
+
+test('contest preferences validate, deduplicate and persist independent platform:id keys through bootstrap and restart', async () => {
+  const h = harness({ account: null });
+  const boundary = `${'p'.repeat(40)}:${'x'.repeat(120)}`;
+  const keys = ['luogu:123', 'codeforces:123', 'AtCoder:abc-001_A', 'new-platform:赛程/round?1', boundary];
+  const saved = await h.invoke('saveSettings', { contestOptOuts: [...keys, 'luogu:123', boundary] });
+  assert.deepEqual(saved.settings.contestOptOuts, keys, 'deduplication preserves order and does not collide across platforms');
+  assert.deepEqual(h.stored('settings.json').contestOptOuts, keys);
+  assert.deepEqual((await h.invoke('bootstrap')).settings.contestOptOuts, keys);
+  const restarted = harness({ account: null, files: { 'settings.json': h.stored('settings.json') } });
+  assert.deepEqual((await restarted.invoke('bootstrap')).settings.contestOptOuts, keys, 'saved exclusions survive a fresh main process');
+  await restarted.invoke('saveSettings', { theme: 'dark' });
+  assert.deepEqual((await restarted.invoke('bootstrap')).settings.contestOptOuts, keys, 'unrelated settings saves retain exclusions');
+  const maximum = Array.from({ length: 500 }, (_, index) => `luogu:${index}`);
+  assert.deepEqual((await h.invoke('saveSettings', { contestOptOuts: maximum })).settings.contestOptOuts, maximum, '500 entries is inclusive');
+  await h.invoke('saveSettings', { contestOptOuts: [] });
+  assert.deepEqual(h.stored('settings.json').contestOptOuts, [], 'restoring all is persisted, not just hidden in renderer state');
+  assert.deepEqual((await h.invoke('bootstrap')).settings.contestOptOuts, []);
+});
+
+test('invalid contest preferences reject atomically without altering saved settings', async () => {
+  const h = harness({ files: { 'settings.json': { repo: REPO, theme: 'light', contestOptOuts: ['luogu:keep'] } } });
+  const invalid = [
+    null, 'luogu:123', {}, 1, [null], [123], [{}],
+    [''], [':123'], ['luogu:'], ['luogu:has space'], ['luogu:tab\tid'], ['luogu:line\nid'], ['luogu:extra:colon'],
+    [' luogu:123'], ['luogu:123 '], ['bad_platform:123'], ['bad.platform:123'],
+    [`${'p'.repeat(41)}:123`], [`luogu:${'x'.repeat(121)}`],
+    Array.from({ length: 501 }, (_, index) => `luogu:${index}`),
+    Array(501).fill('luogu:duplicate'),
+    ['luogu:valid', 'luogu:bad:id']
+  ];
+  const before = h.stored('settings.json');
+  const writesBefore = h.writes.length;
+  for (const contestOptOuts of invalid) {
+    await assert.rejects(h.invoke('saveSettings', { theme: 'dark', contestOptOuts }), /比赛|偏好|格式/, `must reject ${JSON.stringify(contestOptOuts).slice(0, 160)}`);
+    assert.deepEqual(h.stored('settings.json'), before, 'invalid preferences must not partially save unrelated settings');
+    assert.deepEqual((await h.invoke('bootstrap')).settings.contestOptOuts, ['luogu:keep']);
+  }
+  assert.equal(h.writes.length, writesBefore, 'validation happens before any disk write');
+});
 
 test('Linux keyring default respects explicit password stores and native desktop detection', () => {
   for (const desktop of ['niri', 'sway', '']) {
