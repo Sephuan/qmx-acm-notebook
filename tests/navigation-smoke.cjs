@@ -74,7 +74,8 @@ await page.waitForFunction(()=>getComputedStyle(document.querySelector('.sidebar
 await page.click(`.nav-item[data-view="${view}"]`);
 assert.equal(await page.locator('body').getAttribute('data-view'),view);
 assert.equal(await page.locator(`.nav-item[data-view="${view}"]`).getAttribute('aria-current'),'page');
-if(['tricks','algorithms'].includes(view))assert.equal(await page.locator('#section-placeholder').isVisible(),true);
+if(view==='tricks')assert.equal(await page.locator('#section-placeholder').isVisible(),true);
+if(view==='algorithms')assert.equal(await page.locator('#algorithm-panel').isVisible(),true);
 }await page.locator('#home-panel [data-view="mine"]').click();
 assert.equal(await page.locator('body').getAttribute('data-view'),'mine');
 await page.hover('.sidebar');
