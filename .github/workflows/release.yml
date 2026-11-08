@@ -101,6 +101,16 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm test
+      - name: Cache verified official Electron runtime via release API
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('electron/package.json').version")
+          mkdir -p .electron-zip
+          gh release download "v$VERSION" --repo electron/electron --pattern "electron-v$VERSION-win32-x64.zip" --dir .electron-zip
+          node -e "const fs=require('fs'),c=require('crypto'),v=require('electron/package.json').version,n='electron-v'+v+'-win32-x64.zip';if(c.createHash('sha256').update(fs.readFileSync('.electron-zip/'+n)).digest('hex')!==require('electron/checksums.json')[n])throw Error('Electron runtime checksum mismatch')"
       - name: Build unsigned application from reviewed release source
         run: pnpm package
         env:
@@ -174,6 +184,16 @@ jobs:
           New-Item -ItemType Directory -Force feed,resources | Out-Null
           Copy-Item incoming-signed/feed/manifest.json feed/manifest.json -Force
           Copy-Item incoming-signed/resources/app.asar resources/app.asar -Force
+      - name: Cache verified official Electron runtime via release API
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('electron/package.json').version")
+          mkdir -p .electron-zip
+          gh release download "v$VERSION" --repo electron/electron --pattern "electron-v$VERSION-win32-x64.zip" --dir .electron-zip
+          node -e "const fs=require('fs'),c=require('crypto'),v=require('electron/package.json').version,n='electron-v'+v+'-win32-x64.zip';if(c.createHash('sha256').update(fs.readFileSync('.electron-zip/'+n)).digest('hex')!==require('electron/checksums.json')[n])throw Error('Electron runtime checksum mismatch')"
       - name: Build installer and portable archive from verified application
         shell: pwsh
         run: |
@@ -228,6 +248,17 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm test
+      - name: Cache verified official Electron runtime via release API
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          VERSION=$(node -p "require('electron/package.json').version")
+          ASSET="electron-v$VERSION-$QMX_PLATFORM-$QMX_ARCH.zip"
+          mkdir -p .electron-zip
+          gh release download "v$VERSION" --repo electron/electron --pattern "$ASSET" --dir .electron-zip
+          node -e "const fs=require('fs'),c=require('crypto'),v=require('electron/package.json').version,n='electron-v'+v+'-'+process.env.QMX_PLATFORM+'-'+process.env.QMX_ARCH+'.zip';if(c.createHash('sha256').update(fs.readFileSync('.electron-zip/'+n)).digest('hex')!==require('electron/checksums.json')[n])throw Error('Electron runtime checksum mismatch')"
       - name: Build platform app and inject the exact signed archive
         shell: bash
         run: |
