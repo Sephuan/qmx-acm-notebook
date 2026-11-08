@@ -9,6 +9,8 @@ const { createUpdater } = require('./updater.cjs');
 const { prepareFileUpgrade, recoverFileUpgrade, getFileUpgradeCapability } = require('./file-upgrade.cjs');
 const { createAuth, configureUserData } = require('./auth.cjs');
 const { createContestService } = require('./contests.cjs');
+const { createPlatformService } = require('./platform-service.cjs');
+const { createPublicPageReader } = require('./platform-page.cjs');
 const APP_VERSION = require('../package.json').version;
 configureUserData(app);
 const networkFetch = (url, options) => net.fetch(url, { ...options, bypassCustomProtocolHandlers: true });
@@ -58,7 +60,7 @@ app.disableHardwareAcceleration();
 if (process.platform === 'linux' && !app.commandLine.hasSwitch('password-store') && !/gnome|kde/i.test(process.env.XDG_CURRENT_DESKTOP || '')) {
   app.commandLine.appendSwitch('password-store', 'gnome-libsecret');
 }
-let win, dir, contestService, token = '', account = null, permissions = null;
+let win, dir, contestService, platforms, token = '', account = null, permissions = null;
 let loginGeneration = 0, writeBusy = false, syncBusy = false, updateBusy = false, installing = false, updater;
 function processEnvForInstaller() {
   const environment = { ...process.env };
@@ -110,12 +112,12 @@ function state(error) {
     tagCatalog: matching && cache.tagCatalog ? cache.tagCatalog : require('../ui/tag-presets.js'),
     tagCatalogError: matching ? cache.tagCatalogError || null : null,
     settings: s, account, authStatus: auth?.status, appVersion: APP_VERSION, update: updater?.getState(), updateCapability: getFileUpgradeCapability(), permissions: permissions?.repo === s.repo ? permissions : null,
-    local: local(), contests: contestService?.snapshot(), error: error || null
+    local: local(), contests: contestService?.snapshot(), platforms: platforms?.state(), error: error || null
   };
 }
 function assertExternal(url) {
   const u = new URL(url);
-  if (u.protocol !== 'https:' || !['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com'].includes(u.hostname)) throw new Error('仅允许打开 GitHub 和受支持题目平台的 HTTPS 链接');
+  if (u.protocol !== 'https:' || !['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com', 'leetcode.cn', 'leetcode.com', 'www.luogu.com'].includes(u.hostname)) throw new Error('仅允许打开 GitHub 和受支持题目平台的 HTTPS 链接');
   return u;
 }
 async function external(url) {
@@ -265,27 +267,31 @@ function rememberDocument(result, removed = false) {
   save('local.json', personal);
 }
 function setup() {
+  platforms = createPlatformService({ read, save, fetcher: networkFetch, readPage: createPublicPageReader({ BrowserWindow }) });
   // Public schedules use stateless Node fetch, separate from Chromium session cookies.
   contestService = createContestService({ fetcher: (url, options) => fetch(url, options), readCache: () => read('contests.json', null), writeCache: value => save('contests.json', value) });
   handle('bootstrap', () => state());
   handle('getContests', force => contestService.get(force));
+  handle('bindPlatform', (platform, url) => platforms.bind(platform, url));
+  handle('refreshPlatform', platform => platforms.refresh(platform));
+  handle('unbindPlatform', platform => platforms.unbind(platform));
   handle('checkStartupUpdates', async () => {
     // Discovery only: normal reading, editing and sync remain available.
     if (updateBusy || installing) return null;
     try { return await updater.check(); } catch { return null; }
   });
   handle('checkForUpdates', async () => {
-    if (writeBusy || syncBusy || updateBusy || installing) throw new Error('请等待当前操作完成后检查更新');
+    if (writeBusy || syncBusy || updateBusy || installing || platforms.isBusy()) throw new Error('请等待当前操作完成后检查更新');
     updateBusy = true;
     try { return await updater.check(); } finally { updateBusy = false; }
   });
   handle('downloadUpdate', async () => {
-    if (writeBusy || syncBusy || updateBusy || installing) throw new Error('请等待当前操作完成后下载更新');
+    if (writeBusy || syncBusy || updateBusy || installing || platforms.isBusy()) throw new Error('请等待当前操作完成后下载更新');
     updateBusy = true;
     try { await updater.download(); return updater.getState(); } finally { updateBusy = false; }
   });
   handle('installUpdate', async () => {
-    if (writeBusy || syncBusy || updateBusy || installing) throw new Error('请等待当前操作完成后安装更新');
+    if (writeBusy || syncBusy || updateBusy || installing || platforms.isBusy()) throw new Error('请等待当前操作完成后安装更新');
     if (!app.isPackaged) throw new Error('源码运行模式不能覆盖升级，请使用安装版客户端');
     const capability = getFileUpgradeCapability();
     if (!capability.supported) throw new Error(capability.reason);

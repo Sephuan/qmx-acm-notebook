@@ -111,6 +111,8 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       if (name === 'node:crypto') return { randomUUID: () => '00000000-0000-4000-8000-000000000001' };
       if (name === '../package.json') return { version: '0.3.0' };
       if (name === './auth.cjs') return require('../electron/auth.cjs');
+      if (name === './platform-service.cjs') return require('../electron/platform-service.cjs');
+      if (name === './platform-page.cjs') return require('../electron/platform-page.cjs');
        if (name === './contests.cjs') return require('../electron/contests.cjs');
       if (name === '@astral-sh/ruff-wasm-nodejs') return require(name);
        if (name === '../ui/tag-presets.js') return require('../ui/tag-presets.js');
@@ -158,6 +160,95 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     get updaterOptions() { return updaterOptions; }, get quitCalls() { return quitCalls; },
     stored: name => JSON.parse(disk.get(path.join(root, name)) || 'null') };
 }
+
+const cfResponse = (url, rating = 1061) => ({ ok: true, json: async () => ({ status: 'OK', result: String(url).includes('user.info') ? [{ handle: 'time-lo', rating, maxRating: rating }] : [] }) });
+
+test('platform IPC verifies public data through Electron net and persists independently of GitHub and contest settings', async () => {
+  let rating = 1061, offline = false;
+  const initialSettings = { repo: REPO, contestOptOuts: ['luogu:123'], theme: 'dark' };
+  const h = harness({ account: null, files: { 'settings.json': initialSettings }, networkBackend: async url => {
+    if (offline) throw new Error('platform offline');
+    return cfResponse(url, rating);
+  } });
+  assert.deepEqual((await h.invoke('bootstrap')).platforms, {});
+  assert.equal(h.networkCalls.length, 0, 'startup must show cached platform state without network');
+  const bound = await h.invoke('bindPlatform', 'CF', 'https://codeforces.com/profile/time-lo');
+  assert.equal(bound.CF.binding.username, 'time-lo');
+  assert.equal(bound.CF.data.rating, 1061);
+  assert.equal(bound.CF.data.solvedCount, 0);
+  assert.deepEqual((await h.invoke('bootstrap')).platforms, bound);
+  assert.equal(h.networkCalls.length, 3);
+  assert(h.networkCalls.every(call => new URL(call.url).hostname === 'codeforces.com'));
+  assert(h.networkCalls.every(call => call.options.bypassCustomProtocolHandlers && call.options.credentials === 'omit' && !call.options.headers.Authorization));
+  assert.deepEqual(h.stored('settings.json'), initialSettings);
+  assert.equal(h.stored('local.json'), null);
+  assert.equal(h.stored('auth.json'), null);
+  await assert.rejects(h.invoke('bindPlatform', 'CF', 'https://evil.test/profile/time-lo'));
+  assert.deepEqual(h.stored('platforms.json'), bound, 'invalid binding must preserve the successful snapshot');
+  rating = 1200;
+  const refreshed = await h.invoke('refreshPlatform', 'CF');
+  assert.equal(refreshed.CF.data.rating, 1200);
+  offline = true;
+  const failed = await h.invoke('refreshPlatform', 'CF');
+  assert.deepEqual(failed.CF.data, refreshed.CF.data);
+  assert.match(failed.CF.error, /platform offline/);
+  assert.equal(failed.CF.updatedAt, refreshed.CF.updatedAt);
+  const restarted = harness({ account: null, files: { 'platforms.json': h.stored('platforms.json') } });
+  assert.deepEqual((await restarted.invoke('bootstrap')).platforms, failed);
+  assert.equal(restarted.networkCalls.length, 0);
+  await restarted.invoke('logout');
+  await restarted.invoke('saveSettings', { repo: 'other/repo' });
+  assert.deepEqual((await restarted.invoke('bootstrap')).platforms, failed, 'GitHub logout and repository switch must retain device bindings');
+  assert.deepEqual(await restarted.invoke('unbindPlatform', 'CF'), {});
+  assert.deepEqual(restarted.stored('platforms.json'), {});
+});
+
+test('active platform requests prevent update checks, downloads and installation and release locks on failure', async () => {
+  const gate = deferred();
+  const h = harness({ networkBackend: async url => { await gate.promise; return cfResponse(url); } });
+  const binding = h.invoke('bindPlatform', 'CF', 'https://codeforces.com/profile/time-lo');
+  for (const name of ['checkForUpdates', 'downloadUpdate', 'installUpdate']) await assert.rejects(h.invoke(name), /等待/);
+  await assert.rejects(h.invoke('refreshPlatform', 'CF'), /正在查询/);
+  await assert.rejects(h.invoke('unbindPlatform', 'CF'), /正在查询/);
+  assert.equal(h.updaterCalls.filter(call => call.method !== 'getState').length, 0);
+  assert.equal(h.spawnCalls.length, 0);
+  gate.reject(new Error('platform query failed'));
+  await assert.rejects(binding, /platform query failed/);
+  assert.equal((await h.invoke('checkForUpdates')).phase, 'available');
+  assert.deepEqual(await h.invoke('unbindPlatform', 'CF'), {});
+});
+
+test('platform IPC shares sender validation and update locks and opens only supported HTTPS profile links', async () => {
+  const gate = deferred(), h = harness({ updaterBackend: { download: () => gate.promise } });
+  const downloading = h.invoke('downloadUpdate');
+  for (const [name, args] of [['bindPlatform', ['CF', 'https://codeforces.com/profile/time-lo']], ['refreshPlatform', ['CF']], ['unbindPlatform', ['CF']]]) {
+    await assert.rejects(h.invoke(name, ...args), /更新/);
+    await assert.rejects(h.handlers.get(name)({ sender: {} }, ...args), /非法调用/);
+  }
+  assert.equal(h.networkCalls.length, 0);
+  gate.resolve(); await downloading;
+  for (const url of ['https://leetcode.cn/u/time-lo/', 'https://leetcode.com/u/time-lo/', 'https://www.luogu.com/user/123']) await h.invoke('openExternal', url);
+  for (const url of ['http://leetcode.cn/u/time-lo/', 'https://leetcode.cn.evil.test/u/time-lo/', 'https://evil.test/']) await assert.rejects(h.invoke('openExternal', url), /仅允许/);
+  await assert.rejects(h.invoke('openAuthUrl', 'https://leetcode.cn/u/time-lo/'), /GitHub 授权/);
+  assert.equal(h.externalCalls.length, 3);
+});
+
+test('preload exposes platform IPC alongside existing auth, contest, formatter and update methods', async () => {
+  let bridge;
+  const calls = [], listeners = new Map();
+  vm.runInNewContext(fs.readFileSync(path.resolve(__dirname, '../electron/preload.cjs'), 'utf8'), { require(name) {
+    assert.equal(name, 'electron');
+    return { contextBridge: { exposeInMainWorld(name, value) { assert.equal(name, 'notebook'); bridge = value; } }, ipcRenderer: {
+      invoke(name, ...args) { calls.push({ name, args }); return Promise.resolve(name); },
+      on(name, fn) { listeners.set(name, fn); }, removeListener(name, fn) { assert.equal(listeners.get(name), fn); listeners.delete(name); }
+    } };
+  } });
+  for (const name of ['bindPlatform', 'refreshPlatform', 'unbindPlatform', 'getContests', 'login', 'formatCode', 'installUpdate']) assert.equal(typeof bridge[name], 'function');
+  assert.equal(await bridge.bindPlatform('CF', 'https://codeforces.com/profile/time-lo'), 'bindPlatform');
+  assert.deepEqual(calls, [{ name: 'bindPlatform', args: ['CF', 'https://codeforces.com/profile/time-lo'] }]);
+  const stop = bridge.onAuthProgress(() => {}); stop();
+  assert.equal(listeners.size, 0);
+});
 
 test('contest IPC reads cache without network at bootstrap and fetches only fixed official sources anonymously', async () => {
   const h = harness({ account: null, networkBackend: async url => {

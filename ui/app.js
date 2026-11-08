@@ -27,6 +27,7 @@
   try { cached = JSON.parse(localStorage.getItem(STORAGE) || 'null'); } catch (_) { /* Storage may be disabled. */ }
   const s = { view: 'home', records: [], local: { records: [], favorites: [], mastery: {}, draft: {} }, settings: {}, account: null, authStatus: { status: 'anonymous' }, permissions: {}, issues: [], editor: null, lastSync: null, error: '', selected: null, comments: new Map(), loading: true, busy: false, tagCatalog: window.QMX_TAG_PRESETS || { version: 'local', source: 'local', categories: [] }, tagReview: null };
   s.appVersion = ''; s.update = null;
+  window.NotebookPlatforms?.init({ bridge, onSettings: () => $('#settings-button').click() });
   let updateRunning = false;
   let updateReady = false;
   let toastTimer;
@@ -73,6 +74,7 @@
     if (payload.tagCatalog && Array.isArray(payload.tagCatalog.categories)) { s.tagCatalog = payload.tagCatalog; s.catalogFromPayload = true; }
     if (Object.prototype.hasOwnProperty.call(payload, 'contests')) acceptContests(payload.contests);
     if (payload.authStatus) s.authStatus = payload.authStatus;
+    window.NotebookPlatforms?.render(payload.platforms || {});
     if (typeof payload.appVersion === 'string') s.appVersion = payload.appVersion;
     if (payload.update && typeof payload.update === 'object') s.update = { ...payload.update };
     if (payload.updateCapability) s.updateCapability = payload.updateCapability;
@@ -580,6 +582,7 @@
     $$('.nav-item,.rail-nav-item').forEach(node => { node.classList.toggle('active', node.dataset.view === s.view); if (node.dataset.view === s.view) node.setAttribute('aria-current', 'page'); else node.removeAttribute('aria-current'); });
     const all = records(); $('#count-public').textContent = all.filter(record => record.kind === 'document').length; $('#count-favorites').textContent = all.filter(favorite).length;
     $('#home-panel').hidden = s.view !== 'home';
+    $('#platform-overview').hidden = s.view !== 'home';
     const placeholder = ['tricks', 'algorithms'].includes(s.view);
     $('#section-placeholder').hidden = !placeholder;
     $('#stats-panel').hidden = s.view !== 'stats'; $('#library-panel').hidden = s.view === 'home' || s.view === 'stats' || placeholder; updateStatus();

@@ -18,6 +18,7 @@ auth.json
 local.json
 cache.json
 settings.json
+platforms.json
 
 # Local handoff artifacts; source lives in the repository, binaries in Releases
 /qmx-acm-notebook-source.zip

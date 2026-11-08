@@ -2,7 +2,7 @@
 
 面向 ACM 集训队的 Windows、Linux 与 macOS 本地错题与算法资料客户端，无需自建服务器、数据库或域名。默认资料来源：[qmx-acm-data/2026](https://github.com/qmx-acm-data/2026)。
 
-**[下载 Windows x64 安装包 v0.9.3](https://github.com/qmx-acm-data/qmx-acm-notebook/releases/download/v0.9.3/QMX-Notebook-Setup-0.9.3.exe)** · [所有版本](https://github.com/qmx-acm-data/qmx-acm-notebook/releases)
+**[下载 Windows x64 安装包 v0.10.0](https://github.com/qmx-acm-data/qmx-acm-notebook/releases/download/v0.10.0/QMX-Notebook-Setup-0.10.0.exe)** · [所有版本](https://github.com/qmx-acm-data/qmx-acm-notebook/releases)
 
 下载后运行安装程序。首次配置、登录、数据备份与已知限制见 [使用指南](docs/USAGE.md)。当前为预览版，客户端 OAuth 在线投稿尚未完成验收。
 
@@ -17,6 +17,7 @@
 - 旧版首次需手动安装 0.3.0，之后可通过客户端检查更新。
 - 启动进入主页，图标导航支持悬浮展开与固定；公共题库、个人收藏可直接访问，我的题解、讨论和统计在主页提供入口。
 - 主页统一展示洛谷、Codeforces、AtCoder、牛客比赛提醒，独立缓存、北京时间倒计时与赛时；支持“不参加”和勾选恢复，AtCoder 显示 ABC、ARC、AGC、AHC 类型标签。
+- 设置绑定 CF、AtCoder、洛谷、牛客和力扣公开主页，主页统一展示做题与提交统计、最近比赛、CF/AtCoder Rating 图及每日做题热图；支持局部平台切换和悬停详情，新用户无默认绑定。
 - 展示 Markdown、公式、代码与平台原生难度，提供三种界面风格；代码支持高亮、复制和离线格式化（含 Rust），阅读字号与行号可设置。
 
 ## 文档

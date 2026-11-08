@@ -29,7 +29,8 @@ test('backs up only known existing files, preserves originals, records hashes wi
     'local.json': Buffer.from('{"notes":"中文"}'),
     'settings.json': Buffer.from('{"theme":"dark"}'),
     'auth.json': Buffer.from('{"token":"secret-token-never-in-receipt"}'),
-    'cache.json': Buffer.from([0, 255, 1, 2])
+    'cache.json': Buffer.from([0, 255, 1, 2]),
+    'platforms.json': Buffer.from('{"CF":{"binding":{"id":"time-lo"},"data":{"rating":1061}}}')
   };
   const before = {};
   for (const [name, bytes] of Object.entries(files)) {
