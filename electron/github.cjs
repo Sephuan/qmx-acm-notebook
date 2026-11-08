@@ -102,6 +102,12 @@ function validatePath(path) {
   return path;
 }
 
+function parseAlgorithmNote(path, text, extra = {}) {
+  const record = parseDocument(path, text, extra);
+  const { meta } = frontmatter(text);
+  return { ...record, kind: 'algorithm-note', noteScope: meta.note_scope === 'public' ? 'public' : 'personal', nodeId: String(meta.node_id || 'root'), featured: meta.featured === true };
+}
+
 function samePayload(a, b) {
   const comparable = text => {
     const { meta, body } = frontmatter(text, true);
@@ -217,10 +223,55 @@ class GitHub {
   }
 
   recordResult(path, text, sha, branch) {
-    return parseDocument(path, text, {
-      sha, repo: this.repo, branch,
-      url: `https://github.com/${this.repo}/blob/${encodeURIComponent(branch)}/${path.split('/').map(encodeURIComponent).join('/')}`,
-    });
+    const extra = { sha, repo: this.repo, branch,
+      url: `https://github.com/${this.repo}/blob/${encodeURIComponent(branch)}/${path.split('/').map(encodeURIComponent).join('/')}` };
+    return path.startsWith('algorithms/notes/') ? parseAlgorithmNote(path, text, extra) : parseDocument(path, text, extra);
+  }
+
+  async clearFeaturedAlgorithmNotes(branch, exceptPath) {
+    const { data: tree } = await this.request(`/repos/${this.repo}/git/trees/${encodeURIComponent(branch)}?recursive=1`);
+    const targets = (tree.tree || []).filter(item => item.type === 'blob' && item.path.startsWith('algorithms/notes/public/') && item.path.endsWith('.md') && item.path !== exceptPath);
+    for (const target of targets) {
+      const current = await this.currentDocument(target.path, branch);
+      if (!current) continue;
+      const parsed = frontmatter(current.text, true);
+      if (parsed.meta.featured !== true) continue;
+      const meta = { ...parsed.meta, featured: false, updated_at: new Date().toISOString() };
+      const text = `---\n${YAML.stringify(meta)}---\n${parsed.body}`;
+      await this.request(this.contentEndpoint(target.path), { method: 'PUT', body: JSON.stringify({ message: `取消精选算法笔记：${meta.title || target.path}`, content: Buffer.from(text).toString('base64'), branch, sha: current.sha }) });
+    }
+  }
+
+  async saveAlgorithmNote(record) {
+    this.checkScope(record);
+    if (record.path !== undefined) validatePath(record.path);
+    if (record.path && (!record.sha || !String(record.sha).trim())) throw new Error('更新算法笔记必须提供当前 SHA，请先同步');
+    if (!record.body || typeof record.body !== 'string') throw new Error('算法笔记正文必须是字符串');
+    const { user, branch } = await this.writeContext();
+    const admin = (await this.request(`/repos/${this.repo}`)).data.permissions?.admin === true;
+    const scope = record.noteScope === 'public' ? 'public' : 'personal';
+    if (scope === 'public' && !admin) throw new Error('只有仓库管理员可以发布公共算法笔记');
+    const clientId = record.clientId || require('node:crypto').randomUUID();
+    if (!UUID.test(clientId)) throw new Error('算法笔记 clientId 无效');
+    const path = record.path || (scope === 'public' ? `algorithms/notes/public/${clientId.toLowerCase()}.md` : `algorithms/notes/personal/${user.id}/${clientId.toLowerCase()}.md`);
+    const current = await this.currentDocument(path, branch);
+    if (record.path && !current) throw new Error('算法笔记已被删除，请先同步');
+    if (current && record.path && current.sha !== record.sha) throw new Error('算法笔记 SHA 冲突，请先同步');
+    if (current && record.path) {
+      const existing = frontmatter(current.text, true).meta;
+      if (existing.note_scope === 'public') { if (!admin) throw new Error('只有管理员可以编辑公共算法笔记'); }
+      else this.checkOwner(current.text, user);
+    }
+    const supplied = frontmatter(record.body, true);
+    const tags = Array.isArray(record.tags) ? record.tags.map(String) : Array.isArray(supplied.meta.tags) ? supplied.meta.tags.map(String) : [];
+    const meta = { schema: 3, note_scope: scope, node_id: String(record.nodeId || supplied.meta.node_id || 'root'), featured: admin && record.featured === true, author_id: user.id, author: user.login, title: String(record.title || supplied.meta.title || '未命名算法笔记'), tags, client_id: clientId.toLowerCase(), updated_at: new Date().toISOString() };
+    const text = `---\n${YAML.stringify(meta)}---\n${supplied.body}`;
+    if (text.length > 1000000) throw new Error('算法笔记内容过长');
+    if (admin && meta.featured) await this.clearFeaturedAlgorithmNotes(branch, path);
+    if (current && samePayload(current.text, text)) return this.recordResult(path, current.text, current.sha, branch);
+    const { data } = await this.request(this.contentEndpoint(path), { method: 'PUT', body: JSON.stringify({ message: `${current ? '更新' : '新增'}算法笔记：${meta.title}`, content: Buffer.from(text).toString('base64'), branch, ...(current ? { sha: current.sha } : {}) }) });
+    if (!data.content?.sha) throw new Error('算法笔记写入结果未知，请先同步核实');
+    return this.recordResult(path, text, data.content.sha, branch);
   }
 
   async saveDocument(record) {
@@ -335,9 +386,14 @@ class GitHub {
       this.pages(`/repos/${this.repo}/issues?state=all&sort=updated&direction=desc`),
     ]);
     if (tree.truncated) throw new Error('仓库目录过大，GitHub 未返回完整文件树');
+    const hasAlgorithmNotes = tree.tree.some(x => x.type === 'blob' && x.path.startsWith('algorithms/notes/'));
+    const currentUser = hasAlgorithmNotes && this.token ? (await this.request('/user')).data : null;
+    const personalPrefix = currentUser?.id ? `algorithms/notes/personal/${currentUser.id}/` : null;
     const docs = tree.tree.filter(x => {
       if (x.type !== 'blob') return false;
-      try { validatePath(x.path); return true; } catch { return false; }
+      try { validatePath(x.path); } catch { return false; }
+      if (x.path.startsWith('algorithms/notes/')) return x.path.startsWith('algorithms/notes/public/') || !!personalPrefix && x.path.startsWith(personalPrefix);
+      return true;
     });
     const blobs = { ...previous.blobs };
     const records = [];
@@ -353,7 +409,9 @@ class GitHub {
       })));
     }
     return {
-      records, issues: issues.filter(x => !x.pull_request && !/<!--\s*qmx-tag-request\s+[\s\S]*?-->/i.test(String(x.body || ''))).map(x => ({ ...issueRecord(x), repo: this.repo })),
+      records: records.filter(r => r.kind === 'document'),
+      algorithmNotes: records.filter(r => r.kind === 'algorithm-note'),
+      issues: issues.filter(x => !x.pull_request && !/<!--\s*qmx-tag-request\s+[\s\S]*?-->/i.test(String(x.body || ''))).map(x => ({ ...issueRecord(x), repo: this.repo })),
       blobs: Object.fromEntries(docs.map(d => [d.sha, blobs[d.sha]])), branch, lastSync: new Date().toISOString(),
     };
   }
@@ -381,4 +439,4 @@ class GitHub {
   }
 }
 
-module.exports = { GitHub, repoParts, identify, parseDocument, issueRecord, issueBody, documentContent };
+module.exports = { GitHub, repoParts, identify, parseDocument, parseAlgorithmNote, issueRecord, issueBody, documentContent };

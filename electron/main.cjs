@@ -107,6 +107,7 @@ function state(error) {
   const matching = cache.repo === s.repo;
   return {
     records: matching ? (cache.records || []).filter(r => r.kind === 'document').map(r => ({ ...r, repo: s.repo })) : [],
+    algorithmNotes: matching ? (cache.algorithmNotes || []).map(r => ({ ...r, repo: s.repo })) : [],
     issues: matching ? (cache.issues || (cache.records || []).filter(r => r.kind === 'issue')).map(r => ({ ...r, repo: s.repo })) : [],
     lastSync: matching ? cache.lastSync : null,
     tagCatalog: matching && cache.tagCatalog ? cache.tagCatalog : require('../ui/tag-presets.js'),
@@ -347,7 +348,7 @@ function setup() {
       try { tagCatalog = await client().getTagCatalog(); }
       catch (error) { tagCatalogError = error.status === 401 ? '标签目录授权已失效，请重新登录' : '标签目录暂未更新，继续使用已缓存的标签'; }
       if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
-      save('cache.json', { ...result, repo, tagCatalog, tagCatalogError });
+      save('cache.json', { ...result, repo, tagCatalog, tagCatalogError, algorithmNotes: Array.isArray(result.algorithmNotes) ? result.algorithmNotes : [] });
       if (token) { try { await refreshIdentity(); } catch (error) { permissions = null; return state(`资料已同步，账号权限刷新失败：${error.message}`); } }
       return state();
     } finally { syncBusy = false; }
@@ -433,6 +434,15 @@ function setup() {
     rememberDocument(result); return result;
   });
   handle('saveDocument', saveDocument);
+  handle('saveAlgorithmNote', record => writeOperation(async () => {
+    checkRecordRepo(record);
+    if (!account?.id || !token) throw new Error('请先登录 GitHub');
+    const result = await client().saveAlgorithmNote(record);
+    const cache = read('cache.json', {});
+    const notes = (cache.algorithmNotes || []).filter(item => item.path !== result.path);
+    save('cache.json', { ...(cache.repo === settings().repo ? cache : {}), repo: settings().repo, algorithmNotes: [...notes, result] });
+    return result;
+  }));
   handle('submit', saveDocument);
   handle('propose', saveDocument);
   handle('deleteDocument', record => writeOperation(async () => {

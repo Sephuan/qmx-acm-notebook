@@ -25,7 +25,7 @@
   ];
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(STORAGE) || 'null'); } catch (_) { /* Storage may be disabled. */ }
-  const s = { view: 'home', records: [], local: { records: [], favorites: [], mastery: {}, draft: {} }, settings: {}, account: null, authStatus: { status: 'anonymous' }, permissions: {}, issues: [], editor: null, lastSync: null, error: '', selected: null, comments: new Map(), loading: true, busy: false, tagCatalog: window.QMX_TAG_PRESETS || { version: 'local', source: 'local', categories: [] }, tagReview: null };
+  const s = { view: 'home', records: [], algorithmNotes: [], algorithmTree: window.QMX_ALGORITHM_TREE || { id: 'root', label: 'XCPC算法', children: [] }, local: { records: [], favorites: [], mastery: {}, draft: {} }, settings: {}, account: null, authStatus: { status: 'anonymous' }, permissions: {}, issues: [], editor: null, lastSync: null, error: '', selected: null, comments: new Map(), loading: true, busy: false, tagCatalog: window.QMX_TAG_PRESETS || { version: 'local', source: 'local', categories: [] }, tagReview: null };
   s.appVersion = ''; s.update = null;
   window.NotebookPlatforms?.init({ bridge, onSettings: () => $('#settings-button').click() });
   let updateRunning = false;
@@ -80,6 +80,7 @@
     if (payload.updateCapability) s.updateCapability = payload.updateCapability;
     renderUpdate();
     s.records = (Array.isArray(payload.records) ? payload.records : []).filter(record => record.kind === 'document');
+    s.algorithmNotes = (Array.isArray(payload.algorithmNotes) ? payload.algorithmNotes : []).filter(record => record.kind === 'algorithm-note');
     s.issues = (Array.isArray(payload.issues) ? payload.issues : []).filter(record => record.kind === 'issue');
     s.permissions = payload.permissions || {};
     s.settings = payload.settings && typeof payload.settings === 'object' ? payload.settings : {};
@@ -583,11 +584,12 @@
     const all = records(); $('#count-public').textContent = all.filter(record => record.kind === 'document').length; $('#count-favorites').textContent = all.filter(favorite).length;
     $('#home-panel').hidden = s.view !== 'home';
     $('#platform-overview').hidden = s.view !== 'home';
-    const placeholder = ['tricks', 'algorithms'].includes(s.view);
+    $('#algorithm-panel').hidden = s.view !== 'algorithms';
+    const placeholder = ['tricks'].includes(s.view);
     $('#section-placeholder').hidden = !placeholder;
-    $('#stats-panel').hidden = s.view !== 'stats'; $('#library-panel').hidden = s.view === 'home' || s.view === 'stats' || placeholder; updateStatus();
+    $('#stats-panel').hidden = s.view !== 'stats'; $('#library-panel').hidden = s.view === 'home' || s.view === 'stats' || placeholder || s.view === 'algorithms'; updateStatus();
     if (s.view === 'home') { renderHome(); return; }
-    if (placeholder) { $('#section-placeholder').replaceChildren(empty(s.view === 'tricks' ? '留住解题的灵感' : '给知识一个安放的地方', '这个分区已就位，内容将在后续完善。')); return; }
+    if (s.view === 'algorithms') { renderAlgorithmNotes(); return; }
     if (s.view === 'stats') { renderStats(); return; }
     const items = filteredRecords(); $('#result-count').textContent = items.length;
     $('.list-heading > span:last-child').textContent = facets.tags.size ? '标签命中数 ↓ · 相关度 / 更新时间' : $('#search-input').value.trim() ? '匹配程度 ↓' : '最近更新 ↓';
@@ -720,6 +722,257 @@
     if (actionButton.dataset.action === 'copy') void copyCodeBlock(pre, actionButton);
     else if (actionButton.dataset.action === 'format') void formatCodeBlock(pre, actionButton);
   }
+  let algorithmSelectedNode = 'root';
+  let algorithmNodeChosen = false;
+  let algorithmDrillId = null;
+  let algorithmZoom = 1;
+  function flattenTree(node, depth = 0, parent = null, out = []) { out.push({ ...node, depth, parent }); (node.children || []).forEach(child => flattenTree(child, depth + 1, node.id, out)); return out; }
+  function algorithmNodes() { return flattenTree(s.algorithmTree); }
+  function algorithmLabel(id) { return algorithmNodes().find(node => node.id === id)?.label || '算法体系'; }
+  function findAlgorithmNode(id, node = s.algorithmTree, parent = null) {
+    if (!node) return null;
+    if (node.id === id) return { node, parent };
+    for (const kid of node.children || []) { const hit = findAlgorithmNode(id, kid, node); if (hit) return hit; }
+    return null;
+  }
+  function algorithmRoot() { const hit = algorithmDrillId ? findAlgorithmNode(algorithmDrillId) : null; return hit ? hit.node : s.algorithmTree; }
+  function algorithmPath(id) {
+    const names = []; let hit = findAlgorithmNode(id);
+    while (hit) { names.unshift(hit.node.label); hit = hit.parent ? findAlgorithmNode(hit.parent.id) : null; }
+    return names.join(' / ');
+  }
+  // 难度档位取自 xcpc 图例：颜色即难度等级。
+  const ALGORITHM_LEVELS = [
+    { color: 'basic', label: '基础（入门）', aliases: ['基础', '入门', '青', '青色'] },
+    { color: 'beginner', label: '初级（铜牌）', aliases: ['初级', '铜牌', '绿', '绿色'] },
+    { color: 'intermediate', label: '中级（银牌）', aliases: ['中级', '银牌', '蓝', '蓝色'] },
+    { color: 'advanced', label: '高级（金牌）', aliases: ['高级', '金牌', '橙', '橙色'] },
+    { color: 'expert', label: '特级（争冠）', aliases: ['特级', '争冠', '红', '红色'] },
+    { color: 'board', label: '板子', aliases: ['板子', '模板', '紫', '紫色'] },
+    { color: 'useful', label: '常用', aliases: ['常用', 'useful', '有用', '品红'] },
+    { color: 'useless', label: '不常用', aliases: ['不常用', 'useless', '无用', '灰', '灰色'] }
+  ];
+  function algorithmLevelOf(nodeId) { const hit = findAlgorithmNode(nodeId); return hit && hit.node.color ? hit.node.color : ''; }
+  function algorithmLevelMatches(nodeId, query) {
+    const q = query.trim().toLowerCase(); if (!q) return false;
+    const level = algorithmLevelOf(nodeId);
+    const entry = ALGORITHM_LEVELS.find(item => item.color === level);
+    return !!entry && entry.aliases.some(alias => alias.toLowerCase().includes(q) || q.includes(alias.toLowerCase()));
+  }
+  function algorithmNoteMatches(note, query) { const q = query.trim().toLowerCase(); return !q || String(note.author || '').toLowerCase().includes(q) || (note.tags || []).some(tag => String(tag).toLowerCase().includes(q)); }
+  function algorithmNodeWidth(label) { return Math.max(66, Math.min(190, String(label).length * 10 + 20)); }
+  function renderAlgorithmNotes() {
+    const panel = $('#algorithm-panel'); panel.replaceChildren();
+    const toolbar = element('div', 'algorithm-toolbar');
+    const searchWrap = element('label', 'algorithm-search-wrap'); const search = element('input', 'algorithm-search'); search.type = 'search'; search.placeholder = '按标签 / 作者 / 难度搜索'; search.setAttribute('aria-label', '按标签、作者或难度搜索算法笔记');
+    const levelSelect = element('select', 'algorithm-level-filter'); levelSelect.setAttribute('aria-label', '按难度筛选算法笔记');
+    append(levelSelect, element('option', '', '全部难度'));
+    levelSelect.firstChild.value = '';
+    ALGORITHM_LEVELS.forEach(item => { const option = element('option', '', item.label); option.value = item.color; levelSelect.append(option); });
+    levelSelect.value = panel.dataset.level || '';
+    levelSelect.addEventListener('change', () => { panel.dataset.level = levelSelect.value; refreshNotes(); });
+    const mine = button('我的笔记', 'button secondary', () => { if (!s.account) { toast('请先登录 GitHub 账户'); return; } search.value = ''; panel.dataset.scope = panel.dataset.scope === 'personal' ? 'public' : 'personal'; renderAlgorithmNotes(); });
+    const upload = button('＋ 上传算法笔记', 'button primary', openAlgorithmNoteEditor); upload.id = 'algorithm-upload-button';
+    if (!s.account) upload.disabled = true;
+    append(searchWrap, element('span', 'algorithm-search-icon', '⌕'), search);
+    append(toolbar, element('strong', '', '算法笔记'), searchWrap, levelSelect, mine, upload); panel.append(toolbar);
+    const workspace = element('div', 'algorithm-workspace');
+    const treeBox = element('section', 'algorithm-tree-card');
+    const scroller = element('div', 'algorithm-tree-scroll');
+    const treeSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); treeSvg.classList.add('algorithm-tree-svg'); treeSvg.setAttribute('role', 'tree');
+    scroller.append(treeSvg);
+    const controls = append(element('div', 'tree-controls'),
+      button('＋', 'icon-button', () => { algorithmZoom = Math.min(1.8, algorithmZoom + .15); drawTree(); }),
+      button('−', 'icon-button', () => { algorithmZoom = Math.max(.55, algorithmZoom - .15); drawTree(); }),
+      button('重置', 'button subtle', () => { algorithmZoom = 1; drawTree(); scroller.scrollTop = 0; scroller.scrollLeft = 0; }));
+    const backButton = button('← 返回', 'button subtle algorithm-back-button', () => {
+      const hit = algorithmDrillId ? findAlgorithmNode(algorithmDrillId) : null;
+      const parent = hit && hit.parent ? hit.parent : null;
+      algorithmDrillId = parent && parent.id !== 'root' ? parent.id : null;
+      drawTree();
+      scroller.scrollTop = 0; scroller.scrollLeft = 0;
+    });
+    const crumb = element('span', 'algorithm-tree-crumb', '主树链 · 点击节点展开详细树');
+    backButton.hidden = true;
+    append(treeBox, append(element('div', 'algorithm-tree-heading'), backButton, element('div', 'eyebrow', 'ALGORITHM MAP'), crumb), controls, scroller); workspace.append(treeBox);
+    const notesBox = element('aside', 'algorithm-note-drawer'); notesBox.hidden = !algorithmNodeChosen; workspace.append(notesBox); panel.append(workspace);
+    const scope = panel.dataset.scope || 'public';
+
+    function levelFromQuery(q) {
+      if (!q) return '';
+      const exact = ALGORITHM_LEVELS.find(item => item.label.toLowerCase() === q || item.aliases.some(alias => alias.toLowerCase() === q));
+      if (exact) return exact.color;
+      const partial = ALGORITHM_LEVELS.find(item => item.label.toLowerCase().includes(q) || item.aliases.some(alias => alias.toLowerCase().includes(q)));
+      return partial ? partial.color : '';
+    }
+    function activeLevel() {
+      const fromSelect = panel.dataset.level || '';
+      if (fromSelect) return fromSelect;
+      return levelFromQuery(search.value.trim().toLowerCase());
+    }
+    let renderedLevel = '';
+    function refreshNotes() {
+      notesBox.hidden = !algorithmNodeChosen; notesBox.replaceChildren();
+      const query = search.value, level = activeLevel();
+      // 难度变化时同步淡化树中的其他颜色节点。
+      if (level !== renderedLevel) { renderedLevel = level; if (document.querySelector('.algorithm-tree-svg')) drawTree(); }
+      const levelLabel = (ALGORITHM_LEVELS.find(item => item.color === level) || {}).label || '';
+      // 指定难度时跨节点检索该颜色下的全部笔记；否则只显示当前节点。
+      const notes = s.algorithmNotes.filter(note => (scope === 'personal' ? note.noteScope === 'personal' && isMineNote(note) : note.noteScope === 'public')
+        && (level ? algorithmLevelOf(note.nodeId) === level : note.nodeId === algorithmSelectedNode)
+        && algorithmNoteMatches(note, level ? '' : query))
+        .sort((a, b) => Number(b.featured) - Number(a.featured) || new Date(b.updatedAt) - new Date(a.updatedAt));
+      const heading = level ? `${levelLabel} · 全部节点` : algorithmLabel(algorithmSelectedNode);
+      append(notesBox, button('× 关闭', 'button subtle algorithm-close-button', () => { algorithmNodeChosen = false; notesBox.hidden = true; }), append(element('div', 'algorithm-note-heading'), element('div', 'eyebrow', scope === 'personal' ? 'MY NOTES' : 'PUBLIC NOTES'), element('h2', '', heading), element('span', '', `${notes.length} 篇`)));
+      if (!notes.length) { notesBox.append(empty('还没有算法笔记', level ? `当前没有标记为「${levelLabel}」的笔记。请先在算法树中选择该难度的节点上传。` : (scope === 'personal' ? '上传第一篇个人笔记。' : '管理员或其他学习者尚未在此节点发布笔记。'), { label: '上传算法笔记', fn: openAlgorithmNoteEditor })); return; }
+      notes.forEach(note => { const card = button('', `algorithm-note-card${note.featured ? ' featured' : ''}`, () => openAlgorithmNoteDetail(note)); append(card, append(element('div', 'algorithm-note-card-meta'), note.featured ? element('span', 'badge featured-badge', '精选') : null, element('span', '', `${authorName(note.author)} · ${date(note.updatedAt)}`)), element('h3', '', note.title), tags(note)); notesBox.append(card); });
+    }
+
+    // 只渲染当前层级的根：主视图显示 10 条主树链，点击父节点后以该节点为根展开它的详细子树。
+    // 主视图只显示根与 10 条主树链；点击某个父节点后，以它为根展示它的完整子树。
+    function collectVisible(maxDepth, baseRoot) {
+      const root = baseRoot || algorithmRoot(), out = [];
+      (function walk(node, depth, parent) {
+        out.push({ ...node, depth, parent });
+        if (depth < maxDepth) (node.children || []).forEach(kid => walk(kid, depth + 1, node.id));
+      })(root, 0, null);
+      return out;
+    }
+    // 选中难度时只保留该颜色的节点及其祖先链，保证结果真正出现在画布上。
+    function pruneByLevel(node, level) {
+      const kids = (node.children || []).map(kid => pruneByLevel(kid, level)).filter(Boolean);
+      if (node.color === level || kids.length || node.id === s.algorithmTree.id) return { ...node, children: kids };
+      return null;
+    }
+
+    function computeLayout(nodes) {
+      const rowH = 26 * algorithmZoom, colW = 200 * algorithmZoom;
+      const byId = new Map(nodes.map(n => [n.id, n]));
+      const kidsOf = id => nodes.filter(n => n.parent === id);
+      const countLeaves = node => { const kids = kidsOf(node.id); return kids.length ? kids.reduce((sum, kid) => sum + countLeaves(kid), 0) : 1; };
+      let leftWeight = 0, rightWeight = 0;
+      const sideById = new Map();
+      kidsOf(nodes[0].id)
+        .map(trunk => ({ trunk, weight: countLeaves(trunk) }))
+        .sort((a, b) => b.weight - a.weight)
+        .forEach(({ trunk, weight }) => {
+          if (leftWeight <= rightWeight) { sideById.set(trunk.id, -1); leftWeight += weight; }
+          else { sideById.set(trunk.id, 1); rightWeight += weight; }
+        });
+      const positions = new Map();
+      const cursor = { left: 0, right: 0 };
+      function place(node, depth, side) {
+        const key = side < 0 ? 'left' : 'right';
+        const kids = kidsOf(node.id);
+        if (!kids.length) {
+          const y = cursor[key] * rowH + rowH;
+          cursor[key] += 1;
+          positions.set(node.id, { x: side * depth * colW, y, side, depth });
+          return y;
+        }
+        const ys = kids.map(kid => place(kid, depth + 1, side));
+        const y = (Math.min(...ys) + Math.max(...ys)) / 2;
+        positions.set(node.id, { x: side * depth * colW, y, side, depth });
+        return y;
+      }
+      const trunkYs = kidsOf(nodes[0].id).map(trunk => place(trunk, 1, sideById.get(trunk.id) || 1));
+      const rootY = trunkYs.length ? (Math.min(...trunkYs) + Math.max(...trunkYs)) / 2 : rowH;
+      positions.set(nodes[0].id, { x: 0, y: rootY, side: 0, depth: 0 });
+      return positions;
+    }
+
+    function drawTree() {
+      backButton.hidden = !algorithmDrillId;
+      crumb.textContent = algorithmDrillId ? algorithmPath(algorithmDrillId) : '主树链 · 点击节点展开详细树';
+      const level = activeLevel();
+      let nodes;
+      if (level) {
+        const pruned = pruneByLevel(s.algorithmTree, level) || s.algorithmTree;
+        nodes = collectVisible(Infinity, pruned);
+        crumb.textContent = `难度：${(ALGORITHM_LEVELS.find(item => item.color === level) || {}).label || level} · 仅显示该颜色节点`;
+      } else {
+        nodes = collectVisible(algorithmDrillId ? Infinity : 1);
+      }
+      const positions = computeLayout(nodes);
+      let minX = 0, maxX = 0, minY = 0, maxY = 0;
+      nodes.forEach(node => {
+        const p = positions.get(node.id); if (!p) return;
+        const w = algorithmNodeWidth(node.label);
+        minX = Math.min(minX, p.x - w / 2); maxX = Math.max(maxX, p.x + w / 2);
+        minY = Math.min(minY, p.y - 14); maxY = Math.max(maxY, p.y + 14);
+      });
+      const pad = 24;
+      const width = maxX - minX + pad * 2, height = maxY - minY + pad * 2;
+      treeSvg.setAttribute('width', String(Math.ceil(width)));
+      treeSvg.setAttribute('height', String(Math.ceil(height)));
+      treeSvg.setAttribute('viewBox', `${minX - pad} ${minY - pad} ${Math.ceil(width)} ${Math.ceil(height)}`);
+      treeSvg.replaceChildren();
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g'); treeSvg.append(g);
+      const labelOf = new Map(nodes.map(n => [n.id, n.label]));
+      nodes.forEach(node => {
+        if (!node.parent) return;
+        const from = positions.get(node.parent), to = positions.get(node.id);
+        if (!from || !to) return;
+        const pw = algorithmNodeWidth(labelOf.get(node.parent) || '');
+        const cw = algorithmNodeWidth(node.label);
+        const sign = to.x >= from.x ? 1 : -1;
+        const x1 = from.x + sign * pw / 2, x2 = to.x - sign * cw / 2, mid = (x1 + x2) / 2;
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', `M ${x1} ${from.y} C ${mid} ${from.y}, ${mid} ${to.y}, ${x2} ${to.y}`);
+        path.classList.add('algorithm-tree-edge'); g.append(path);
+      });
+      nodes.forEach(node => {
+        const p = positions.get(node.id); if (!p) return;
+        const w = algorithmNodeWidth(node.label);
+        const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        group.dataset.node = node.id; group.classList.add('algorithm-tree-node');
+        group.dataset.level = String(node.level ?? p.depth); group.dataset.color = node.color || 'parent';
+        if (node.id === algorithmSelectedNode) group.classList.add('selected');
+        const levelNow = activeLevel();
+        if (levelNow && (node.color || '') !== levelNow) group.classList.add('dimmed');
+        const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('x', p.x - w / 2); rect.setAttribute('y', p.y - 11);
+        rect.setAttribute('width', w); rect.setAttribute('height', 22); rect.setAttribute('rx', 7);
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', p.x); text.setAttribute('y', p.y + 4); text.setAttribute('text-anchor', 'middle');
+        text.textContent = node.label;
+        group.append(rect, text);
+        group.addEventListener('click', () => {
+          algorithmSelectedNode = node.id; algorithmNodeChosen = true; notesBox.hidden = false;
+          if ((node.children || []).length) { algorithmDrillId = node.id === 'root' ? null : node.id; scroller.scrollTop = 0; scroller.scrollLeft = 0; }
+          refreshNotes(); drawTree();
+        });
+        g.append(group);
+      });
+    }
+
+    // 鼠标拖动平移（按住空白处拖动；按节点仍是点击，因此不使用指针捕获）。
+    let dragState = null;
+    scroller.addEventListener('pointerdown', event => {
+      if (event.target.closest('.algorithm-tree-node')) return;
+      dragState = { x: event.clientX, y: event.clientY, left: scroller.scrollLeft, top: scroller.scrollTop, moved: false };
+    });
+    scroller.addEventListener('pointermove', event => {
+      if (!dragState) return;
+      const dx = event.clientX - dragState.x, dy = event.clientY - dragState.y;
+      if (!dragState.moved && Math.abs(dx) + Math.abs(dy) < 4) return;
+      dragState.moved = true; scroller.classList.add('dragging');
+      scroller.scrollLeft = dragState.left - dx;
+      scroller.scrollTop = dragState.top - dy;
+    });
+    const endDrag = () => { dragState = null; scroller.classList.remove('dragging'); };
+    scroller.addEventListener('pointerup', endDrag);
+    scroller.addEventListener('pointerleave', endDrag);
+    scroller.addEventListener('pointercancel', endDrag);
+
+    const hoverSearch = $('#algorithm-hover-search'); if (hoverSearch) { hoverSearch.value = search.value; hoverSearch.addEventListener('input', () => { search.value = hoverSearch.value; refreshNotes(); }); }
+    search.addEventListener('input', () => { if (hoverSearch) hoverSearch.value = search.value; refreshNotes(); });
+    drawTree(); refreshNotes();
+  }
+  function isMineNote(note) { return accountId() !== null && String(note.authorId || '') === accountId(); }
+  function openAlgorithmNoteDetail(note) { const panel=$('#algorithm-panel'); const drawer=element('div','algorithm-reading'); append(drawer,button('× 关闭算法笔记','button subtle algorithm-close-button',renderAlgorithmNotes),element('div','eyebrow','ALGORITHM NOTE'),element('h2','',note.title),append(element('div','author-row'),element('span','mini-avatar',authorName(note.author).slice(0,1)),element('span','',authorName(note.author)),element('span','separator','·'),element('span','',date(note.updatedAt)))); const body=element('div','markdown-body algorithm-reading-body');renderMarkdown(body,note.body);drawer.append(tags(note),body);panel.replaceChildren(drawer); }
+  function openAlgorithmNoteEditor() { if (!s.account || !s.permissions.push) { toast('请先登录具有仓库写入权限的 GitHub 账户'); return; } const form=$('#algorithm-note-form'); form.reset(); const node=form.elements.nodeId; node.replaceChildren(...algorithmNodes().map(n=>{const o=element('option','',n.label);o.value=n.id;return o;})); node.value=algorithmSelectedNode; form.elements.noteScope.value=s.permissions.admin ? 'public' : 'personal'; form.elements.noteScope.disabled=!s.permissions.admin; $('#algorithm-note-error').hidden=true; $('#algorithm-note-dialog').showModal(); }
+  $('#algorithm-note-form').addEventListener('submit', async event => { event.preventDefault(); const form=event.currentTarget;if(s.busy)return;const data=Object.fromEntries(new FormData(form));const note={title:data.noteTitle,noteScope:data.noteScope,nodeId:data.nodeId,tags:String(data.noteTags||'').split(/[,，、]/).map(x=>x.trim()).filter(Boolean),body:data.body,featured:data.featured === 'on',clientId:uuid(),repo:repo()};setBusy(true);try{const result=await call('saveAlgorithmNote',note);s.algorithmNotes=[...s.algorithmNotes.filter(x=>x.path!==result.path),result];$('#algorithm-note-dialog').close();render();toast('算法笔记已保存')}catch(error){$('#algorithm-note-error').textContent=errorMessage(error);$('#algorithm-note-error').hidden=false}finally{setBusy(false)}});
   function renderMarkdown(container, body) {
     const source = String(body || '还没有题解内容。可以从记录错因开始。');
     if (window.marked && window.DOMPurify) {
