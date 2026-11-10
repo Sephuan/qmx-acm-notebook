@@ -1,0 +1,22 @@
+{
+  "schema": 1,
+  "version": "1.1.1",
+  "runtimeVersion": "40.10.6",
+  "target": {
+    "size": 27536508,
+    "sha256": "4f153bc6ca0d2d81024fb4c2f9afadf20f84e931d65fa9099bde2d27cf75710a"
+  },
+  "patches": [
+    {
+      "fromVersion": "1.0.0",
+      "fromSize": 27508708,
+      "fromSha256": "c69133642d9979e74959ad0a9741ef1df7a64c4efeac110b1e473a2004001a98",
+      "path": "resources/deltas/c69133642d9979e74959ad0a9741ef1df7a64c4efeac110b1e473a2004001a98.qmxdelta",
+      "size": 211540,
+      "sha256": "dbc26f820f361e8fd04d2fcfa4eb0359794c691ad6d46dbcf0b87e1d1118c160",
+      "algorithm": "qmx-cdc-brotli-v1"
+    }
+  ],
+  "publishedAt": "2026-11-10T12:14:45.153Z",
+  "signature": "eZhBGcrZK0Zyqtb6trUMHKNU5QQdwFVYUblNWG5LwWJPeXdIYTrC7N2JP2TWTIAds5Iw6F3QAdwliMnlb+bGAw=="
+}
