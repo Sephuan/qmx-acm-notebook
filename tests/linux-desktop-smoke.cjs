@@ -112,8 +112,8 @@ async function bounded(promise, milliseconds, message) {
     await page.locator('.nav-item[data-view="home"]').click();
     await page.locator('.rail-nav-item[data-view="mine"]').click();
     await page.click('#submit-button');
-    await page.fill('[name="url"]', 'https://codeforces.com/problemset/problem/1/A');
-    await page.fill('[name="title"]', title);
+    await page.fill('#submit-dialog [name="url"]', 'https://codeforces.com/problemset/problem/1/A');
+    await page.fill('#submit-dialog [name="title"]', title);
     await page.fill('#record-body', body);
     await page.click('#save-local-button');
     await page.waitForSelector('#submit-dialog', { state: 'hidden' });
@@ -147,7 +147,7 @@ async function bounded(promise, milliseconds, message) {
     await page.locator('.record-card').filter({ hasText: title }).click();
     await page.getByRole('button', { name: '★ 已收藏', exact: true }).waitFor();
     await page.click('#edit-record-button');
-    assert.equal(await page.inputValue('[name="title"]'), title);
+    assert.equal(await page.inputValue('#submit-dialog [name="title"]'), title);
     assert.equal(await page.inputValue('#record-body'), body, 'Editor must restore exact Markdown');
     await page.click('[data-close="submit-dialog"]');
     assert.deepEqual(rendererErrors, [], 'Renderer must not throw');
