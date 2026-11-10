@@ -108,16 +108,16 @@ async function bounded(promise, milliseconds, message) {
     const ready = await launch();
     assert.equal(ready.settings.autoSync, false);
     assert.equal(ready.account, null);
-    await page.locator('.sidebar').hover();
-    await page.locator('.nav-item[data-view="home"]').click();
-    await page.locator('.rail-nav-item[data-view="mine"]').click();
+    assert.deepEqual(await page.locator('.nav-item').evaluateAll(nodes => nodes.map(node => node.dataset.view)), ['home', 'tricks', 'public', 'algorithms', 'favorites']);
     await page.click('#submit-button');
     await page.fill('#submit-dialog [name="url"]', 'https://codeforces.com/problemset/problem/1/A');
     await page.fill('#submit-dialog [name="title"]', title);
     await page.fill('#record-body', body);
     await page.click('#save-local-button');
     await page.waitForSelector('#submit-dialog', { state: 'hidden' });
-    await page.locator('.record-card').filter({ hasText: title }).waitFor();
+    await page.waitForSelector('body.reading-detail #detail-back-button');
+    assert.match(await page.locator('#detail-panel').innerText(), /Linux packaged smoke: 本地题解/);
+    assert.equal(await page.locator('body').getAttribute('data-view'), 'public');
     await page.getByRole('button', { name: '☆ 收藏', exact: true }).click();
     await page.getByRole('button', { name: '★ 已收藏', exact: true }).waitFor();
     // The UI renders optimistically; poll the real IPC bootstrap until disk persistence finishes.

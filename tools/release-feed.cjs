@@ -94,7 +94,13 @@ function verifyFeed(root = '.', options = {}) {
   if (bytes.length !== metadata.size || hash !== metadata.sha256.toLowerCase()) {
     throw safeError('Signed application feed hash mismatch');
   }
-  return { manifest, file: metadata, archivePath: archive };
+  const result = { manifest, file: metadata, archivePath: archive };
+  if (options.verifyDelta !== false) {
+    result.delta = require('./delta-feed.cjs').verifyDeltaFeed(root, {
+      publicKey: publicKeyFor(options), manifest, file: metadata
+    });
+  }
+  return result;
 }
 
 function main(argv = process.argv.slice(2)) {

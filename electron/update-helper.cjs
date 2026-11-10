@@ -120,7 +120,7 @@ function writeJson(file, value, exclusive = false) {
 function readJson(file) { if (regular(file).size > 512 * 1024) throw new Error('Update JSON too large'); return JSON.parse(fs.readFileSync(file, 'utf8')); }
 function existingRegular(file) { try { regular(file); return true; } catch (error) { if (error.code === 'ENOENT') return false; throw error; } }
 function newer(a, b) { const aa = a.split('.').map(BigInt), bb = b.split('.').map(BigInt); for (let i = 0; i < 3; i++) if (aa[i] !== bb[i]) return aa[i] > bb[i]; return false; }
-function validateJob(jobPath, publicKey) {
+function validateJob(jobPath, publicKey, { allowCurrentParent = false } = {}) {
   regular(jobPath);
   const job = readJson(jobPath);
   const transactionDir = directory(path.dirname(jobPath));
@@ -135,8 +135,7 @@ function validateJob(jobPath, publicKey) {
   const derived = { stagePath: path.join(transactionDir, 'app.asar'), backupPath: path.join(transactionDir, 'original.asar'), statePath: path.join(transactionDir, 'state.json'), keyPath: path.join(transactionDir, 'public-key.pem'), targetPath: path.join(resources, 'app.asar'), newPath: path.join(resources, `app.asar.${id}.new`), oldPath: path.join(resources, `app.asar.${id}.old`), executablePath: installation.executablePath };
   for (const [key, value] of Object.entries(derived)) if (job[key] !== value) throw new Error(`Unsafe update ${key}`);
   regular(job.executablePath);
-  if (process.platform === 'win32') regular(path.join(job.installDir, 'Uninstall QMX-Notebook.exe'));
-  if (!VERSION.test(job.fromVersion) || !VERSION.test(job.toVersion) || !newer(job.toVersion, job.fromVersion) || job.manifest?.version !== job.toVersion || !Number.isSafeInteger(job.parentPid) || job.parentPid <= 0 || job.parentPid === process.pid || !Array.isArray(job.launchArgs) || job.launchArgs.some(a => typeof a !== 'string' || /[\x00\r\n]/.test(a))) throw new Error('Invalid update job');
+  if (!VERSION.test(job.fromVersion) || !VERSION.test(job.toVersion) || !newer(job.toVersion, job.fromVersion) || job.manifest?.version !== job.toVersion || !Number.isSafeInteger(job.parentPid) || job.parentPid <= 0 || (job.parentPid === process.pid && allowCurrentParent !== true) || !Array.isArray(job.launchArgs) || job.launchArgs.some(a => typeof a !== 'string' || /[\x00\r\n]/.test(a))) throw new Error('Invalid update job');
   regular(job.keyPath);
   job.file = validateManifest(job.manifest, publicKey || fs.readFileSync(job.keyPath, 'utf8'), job.runtimeVersion);
   for (const file of [job.stagePath, job.backupPath, job.targetPath, job.newPath, job.oldPath, job.statePath]) existingRegular(file);
@@ -208,8 +207,9 @@ async function applyJob(jobPath, { spawn = childProcess.spawn, io = fs, timeoutM
     // Publish verified completion before relaunch so the next Electron boot can
     // recover synchronously without racing this helper's spawn notification.
     // A spawn error still enters rollback because mutationStarted remains true.
-    receipt(job, state, 'completed', { helperPid: null });
+    receipt(job, state, 'completed', { helperPid: process.pid });
     await launch(job, spawn);
+    receipt(job, state, 'completed', { helperPid: null });
     return { phase: state.phase, backupDir: job.backupDir };
   } catch (error) {
     if (state.mutationStarted) {

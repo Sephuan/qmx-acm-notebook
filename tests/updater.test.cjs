@@ -38,8 +38,8 @@ function response(data, extra = {}) {
   const body = Buffer.isBuffer(data) ? data : Buffer.from(JSON.stringify(data));
   return { ok: true, status: 200, body: Readable.from([body.subarray(0, 3), body.subarray(3)]), headers: new Headers(), ...extra };
 }
-async function setup(t, { manifest = sign(), commitResponse, manifestResponse, fileResponse, timeoutMs, attemptMs, onProgress, key = publicKey, runtimeVersion = '42.0.0' } = {}) {
-  const dir = await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'qmx-updater-test-')));
+async function setup(t, { manifest = sign(), commitResponse, manifestResponse, fileResponse, timeoutMs, attemptMs, onProgress, key = publicKey, runtimeVersion = '42.0.0', downloadDir } = {}) {
+  const dir = downloadDir || await fs.realpath(await fs.mkdtemp(path.join(os.tmpdir(), 'qmx-updater-test-')));
   t.after(() => fs.rm(dir, { recursive: true, force: true }));
   const calls = [];
   const events = [];
@@ -78,6 +78,156 @@ test('signed manifest uses fixed production sources, resolves once, and pins eve
   assert.ok(events.some(event => event.phase === 'downloading' && event.downloaded > 0));
   assert.ok(events.some(event => event.phase === 'ready' && event.percent === 100));
   assert.ok(events.every(event => !('path' in event)));
+});
+
+test('repeated checks and downloads keep one archive and bounded disk bytes', async t => {
+  const { updater, calls, dir } = await setup(t);
+  let previous;
+  for (let attempt = 0; attempt < 6; attempt++) {
+    await updater.check();
+    assert.deepEqual(await fs.readdir(dir), []);
+    if (previous) await assert.rejects(fs.lstat(previous.path), { code: 'ENOENT' });
+    const ready = await updater.download();
+    assert.deepEqual(await updater.download(), ready);
+    assert.deepEqual(await updater.verifyReady(), ready);
+    const ownerPath = path.join(path.dirname(ready.path), '.owner.json');
+    assert.deepEqual((await allFiles(dir)).sort(), [ownerPath, ready.path].sort());
+    assert.deepEqual(JSON.parse(await fs.readFile(ownerPath, 'utf8')), { schema: 1, pid: process.pid });
+    const totalBytes = (await fs.stat(ready.path)).size + (await fs.stat(ownerPath)).size;
+    assert.equal(totalBytes, bytes.length + Buffer.byteLength(JSON.stringify({ schema: 1, pid: process.pid })));
+    assert.equal((await fs.stat(ready.path)).size, bytes.length);
+    assert.equal((await fs.readdir(dir)).length, 1);
+    previous = ready;
+  }
+  assert.equal(calls.filter(call => sources('resources/app.asar').includes(call.url)).length, 6);
+});
+
+test('owner receipt is published before fetching archive bytes', async t => {
+  let receiptChecked = false;
+  const { updater, dir } = await setup(t, { fileResponse: async () => {
+    const directories = await fs.readdir(dir);
+    assert.equal(directories.length, 1);
+    const receipt = path.join(dir, directories[0], '.owner.json');
+    assert.deepEqual(JSON.parse(await fs.readFile(receipt, 'utf8')), { schema: 1, pid: process.pid });
+    const info = await fs.lstat(receipt);
+    assert.equal(info.isFile(), true);
+    assert.equal(info.isSymbolicLink(), false);
+    receiptChecked = true;
+    return response(bytes);
+  } });
+  await updater.download();
+  assert.equal(receiptChecked, true);
+  await updater.check();
+  assert.deepEqual(await fs.readdir(dir), []);
+});
+
+test('cleanup never follows an owner receipt replaced with a junction', async t => {
+  const { updater, dir } = await setup(t);
+  const ready = await updater.download();
+  const ownerPath = path.join(path.dirname(ready.path), '.owner.json');
+  const target = path.join(dir, 'unrelated-owner-target');
+  await fs.mkdir(target);
+  const unrelated = path.join(target, 'keep.txt');
+  await fs.writeFile(unrelated, 'keep');
+  await fs.unlink(ownerPath);
+  await fs.symlink(target, ownerPath, process.platform === 'win32' ? 'junction' : 'dir');
+  await updater.check();
+  assert.equal((await fs.lstat(ownerPath)).isSymbolicLink(), true);
+  assert.equal(await fs.readFile(unrelated, 'utf8'), 'keep');
+  await assert.rejects(fs.lstat(ready.path), { code: 'ENOENT' });
+});
+
+test('a replacement check removes ready bytes before network failure or an up-to-date selection', async t => {
+  for (const result of ['failure', 'current']) {
+    let replacing = false;
+    let ready;
+    const { updater, dir } = await setup(t, {
+      commitResponse: async () => {
+        if (replacing) {
+          await assert.rejects(fs.lstat(ready.path), { code: 'ENOENT' });
+          if (result === 'failure') return response({}, { ok: false, status: 404 });
+        }
+        return response({ sha: commit });
+      },
+      manifestResponse: async () => response(sign({ version: replacing ? '1.9.0' : '1.10.0' }))
+    });
+    ready = await updater.download();
+    replacing = true;
+    if (result === 'failure') await assert.rejects(updater.check(), /HTTP_404/);
+    else assert.equal((await updater.check()).phase, 'idle');
+    assert.deepEqual(await fs.readdir(dir), []);
+    await assert.rejects(updater.verifyReady(), /No verified update/);
+  }
+});
+
+test('cleanup preserves unrelated files, legacy downloads, and another updater instance', async t => {
+  const first = await setup(t);
+  const unrelated = path.join(first.dir, 'unrelated.txt');
+  const legacy = path.join(first.dir, 'qmx-update-legacy');
+  await fs.writeFile(unrelated, 'keep');
+  await fs.mkdir(legacy);
+  await fs.writeFile(path.join(legacy, 'app.asar'), 'legacy');
+  const firstReady = await first.updater.download();
+  const extra = path.join(path.dirname(firstReady.path), 'unrelated.txt');
+  await fs.writeFile(extra, 'keep inside staging');
+  const second = await setup(t, { downloadDir: first.dir });
+  const secondReady = await second.updater.download();
+  await first.updater.check();
+  await assert.rejects(fs.lstat(firstReady.path), { code: 'ENOENT' });
+  assert.equal(await fs.readFile(extra, 'utf8'), 'keep inside staging');
+  assert.equal(await fs.readFile(unrelated, 'utf8'), 'keep');
+  assert.equal(await fs.readFile(path.join(legacy, 'app.asar'), 'utf8'), 'legacy');
+  assert.deepEqual(await fs.readFile(secondReady.path), bytes);
+  assert.deepEqual(await second.updater.verifyReady(), secondReady);
+});
+
+test('cleanup never follows a staging directory replaced with a junction', async t => {
+  const { updater, dir } = await setup(t);
+  const ready = await updater.download();
+  const stage = path.dirname(ready.path);
+  const moved = path.join(dir, 'moved');
+  await fs.rename(stage, moved);
+  await fs.symlink(moved, stage, process.platform === 'win32' ? 'junction' : 'dir');
+  await updater.check();
+  assert.equal((await fs.lstat(stage)).isSymbolicLink(), true);
+  assert.deepEqual(await fs.readFile(path.join(moved, 'app.asar')), bytes);
+  const replacement = await updater.download();
+  assert.notEqual(replacement.path, ready.path);
+  assert.deepEqual(await fs.readFile(path.join(moved, 'app.asar')), bytes);
+});
+
+test('cleanup skips an unexpected directory at an archive filename', async t => {
+  const { updater, dir } = await setup(t);
+  const ready = await updater.download();
+  const moved = path.join(dir, 'moved.asar');
+  await fs.rename(ready.path, moved);
+  await fs.mkdir(ready.path);
+  const unrelated = path.join(ready.path, 'unrelated.txt');
+  await fs.writeFile(unrelated, 'keep');
+  await updater.check();
+  assert.equal(await fs.readFile(unrelated, 'utf8'), 'keep');
+  assert.deepEqual(await fs.readFile(moved), bytes);
+});
+
+test('repeated failed downloads remove their directories and a later download replaces invalid ready bytes', async t => {
+  let failing = true;
+  const { updater, dir } = await setup(t, {
+    fileResponse: async () => response(failing ? Buffer.alloc(bytes.length) : bytes)
+  });
+  for (let attempt = 0; attempt < 4; attempt++) {
+    await assert.rejects(updater.download(), /SHA-256/);
+    assert.deepEqual(await fs.readdir(dir), []);
+  }
+  failing = false;
+  const ready = await updater.download();
+  await fs.writeFile(ready.path, Buffer.alloc(bytes.length));
+  await assert.rejects(updater.verifyReady(), /SHA-256/);
+  assert.equal((await fs.lstat(ready.path)).isFile(), true);
+  const replacement = await updater.download();
+  await assert.rejects(fs.lstat(ready.path), { code: 'ENOENT' });
+  assert.deepEqual((await allFiles(dir)).sort(), [path.join(path.dirname(replacement.path), '.owner.json'), replacement.path].sort());
+  assert.equal((await fs.readdir(dir)).length, 1);
+  assert.deepEqual(await fs.readFile(replacement.path), bytes);
 });
 
 test('exports canonical and manifest validation for the signing and apply tools', () => {
@@ -141,6 +291,7 @@ test('stream verification rejects hash, short, oversized, disconnected and misma
     await fs.writeFile(unrelated, 'keep');
     await assert.rejects(updater.download(), /verification|size|NETWORK_ERROR|Content-Length/);
     assert.deepEqual(await allFiles(dir), [unrelated]);
+    assert.deepEqual(await fs.readdir(dir), ['unrelated.part']);
     assert.equal(await fs.readFile(unrelated, 'utf8'), 'keep');
   }
 });
@@ -205,6 +356,7 @@ test('verifyReady rehashes cached bytes and rejects truncation and hard links', 
     if (mode === 'short') await fs.truncate(ready.path, 2);
     if (mode === 'hardlink') await fs.link(ready.path, ready.path + '.link');
     await assert.rejects(updater.verifyReady(), /verification|links/);
+    assert.equal((await fs.lstat(ready.path)).isFile(), true, 'verification must not delete the current archive');
     assert.equal(updater.getState().phase, 'error');
     await assert.rejects(updater.verifyReady(), /No verified update/);
   }
@@ -228,6 +380,7 @@ test('timeout aborts download, cleans partial files, and permits retry', async t
   } });
   await assert.rejects(updater.download(), /ETIMEDOUT/);
   assert.deepEqual(await allFiles(dir), []);
+  assert.deepEqual(await fs.readdir(dir), []);
   stall = false;
   assert.equal((await updater.download()).version, '1.10.0');
 });
@@ -238,6 +391,7 @@ test('timeout covers stalled manifest and file streams without advertising ready
     await assert.rejects(updater.download(), /ETIMEDOUT/);
     assert.equal(updater.getState().phase, 'error');
     assert.deepEqual(await allFiles(dir), []);
+    assert.deepEqual(await fs.readdir(dir), []);
   }
 });
 

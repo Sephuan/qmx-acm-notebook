@@ -139,8 +139,8 @@ const fixture = { fetchedAt: iso(0), platforms: [
     await page.waitForFunction(() => !document.querySelector('#sync-button').disabled);
     assert.equal(await page.locator('[data-contest-id="stale"]').count(), 1, 'applyPayload without contests keeps cache');
     // Returning from navigation derives countdown from the current clock, including a large time jump.
-    await page.locator('#home-panel [data-view="mine"]').click();
-    assert.equal(await page.locator('body').getAttribute('data-view'), 'mine');
+    await page.locator('.rail-nav-item[data-view="public"]').click();
+    assert.equal(await page.locator('body').getAttribute('data-view'), 'public');
     await page.clock.setSystemTime(instant + 7200000);
     await page.locator('.rail-nav-item[data-view="home"]').click();
     assert.match(await page.locator('[data-contest-id="stale"] .contest-countdown').innerText(), /距结束 1小时/);

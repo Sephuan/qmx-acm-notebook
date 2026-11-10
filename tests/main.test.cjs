@@ -45,7 +45,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
   const helperPath = path.join(root, 'updates', 'transaction-mock', 'update-helper.cjs');
   const jobPath = path.join(root, 'updates', 'transaction-mock', 'job.json');
   const installerArgs = [helperPath, jobPath];
-  const recoveryCalls = [];
+  const recoveryCalls = [], cancellationCalls = [];
   const helperEnv = { ELECTRON_RUN_AS_NODE: '1' };
   const backupDir = path.join(root, 'upgrade-backups', 'mock-backup');
   const upgradeCalls = [], installSteps = [];
@@ -118,8 +118,14 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       if (name === '@astral-sh/ruff-wasm-nodejs') return require(name);
        if (name === '../ui/tag-presets.js') return require('../ui/tag-presets.js');
        if (name === './updater.cjs') return { createUpdater(options) { updaterOptions = options; return updater; } };
+      if (name === './update-storage.cjs') return { cleanupUpdateStorage() { return { files: 0, bytes: 0, retained: 0 }; } };
       if (name === './file-upgrade.cjs') return {
         prepareFileUpgrade: prepareUpgrade,
+        cancelPreparedFileUpgrade(...args) {
+          installSteps.push('cancelPreparedUpgrade');
+          cancellationCalls.push(clone(args));
+          return upgradeBackend.cancelPreparedFileUpgrade?.(...args) || { phase: 'cancelled' };
+        },
         getFileUpgradeCapability: () => upgradeBackend.capability || { supported: true, reason: '' },
         recoverFileUpgrade(...args) {
           recoveryCalls.push(clone(args));
@@ -156,7 +162,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     }
     now = end;
   };
-  return { invoke, calls, writes, handlers, windows, updaterCalls, upgradeCalls, recoveryCalls, installSteps, spawnCalls, installerPath, readyUpdate, helperPath, jobPath, execPath, installDir, installerArgs, backupDir, advanceTimers,
+  return { invoke, calls, writes, handlers, windows, updaterCalls, upgradeCalls, recoveryCalls, cancellationCalls, installSteps, spawnCalls, installerPath, readyUpdate, helperPath, jobPath, execPath, installDir, installerArgs, backupDir, advanceTimers,
     appendedSwitches, commandLineSwitches, externalCalls, networkCalls, timers,
     get updaterOptions() { return updaterOptions; }, get quitCalls() { return quitCalls; },
     stored: name => JSON.parse(disk.get(path.join(root, name)) || 'null') };
@@ -929,6 +935,7 @@ test('spawn errors are surfaced, retain a retryable verified update and allow a 
   h.spawnCalls[0].child.emit('error', new Error('launch denied'));
   await rejected;
   assert.equal((await h.invoke('bootstrap')).update.phase, 'ready', 'verified package remains available for install retry');
+  assert.deepEqual(h.cancellationCalls, [[path.resolve('mock-user-data'), h.installDir]]);
   h.advanceTimers(10000); assert.equal(h.quitCalls, 0); assert.equal(h.spawnCalls[0].child.unrefCalls, 0);
   const retry = h.invoke('installUpdate');
   await new Promise(setImmediate);
@@ -937,6 +944,105 @@ test('spawn errors are surfaced, retain a retryable verified update and allow a 
   h.spawnCalls[1].child.emit('spawn');
   assert.deepEqual(await retry, { installing: true });
   h.advanceTimers(400); assert.equal(h.quitCalls, 1);
+});
+
+test('synchronous helper spawn throws cancel preparation and release the update lock', async () => {
+  const h = harness({ browserBackend: { spawn() { throw new Error('synchronous launch denied'); } } });
+  await h.invoke('downloadUpdate');
+  await assert.rejects(h.invoke('installUpdate'), /synchronous launch denied/);
+  assert.deepEqual(h.cancellationCalls, [[path.resolve('mock-user-data'), h.installDir]]);
+  assert.equal((await h.invoke('bootstrap')).update.phase, 'ready');
+  await h.invoke('saveSettings', { theme: 'dark' });
+  h.advanceTimers(10000);
+  assert.equal(h.quitCalls, 0);
+});
+
+test('confirmed spawn success never cancels a job on late process errors', async () => {
+  const h = harness();
+  const install = h.invoke('installUpdate');
+  await new Promise(setImmediate);
+  h.spawnCalls[0].child.emit('spawn');
+  h.spawnCalls[0].child.emit('error', new Error('late helper error'));
+  assert.deepEqual(await install, { installing: true });
+  assert.deepEqual(h.cancellationCalls, []);
+  h.advanceTimers(400);
+  assert.equal(h.quitCalls, 1);
+});
+
+test('unsafe preparation cancellation reports its failure and does not quit', async () => {
+  const h = harness({ upgradeBackend: { cancelPreparedFileUpgrade() { throw new Error('helper already waiting'); } } });
+  const install = h.invoke('installUpdate');
+  await new Promise(setImmediate);
+  const rejected = assert.rejects(install, /launch denied.*取消升级准备失败.*helper already waiting/);
+  h.spawnCalls[0].child.emit('error', new Error('launch denied'));
+  await rejected;
+  h.advanceTimers(10000);
+  assert.equal(h.quitCalls, 0);
+  await h.invoke('saveSettings', { theme: 'dark' });
+});
+
+for (const spawnFailure of ['error', 'throw']) test(`main ${spawnFailure} spawn failure retires the real prepared transaction and retries without restarting`, async t => {
+  if (process.platform === 'darwin') { t.skip('automatic file upgrades are disabled on macOS'); return; }
+  const os = require('node:os');
+  const crypto = require('node:crypto');
+  const helper = require('../electron/update-helper.cjs');
+  const upgrade = require('../electron/file-upgrade.cjs');
+  const keyModule = require.resolve('../electron/update-key.cjs');
+  const productionKey = require(keyModule);
+  const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519');
+  require.cache[keyModule].exports = publicKey.export({ type: 'spki', format: 'pem' });
+  t.after(() => { require.cache[keyModule].exports = productionKey; });
+  const root = fs.realpathSync(fs.mkdtempSync(path.join(os.tmpdir(), 'qmx-main-retry-')));
+  t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+  const userDataDir = path.join(root, 'user');
+  const installDir = path.join(root, 'installed');
+  fs.mkdirSync(userDataDir); fs.mkdirSync(installDir); fs.mkdirSync(path.join(installDir, 'resources'));
+  const executablePath = helper.installationPaths(installDir).executablePath;
+  fs.writeFileSync(executablePath, 'fixture executable');
+  const target = path.join(installDir, 'resources', 'app.asar');
+  fs.writeFileSync(target, 'original archive');
+  const download = path.join(root, 'download.asar');
+  const bytes = Buffer.from('signed replacement archive');
+  fs.writeFileSync(download, bytes);
+  const manifest = { schema: 1, version: '0.4.0', runtimeVersion: '40.0.0', base: '../', notes: '', publishedAt: '2026-01-01T00:00:00Z', files: [{ path: 'resources/app.asar', size: bytes.length, sha256: crypto.createHash('sha256').update(bytes).digest('hex') }] };
+  manifest.signature = crypto.sign(null, Buffer.from(helper.canonical(manifest)), privateKey).toString('base64');
+  const ready = { version: '0.4.0', path: download, manifest };
+  const transactions = [];
+  let spawnAttempts = 0;
+  const h = harness({
+    browserBackend: { spawn(file, args, options, child) {
+      if (++spawnAttempts === 1 && spawnFailure === 'throw') throw new Error('launch denied');
+      return child;
+    } },
+    updaterBackend: { verifyReady: () => ready },
+    upgradeBackend: {
+      prepareUpgrade(options) {
+        const prepared = upgrade.prepareFileUpgrade({ ...options, userDataDir, installDir, executablePath });
+        transactions.push(prepared.args[1]);
+        return prepared;
+      },
+      cancelPreparedFileUpgrade: () => upgrade.cancelPreparedFileUpgrade(userDataDir, installDir),
+    },
+  });
+  const failed = h.invoke('installUpdate');
+  const rejected = assert.rejects(failed, /launch denied/);
+  await new Promise(setImmediate);
+  if (spawnFailure === 'error') h.spawnCalls[0].child.emit('error', new Error('launch denied'));
+  await rejected;
+  const firstJob = helper.readJson(transactions[0]);
+  assert.equal(helper.readJson(firstJob.statePath).phase, 'cancelled');
+  assert.equal(fs.existsSync(path.join(userDataDir, 'updates', 'active.json')), false);
+  assert.deepEqual(fs.readFileSync(download), bytes);
+  assert.equal(fs.readFileSync(target, 'utf8'), 'original archive');
+  assert.equal(h.quitCalls, 0);
+  const retry = h.invoke('installUpdate');
+  await new Promise(setImmediate);
+  assert.equal(transactions.length, 2);
+  assert.notEqual(transactions[0], transactions[1]);
+  h.spawnCalls[1].child.emit('spawn');
+  assert.deepEqual(await retry, { installing: true });
+  assert.equal(h.cancellationCalls.length, 1);
+  assert.equal(fs.readFileSync(target, 'utf8'), 'original archive');
 });
 
 test('download blocks conflicting operations and window close while local edits persist between update stages', async () => {

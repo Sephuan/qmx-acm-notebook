@@ -21,18 +21,20 @@ test('release workflow runs manually from main and isolates signing from tag sou
   assert.equal(signer.steps[0].uses, 'actions/checkout@v4');
   assert.equal(signer.steps[0].with.ref, '${{ github.sha }}');
   assert.equal(signer.steps.find(step => step.name?.startsWith('Sign using trusted')).env.QMX_UPDATE_SIGNING_KEY_PEM, '${{ secrets.QMX_UPDATE_SIGNING_KEY_PEM }}');
-  assert.equal(signer.steps.find(step => step.name?.startsWith('Sign using trusted')).run, 'node tools/update-manifest.cjs --root-dir signing-root');
-  assert.deepEqual(signer.steps.find(step => step.uses === 'actions/upload-artifact@v4').with.path.trim().split('\n'), ['signing-root/feed/manifest.json', 'signing-root/resources/app.asar']);
+  const signing = signer.steps.find(step => step.name?.startsWith('Sign using trusted')).run;
+  assert.match(signing, /node tools\/update-manifest\.cjs --root-dir signing-root/);
+  assert.match(signing, /node tools\/delta-feed\.cjs build --root-dir signing-root --base resources\/app\.asar --base-manifest feed\/manifest\.json/);
+  assert.deepEqual(signer.steps.find(step => step.uses === 'actions/upload-artifact@v4').with.path.trim().split('\n'), ['signing-root/feed/manifest.json', 'signing-root/feed/delta.json', 'signing-root/resources/app.asar', 'signing-root/resources/deltas/**']);
 });
 
 test('signed feed is injected into every installer and attached for post-release verification', () => {
   const workflow = readWorkflow('release.yml');
   const windowsPackage = workflow.jobs['windows-package'];
   assert.ok(windowsPackage.needs.includes('sign-feed'));
-  assert.match(windowsPackage.steps.find(step => step.name?.includes('Verify and install')).run, /incoming-signed\/resources\/app\.asar/);
+  assert.match(windowsPackage.steps.find(step => step.name?.includes('Verify and install')).run, /delta-feed\.cjs install incoming-signed/);
   assert.match(windowsPackage.steps.find(step => step.name?.includes('Verify and install')).run, /verify incoming-signed/);
   const unix = workflow.jobs.unix.steps.find(step => step.name?.includes('Build platform app'));
-  assert.match(unix.run, /cp incoming\/resources\/app\.asar resources\/app\.asar/);
+  assert.match(unix.run, /delta-feed\.cjs install incoming/);
   assert.match(unix.run, /pnpm dist/);
 
   const draft = workflow.jobs.draft.steps.find(step => step.name?.includes('Prepare flat release'));

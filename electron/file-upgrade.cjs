@@ -42,6 +42,30 @@ function recoverFileUpgrade(userDataDir, installDir) {
   return result;
 }
 
+// Only the parent that confirmed helper spawn failure may abandon its preparation.
+// Ordinary helper execution and recovery must continue rejecting current-parent jobs.
+function cancelPreparedFileUpgrade(userDataDir, installDir) {
+  helper.assertFileUpgradeSupported();
+  userDataDir = helper.absolute(userDataDir);
+  installDir = helper.absolute(installDir);
+  helper.directory(userDataDir); helper.directory(installDir);
+  if (helper.overlaps(userDataDir, installDir)) throw new Error('Install and user data directories overlap');
+  const updates = updatesDirectory(userDataDir);
+  const pointerPath = path.join(updates, 'active.json');
+  const pointer = helper.readJson(pointerPath);
+  if (pointer.schema !== 1 || Object.keys(pointer).sort().join(',') !== 'schema,transaction' || typeof pointer.transaction !== 'string' || !/^transaction-[a-f0-9]{32}$/.test(pointer.transaction)) throw new Error('Unsafe update cancellation pointer');
+  const jobPath = path.join(updates, pointer.transaction, 'job.json');
+  const job = helper.validateJob(jobPath, publicKeyPem(), { allowCurrentParent: true });
+  if (job.userDataDir !== userDataDir || job.installDir !== installDir || job.parentPid !== process.pid) throw new Error('Update cancellation parent or install location mismatch');
+  const state = helper.readJson(job.statePath);
+  if (state.schema !== 1 || state.phase !== 'prepared' || state.mutationStarted !== false || state.helperPid !== null) throw new Error('Only an unstarted prepared update can be cancelled');
+  // Recheck the published pointer before changing the receipt or retiring it.
+  if (helper.canonical(helper.readJson(pointerPath)) !== helper.canonical(pointer)) throw new Error('Update cancellation pointer changed');
+  helper.writeJson(job.statePath, { ...state, phase: 'cancelled', updatedAt: new Date().toISOString() });
+  fs.renameSync(pointerPath, path.join(updates, `${pointer.transaction}-resolved.json`));
+  return { phase: 'cancelled' };
+}
+
 /** Prepare synchronously, then spawn process.execPath with returned args and merged env.
  * Electron's default RunAsNode fuse must remain enabled. Wait for the helper's
  * spawn event before quitting Electron. The external helper waits for this PID.
@@ -64,7 +88,7 @@ function prepareFileUpgrade({ userDataDir, installDir, version, targetVersion, r
   helper.metadata(path.join(resourcesDir, 'app.asar'));
   // Never replace a pointer to an unfinished transaction.
   recoverFileUpgrade(userDataDir, installDir);
-  const { backupDir } = prepareUpgrade({ userDataDir, installDir, version, targetVersion });
+  const { backupDir } = prepareUpgrade({ userDataDir, installDir, version, targetVersion }, { installer: false });
   const updates = updatesDirectory(userDataDir, true);
   const id = crypto.randomBytes(16).toString('hex');
   const transactionDir = path.join(updates, `transaction-${id}`);
@@ -100,4 +124,4 @@ function prepareFileUpgrade({ userDataDir, installDir, version, targetVersion, r
   helper.writeJson(path.join(updates, 'active.json'), { schema: 1, transaction: path.basename(transactionDir) });
   return { args: [helperPath, jobPath], env: { ELECTRON_RUN_AS_NODE: '1' }, backupDir };
 }
-module.exports = { prepareFileUpgrade, recoverFileUpgrade, getFileUpgradeCapability: helper.getFileUpgradeCapability };
+module.exports = { prepareFileUpgrade, recoverFileUpgrade, cancelPreparedFileUpgrade, getFileUpgradeCapability: helper.getFileUpgradeCapability };

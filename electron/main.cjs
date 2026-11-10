@@ -6,7 +6,8 @@ const { GitHub, repoParts } = require('./github.cjs');
 const { randomUUID } = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { createUpdater } = require('./updater.cjs');
-const { prepareFileUpgrade, recoverFileUpgrade, getFileUpgradeCapability } = require('./file-upgrade.cjs');
+const { prepareFileUpgrade, recoverFileUpgrade, cancelPreparedFileUpgrade, getFileUpgradeCapability } = require('./file-upgrade.cjs');
+const { cleanupUpdateStorage } = require('./update-storage.cjs');
 const { createAuth, configureUserData } = require('./auth.cjs');
 const { createContestService } = require('./contests.cjs');
 const { createPlatformService } = require('./platform-service.cjs');
@@ -283,12 +284,18 @@ function setup() {
   handle('checkStartupUpdates', async () => {
     // Discovery only: normal reading, editing and sync remain available.
     if (updateBusy || installing) return null;
-    try { return await updater.check(); } catch { return null; }
+    try {
+      if (app.isPackaged) cleanupUpdateStorage(dir, path.dirname(process.execPath), undefined, { downloads: false });
+      return await updater.check();
+    } catch { return null; }
   });
   handle('checkForUpdates', async () => {
     if (writeBusy || syncBusy || updateBusy || installing || platforms.isBusy()) throw new Error('请等待当前操作完成后检查更新');
     updateBusy = true;
-    try { return await updater.check(); } finally { updateBusy = false; }
+    try {
+      if (app.isPackaged) cleanupUpdateStorage(dir, path.dirname(process.execPath), undefined, { downloads: false });
+      return await updater.check();
+    } finally { updateBusy = false; }
   });
   handle('downloadUpdate', async () => {
     if (writeBusy || syncBusy || updateBusy || installing || platforms.isBusy()) throw new Error('请等待当前操作完成后下载更新');
@@ -307,9 +314,18 @@ function setup() {
         ready, runtimeVersion: process.versions.electron, executablePath: process.execPath });
       // The detached helper waits for exit, then verifies, backs up and swaps app.asar.
       await new Promise((resolve, reject) => {
-        const process = spawn(globalThis.process.execPath, upgrade.args, { detached: true, stdio: 'ignore', windowsHide: true, shell: false, env: { ...processEnvForInstaller(), ...upgrade.env } });
-        process.once('error', reject);
-        process.once('spawn', () => { process.unref(); resolve(); });
+        let child, spawned = false, failed = false;
+        const spawnFailed = error => {
+          if (spawned || failed) return;
+          failed = true;
+          try { cancelPreparedFileUpgrade(dir, path.dirname(globalThis.process.execPath)); }
+          catch (cancelError) { reject(new Error(`${error.message}；取消升级准备失败：${cancelError.message}`)); return; }
+          reject(error);
+        };
+        try { child = spawn(globalThis.process.execPath, upgrade.args, { detached: true, stdio: 'ignore', windowsHide: true, shell: false, env: { ...processEnvForInstaller(), ...upgrade.env } }); }
+        catch (error) { spawnFailed(error); return; }
+        child.once('error', spawnFailed);
+        child.once('spawn', () => { if (failed) return; spawned = true; child.unref(); resolve(); });
       });
       installing = true;
       setTimeout(() => app.quit(), 400);
@@ -487,7 +503,13 @@ function setup() {
 }
 app.whenReady().then(() => {
   dir = app.getPath('userData'); fs.mkdirSync(dir, { recursive: true });
-  if (app.isPackaged) recoverFileUpgrade(dir, path.dirname(process.execPath));
+  if (app.isPackaged) {
+    const installDir = path.dirname(process.execPath);
+    recoverFileUpgrade(dir, installDir);
+    cleanupUpdateStorage(dir, installDir);
+    // A helper still observing relaunch keeps its rollback files. The next
+    // update check retries cleanup after it exits, without touching new downloads.
+  }
   const personal = local(); let migrated = false;
   personal.records = personal.records.map(record => {
     if (record.kind !== 'local') return record;
@@ -509,6 +531,7 @@ app.whenReady().then(() => {
   updater = createUpdater({
     currentVersion: APP_VERSION, runtimeVersion: process.versions.electron, downloadDir: path.join(dir, 'updates'),
     fetcher: networkFetch,
+    installedArchive: app.isPackaged ? path.join(path.dirname(process.execPath), 'resources', 'app.asar') : undefined,
     onProgress: progress => { if (!win.isDestroyed()) win.webContents.send('update-progress', progress); }
   });
   win.on('close', event => {

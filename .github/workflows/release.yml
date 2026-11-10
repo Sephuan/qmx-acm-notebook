@@ -51,7 +51,7 @@ jobs:
           git rev-parse -q --verify "refs/tags/$TAG_INPUT^{commit}" >/dev/null || { echo 'Requested tag does not exist'; exit 1; }
           TAG_COMMIT=$(git rev-parse "refs/tags/$TAG_INPUT^{commit}")
           git merge-base --is-ancestor "$TAG_COMMIT" origin/main || { echo 'Release tag must point to reviewed source already in main'; exit 1; }
-          for TOOL in tools/package.cjs tools/installer.cjs tools/release-feed.cjs electron/updater.cjs electron/update-key.cjs; do
+          for TOOL in tools/package.cjs tools/installer.cjs tools/update-manifest.cjs tools/release-feed.cjs tools/delta-feed.cjs electron/updater.cjs electron/update-key.cjs electron/delta-codec.cjs electron/delta-manifest.cjs; do
             git diff --quiet "$GITHUB_SHA" "$TAG_COMMIT" -- "$TOOL" || { echo "Release tag must contain the reviewed release tooling: $TOOL"; exit 1; }
           done
           VERSION=$(git show "$TAG_COMMIT:package.json" | node -e "let s='';process.stdin.on('data',c=>s+=c).on('end',()=>process.stdout.write(JSON.parse(s).version))")
@@ -147,7 +147,13 @@ jobs:
       - name: Sign using trusted main-branch tooling only
         env:
           QMX_UPDATE_SIGNING_KEY_PEM: ${{ secrets.QMX_UPDATE_SIGNING_KEY_PEM }}
-        run: node tools/update-manifest.cjs --root-dir signing-root
+        shell: bash
+        run: |
+          set -euo pipefail
+          node tools/update-manifest.cjs --root-dir signing-root
+          # Base is the trusted checkout's previously activated signed feed;
+          # it is verified against the pinned key and SHA-256 before encoding.
+          node tools/delta-feed.cjs build --root-dir signing-root --base resources/app.asar --base-manifest feed/manifest.json
       - name: Verify signed artifact before publishing it to other jobs
         run: node tools/release-feed.cjs verify signing-root
       - uses: actions/upload-artifact@v4
@@ -156,7 +162,9 @@ jobs:
           if-no-files-found: error
           path: |
             signing-root/feed/manifest.json
+            signing-root/feed/delta.json
             signing-root/resources/app.asar
+            signing-root/resources/deltas/**
   windows-package:
     needs: [trust, windows-build, sign-feed]
     if: needs.trust.outputs.tag_release == 'true'
@@ -181,9 +189,9 @@ jobs:
         run: |
           node tools/release-feed.cjs verify incoming-signed --root-dir .
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-          New-Item -ItemType Directory -Force feed,resources | Out-Null
-          Copy-Item incoming-signed/feed/manifest.json feed/manifest.json -Force
-          Copy-Item incoming-signed/resources/app.asar resources/app.asar -Force
+          $version = node -p "require('./package.json').version"
+          node tools/delta-feed.cjs install incoming-signed --root-dir . --version $version
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
       - name: Cache verified official Electron runtime via release API
         shell: bash
         env:
@@ -263,9 +271,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p feed resources
-          cp incoming/feed/manifest.json feed/manifest.json
-          cp incoming/resources/app.asar resources/app.asar
+          node tools/release-feed.cjs verify incoming --root-dir .
+          VERSION=$(node -p "require('./package.json').version")
+          node tools/delta-feed.cjs install incoming --root-dir . --version "$VERSION"
           node tools/release-feed.cjs verify .
           pnpm dist
       - name: Load reviewed acceptance script from trusted workflow commit
@@ -304,7 +312,12 @@ jobs:
         with:
           name: signed-update-feed
           path: artifacts/signed-update-feed
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
       - name: Prepare flat release attachments and checksums
+        env:
+          RELEASE_TAG: ${{ needs.trust.outputs.release_tag }}
         shell: bash
         run: |
           set -euo pipefail
@@ -312,6 +325,16 @@ jobs:
           find artifacts -type f \( -name '*.exe' -o -name '*.zip' -o -name '*.dmg' -o -name '*.tar.gz' \) -exec cp -n {} release-assets/ \;
           cp artifacts/signed-update-feed/feed/manifest.json release-assets/update-manifest.json
           cp artifacts/signed-update-feed/resources/app.asar release-assets/update-app.asar
+          node tools/release-feed.cjs verify artifacts/signed-update-feed --version "${RELEASE_TAG#v}" --runtime-version manifest
+          if [[ -f artifacts/signed-update-feed/feed/delta.json ]]; then
+            cp artifacts/signed-update-feed/feed/delta.json release-assets/delta-manifest.json
+            node tools/delta-feed.cjs list-assets artifacts/signed-update-feed --version "${RELEASE_TAG#v}" > delta-assets.txt
+            while IFS= read -r ASSET; do
+              HASH=${ASSET#update-delta-}
+              HASH=${HASH%.qmxdelta}
+              cp "artifacts/signed-update-feed/resources/deltas/$HASH.qmxdelta" "release-assets/$ASSET"
+            done < delta-assets.txt
+          fi
           (cd release-assets && sha256sum * > SHA256SUMS.txt)
       - name: Attach verified builds to draft only
         uses: softprops/action-gh-release@v2

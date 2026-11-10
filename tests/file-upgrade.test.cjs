@@ -9,7 +9,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { EventEmitter } = require('node:events');
 const helper = require('../electron/update-helper.cjs');
-const { prepareFileUpgrade, recoverFileUpgrade } = require('../electron/file-upgrade.cjs');
+const { prepareFileUpgrade, recoverFileUpgrade, cancelPreparedFileUpgrade } = require('../electron/file-upgrade.cjs');
 const { publicKey, privateKey } = crypto.generateKeyPairSync('ed25519');
 const pem = publicKey.export({ type: 'spki', format: 'pem' });
 const keyModule = require.resolve('../electron/update-key.cjs');
@@ -85,6 +85,73 @@ test('successful signed archive upgrade backs up user data and relaunches withou
   assert.equal(calls[0].options.detached, true);
   assert.equal(calls[0].options.env.ELECTRON_RUN_AS_NODE, undefined);
   assert.deepEqual(recoverFileUpgrade(f.userDataDir, f.installDir), { phase: 'completed' });
+  assertUserData(f);
+});
+
+test('confirmed helper spawn failure cancels preparation and permits a new transaction in the same process', t => {
+  const f = fixture(t);
+  f.options.parentPid = process.pid;
+  const prepared = prepareFileUpgrade(f.options);
+  const job = helper.readJson(prepared.args[1]);
+  assert.throws(() => helper.validateJob(prepared.args[1], pem), /Invalid update job/);
+  assert.throws(() => recoverFileUpgrade(f.userDataDir, f.installDir), /Invalid update job/);
+  assert.deepEqual(cancelPreparedFileUpgrade(f.userDataDir, f.installDir), { phase: 'cancelled' });
+  assert.equal(helper.readJson(job.statePath).phase, 'cancelled');
+  assert.equal(fs.existsSync(path.join(f.userDataDir, 'updates', 'active.json')), false);
+  assert.deepEqual(fs.readFileSync(f.stage), f.next, 'keep the verified download for retry');
+  const retry = prepareFileUpgrade(f.options);
+  assert.notEqual(retry.args[1], prepared.args[1], 'retry publishes a new transaction');
+  assert.equal(helper.readJson(helper.readJson(retry.args[1]).statePath).phase, 'prepared');
+  assert.deepEqual(fs.readFileSync(f.target), f.old);
+  assertUserData(f);
+});
+
+test('prepared cancellation refuses waiting, mutated, foreign-parent and malicious transactions', t => {
+  const f = fixture(t);
+  f.options.parentPid = process.pid;
+  const prepared = prepareFileUpgrade(f.options);
+  const job = helper.readJson(prepared.args[1]);
+  const pointerPath = path.join(f.userDataDir, 'updates', 'active.json');
+  const pointer = helper.readJson(pointerPath);
+  const initialState = helper.readJson(job.statePath);
+  const refuse = pattern => {
+    const beforeState = fs.readFileSync(job.statePath);
+    const beforePointer = fs.readFileSync(pointerPath);
+    assert.throws(() => cancelPreparedFileUpgrade(f.userDataDir, f.installDir), pattern);
+    assert.deepEqual(fs.readFileSync(job.statePath), beforeState);
+    assert.deepEqual(fs.readFileSync(pointerPath), beforePointer);
+    assert.deepEqual(fs.readFileSync(f.target), f.old);
+    assert.deepEqual(fs.readFileSync(f.stage), f.next);
+  };
+  for (const patch of [{ phase: 'waiting', helperPid: process.pid }, { mutationStarted: true }, { helperPid: process.pid }, { phase: 'completed' }]) {
+    helper.writeJson(job.statePath, { ...initialState, ...patch });
+    refuse(/unstarted prepared/);
+  }
+  helper.writeJson(job.statePath, initialState);
+  helper.writeJson(prepared.args[1], { ...job, parentPid: DEAD_PID });
+  refuse(/parent or install/);
+  helper.writeJson(prepared.args[1], { ...job, targetPath: f.stage });
+  refuse(/Unsafe update targetPath/);
+  helper.writeJson(prepared.args[1], { ...job, manifest: { ...job.manifest, notes: 'tampered' } });
+  refuse(/signature/);
+  const attacker = crypto.generateKeyPairSync('ed25519');
+  const forgedManifest = { ...job.manifest, notes: 'attacker-signed' };
+  delete forgedManifest.signature;
+  forgedManifest.signature = crypto.sign(null, Buffer.from(helper.canonical(forgedManifest)), attacker.privateKey).toString('base64');
+  fs.writeFileSync(job.keyPath, attacker.publicKey.export({ type: 'spki', format: 'pem' }));
+  helper.writeJson(prepared.args[1], { ...job, manifest: forgedManifest });
+  refuse(/signature/);
+  fs.writeFileSync(job.keyPath, pem);
+  helper.writeJson(prepared.args[1], job);
+  helper.writeJson(pointerPath, { schema: 1, transaction: '../escape' });
+  refuse(/pointer/);
+  helper.writeJson(pointerPath, { ...pointer, unexpected: true });
+  refuse(/pointer/);
+  helper.writeJson(pointerPath, pointer);
+  const otherInstall = path.join(path.dirname(f.installDir), 'other-install');
+  fs.mkdirSync(otherInstall);
+  assert.throws(() => cancelPreparedFileUpgrade(f.userDataDir, otherInstall), /install location mismatch/);
+  assert.equal(helper.readJson(job.statePath).phase, 'prepared');
   assertUserData(f);
 });
 

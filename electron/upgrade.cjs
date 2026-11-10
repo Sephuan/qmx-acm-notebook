@@ -48,7 +48,7 @@ function overlaps(a, b) {
  * args unchanged. NSIS requires /D= to remain last; never wrap this in cmd.exe.
  * Completed and partial backup directories are intentionally retained.
  */
-function prepareUpgrade({ userDataDir, installDir, version, targetVersion } = {}, { fs = nativeFs, platform = process.platform } = {}) {
+function prepareUpgrade({ userDataDir, installDir, version, targetVersion } = {}, { fs = nativeFs, platform = process.platform, installer = true } = {}) {
   if (!VERSION.test(version) || !VERSION.test(targetVersion)) throw new Error('Upgrade versions must be stable semantic versions');
   const userPath = absoluteDirectory(userDataDir, 'userDataDir');
   const installPath = absoluteDirectory(installDir, 'installDir');
@@ -61,13 +61,13 @@ function prepareUpgrade({ userDataDir, installDir, version, targetVersion } = {}
 
   const { executablePath } = installationPaths(realInstallDir, platform);
   const requiredFiles = [executablePath];
-  if (platform === 'win32') requiredFiles.push(path.join(realInstallDir, 'Uninstall QMX-Notebook.exe'));
+  if (platform === 'win32' && installer) requiredFiles.push(path.join(realInstallDir, 'Uninstall QMX-Notebook.exe'));
   for (const filename of requiredFiles) {
     let info;
     try { info = fs.lstatSync(filename); }
     catch (error) { if (error.code !== 'ENOENT') throw error; }
     if (!info || !info.isFile() || info.isSymbolicLink()) {
-      throw new Error(platform === 'win32'
+      throw new Error(platform === 'win32' && installer
         ? 'Portable upgrades are unsupported. Perform one manual installation of QMX Notebook, then retry; shortcuts are not migrated automatically.'
         : 'Installed QMX-Notebook executable is missing or unsafe; manual installation required.');
     }

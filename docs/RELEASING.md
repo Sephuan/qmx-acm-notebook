@@ -21,15 +21,15 @@ git push -u origin main
 
 ## 构建与版本发布
 
-版本说明按版本保存在 [`docs/releases/`](releases/)；当前版本说明见 [v1.0.0 更新说明](releases/v1.0.0.md)，历史版本说明保留在同一目录。
+版本说明按版本保存在 [`docs/releases/`](releases/)；当前版本说明见 [v1.1.0 更新说明](releases/v1.1.0.md)，历史版本说明保留在同一目录。
 
 本地安装依赖、检查和构建的完整命令集中在 [CONTRIBUTING](../CONTRIBUTING.md#环境与命令)。发布构建使用 `pnpm dist`，同时生成便携目录与 NSIS 安装程序；仅需便携目录时使用该文档列出的独立打包命令。
 
 1. 更新 `package.json` 的 `version` 并编写版本说明。使用 `x.y.z`：不兼容变更增加主版本、兼容新增功能增加次版本、兼容修复增加修订版本；高位增加后低位归零。一次修复发布无论修复多少问题通常只增加一次修订号；`0.x` 仍处于早期开发阶段。
 2. 完成源码检查、测试和成品验收后合并到 `main`。标签必须包含当前 main 的发布工具及更新验证器，旧标签不能套用新发布流水线。确认版本号后创建并推送一个未使用过的版本标签，例如 `v0.6.1`；不要覆盖已发布的标签或成品。
 3. 在 Actions → **Build desktop clients** → **Run workflow** 中选择 `main`，输入已推送的标签（例如 `v0.6.1`），再运行。工作流只签出 `main` 上的受信任工作流；它会验证标签指向 `main`、标签版本匹配、私钥 Secret 与客户端公钥匹配，然后检查、测试并构建所有支持平台。
-4. 成功后检查草稿 Release 中的 Windows 安装包、便携 ZIP、其他平台包、`update-manifest.json`、`update-app.asar` 和 `SHA256SUMS.txt`。只有草稿内容验收通过后才点击 Publish release。
-5. 发布正式 Release 后，在 Actions → **Prepare published update channel** → **Run workflow** 中选择 `main`，填写刚发布的标签并运行。它重新验证公开 Release 的签名、版本及 app.asar 哈希，创建只包含 `feed/manifest.json` 与 `resources/app.asar` 的分支和 PR。审查、合并该 PR 后，现有客户端才会收到应用内更新。这样不会在 Release 成品验收之前提前向用户推送更新。
+4. 成功后检查草稿 Release 中的 Windows 安装包、便携 ZIP、其他平台包、`update-manifest.json`、`update-app.asar`、`delta-manifest.json`、适用的 `update-delta-<base-sha256>.qmxdelta` 和 `SHA256SUMS.txt`。只有草稿内容验收通过后才点击 Publish release。
+5. 发布正式 Release 后，在 Actions → **Prepare published update channel** → **Run workflow** 中选择 `main`，填写刚发布的标签并运行。它重新验证公开 Release 的签名、版本及 app.asar 哈希，创建包含 `feed/manifest.json`、`resources/app.asar`、`feed/delta.json` 和对应 `resources/deltas/` 补丁 的分支和 PR。审查、合并该 PR 后，现有客户端才会收到应用内更新。这样不会在 Release 成品验收之前提前向用户推送更新。
 6. 发布后重新下载公开成品，比对 `SHA256SUMS.txt` 并确认首页下载链接与版本对应。用户安装和数据说明统一链接到 [USAGE](USAGE.md)，不在发布流程中维护第二份教程。
 
 Actions → **Build desktop clients** → **Run workflow** 也可只运行签名 Secret 自检（不填标签并勾选 `verify_signing_only`），不会构建或创建 Release。私钥 Secret 只会传给 main 上已审核的签名工具，不传入 PR 检查工作流。
@@ -38,11 +38,13 @@ Actions 使用仓库提供的 `GITHUB_TOKEN`，无需个人 Token。构建任务
 
 ## 0.3.4 起的签名更新清单
 
-应用内更新读取默认分支 `feed/manifest.json`，按固定提交下载 `resources/app.asar`。清单通过 Ed25519 签名，公钥固定在客户端，私钥必须保存在仓库之外且备份妥善。丢失私钥后不能给已安装客户端签发新更新。
+应用内更新读取默认分支 `feed/manifest.json`，按固定提交下载 `resources/app.asar`。1.1.0 起兼容客户端额外读取同一提交的 `feed/delta.json`，签名覆盖基础文件哈希、补丁路径/大小/哈希和最终应用包哈希。本机基础文件匹配时下载补丁，重建后完整校验再交给原有替换流程；任何优化失败均回退完整包。旧客户端继续读取原清单，不会因新增字段失败。清单通过 Ed25519 签名，公钥固定在客户端，私钥必须保存在仓库之外且备份妥善。丢失私钥后不能给已安装客户端签发新更新。
+
+签名作业以已激活的可信旧清单及应用包为基础，按内容分块匹配并 Brotli 压缩复制/新增指令。只发布小于完整应用包 90% 的补丁，生成后必须重建并比对完整新版。工具允许最多两个显式、已签名的基础版本；默认流水线使用上一激活版本一个基础。激活时验证所有补丁，删除旧签名清单引用的过期补丁。Electron 版本不一致时不生成该基础补丁，继续保留完整安装途径。
 
 GitHub 仓库 Actions Secret `QMX_UPDATE_SIGNING_KEY_PEM` 保存与客户端内置 Ed25519 公钥匹配的 PEM 私钥。`.github/workflows/release.yml` 仅能从 `main` 手动触发：先校验已存在的稳定版本标签指向 main 历史、标签版本与该提交的 `package.json` 一致；构建/测试任务不获取私钥。签名作业只用 main 上受信任的工具读取私钥，并仅将未执行的 `app.asar` 字节及版本元数据作为输入；Secret 不写入磁盘、日志或 Release。
 
-Windows 构建作业生成应用包，独立的受信任签名作业生成唯一签名清单。Windows 安装包、便携 ZIP 与 Linux/macOS 包均注入同一份签名应用字节；发布前验证清单签名、版本、Electron runtime 和 SHA-256。工作流先创建草稿 Release，供维护者验收。发布草稿后，从 `main` 手动运行 `activate-update.yml`，校验 Release 附件并创建仅修改 `feed/manifest.json` 与 `resources/app.asar` 的更新通道 PR；只有该 PR 审核合并后，现有客户端才会收到该更新。运行时版本变动仍需完整安装程序升级。
+Windows 构建作业生成应用包，独立的受信任签名作业生成唯一签名清单。Windows 安装包、便携 ZIP 与 Linux/macOS 包均注入同一份签名应用字节；发布前验证清单签名、版本、Electron runtime 和 SHA-256。工作流先创建草稿 Release，供维护者验收。发布草稿后，从 `main` 手动运行 `activate-update.yml`，校验 Release 附件并创建修改完整更新清单、应用包、独立签名差分清单和对应补丁 的更新通道 PR；只有该 PR 审核合并后，现有客户端才会收到该更新。运行时版本变动仍需完整安装程序升级。
 
 私钥绝不能加入源码、Release、构建 Artifact 或普通构建日志。轮换或丢失私钥无法替代已安装客户端信任的公钥；必须通过完整安装程序发布带新公钥的版本。
 

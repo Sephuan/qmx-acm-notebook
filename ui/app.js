@@ -13,10 +13,7 @@
     tricks: ['tricks', '把灵光一现，留给下一次解题。', 'SMALL IDEAS, NEW POSSIBILITIES'],
     algorithms: ['算法笔记', '整理知识，连接思路。', 'BUILD YOUR KNOWLEDGE'],
     public: ['公共题库', '在他人的思路里，找到自己的突破口。', 'A LITTLE BETTER, EVERY DAY'],
-    discussion: ['讨论 Issues', '阅读已有讨论，与学习者交流观察。', 'DISCUSS AND LEARN'],
-    mine: ['我的错题', '每个没有想通的瞬间，都有重新理解的机会。', 'TURN MISTAKES INTO INSIGHT'],
-    favorites: ['个人收藏', '再想一遍，让解题思路真正成为自己的。', 'REVISIT. UNDERSTAND. REMEMBER.'],
-    stats: ['学习统计', '看见积累，也看见下一步的方向。', 'SMALL STEPS, REAL PROGRESS']
+    favorites: ['个人收藏', '再想一遍，让解题思路真正成为自己的。', 'REVISIT. UNDERSTAND. REMEMBER.']
   };
   const examples = [
     { id: 'demo-issue-1', number: 101, kind: 'issue', title: 'D. 数对计数：从枚举到贡献法', pid: 'CF1900D', platform: 'Codeforces', rating: 1900, tags: ['数论', '贡献法', '枚举优化'], author: '林间的二分树', body: '## 错因分析\n直接枚举三个位置会退化到 O(n³)。我一直试图优化判断过程，却没有先调整统计的顺序。\n\n## 关键观察\n排序后，固定中间位置，把左侧数字按因子归类。统计一个数对的贡献，比逐个寻找合法三元组更容易。\n\n> 先问「谁在产生贡献」，再问「如何更快地枚举」。\n\n## 复盘笔记\n1. 先用小数据写暴力，确认统计对象。\n2. 把 gcd 条件拆解为因子计数。\n3. 注意重复元素与 64 位整数溢出。\n\n```cpp\nlong long answer = 0;\n// 先计算贡献，再更新计数，避免重复统计。\n```\n\n*此内容为界面演示示例，并非该题的正式题解。*', url: 'https://codeforces.com/problemset/problem/1900/D', updatedAt: '2026-10-29T10:20:00Z', comments: 0, state: 'open' },
@@ -279,8 +276,6 @@
     const difficultyActive = [min,max,lgMin,lgMax].some(v=>v!==null) || facets.native.size>0;
     return records().filter(record => {
       if (s.view === 'public' && record.kind !== 'document') return false;
-      if (s.view === 'discussion' && record.kind !== 'issue') return false;
-      if (s.view === 'mine' && !isMine(record)) return false;
       if (s.view === 'favorites' && !favorite(record)) return false;
       if (facets.platform.size && !facets.platform.has(facetValue(record,'platform'))) return false;
       if (facets.tags.size && !(record.tags || []).some(tag=>facets.tags.has(String(tag)))) return false;
@@ -589,10 +584,14 @@
     $('#algorithm-panel').hidden = s.view !== 'algorithms';
     const placeholder = ['tricks'].includes(s.view);
     $('#section-placeholder').hidden = !placeholder;
-    $('#stats-panel').hidden = s.view !== 'stats'; $('#library-panel').hidden = s.view === 'home' || s.view === 'stats' || placeholder || s.view === 'algorithms'; updateStatus();
+    $('#library-panel').hidden = s.view === 'home' || placeholder || s.view === 'algorithms'; updateStatus();
     if (s.view === 'home') { renderHome(); return; }
     if (s.view === 'algorithms') { renderAlgorithmNotes(); return; }
-    if (s.view === 'stats') { renderStats(); return; }
+    if (focusedDetail) {
+      const selected = records().find(record => key(record) === s.selected);
+      if (selected) { renderDetail(selected); return; }
+      focusedDetail = false; document.body.classList.remove('reading-detail');
+    }
     const items = filteredRecords(); $('#result-count').textContent = items.length;
     $('.list-heading > span:last-child').textContent = facets.tags.size ? '标签命中数 ↓ · 相关度 / 更新时间' : $('#search-input').value.trim() ? '匹配程度 ↓' : '最近更新 ↓';
     if (!items.some(record => key(record) === s.selected)) s.selected = items[0] ? key(items[0]) : null;
@@ -796,14 +795,6 @@
       comments.forEach(comment => { container.append(append(element('article', 'comment-item'), element('strong', '', authorName(comment.author || comment.user)), element('p', '', comment.body || ''))); });
     } catch (error) { if (container.isConnected) container.replaceChildren(element('div', 'comment-empty', `讨论暂不可用：${errorMessage(error)}`)); }
   }
-  function renderStats() {
-    const all = records(), mine = all.filter(isMine), favorites = all.filter(favorite); const tracked = all.filter(record => s.local.mastery[key(record)]); const mastered = tracked.filter(record => mastery(record) === 'mastered').length;
-    const panel = $('#stats-panel'); panel.replaceChildren();
-    for (const [label, value, caption] of [['我的错题', mine.length, `${mine.filter(isLocal).length} 道仅本地 · ${mine.filter(record => !isLocal(record)).length} 道已共享`], ['收藏题目', favorites.length, '值得再次思考的题目'], ['已掌握', mastered, '来自你手动记录的复习进度'], ['待复习', favorites.filter(record => mastery(record) !== 'mastered').length, '收藏中尚未掌握的题目']]) panel.append(append(element('article', 'stat-card'), element('div', 'stat-label', label), element('div', 'stat-number', value), element('div', 'stat-caption', caption)));
-    const progress = append(element('article', 'stat-card stat-wide'), element('div', 'stat-label', '复习进度'));
-    Object.entries(stateLabels).forEach(([value, label]) => { const count = favorites.filter(record => mastery(record) === value).length; const fill = element('div', 'progress-fill'); fill.style.width = `${favorites.length ? count / favorites.length * 100 : 0}%`; progress.append(append(element('div', 'progress-row'), element('span', '', label), append(element('div', 'progress-track'), fill), element('span', '', count))); }); panel.append(progress);
-    const topics = append(element('article', 'stat-card stat-wide'), element('div', 'stat-label', '我的算法足迹')); const counts = new Map(); mine.forEach(record => (Array.isArray(record.tags) ? record.tags : []).forEach(tag => counts.set(tag, (counts.get(tag) || 0) + 1))); [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 5).forEach(([tag, count]) => topics.append(append(element('div', 'progress-row'), element('span', '', tag), element('span', 'tag', `${count} 道`)))); if (!counts.size) topics.append(element('p', 'settings-note', '记下第一道错题，开始积累你的算法地图。')); panel.append(topics, element('div', 'stats-note', demo ? '演示统计 · 基于 3 条明确标记的示例及你在浏览器中的本地操作，不代表真实学习记录。' : '统计来自当前已载入的题目与本地复习记录。'));
-  }
   function clearFilters() { $('#search-input').value = ''; $('#state-filter').value=''; Object.values(facets).forEach(set=>set.clear()); clearDifficulty(); render(); }
   async function openExternal(url) { try { const parsed = new URL(String(url)); if (!['https:', 'http:'].includes(parsed.protocol)) throw new Error('仅支持 http 或 https 题目链接'); if (demo) window.open(parsed.href, '_blank', 'noopener,noreferrer'); else await call('openExternal', parsed.href); } catch (error) { toast(errorMessage(error)); } }
   let updateLockedControls = null;
@@ -957,7 +948,11 @@
       }
       delete s.local.draft[draftKey(s.editor.source, s.editor.ownerId)];
       try { await persistLocal(); } catch (error) { if (wroteRemote) { toast('GitHub 已更新，本地清理未保存，请同步核实'); } else throw error; }
-      form.reset(); $('#submit-dialog').close(); s.editor = null; s.view = 'mine'; refreshFilters(); render(); toast(remote ? '正式题解已保存到 GitHub' : '已保存本地记录');
+      const savedRecord = records().find(item => key(item) === s.selected);
+      form.reset(); $('#submit-dialog').close(); s.editor = null; refreshFilters(); navigate('public');
+      if (remote) { s.selected = key(savedRecord); render(); }
+      else openDetail(savedRecord);
+      toast(remote ? '正式题解已保存到 GitHub' : '已保存本地记录，收藏后可从个人收藏访问');
     } catch (error) { if (!remote) s.local = previousLocal; editorError(error); await saveDraft(); }
     finally { setBusy(false); }
   }
@@ -1117,6 +1112,9 @@
     const percent = typeof update.percent === 'number' && Number.isFinite(update.percent) ? update.percent : typeof update.total === 'number' && update.total > 0 && Number.isFinite(update.downloaded) ? update.downloaded / update.total * 100 : null;
     if (percent === null) progress.removeAttribute('value'); else { progress.value = Math.min(100, Math.max(0, percent)); if (!progress.hidden) text += ` ${Math.round(progress.value)}%`; }
     if (!progress.hidden && Number.isFinite(update.downloaded) && Number.isFinite(update.total) && update.total > 0) text += `（${(update.downloaded / 1048576).toFixed(1)} / ${(update.total / 1048576).toFixed(1)} MB）`;
+    if (update.downloadKind === 'delta' && Number.isFinite(update.total) && Number.isFinite(update.fullSize) && update.fullSize > update.total) {
+      text += ` 差分下载 ${(update.total / 1048576).toFixed(2)} MB，完整包 ${(update.fullSize / 1048576).toFixed(1)} MB。`;
+    }
     $('#update-status').textContent = text;
     $('#update-status').classList.toggle('update-error', update.phase === 'error');
     $('#check-update-button').textContent = updateReady && update.phase === 'error' ? '重试安装' : '检查更新';
@@ -1264,7 +1262,7 @@
     } catch (_) { /* Validation is shown when saving. */ }
   });
   window.addEventListener('online', updateStatus); window.addEventListener('offline', updateStatus);
-  document.addEventListener('keydown', event => { if (event.key === '/' && !event.ctrlKey && !event.metaKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) && !document.querySelector('dialog[open]')) { event.preventDefault(); if (['home', 'stats', 'tricks', 'algorithms'].includes(s.view)) { navigate('public'); } $('#search-input').focus(); } });
+  document.addEventListener('keydown', event => { if (event.key === '/' && !event.ctrlKey && !event.metaKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) && !document.querySelector('dialog[open]')) { event.preventDefault(); if (['home', 'tricks', 'algorithms'].includes(s.view)) { navigate('public'); } $('#search-input').focus(); } });
   async function bootstrap() {
     applyTheme(readTheme()); applySidebar(readSidebar()); render();
     if (demo) { s.permissions = { repo: 'qmx-acm-data/2026', push: false, admin: false }; s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo })); s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo })); s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} }); s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record); s.settings = cached?.settings || {}; applyTheme(s.settings.theme || readTheme()); applyCodeSettings(); }

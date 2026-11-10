@@ -49,6 +49,21 @@ jobs:
           gh release download "$RELEASE_TAG" --pattern update-manifest.json --pattern update-app.asar --dir incoming
           mv incoming/update-manifest.json incoming/feed/manifest.json
           mv incoming/update-app.asar incoming/resources/app.asar
+          gh release view "$RELEASE_TAG" --json assets > incoming/release-assets.json
+          # Missing metadata denotes a legacy release. Download errors for an
+          # advertised delta manifest must fail instead of silently dropping it.
+          if node -e "const r=require('./incoming/release-assets.json');process.exit(r.assets.some(a=>a.name==='delta-manifest.json')?0:1)"; then
+            gh release download "$RELEASE_TAG" --pattern delta-manifest.json --dir incoming
+            mv incoming/delta-manifest.json incoming/feed/delta.json
+            node tools/delta-feed.cjs list-assets incoming --version "${RELEASE_TAG#v}" > incoming/delta-assets.txt
+            mkdir -p incoming/resources/deltas
+            while IFS= read -r ASSET; do
+              gh release download "$RELEASE_TAG" --pattern "$ASSET" --dir incoming
+              HASH=${ASSET#update-delta-}
+              HASH=${HASH%.qmxdelta}
+              mv "incoming/$ASSET" "incoming/resources/deltas/$HASH.qmxdelta"
+            done < incoming/delta-assets.txt
+          fi
       - name: Verify signature, version and content before preparing channel
         shell: bash
         run: |
@@ -64,16 +79,22 @@ jobs:
             echo 'Channel review branch already exists; inspect it instead of overwriting'; exit 1
           fi
           git switch -c "$BRANCH"
-          cp incoming/feed/manifest.json feed/manifest.json
-          cp incoming/resources/app.asar resources/app.asar
+          node tools/delta-feed.cjs install incoming --root-dir . --version "${RELEASE_TAG#v}"
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add feed/manifest.json resources/app.asar
+          # Include new metadata/patches and tracked deletions without broad staging.
+          if [[ -e feed/delta.json ]] || git ls-files --error-unmatch feed/delta.json >/dev/null 2>&1; then
+            git add -- feed/delta.json
+          fi
+          if [[ -d resources/deltas ]] || [[ -n "$(git ls-files -- resources/deltas)" ]]; then
+            git add -A -- resources/deltas
+          fi
           git commit -m "Activate signed update $RELEASE_TAG after release acceptance"
           gh auth setup-git --hostname github.com
           git push origin "HEAD:refs/heads/$BRANCH"
           printf '## Update channel requires review\n\nPublished installers do not change the client update feed until this branch is merged.\n\nOpen/merge the channel PR: https://github.com/%s/compare/main...%s\n' "$GH_REPO" "$BRANCH" >> "$GITHUB_STEP_SUMMARY"
-          if ! gh pr create --base main --head "$BRANCH" --title "Activate signed update $RELEASE_TAG" --body "Published release $RELEASE_TAG has passed signature, version and SHA-256 verification. Merge after acceptance to notify existing clients. This changes only the signed update manifest and application archive."; then
+          if ! gh pr create --base main --head "$BRANCH" --title "Activate signed update $RELEASE_TAG" --body "Published release $RELEASE_TAG has passed signature, version and SHA-256 verification. Merge after acceptance to notify existing clients. This activates the signed application feed and optional signed delta metadata/patches; only superseded patches owned by the previous signed feed are removed."; then
             echo '::warning::Repository policy may forbid Actions-created pull requests. The review branch was pushed successfully; use the compare link above to open the PR manually.'
           fi
       - name: Run required source checks for the channel branch
