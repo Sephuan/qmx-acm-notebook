@@ -2,9 +2,9 @@
 
 面向 ACM 集训队的 Windows、Linux 与 macOS 本地错题与算法资料客户端，无需自建服务器、数据库或域名。默认资料来源：[qmx-acm-data/2026](https://github.com/qmx-acm-data/2026)。
 
-**[下载 Windows x64 安装包 v0.10.0](https://github.com/qmx-acm-data/qmx-acm-notebook/releases/download/v0.10.0/QMX-Notebook-Setup-0.10.0.exe)** · [所有版本](https://github.com/qmx-acm-data/qmx-acm-notebook/releases)
+**[下载 Windows x64 安装包 v1.0.0](https://github.com/qmx-acm-data/qmx-acm-notebook/releases/download/v1.0.0/QMX-Notebook-Setup-1.0.0.exe)** · [所有版本](https://github.com/qmx-acm-data/qmx-acm-notebook/releases) · [v1.0.0 更新说明](docs/releases/v1.0.0.md)
 
-下载后运行安装程序。首次配置、登录、数据备份与已知限制见 [使用指南](docs/USAGE.md)。当前为预览版，客户端 OAuth 在线投稿尚未完成验收。
+下载后运行安装程序。首次配置、登录、数据备份与已知限制见 [使用指南](docs/USAGE.md)。客户端 OAuth 的真实设备授权、组织访问和在线写入仍需按实际账号验收，本地测试不代替这些验证。
 
 ![浅色界面示例](screenshots/preview-light.png)
 
@@ -14,8 +14,10 @@
 - 管理标记为“仅本地”的题解、草稿、收藏与复习状态，本地编辑删除不影响 GitHub。
 - GitHub 登录提供账号身份；直接上传题解文件，在客户端修改、删除本人已上传题解，不创建重复 Issue 或 PR。
 - 账户界面检查更新，发现公开正式新版后自动下载校验、备份个人数据，在原位置静默升级并重启，保留已有快捷方式。
-- 旧版首次需手动安装 0.3.0，之后可通过客户端检查更新。
-- 启动进入主页，图标导航支持悬浮展开与固定；公共题库、个人收藏可直接访问，我的题解、讨论和统计在主页提供入口。
+- 旧版无法使用应用内更新或 Electron 运行时不匹配时，从 Releases 下载当前完整安装包升级。
+- 启动进入紧凑主页，集中展示比赛提醒、待做题目、学习任务与平台统计；主页不再显示六项快捷入口，公共题库、算法笔记、个人收藏、我的题解、讨论与学习统计通过侧边栏访问，导航支持悬浮展开与固定。
+- 待做题目可粘贴受支持平台的题目链接并选填名称；学习任务支持完成、编辑、删除与可选截止时间弹窗，点击任务标题查看只读详情，补充说明通过“编辑”填写。计划只保存在本机，不随 GitHub 同步。
+- 算法笔记使用 367 节点的分层目录，支持搜索、筛选与独立阅读；入门、初级、中级、高级、挑战五档仅作学习参考，模板、常用、低频作为独立属性，目录层级与深色配色清晰区分。
 - 主页统一展示洛谷、Codeforces、AtCoder、牛客比赛提醒，独立缓存、北京时间倒计时与赛时；支持“不参加”和勾选恢复，AtCoder 显示 ABC、ARC、AGC、AHC 类型标签。
 - 设置绑定 CF、AtCoder、洛谷、牛客和力扣公开主页，主页统一展示做题与提交统计、最近比赛、CF/AtCoder Rating 图及每日做题热图；支持局部平台切换和悬停详情，新用户无默认绑定。
 - 展示 Markdown、公式、代码与平台原生难度，提供三种界面风格；代码支持高亮、复制和离线格式化（含 Rust），阅读字号与行号可设置。

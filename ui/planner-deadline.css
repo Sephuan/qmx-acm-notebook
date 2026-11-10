@@ -1,0 +1,46 @@
+/* Compact deadline trigger and native top-layer calendar; notebook theme tokens stay inherited. */
+.planner-deadline-trigger{display:inline-flex;align-items:center;justify-content:center;gap:6px;max-width:100%;min-width:0;min-height:35px;padding:7px 9px;border:1px solid var(--line);border-radius:7px;background:var(--surface-soft);color:var(--muted);font:inherit;font-size:11px;line-height:1.5;white-space:nowrap;cursor:pointer;font-variant-numeric:tabular-nums}
+.planner-deadline-trigger:hover:not(:disabled),.planner-deadline-trigger[aria-expanded="true"]{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.planner-deadline-trigger.has-deadline{color:var(--accent)}
+.planner-deadline-trigger:disabled{opacity:.55;cursor:wait}
+.planner-deadline-icon{flex:none;width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.35;stroke-linecap:round;stroke-linejoin:round}
+.planner-deadline-caption{min-width:0;overflow:hidden;text-overflow:ellipsis}
+.planner-deadline-popover{position:fixed;inset:auto;margin:0;box-sizing:border-box;width:302px;max-width:calc(100vw - 16px);max-height:calc(100dvh - 16px);overflow:auto;overscroll-behavior:contain;padding:15px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--text);box-shadow:0 12px 44px #10241930;font:inherit;font-size:12px;line-height:1.5;z-index:2147483647;font-variant-numeric:tabular-nums}
+.planner-deadline-popover::backdrop{background:transparent}
+.planner-deadline-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:13px}
+.planner-deadline-heading h3{margin:0;font-size:13px;font-weight:650;line-height:1.5}
+.planner-deadline-optional,.planner-deadline-zone{font-size:10px;color:var(--muted)}
+.planner-deadline-navigation{display:grid;grid-template-columns:30px minmax(0,1fr) 30px;align-items:center;gap:6px;margin-bottom:9px}
+.planner-deadline-month{text-align:center;font-size:12px;font-weight:600}
+.planner-deadline-nav{display:grid;place-items:center;width:30px;height:28px;padding:0;border:0;border-radius:6px;background:var(--surface-soft);color:var(--muted);font:inherit;font-size:22px;line-height:1;cursor:pointer}
+.planner-deadline-nav:hover:not(:disabled){background:var(--accent-soft);color:var(--accent)}
+.planner-deadline-weekdays,.planner-deadline-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.planner-deadline-weekdays{margin-bottom:5px;color:var(--muted);font-size:10px;text-align:center}
+.planner-deadline-weekdays span{padding:3px 0}
+.planner-deadline-day{position:relative;display:grid;place-items:center;width:100%;height:29px;padding:0;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--text);font:inherit;font-size:11px;line-height:1;cursor:pointer}
+.planner-deadline-day.is-adjacent{color:var(--muted);opacity:.6}
+.planner-deadline-day.is-today{border-color:var(--line);font-weight:750}
+.planner-deadline-day.is-today::after{position:absolute;bottom:3px;width:3px;height:3px;border-radius:50%;background:currentColor;content:""}
+.planner-deadline-day:hover:not(:disabled){background:var(--accent-soft);color:var(--accent);opacity:1}
+.planner-deadline-day[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--surface);opacity:1;font-weight:650}
+.planner-deadline-shortcuts{display:flex;gap:6px;margin:12px 0}
+.planner-deadline-shortcut{flex:1;padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:var(--surface-soft);color:var(--muted);font:inherit;font-size:10px;line-height:1.5;cursor:pointer}
+.planner-deadline-shortcut:hover{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
+.planner-deadline-time-row{display:flex;align-items:center;gap:9px;margin:0;padding-top:11px;border-top:1px solid var(--line);font-size:11px}
+.planner-deadline-time{flex:1;min-width:0;width:100px;min-height:32px;padding:5px 7px;border:1px solid var(--line);border-radius:6px;background:var(--surface-soft);color:var(--text);font:inherit;font-size:12px;line-height:1.5}
+.planner-deadline-time:focus{border-color:var(--accent);outline:2px solid var(--accent-soft);outline-offset:2px}
+.planner-deadline-selection{margin:10px 0 0;color:var(--muted);font-size:10px;line-height:1.6}
+.planner-deadline-error{margin:8px 0 0;color:var(--tone-red,#bb5555);font-size:11px;line-height:1.6}
+.planner-deadline-error[hidden]{display:none}
+.planner-deadline-footer{display:flex;align-items:center;justify-content:flex-end;gap:7px;margin-top:12px}
+.planner-deadline-footer button{min-height:31px;padding:5px 12px;border:1px solid var(--line);border-radius:6px;background:var(--surface);color:var(--text);font:inherit;font-size:11px;line-height:1.5;cursor:pointer}
+.planner-deadline-footer .planner-deadline-clear{margin-right:auto;padding-left:2px;border-color:transparent;background:transparent;color:var(--muted)}
+.planner-deadline-footer .planner-deadline-confirm{border-color:var(--accent);background:var(--accent);color:var(--surface);font-weight:650}
+.planner-deadline-footer button:hover{filter:brightness(.96)}
+.planner-deadline-trigger:focus-visible,.planner-deadline-popover button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.planner-deadline-popover button:disabled{opacity:.4;cursor:default}
+.planner-editor .planner-deadline-trigger{justify-content:flex-start;min-height:39px;padding:9px 11px;font-size:13px}
+body[data-theme="dark"] .planner-deadline-time{color-scheme:dark}
+body[data-theme="dark"] .planner-deadline-popover{box-shadow:0 12px 44px #0007}
+body[data-theme="dark"] .planner-deadline-day[aria-pressed="true"],body[data-theme="dark"] .planner-deadline-footer .planner-deadline-confirm{border-color:#527e64;background:#527e64;color:#f3fff5}
+@media(max-width:420px){.planner-deadline-popover{width:296px;padding:13px}.planner-deadline-day{height:30px}}

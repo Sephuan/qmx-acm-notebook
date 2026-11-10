@@ -112,6 +112,7 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
       if (name === '../package.json') return { version: '0.3.0' };
       if (name === './auth.cjs') return require('../electron/auth.cjs');
       if (name === './platform-service.cjs') return require('../electron/platform-service.cjs');
+      if (name === './planner-service.cjs') return require('../electron/planner-service.cjs');
       if (name === './platform-page.cjs') return require('../electron/platform-page.cjs');
        if (name === './contests.cjs') return require('../electron/contests.cjs');
       if (name === '@astral-sh/ruff-wasm-nodejs') return require(name);
@@ -160,6 +161,46 @@ function harness({ files = {}, account = { id: 42, login: 'alice' }, backend = {
     get updaterOptions() { return updaterOptions; }, get quitCalls() { return quitCalls; },
     stored: name => JSON.parse(disk.get(path.join(root, name)) || 'null') };
 }
+
+test('planner IPC persists device data across account/repository changes and restart without network', async () => {
+  const h = harness({ account: null });
+  assert.deepEqual((await h.invoke('bootstrap')).planner, { problems: [], tasks: [], layout: 'compact' });
+  assert.equal(h.stored('planner.json'), null);
+  let planner = await h.invoke('plannerAction', 'addProblem', { url: 'http://codeforces.com/problemset/problem/1/A', title: 'Watermelon' });
+  const problemId = planner.problems[0].id;
+  planner = await h.invoke('plannerAction', 'addTask', { title: 'Review proof', dueAt: '2026-11-11T18:00:00+08:00' });
+  const taskId = planner.tasks[0].id;
+  await h.invoke('plannerAction', 'updateProblem', { id: problemId, done: true });
+  await h.invoke('plannerAction', 'updateTask', { id: taskId, details: 'Check parity', done: true });
+  planner = await h.invoke('plannerAction', 'setLayout', { layout: 'compact' });
+  assert.deepEqual(h.stored('planner.json'), planner);
+  assert.equal(h.stored('local.json'), null);
+  assert.equal(h.stored('platforms.json'), null);
+  const writeCount = h.writes.length;
+  await assert.rejects(h.invoke('plannerAction', 'updateTask', { id: 'missing', title: 'bad' }));
+  await assert.rejects(h.invoke('plannerAction', 'addProblem', { url: 'https://evil.test/' }));
+  assert.equal(h.writes.length, writeCount);
+  await h.invoke('logout');
+  await h.invoke('saveSettings', { repo: 'other/repo' });
+  assert.deepEqual((await h.invoke('bootstrap')).planner, planner);
+  const restarted = harness({ account: { id: 100, login: 'bob' }, files: { 'planner.json': h.stored('planner.json') } });
+  assert.deepEqual((await restarted.invoke('bootstrap')).planner, planner);
+  assert.equal(h.networkCalls.length + restarted.networkCalls.length, 0);
+  await restarted.invoke('plannerAction', 'deleteProblem', { id: problemId });
+  assert.deepEqual((await restarted.invoke('plannerAction', 'deleteTask', { id: taskId })), { problems: [], tasks: [], layout: 'compact' });
+});
+
+test('planner IPC validates sender/update locks and opens accepted official problem URLs', async () => {
+  const gate = deferred(), h = harness({ updaterBackend: { download: () => gate.promise } });
+  await assert.rejects(h.handlers.get('plannerAction')({ sender: {} }, 'addTask', { title: 'bad caller' }), /非法调用/);
+  const downloading = h.invoke('downloadUpdate');
+  await assert.rejects(h.invoke('plannerAction', 'addTask', { title: 'during update' }), /更新/);
+  assert.equal(h.stored('planner.json'), null);
+  gate.resolve(); await downloading;
+  for (const url of ['http://codeforces.com/problemset/problem/1/A', 'https://hydro.ac/d/luogu/p/P1001', 'http://www.acwing.com/problem/content/1/']) await h.invoke('openExternal', url);
+  for (const url of ['http://codeforces.com/profile/alice', 'https://user:pass@codeforces.com/problemset/problem/1/A', 'https://codeforces.com:8443/problemset/problem/1/A']) await assert.rejects(h.invoke('openExternal', url), /仅允许/);
+  assert.equal(h.externalCalls.length, 3);
+});
 
 const cfResponse = (url, rating = 1061) => ({ ok: true, json: async () => ({ status: 'OK', result: String(url).includes('user.info') ? [{ handle: 'time-lo', rating, maxRating: rating }] : [] }) });
 
@@ -243,9 +284,10 @@ test('preload exposes platform IPC alongside existing auth, contest, formatter a
       on(name, fn) { listeners.set(name, fn); }, removeListener(name, fn) { assert.equal(listeners.get(name), fn); listeners.delete(name); }
     } };
   } });
-  for (const name of ['bindPlatform', 'refreshPlatform', 'unbindPlatform', 'getContests', 'login', 'formatCode', 'installUpdate']) assert.equal(typeof bridge[name], 'function');
+  for (const name of ['plannerAction', 'bindPlatform', 'refreshPlatform', 'unbindPlatform', 'getContests', 'login', 'formatCode', 'installUpdate']) assert.equal(typeof bridge[name], 'function');
   assert.equal(await bridge.bindPlatform('CF', 'https://codeforces.com/profile/time-lo'), 'bindPlatform');
-  assert.deepEqual(calls, [{ name: 'bindPlatform', args: ['CF', 'https://codeforces.com/profile/time-lo'] }]);
+  assert.equal(await bridge.plannerAction('setLayout', { layout: 'compact' }), 'plannerAction');
+  assert.deepEqual(calls, [{ name: 'bindPlatform', args: ['CF', 'https://codeforces.com/profile/time-lo'] }, { name: 'plannerAction', args: ['setLayout', { layout: 'compact' }] }]);
   const stop = bridge.onAuthProgress(() => {}); stop();
   assert.equal(listeners.size, 0);
 });

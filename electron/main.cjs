@@ -10,6 +10,7 @@ const { prepareFileUpgrade, recoverFileUpgrade, getFileUpgradeCapability } = req
 const { createAuth, configureUserData } = require('./auth.cjs');
 const { createContestService } = require('./contests.cjs');
 const { createPlatformService } = require('./platform-service.cjs');
+const { createPlannerService, problemUrl } = require('./planner-service.cjs');
 const { createPublicPageReader } = require('./platform-page.cjs');
 const APP_VERSION = require('../package.json').version;
 configureUserData(app);
@@ -60,7 +61,7 @@ app.disableHardwareAcceleration();
 if (process.platform === 'linux' && !app.commandLine.hasSwitch('password-store') && !/gnome|kde/i.test(process.env.XDG_CURRENT_DESKTOP || '')) {
   app.commandLine.appendSwitch('password-store', 'gnome-libsecret');
 }
-let win, dir, contestService, platforms, token = '', account = null, permissions = null;
+let win, dir, contestService, platforms, planner, token = '', account = null, permissions = null;
 let loginGeneration = 0, writeBusy = false, syncBusy = false, updateBusy = false, installing = false, updater;
 function processEnvForInstaller() {
   const environment = { ...process.env };
@@ -113,13 +114,14 @@ function state(error) {
     tagCatalog: matching && cache.tagCatalog ? cache.tagCatalog : require('../ui/tag-presets.js'),
     tagCatalogError: matching ? cache.tagCatalogError || null : null,
     settings: s, account, authStatus: auth?.status, appVersion: APP_VERSION, update: updater?.getState(), updateCapability: getFileUpgradeCapability(), permissions: permissions?.repo === s.repo ? permissions : null,
-    local: local(), contests: contestService?.snapshot(), platforms: platforms?.state(), error: error || null
+    local: local(), contests: contestService?.snapshot(), platforms: platforms?.state(), planner: planner?.state(), error: error || null
   };
 }
 function assertExternal(url) {
   const u = new URL(url);
-  if (u.protocol !== 'https:' || !['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com', 'leetcode.cn', 'leetcode.com', 'www.luogu.com'].includes(u.hostname)) throw new Error('仅允许打开 GitHub 和受支持题目平台的 HTTPS 链接');
-  return u;
+  if (!u.username && !u.password && !u.port && u.protocol === 'https:' && ['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com', 'leetcode.cn', 'leetcode.com', 'www.luogu.com'].includes(u.hostname)) return u;
+  try { return new URL(problemUrl(url)); }
+  catch { throw new Error('仅允许打开 GitHub 和受支持题目平台的链接（HTTP 仅限官方题目）'); }
 }
 async function external(url) {
   const u = assertExternal(url);
@@ -268,10 +270,12 @@ function rememberDocument(result, removed = false) {
   save('local.json', personal);
 }
 function setup() {
+  planner = createPlannerService({ read, save });
   platforms = createPlatformService({ read, save, fetcher: networkFetch, readPage: createPublicPageReader({ BrowserWindow }) });
   // Public schedules use stateless Node fetch, separate from Chromium session cookies.
   contestService = createContestService({ fetcher: (url, options) => fetch(url, options), readCache: () => read('contests.json', null), writeCache: value => save('contests.json', value) });
   handle('bootstrap', () => state());
+  handle('plannerAction', (action, payload) => planner.action(action, payload));
   handle('getContests', force => contestService.get(force));
   handle('bindPlatform', (platform, url) => platforms.bind(platform, url));
   handle('refreshPlatform', platform => platforms.refresh(platform));

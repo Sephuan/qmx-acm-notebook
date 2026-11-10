@@ -5,7 +5,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { installationPaths } = require('./update-helper.cjs');
 
-const USER_FILES = ['local.json', 'settings.json', 'auth.json', 'cache.json', 'platforms.json'];
+const USER_FILES = ['local.json', 'settings.json', 'auth.json', 'cache.json', 'platforms.json', 'planner.json'];
 const VERSION = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
 
 function absoluteDirectory(value, name) {

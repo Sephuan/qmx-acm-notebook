@@ -23,9 +23,16 @@
   <link rel="stylesheet" href="styles.css">
   <script defer src="tag-presets.js"></script>
   <script defer src="search.js"></script>
-<script defer src="algorithm-tree.js"></script>
+  <script defer src="algorithm-tree.js"></script>
+  <link rel="stylesheet" href="algorithm-browser.css">
+  <script defer src="algorithm-browser.js"></script>
   <link rel="stylesheet" href="platforms.css">
   <script defer src="platforms.js"></script>
+  <link rel="stylesheet" href="planner.css">
+  <link rel="stylesheet" href="home-layouts.css">
+  <link rel="stylesheet" href="planner-deadline.css">
+  <script defer src="planner-deadline.js"></script>
+  <script defer src="planner.js"></script>
   <script defer src="app.js"></script>
 </head>
 <body data-theme="light">
@@ -44,6 +51,9 @@
         <button class="nav-item" type="button" data-view="public" aria-label="公共题库"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 4h5v16H3ZM8 4h5v16H8ZM15 5l4-1 4 15-4 1ZM3 16h10M16.5 10l4-1"/></svg></span><span class="nav-label">公共题库</span><span class="nav-count" id="count-public">0</span></button>
         <button class="nav-item" type="button" data-view="algorithms" aria-label="算法笔记"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 3h14v18H6ZM3 7h5M3 12h5M3 17h5M11 8h5M11 12h5M11 16h3"/></svg></span><span class="nav-label">算法笔记</span></button>
         <button class="nav-item" type="button" data-view="favorites" aria-label="个人收藏"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9Z"/></svg></span><span class="nav-label">个人收藏</span><span class="nav-count" id="count-favorites">0</span></button>
+        <button class="nav-item" type="button" data-view="mine" aria-label="我的题解"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 3h10l4 4v14H5ZM15 3v5h4M8 12h8M8 16h5"/></svg></span><span class="nav-label">我的题解</span></button>
+        <button class="nav-item" type="button" data-view="discussion" aria-label="讨论交流"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M3 4h18v13H9l-6 4ZM7 8h10M7 12h7"/></svg></span><span class="nav-label">讨论交流</span></button>
+        <button class="nav-item" type="button" data-view="stats" aria-label="学习统计"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 3v18h17M8 17v-5M13 17V8M18 17V4"/></svg></span><span class="nav-label">学习统计</span></button>
       </nav>
       <div class="sidebar-note"><span class="eyebrow">KEEP THINKING</span><p>把每一次卡住，<br>变成下一次的直觉。</p><span class="note-line"></span><small>记录 · 理解 · 再出发</small></div>
       <button class="sidebar-bottom" id="account-button" type="button" title="GitHub 账户" aria-label="GitHub 账户"><span class="account-avatar">访</span><span class="account-info"><strong id="account-name">本地学习者</strong><span id="account-caption">你的积累，从这里开始</span></span><span class="icon-button" aria-hidden="true">↗</span></button>
