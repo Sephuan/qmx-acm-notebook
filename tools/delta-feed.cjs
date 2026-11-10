@@ -199,8 +199,10 @@ function main(argv = process.argv.slice(2)) {
   } else throw new Error('Usage: node tools/delta-feed.cjs build [--root-dir directory] [--base archive --base-manifest manifest] (max 2) | list-assets directory --version x.y.z | install directory --root-dir destination --version x.y.z');
 }
 
+// Publish the verifier before CLI install calls back through release-feed.
+module.exports = { buildDeltaFeed, verifyDeltaFeed, listAssets, installFeed, main };
+
 if (require.main === module) {
   try { main(); }
   catch (error) { console.error(error.message || 'Delta release operation failed'); process.exitCode = 1; }
 }
-module.exports = { buildDeltaFeed, verifyDeltaFeed, listAssets, installFeed, main };

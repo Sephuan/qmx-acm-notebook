@@ -2,7 +2,7 @@
 
 面向 ACM 集训队的 Windows、Linux 与 macOS 本地错题与算法资料客户端，无需自建服务器、数据库或域名。默认资料来源：[qmx-acm-data/2026](https://github.com/qmx-acm-data/2026)。
 
-**[下载 Windows x64 安装包 v1.1.0](https://github.com/qmx-acm-data/qmx-acm-notebook/releases/download/v1.1.0/QMX-Notebook-Setup-1.1.0.exe)** · [所有版本](https://github.com/qmx-acm-data/qmx-acm-notebook/releases) · [v1.1.0 更新说明](docs/releases/v1.1.0.md)
+**[下载 Windows x64 安装包 v1.1.1](https://github.com/qmx-acm-data/qmx-acm-notebook/releases/download/v1.1.1/QMX-Notebook-Setup-1.1.1.exe)** · [所有版本](https://github.com/qmx-acm-data/qmx-acm-notebook/releases) · [v1.1.1 更新说明](docs/releases/v1.1.1.md)
 
 下载后运行安装程序。首次配置、登录、数据备份与已知限制见 [使用指南](docs/USAGE.md)。客户端 OAuth 的真实设备授权、组织访问和在线写入仍需按实际账号验收，本地测试不代替这些验证。
 

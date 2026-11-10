@@ -62,7 +62,7 @@ test('delta feed binds signed base and target and reconstructs insertion changes
   assert.deepEqual(listAssets(f.target, { expectedVersion: '1.1.0', publicKey: f.publicKey }), [`update-delta-${manifest.patches[0].fromSha256}.qmxdelta`]);
 });
 
-test('CLI build, release verification and asset listing work in fresh processes', t => {
+test('CLI build, release verification, asset listing and install work in fresh processes', t => {
   const f = fixture(t);
   const preload = path.join(f.directory, 'fixture-public-key.cjs');
   const pinned = require.resolve('../electron/update-key.cjs');
@@ -87,6 +87,11 @@ test('CLI build, release verification and asset listing work in fresh processes'
     '--base-manifest', f.baseInput(f.base).manifestPath]), /Signed delta feed 1\.1\.0: 1 patches/);
   assert.match(run('release-feed.cjs', ['verify', f.target]), /Verified update feed 1\.1\.0/);
   assert.match(run('delta-feed.cjs', ['list-assets', f.target, '--version', '1.1.0']), /^update-delta-[a-f0-9]{64}\.qmxdelta\s*$/);
+  const installed = f.feed('cli-installed', '1.0.0', f.baseBytes);
+  assert.match(run('delta-feed.cjs', ['install', f.target, '--root-dir', installed, '--version', '1.1.0']), /Installed verified update feed 1\.1\.0: 1 patches/);
+  const verified = verifyFeed(installed, { expectedVersion: '1.1.0', runtimeVersion: 'manifest', publicKey: f.publicKey });
+  assert.equal(verified.delta.patches.length, 1);
+  assert.deepEqual(fs.readFileSync(path.join(installed, 'resources/app.asar')), f.targetBytes);
 });
 
 test('unsigned or mismatched bases and signing keys fail before writing delta metadata', t => {
