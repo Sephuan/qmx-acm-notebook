@@ -110,7 +110,7 @@ async function bounded(promise, milliseconds, message) {
     assert.equal(ready.account, null);
     await page.locator('.sidebar').hover();
     await page.locator('.nav-item[data-view="home"]').click();
-    await page.locator('#home-panel .home-shortcut[data-view="mine"]').click();
+    await page.locator('.rail-nav-item[data-view="mine"]').click();
     await page.click('#submit-button');
     await page.fill('[name="url"]', 'https://codeforces.com/problemset/problem/1/A');
     await page.fill('[name="title"]', title);
