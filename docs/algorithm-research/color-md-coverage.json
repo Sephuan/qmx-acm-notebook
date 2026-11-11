@@ -1,0 +1,1731 @@
+{
+  "source": {
+    "id": "color-md",
+    "title": "XCPC算法_颜色难度对应.md",
+    "path": "E:/录屏/XCPC算法_颜色难度对应.md",
+    "role": "明确难度与额外算法补充",
+    "sha256": "5c8ad3f2287e012d50e197a84be03d32283dcbd853f287499b3f312db2aa334e"
+  },
+  "sourceBulletRows": 99,
+  "rows": [
+    {
+      "sourceLine": 27,
+      "sourceText": "函数",
+      "nodes": [
+        {
+          "id": "xcpc-函数-1",
+          "label": "函数",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 28,
+      "sourceText": "指针",
+      "nodes": [
+        {
+          "id": "xcpc-指针-1",
+          "label": "指针",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 29,
+      "sourceText": "引用",
+      "nodes": [
+        {
+          "id": "xcpc-引用-1",
+          "label": "引用",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 30,
+      "sourceText": "结构体",
+      "nodes": [
+        {
+          "id": "xcpc-结构体-类-1",
+          "label": "结构体与类",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 31,
+      "sourceText": "模拟",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-1-1",
+          "label": "枚举与模拟",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 32,
+      "sourceText": "枚举",
+      "nodes": [
+        {
+          "id": "algorithm-枚举",
+          "label": "枚举",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 33,
+      "sourceText": "递归 / 迭代基础",
+      "nodes": [
+        {
+          "id": "xcpc-递归-回溯-1",
+          "label": "递归",
+          "difficulty": "basic"
+        },
+        {
+          "id": "xcpc-递推-1",
+          "label": "递推",
+          "difficulty": "basic"
+        },
+        {
+          "id": "algorithm-迭代基础",
+          "label": "迭代",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 34,
+      "sourceText": "排序基础（冒泡 / 选择 / 插入）",
+      "nodes": [
+        {
+          "id": "xcpc-冒泡排序-1",
+          "label": "冒泡排序",
+          "difficulty": "basic"
+        },
+        {
+          "id": "xcpc-选择排序-1",
+          "label": "选择排序",
+          "difficulty": "basic"
+        },
+        {
+          "id": "xcpc-插入排序-1",
+          "label": "插入排序",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 35,
+      "sourceText": "位运算基础",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-5-1",
+          "label": "位运算",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 36,
+      "sourceText": "时空复杂度分析",
+      "nodes": [
+        {
+          "id": "xcpc-时空复杂度分析-1",
+          "label": "复杂度分析",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 43,
+      "sourceText": "贪心",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-1-5",
+          "label": "贪心",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 44,
+      "sourceText": "二分（查找 / 二分答案）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-1-3",
+          "label": "二分",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-二分查找",
+          "label": "二分查找",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-二分答案",
+          "label": "二分答案",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 45,
+      "sourceText": "前缀和与差分",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-1-8",
+          "label": "前缀和与差分",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 46,
+      "sourceText": "双指针",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-1-9",
+          "label": "双指针",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 47,
+      "sourceText": "简单 DFS / BFS",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-2-1",
+          "label": "DFS",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-2-2",
+          "label": "BFS",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 48,
+      "sourceText": "高精度",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-1-7",
+          "label": "高精度",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 51,
+      "sourceText": "栈 / 队列 / 优先队列",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-6-3",
+          "label": "栈",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-6-4",
+          "label": "队列",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-priority-queue-1",
+          "label": "priority_queue",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 52,
+      "sourceText": "单调栈 / 单调队列",
+      "nodes": [
+        {
+          "id": "xcpc-单调栈-1",
+          "label": "单调栈",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-单调队列-1",
+          "label": "单调队列",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 53,
+      "sourceText": "并查集",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-6-5",
+          "label": "并查集",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 54,
+      "sourceText": "树状数组（基础）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-6-8",
+          "label": "树状数组",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 55,
+      "sourceText": "ST 表",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-6-7",
+          "label": "ST 表",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 56,
+      "sourceText": "线段树（基础）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-6-9",
+          "label": "线段树",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 59,
+      "sourceText": "线性 DP",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-3-1",
+          "label": "线性 DP",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 60,
+      "sourceText": "背包（01 / 完全 / 多重 / 分组）",
+      "nodes": [
+        {
+          "id": "xcpc-01背包-1",
+          "label": "01背包",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-无限背包-1",
+          "label": "完全背包",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-xcpc-多重背包-1",
+          "label": "多重背包",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-分组背包-1",
+          "label": "分组背包",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 61,
+      "sourceText": "区间 DP",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-3-3",
+          "label": "区间 DP",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 62,
+      "sourceText": "树形 DP（基础）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-3-4",
+          "label": "树形 DP",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 63,
+      "sourceText": "状态压缩 DP（基础）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-3-5",
+          "label": "状压 DP",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 66,
+      "sourceText": "图的遍历（DFS / BFS）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-7-1",
+          "label": "图基础",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 67,
+      "sourceText": "拓扑排序",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-7-5",
+          "label": "拓扑排序",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 68,
+      "sourceText": "最短路（Dijkstra / Floyd）",
+      "nodes": [
+        {
+          "id": "xcpc-dijkstra-1",
+          "label": "Dijkstra",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-floyd-1",
+          "label": "Floyd–Warshall",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 69,
+      "sourceText": "最小生成树（Kruskal / Prim）",
+      "nodes": [
+        {
+          "id": "xcpc-kruskal-1",
+          "label": "Kruskal",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-prim-1",
+          "label": "Prim",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 70,
+      "sourceText": "二分图判定与匹配（匈牙利）",
+      "nodes": [
+        {
+          "id": "xcpc-二分图判定-1",
+          "label": "二分图判定",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-匈牙利算法-1",
+          "label": "匈牙利算法",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 73,
+      "sourceText": "GCD / LCM、快速幂、逆元",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-5-2-2",
+          "label": "GCD 与 LCM",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-快速幂-1",
+          "label": "快速幂",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-逆元-1",
+          "label": "逆元",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-lcm",
+          "label": "最小公倍数",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 74,
+      "sourceText": "线性筛（素数）、欧拉函数",
+      "nodes": [
+        {
+          "id": "algorithm-线性筛-素数",
+          "label": "线性筛",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-5-2-3",
+          "label": "欧拉函数与定理",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 75,
+      "sourceText": "杨辉三角 / 组合数、卡特兰数",
+      "nodes": [
+        {
+          "id": "xcpc-杨辉三角-1",
+          "label": "杨辉三角",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-5-6-1",
+          "label": "排列组合",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-卡特兰数-1",
+          "label": "卡特兰数",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 76,
+      "sourceText": "容斥原理（基础）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-5-6-3",
+          "label": "容斥原理",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 79,
+      "sourceText": "KMP、字符串哈希、字典树（Trie）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-4-2",
+          "label": "KMP",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-4-1",
+          "label": "字符串哈希",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-4-4",
+          "label": "Trie",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 82,
+      "sourceText": "点与向量、点积 / 叉积、极角排序",
+      "nodes": [
+        {
+          "id": "algorithm-点与向量",
+          "label": "点与向量",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-点积-1",
+          "label": "点积",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-叉积-1",
+          "label": "叉积",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-极角序-1",
+          "label": "极角序",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 85,
+      "sourceText": "Nim 博弈、SG 函数（基础）",
+      "nodes": [
+        {
+          "id": "algorithm-nim-博弈",
+          "label": "Nim 博弈",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-sg函数-1",
+          "label": "SG函数",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 92,
+      "sourceText": "记忆化搜索、双向 BFS、启发式搜索（A*）、IDA*",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-2-3",
+          "label": "记忆化搜索",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-双向-bfs",
+          "label": "双向 BFS",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-2-6",
+          "label": "A* 搜索",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-2-7",
+          "label": "IDA* 搜索",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 95,
+      "sourceText": "数位 DP（进阶）、概率 / 期望 DP、计数 DP",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-3-11",
+          "label": "数位 DP",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-xcpc-概率dp-1",
+          "label": "概率 DP",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-xcpc-计数dp-1",
+          "label": "计数 DP",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-期望dp",
+          "label": "期望 DP",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 96,
+      "sourceText": "斜率优化、四边形不等式优化",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-3-9",
+          "label": "斜率优化",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-四边形不等式优化-1",
+          "label": "四边形不等式",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 97,
+      "sourceText": "树形 DP（换根）",
+      "nodes": [
+        {
+          "id": "algorithm-树形-dp-换根",
+          "label": "换根 DP",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 100,
+      "sourceText": "强连通分量（Tarjan）、点双 / 边双、割点割边桥",
+      "nodes": [
+        {
+          "id": "algorithm-强连通分量-tarjan-",
+          "label": "Tarjan 强连通",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-点双连通分量",
+          "label": "点双连通分量",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-边双连通分量",
+          "label": "边双连通分量",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-割点-割边-1",
+          "label": "割点、割边",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 101,
+      "sourceText": "2-SAT、差分约束",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-7-10",
+          "label": "2-SAT",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-7-6",
+          "label": "差分约束",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 102,
+      "sourceText": "LCA（倍增 / Tarjan 离线）、树的直径 / 重心",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-7-3-3",
+          "label": "LCA",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-7-3-2",
+          "label": "树的直径",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-树的重心-1",
+          "label": "树的重心",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 103,
+      "sourceText": "树链剖分（基础）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-6-14",
+          "label": "树链剖分",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 106,
+      "sourceText": "可持久化线段树（主席树）、线段树合并",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-6-12",
+          "label": "主席树",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-线段树合并-1",
+          "label": "线段树合并",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 107,
+      "sourceText": "分块、莫队（基础 / 带修）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-6-10",
+          "label": "分块",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-9-3-3",
+          "label": "莫队",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-带修莫队",
+          "label": "带修莫队",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 108,
+      "sourceText": "左偏树、树套树（基础）",
+      "nodes": [
+        {
+          "id": "xcpc-左偏堆-1",
+          "label": "左偏堆",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-6-15",
+          "label": "树套树",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 111,
+      "sourceText": "扩展欧几里得、中国剩余定理（CRT）、Lucas 定理",
+      "nodes": [
+        {
+          "id": "xcpc-扩展欧几里得-1",
+          "label": "扩展欧几里得",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-5-3-2",
+          "label": "CRT 与扩展",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-xcpc-lucas定理-1",
+          "label": "Lucas 定理",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 112,
+      "sourceText": "高斯消元、线性基、行列式、矩阵快速幂、矩阵树定理",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-5-7-2",
+          "label": "高斯消元",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-5-7-3",
+          "label": "线性基",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-行列式-1",
+          "label": "行列式",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-矩阵快速幂-1",
+          "label": "矩阵快速幂",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-7-13",
+          "label": "矩阵树定理",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 113,
+      "sourceText": "莫比乌斯反演（基础）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-5-9",
+          "label": "莫比乌斯反演",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 116,
+      "sourceText": "AC 自动机、后缀数组（SA）、Manacher",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-4-5",
+          "label": "AC 自动机",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-4-7",
+          "label": "后缀数组",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-4-3",
+          "label": "Manacher",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 119,
+      "sourceText": "凸包、旋转卡壳、半平面交（基础）、Pick 定理",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-8-1",
+          "label": "凸包",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-8-2",
+          "label": "旋转卡壳",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-8-3",
+          "label": "半平面交",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-picks定理-1",
+          "label": "Pick 定理",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 122,
+      "sourceText": "最大流（Dinic）、最小费用最大流",
+      "nodes": [
+        {
+          "id": "xcpc-dinic-1",
+          "label": "Dinic",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-7-9-3",
+          "label": "最小费用流",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 129,
+      "sourceText": "CDQ 分治、整体二分、点分治 / 边分治",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-9-3-1",
+          "label": "CDQ 分治",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-content-feishu-part-9-3-2",
+          "label": "整体二分",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-content-feishu-part-7-11",
+          "label": "点分治",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-边分-1",
+          "label": "边分治",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 132,
+      "sourceText": "插头 DP、动态 DP（DDP）",
+      "nodes": [
+        {
+          "id": "xcpc-插头dp-1",
+          "label": "插头 DP",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-动态dp-1",
+          "label": "动态 DP",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 135,
+      "sourceText": "一般图最大匹配（带花树）、最小树形图（朱-刘）、Steiner 树",
+      "nodes": [
+        {
+          "id": "algorithm-一般图最大匹配-带花树",
+          "label": "带花树",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-最小树形图-1",
+          "label": "最小树形图",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-斯坦纳树-1",
+          "label": "斯坦纳树",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 136,
+      "sourceText": "树链剖分（进阶）、LCT（动态树）",
+      "nodes": [
+        {
+          "id": "algorithm-树链剖分-进阶",
+          "label": "进阶树链剖分",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-content-feishu-part-6-16",
+          "label": "动态树",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 139,
+      "sourceText": "Splay、Treap / 替罪羊树、KD-Tree、树套树（进阶）",
+      "nodes": [
+        {
+          "id": "xcpc-splay-1",
+          "label": "Splay",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-treap-1",
+          "label": "Treap",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-替罪羊树-1",
+          "label": "替罪羊树",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-content-feishu-part-6-18",
+          "label": "K-D 树",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-树套树-进阶",
+          "label": "进阶树套树",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 142,
+      "sourceText": "FFT、NTT、多项式求逆 / 开方 / ln / exp、生成函数",
+      "nodes": [
+        {
+          "id": "algorithm-content-xcpc-fft-ntt-1",
+          "label": "FFT/NTT",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-多项式求逆",
+          "label": "多项式求逆",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-多项式开方",
+          "label": "多项式开方",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-多项式-ln",
+          "label": "多项式 ln",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-多项式-exp",
+          "label": "多项式 exp",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-content-xcpc-生成函数-1",
+          "label": "生成函数",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 143,
+      "sourceText": "杜教筛、Min_25 筛、BSGS / exBSGS、Pollard-Rho、离散对数",
+      "nodes": [
+        {
+          "id": "xcpc-杜教筛-1",
+          "label": "杜教筛",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-min25筛-1",
+          "label": "min25筛",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-bsgs-1",
+          "label": "BSGS",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-exbsgs",
+          "label": "exBSGS",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-pollard-rho-1",
+          "label": "Pollard–Rho",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-content-xcpc-离散对数-1",
+          "label": "离散对数",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 146,
+      "sourceText": "上下界网络流、最小割模型、最大权闭合子图",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-7-9-4",
+          "label": "上下界流",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-最小割模型",
+          "label": "最小割模型",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-最大权闭合子图",
+          "label": "最大权闭合子图",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 149,
+      "sourceText": "半平面交（进阶）、最小圆覆盖、Voronoi 图、三维几何",
+      "nodes": [
+        {
+          "id": "algorithm-半平面交-进阶",
+          "label": "进阶半平面交",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-最小圆覆盖-1",
+          "label": "最小圆覆盖",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-voronoi图-1",
+          "label": "Voronoi图",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-三维计算几何-1",
+          "label": "三维几何",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 155,
+      "sourceText": "后缀自动机（SAM）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-4-8",
+          "label": "后缀自动机",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 156,
+      "sourceText": "回文自动机（PAM）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-4-6",
+          "label": "回文自动机",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 157,
+      "sourceText": "FWT（快速沃尔什变换）",
+      "nodes": [
+        {
+          "id": "xcpc-fwt-fmt-1",
+          "label": "FWT",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 158,
+      "sourceText": "多项式复合 / 反三角等",
+      "nodes": [
+        {
+          "id": "algorithm-多项式复合-反三角",
+          "label": "多项式复合与反三角",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 159,
+      "sourceText": "一般图最大权匹配",
+      "nodes": [
+        {
+          "id": "algorithm-一般图最大权匹配",
+          "label": "一般图最大权匹配",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 160,
+      "sourceText": "线性规划（单纯形）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-5-11",
+          "label": "线性规划",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 161,
+      "sourceText": "Burnside 引理 / Pólya 定理、Prufer 序列",
+      "nodes": [
+        {
+          "id": "xcpc-burnside引理-1",
+          "label": "Burnside引理",
+          "difficulty": "expert"
+        },
+        {
+          "id": "xcpc-polya定理-1",
+          "label": "Pólya 定理",
+          "difficulty": "expert"
+        },
+        {
+          "id": "xcpc-prufer序列-1",
+          "label": "Prüfer 序列",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 162,
+      "sourceText": "动态图连通性",
+      "nodes": [
+        {
+          "id": "algorithm-动态图连通性",
+          "label": "动态图连通性",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 163,
+      "sourceText": "Lyndon 分解 / Duval 算法",
+      "nodes": [
+        {
+          "id": "xcpc-lyndon-分解-1",
+          "label": "Lyndon 分解",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 164,
+      "sourceText": "支配树",
+      "nodes": [
+        {
+          "id": "xcpc-支配树-1",
+          "label": "支配树",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 170,
+      "sourceText": "快读快写",
+      "nodes": [
+        {
+          "id": "algorithm-快读快写",
+          "label": "快读快写",
+          "difficulty": "basic"
+        }
+      ]
+    },
+    {
+      "sourceLine": 171,
+      "sourceText": "图论模板：Dijkstra / SPFA / Tarjan / 匈牙利",
+      "nodes": [
+        {
+          "id": "xcpc-dijkstra-1",
+          "label": "Dijkstra",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-spfa",
+          "label": "SPFA",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-tarjan-1",
+          "label": "Tarjan 双连通",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-匈牙利算法-1",
+          "label": "匈牙利算法",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 172,
+      "sourceText": "数据结构模板：线段树 / 树状数组 / 并查集 / ST 表",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-6-9",
+          "label": "线段树",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-6-8",
+          "label": "树状数组",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-6-5",
+          "label": "并查集",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-6-7",
+          "label": "ST 表",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 173,
+      "sourceText": "DP 模板：背包 / LIS / LCS / 区间",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-3-2",
+          "label": "背包 DP",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-最长上升子序列-lis",
+          "label": "LIS",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-最长公共子序列-lcs",
+          "label": "LCS",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-3-3",
+          "label": "区间 DP",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 174,
+      "sourceText": "数学模板：快速幂 / 逆元 / 线性筛 / Lucas / 扩展欧几里得",
+      "nodes": [
+        {
+          "id": "xcpc-快速幂-1",
+          "label": "快速幂",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-逆元-1",
+          "label": "逆元",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-线性筛-素数",
+          "label": "线性筛",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-xcpc-lucas定理-1",
+          "label": "Lucas 定理",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-扩展欧几里得-1",
+          "label": "扩展欧几里得",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 175,
+      "sourceText": "字符串模板：KMP / AC 自动机 / 后缀数组",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-4-2",
+          "label": "KMP",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-4-5",
+          "label": "AC 自动机",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-4-7",
+          "label": "后缀数组",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 176,
+      "sourceText": "网络流模板：Dinic / 费用流",
+      "nodes": [
+        {
+          "id": "xcpc-dinic-1",
+          "label": "Dinic",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-7-9-3",
+          "label": "最小费用流",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 177,
+      "sourceText": "几何模板：凸包 / 旋转卡壳 / 半平面交",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-8-1",
+          "label": "凸包",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-8-2",
+          "label": "旋转卡壳",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-8-3",
+          "label": "半平面交",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 178,
+      "sourceText": "Miller-Rabin 素性测试、Pollard-Rho 大数分解",
+      "nodes": [
+        {
+          "id": "xcpc-miller-rabin-1",
+          "label": "Miller–Rabin",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-pollard-rho-1",
+          "label": "Pollard–Rho",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 179,
+      "sourceText": "虚树构建、DSU on tree",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-7-12",
+          "label": "虚树",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-树的启发式合并-1",
+          "label": "启发式合并",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 185,
+      "sourceText": "二分答案、前缀和 / 差分、贪心策略",
+      "nodes": [
+        {
+          "id": "algorithm-二分答案",
+          "label": "二分答案",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-1-8",
+          "label": "前缀和与差分",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-1-5",
+          "label": "贪心",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 186,
+      "sourceText": "并查集（带权 / 可撤销）、Dijkstra 最短路",
+      "nodes": [
+        {
+          "id": "xcpc-带权并查集-1",
+          "label": "带权并查集",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-可撤销并查集",
+          "label": "可撤销并查集",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "xcpc-dijkstra-1",
+          "label": "Dijkstra",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 187,
+      "sourceText": "树形 DP（换根）、LCA、拓扑排序",
+      "nodes": [
+        {
+          "id": "algorithm-树形-dp-换根",
+          "label": "换根 DP",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-7-3-3",
+          "label": "LCA",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-7-5",
+          "label": "拓扑排序",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 188,
+      "sourceText": "线段树（区间修改 / 查询）、树状数组",
+      "nodes": [
+        {
+          "id": "xcpc-带标记的线段树-1",
+          "label": "懒标记线段树",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-6-8",
+          "label": "树状数组",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 189,
+      "sourceText": "KMP / 字符串哈希、单调栈 / 单调队列",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-4-2",
+          "label": "KMP",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-4-1",
+          "label": "字符串哈希",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-单调栈-1",
+          "label": "单调栈",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-单调队列-1",
+          "label": "单调队列",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 190,
+      "sourceText": "莫队算法、二分图匹配、最小生成树",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-9-3-3",
+          "label": "莫队",
+          "difficulty": "intermediate"
+        },
+        {
+          "id": "algorithm-content-feishu-part-7-8",
+          "label": "二分图与匹配",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "algorithm-content-feishu-part-7-4",
+          "label": "生成树与斯坦纳树",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 191,
+      "sourceText": "快速幂 + 逆元、01 / 完全背包",
+      "nodes": [
+        {
+          "id": "xcpc-快速幂-1",
+          "label": "快速幂",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-逆元-1",
+          "label": "逆元",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-01背包-1",
+          "label": "01背包",
+          "difficulty": "beginner"
+        },
+        {
+          "id": "xcpc-无限背包-1",
+          "label": "完全背包",
+          "difficulty": "beginner"
+        }
+      ]
+    },
+    {
+      "sourceLine": 197,
+      "sourceText": "Dancing Links（DLX / 精确覆盖）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-2-8",
+          "label": "DLX",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 198,
+      "sourceText": "后缀平衡树、最小表示法",
+      "nodes": [
+        {
+          "id": "algorithm-后缀平衡树",
+          "label": "后缀平衡树",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-最小表示法-1",
+          "label": "最小表示法",
+          "difficulty": "intermediate"
+        }
+      ]
+    },
+    {
+      "sourceLine": 199,
+      "sourceText": "带修莫队（高维）/ 树上莫队 / 回滚莫队",
+      "nodes": [
+        {
+          "id": "algorithm-高维带修改莫队",
+          "label": "高维带修莫队",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-树上莫队",
+          "label": "树上莫队",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "algorithm-回滚莫队",
+          "label": "回滚莫队",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 200,
+      "sourceText": "仙人掌 / 圆方树（进阶应用）",
+      "nodes": [
+        {
+          "id": "xcpc-仙人掌-1",
+          "label": "仙人掌",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-圆方树-1",
+          "label": "圆方树",
+          "difficulty": "advanced"
+        }
+      ]
+    },
+    {
+      "sourceLine": 201,
+      "sourceText": "分数规划（复杂形式）、拟阵",
+      "nodes": [
+        {
+          "id": "algorithm-复杂分数规划",
+          "label": "复杂分数规划",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-拟阵-1",
+          "label": "拟阵",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 202,
+      "sourceText": "线性规划单纯形法（极少单独出题）",
+      "nodes": [
+        {
+          "id": "algorithm-content-feishu-part-5-11",
+          "label": "线性规划",
+          "difficulty": "expert"
+        }
+      ]
+    },
+    {
+      "sourceLine": 203,
+      "sourceText": "AVL / 红黑树（理论了解）",
+      "nodes": [
+        {
+          "id": "xcpc-avl-1",
+          "label": "AVL",
+          "difficulty": "advanced"
+        },
+        {
+          "id": "xcpc-红黑树-1",
+          "label": "红黑树",
+          "difficulty": "advanced"
+        }
+      ]
+    }
+  ]
+}

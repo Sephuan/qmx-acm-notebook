@@ -1,5 +1,24163 @@
 'use strict';
-// Generated from xcpc/XCPC算法知识体系-结构化转录.md and box_table.json.
-const algorithmTree={"id":"root","label":"XCPC算法","level":0,"color":"parent","children":[{"label":"基础","children":[{"label":"语法基础","children":[{"label":"函数","children":[],"id":"xcpc-函数-1","level":2,"color":"basic"},{"label":"指针","children":[],"id":"xcpc-指针-1","level":2,"color":"basic"},{"label":"引用","children":[],"id":"xcpc-引用-1","level":2,"color":"basic"},{"label":"结构体、类","children":[],"id":"xcpc-结构体-类-1","level":2,"color":"basic"}],"id":"xcpc-语法基础-1","level":2,"color":"parent"},{"label":"算法基础","children":[{"label":"模拟","children":[],"id":"xcpc-模拟-1","level":2,"color":"basic"},{"label":"递归、回溯","children":[],"id":"xcpc-递归-回溯-1","level":2,"color":"parent"},{"label":"递推","children":[],"id":"xcpc-递推-1","level":2,"color":"basic"},{"label":"贪心","children":[],"id":"xcpc-贪心-1","level":2,"color":"basic"},{"label":"二分","children":[],"id":"xcpc-二分-1","level":2,"color":"basic"},{"label":"排序","children":[{"label":"选择排序","children":[],"id":"xcpc-选择排序-1","level":2,"color":"basic"},{"label":"冒泡排序","children":[],"id":"xcpc-冒泡排序-1","level":2,"color":"basic"},{"label":"插入排序","children":[],"id":"xcpc-插入排序-1","level":2,"color":"basic"},{"label":"快速排序","children":[],"id":"xcpc-快速排序-1","level":2,"color":"basic"},{"label":"归并排序","children":[],"id":"xcpc-归并排序-1","level":2,"color":"basic"},{"label":"桶排序","children":[],"id":"xcpc-桶排序-1","level":2,"color":"basic"},{"label":"基数排序","children":[],"id":"xcpc-基数排序-1","level":2,"color":"basic"},{"label":"堆排序","children":[],"id":"xcpc-堆排序-1","level":2,"color":"useless"},{"label":"希尔排序","children":[],"id":"xcpc-希尔排序-1","level":2,"color":"useless"}],"id":"xcpc-排序-1","level":2,"color":"parent"},{"label":"高精度","children":[],"id":"xcpc-高精度-1","level":2,"color":"basic"},{"label":"位运算","children":[],"id":"xcpc-位运算-1","level":2,"color":"basic"},{"label":"时空复杂度分析","children":[],"id":"xcpc-时空复杂度分析-1","level":2,"color":"basic"}],"id":"xcpc-算法基础-1","level":2,"color":"parent"}],"id":"xcpc-基础-1","level":1,"color":"parent"},{"label":"杂","children":[{"label":"离散","children":[],"id":"xcpc-离散-1","level":2,"color":"beginner"},{"label":"前缀和/差分","children":[],"id":"xcpc-前缀和-差分-1","level":2,"color":"beginner"},{"label":"逆序对","children":[],"id":"xcpc-逆序对-1","level":2,"color":"beginner"},{"label":"扫描线","children":[],"id":"xcpc-扫描线-1","level":2,"color":"beginner"},{"label":"双指针","children":[],"id":"xcpc-双指针-1","level":2,"color":"beginner"},{"label":"倍增","children":[],"id":"xcpc-倍增-1","level":2,"color":"intermediate"},{"label":"三分","children":[],"id":"xcpc-三分-1","level":2,"color":"parent"},{"label":"枚举子集、超集","children":[],"id":"xcpc-枚举子集-超集-1","level":2,"color":"intermediate"},{"label":"搜索","children":[{"label":"剪枝","children":[],"id":"xcpc-剪枝-1","level":2,"color":"parent"},{"label":"折半搜索","children":[],"id":"xcpc-折半搜索-1","level":2,"color":"intermediate"},{"label":"DLX","children":[],"id":"xcpc-dlx-1","level":2,"color":"board"},{"label":"A*","children":[],"id":"xcpc-a-1","level":2,"color":"parent"}],"id":"xcpc-搜索-1","level":2,"color":"parent"},{"label":"分治","children":[{"label":"树上分治","children":[{"label":"点分","children":[],"id":"xcpc-点分-1","level":2,"color":"expert"},{"label":"边分","children":[],"id":"xcpc-边分-1","level":2,"color":"advanced"},{"label":"动态点分","children":[],"id":"xcpc-动态点分-1","level":2,"color":"expert"}],"id":"xcpc-树上分治-1","level":2,"color":"parent"},{"label":"cdq分治","children":[],"id":"xcpc-cdq分治-1","level":2,"color":"advanced"}],"id":"xcpc-分治-1","level":2,"color":"parent"},{"label":"随机","children":[{"label":"爬山","children":[],"id":"xcpc-爬山-1","level":2,"color":"useful"},{"label":"模拟退火","children":[],"id":"xcpc-模拟退火-1","level":2,"color":"useful"},{"label":"遗传算法","children":[],"id":"xcpc-遗传算法-1","level":2,"color":"useless"}],"id":"xcpc-随机-1","level":2,"color":"parent"},{"label":"对拍","children":[],"id":"xcpc-对拍-1","level":2,"color":"useful"},{"label":"常数优化","children":[],"id":"xcpc-常数优化-1","level":2,"color":"useful"},{"label":"读入优化","children":[],"id":"xcpc-读入优化-1","level":2,"color":"useful"},{"label":"拟阵","children":[],"id":"xcpc-拟阵-1","level":2,"color":"parent"}],"id":"xcpc-杂-1","level":1,"color":"parent"},{"label":"几何","children":[{"label":"点类","children":[{"label":"点积","children":[],"id":"xcpc-点积-1","level":2,"color":"intermediate"},{"label":"叉积","children":[],"id":"xcpc-叉积-1","level":2,"color":"beginner"},{"label":"极角序","children":[],"id":"xcpc-极角序-1","level":2,"color":"intermediate"}],"id":"xcpc-点类-1","level":2,"color":"parent"},{"label":"线段相关","children":[{"label":"相交判定","children":[],"id":"xcpc-相交判定-1","level":2,"color":"beginner"},{"label":"交点","children":[],"id":"xcpc-交点-1","level":2,"color":"intermediate"}],"id":"xcpc-线段相关-1","level":2,"color":"parent"},{"label":"多边形相关","children":[{"label":"凸包","children":[],"id":"xcpc-凸包-1","level":2,"color":"intermediate"},{"label":"多边形包含","children":[],"id":"xcpc-多边形包含-1","level":2,"color":"advanced"},{"label":"旋转卡壳","children":[],"id":"xcpc-旋转卡壳-1","level":2,"color":"advanced"},{"label":"半平面交","children":[],"id":"xcpc-半平面交-1","level":2,"color":"advanced"}],"id":"xcpc-多边形相关-1","level":2,"color":"parent"},{"label":"圆相关","children":[{"label":"交点切线","children":[],"id":"xcpc-交点切线-1","level":2,"color":"intermediate"},{"label":"面积交/并","children":[],"id":"xcpc-面积交-并-1","level":2,"color":"advanced"}],"id":"xcpc-圆相关-1","level":2,"color":"parent"},{"label":"凸包快速操作","children":[],"id":"xcpc-凸包快速操作-1","level":2,"color":"parent"},{"label":"三维计算几何","children":[],"id":"xcpc-三维计算几何-1","level":2,"color":"parent"},{"label":"杂","children":[{"label":"数值积分","children":[{"label":"辛普森积分","children":[],"id":"xcpc-辛普森积分-1","level":2,"color":"useless"},{"label":"自适应辛普森","children":[],"id":"xcpc-自适应辛普森-1","level":2,"color":"advanced"}],"id":"xcpc-数值积分-1","level":2,"color":"parent"},{"label":"点定位","children":[],"id":"xcpc-点定位-1","level":2,"color":"advanced"},{"label":"最小圆覆盖","children":[],"id":"xcpc-最小圆覆盖-1","level":2,"color":"board"},{"label":"Voronoi图","children":[],"id":"xcpc-voronoi图-1","level":2,"color":"board"},{"label":"圆反演","children":[],"id":"xcpc-圆反演-1","level":2,"color":"parent"},{"label":"Picks定理","children":[],"id":"xcpc-picks定理-1","level":2,"color":"useless"}],"id":"xcpc-杂-2","level":2,"color":"parent"}],"id":"xcpc-几何-1","level":1,"color":"parent"},{"label":"数学","children":[{"label":"组合数学","children":[{"label":"组合数","children":[{"label":"杨辉三角","children":[],"id":"xcpc-杨辉三角-1","level":2,"color":"parent"},{"label":"多重集组合数","children":[],"id":"xcpc-多重集组合数-1","level":2,"color":"beginner"}],"id":"xcpc-组合数-1","level":2,"color":"parent"},{"label":"二项式定理","children":[],"id":"xcpc-二项式定理-1","level":2,"color":"beginner"},{"label":"概率论","children":[{"label":"期望的线性性","children":[],"id":"xcpc-期望的线性性-1","level":2,"color":"beginner"},{"label":"条件概率","children":[],"id":"xcpc-条件概率-1","level":2,"color":"useless"}],"id":"xcpc-概率论-1","level":2,"color":"parent"},{"label":"容斥原理","children":[{"label":"基础","children":[],"id":"xcpc-基础-2","level":2,"color":"parent"},{"label":"min-max容斥","children":[],"id":"xcpc-min-max容斥-1","level":2,"color":"advanced"},{"label":"二项式反演","children":[],"id":"xcpc-二项式反演-1","level":2,"color":"advanced"}],"id":"xcpc-容斥原理-1","level":2,"color":"parent"},{"label":"常见数列","children":[{"label":"斐波那契数列","children":[],"id":"xcpc-斐波那契数列-1","level":2,"color":"basic"},{"label":"错排问题","children":[],"id":"xcpc-错排问题-1","level":2,"color":"basic"},{"label":"卡特兰数","children":[],"id":"xcpc-卡特兰数-1","level":2,"color":"basic"},{"label":"拆分数","children":[],"id":"xcpc-拆分数-1","level":2,"color":"beginner"},{"label":"斯特林数","children":[],"id":"xcpc-斯特林数-1","level":2,"color":"beginner"},{"label":"贝尔数","children":[],"id":"xcpc-贝尔数-1","level":2,"color":"useless"},{"label":"伯努利数","children":[],"id":"xcpc-伯努利数-1","level":2,"color":"useless"}],"id":"xcpc-常见数列-1","level":2,"color":"parent"}],"id":"xcpc-组合数学-1","level":2,"color":"parent"},{"label":"prufer序列","children":[],"id":"xcpc-prufer序列-1","level":2,"color":"advanced"},{"label":"LGV引理","children":[],"id":"xcpc-lgv引理-1","level":2,"color":"useless"},{"label":"杨表","children":[],"id":"xcpc-杨表-1","level":2,"color":"parent"},{"label":"博弈论","children":[{"label":"SG函数","children":[],"id":"xcpc-sg函数-1","level":2,"color":"intermediate"},{"label":"常见结论","children":[],"id":"xcpc-常见结论-1","level":2,"color":"intermediate"},{"label":"不平等博弈","children":[],"id":"xcpc-不平等博弈-1","level":2,"color":"useless"}],"id":"xcpc-博弈论-1","level":2,"color":"expert"},{"label":"线性代数","children":[{"label":"矩阵快速幂","children":[],"id":"xcpc-矩阵快速幂-1","level":2,"color":"beginner"},{"label":"高斯消元","children":[],"id":"xcpc-高斯消元-1","level":2,"color":"beginner"},{"label":"行列式","children":[],"id":"xcpc-行列式-1","level":2,"color":"intermediate"},{"label":"线性基","children":[],"id":"xcpc-线性基-1","level":2,"color":"beginner"},{"label":"矩阵求逆","children":[],"id":"xcpc-矩阵求逆-1","level":2,"color":"advanced"},{"label":"常系数线性递推","children":[],"id":"xcpc-常系数线性递推-1","level":2,"color":"advanced"},{"label":"矩阵树定理","children":[],"id":"xcpc-矩阵树定理-1","level":2,"color":"advanced"},{"label":"BM","children":[],"id":"xcpc-bm-1","level":2,"color":"board"},{"label":"BEST定理","children":[],"id":"xcpc-best定理-1","level":2,"color":"useless"},{"label":"特征值，特征向量","children":[],"id":"xcpc-特征值-特征向量-1","level":2,"color":"useless"}],"id":"xcpc-线性代数-1","level":2,"color":"parent"}],"id":"xcpc-数学-1","level":1,"color":"parent"},{"label":"多项式","children":[{"label":"FFT/NTT","children":[{"label":"拉格朗日插值","children":[{"label":"生成函数","children":[{"label":"多项式全家桶","children":[],"id":"xcpc-多项式全家桶-1","level":2,"color":"board"}],"id":"xcpc-生成函数-1","level":2,"color":"advanced"}],"id":"xcpc-拉格朗日插值-1","level":2,"color":"advanced"}],"id":"xcpc-fft-ntt-1","level":2,"color":"intermediate"},{"label":"FWT/FMT","children":[],"id":"xcpc-fwt-fmt-1","level":2,"color":"advanced"},{"label":"集合幂级数","children":[],"id":"xcpc-集合幂级数-1","level":2,"color":"parent"},{"label":"群论","children":[{"label":"置换","children":[],"id":"xcpc-置换-1","level":2,"color":"beginner"},{"label":"Burnside引理","children":[],"id":"xcpc-burnside引理-1","level":2,"color":"advanced"},{"label":"Polya定理","children":[],"id":"xcpc-polya定理-1","level":2,"color":"advanced"}],"id":"xcpc-群论-1","level":2,"color":"parent"},{"label":"线性规划","children":[],"id":"xcpc-线性规划-1","level":2,"color":"board"}],"id":"xcpc-多项式-1","level":1,"color":"parent"},{"label":"数论","children":[{"label":"埃式筛","children":[],"id":"xcpc-埃式筛-1","level":2,"color":"basic"},{"label":"gcd/lcm","children":[],"id":"xcpc-gcd-lcm-1","level":2,"color":"basic"},{"label":"快速幂","children":[],"id":"xcpc-快速幂-1","level":2,"color":"beginner"},{"label":"逆元","children":[],"id":"xcpc-逆元-1","level":2,"color":"beginner"},{"label":"同余方程组","children":[{"label":"扩展中国剩余定理","children":[],"id":"xcpc-扩展中国剩余定理-1","level":2,"color":"intermediate"},{"label":"中国剩余定理","children":[],"id":"xcpc-中国剩余定理-1","level":2,"color":"useless"}],"id":"xcpc-同余方程组-1","level":2,"color":"parent"},{"label":"扩展欧几里得","children":[],"id":"xcpc-扩展欧几里得-1","level":2,"color":"beginner"},{"label":"费马定理/欧拉定理","children":[],"id":"xcpc-费马定理-欧拉定理-1","level":2,"color":"beginner"},{"label":"扩展欧拉定理","children":[],"id":"xcpc-扩展欧拉定理-1","level":2,"color":"intermediate"},{"label":"原根/阶","children":[],"id":"xcpc-原根-阶-1","level":2,"color":"advanced"},{"label":"类欧几里得","children":[],"id":"xcpc-类欧几里得-1","level":2,"color":"advanced"},{"label":"Lucas定理","children":[{"label":"普通","children":[],"id":"xcpc-普通-1","level":2,"color":"intermediate"},{"label":"exLucas","children":[],"id":"xcpc-exlucas-1","level":2,"color":"advanced"}],"id":"xcpc-lucas定理-1","level":2,"color":"parent"},{"label":"离散对数","children":[{"label":"BSGS","children":[],"id":"xcpc-bsgs-1","level":2,"color":"advanced"},{"label":"Pohlig-Hellman","children":[],"id":"xcpc-pohlig-hellman-1","level":2,"color":"useless"}],"id":"xcpc-离散对数-1","level":2,"color":"parent"},{"label":"数论函数","children":[{"label":"线性筛","children":[],"id":"xcpc-线性筛-1","level":2,"color":"parent"},{"label":"整除分块","children":[],"id":"xcpc-整除分块-1","level":2,"color":"beginner"},{"label":"狄利克雷卷积","children":[],"id":"xcpc-狄利克雷卷积-1","level":2,"color":"intermediate"},{"label":"莫比乌斯反演","children":[],"id":"xcpc-莫比乌斯反演-1","level":2,"color":"intermediate"},{"label":"杜教筛","children":[],"id":"xcpc-杜教筛-1","level":2,"color":"advanced"},{"label":"min25筛","children":[],"id":"xcpc-min25筛-1","level":2,"color":"advanced"}],"id":"xcpc-数论函数-1","level":2,"color":"parent"},{"label":"Miller Rabin","children":[],"id":"xcpc-miller-rabin-1","level":2,"color":"board"},{"label":"Pollard Rho","children":[],"id":"xcpc-pollard-rho-1","level":2,"color":"board"},{"label":"佩尔方程","children":[],"id":"xcpc-佩尔方程-1","level":2,"color":"useless"},{"label":"单位根反演","children":[],"id":"xcpc-单位根反演-1","level":2,"color":"useless"},{"label":"二次剩余","children":[{"label":"勒让德符号","children":[],"id":"xcpc-勒让德符号-1","level":2,"color":"parent"},{"label":"Cipolla算法","children":[],"id":"xcpc-cipolla算法-1","level":2,"color":"useless"}],"id":"xcpc-二次剩余-1","level":2,"color":"parent"}],"id":"xcpc-数论-1","level":1,"color":"parent"},{"label":"字符串","children":[{"label":"kmp","children":[],"id":"xcpc-kmp-1","level":2,"color":"beginner"},{"label":"字符串的哈希","children":[],"id":"xcpc-字符串的哈希-1","level":2,"color":"beginner"},{"label":"字典树","children":[],"id":"xcpc-字典树-1","level":2,"color":"beginner"},{"label":"AC自动机","children":[],"id":"xcpc-ac自动机-1","level":2,"color":"intermediate"},{"label":"后缀数组","children":[],"id":"xcpc-后缀数组-1","level":2,"color":"advanced"},{"label":"后缀自动机","children":[],"id":"xcpc-后缀自动机-1","level":2,"color":"advanced"},{"label":"回文自动机","children":[],"id":"xcpc-回文自动机-1","level":2,"color":"advanced"},{"label":"扩展kmp","children":[],"id":"xcpc-扩展kmp-1","level":2,"color":"board"},{"label":"manacher","children":[],"id":"xcpc-manacher-1","level":2,"color":"parent"},{"label":"最小表示法","children":[],"id":"xcpc-最小表示法-1","level":2,"color":"board"},{"label":"Lyndon 分解","children":[],"id":"xcpc-lyndon-分解-1","level":2,"color":"board"},{"label":"后缀树","children":[],"id":"xcpc-后缀树-1","level":2,"color":"useless"}],"id":"xcpc-字符串-1","level":1,"color":"parent"},{"label":"图论","children":[{"label":"图的概念","children":[],"id":"xcpc-图的概念-1","level":2,"color":"beginner"},{"label":"图的遍历","children":[{"label":"dfs","children":[],"id":"xcpc-dfs-1","level":2,"color":"parent"},{"label":"bfs","children":[],"id":"xcpc-bfs-1","level":2,"color":"parent"}],"id":"xcpc-图的遍历-1","level":2,"color":"parent"},{"label":"拓扑序","children":[],"id":"xcpc-拓扑序-1","level":2,"color":"beginner"},{"label":"传递闭包","children":[{"label":"floyd","children":[],"id":"xcpc-floyd-1","level":2,"color":"beginner"}],"id":"xcpc-传递闭包-1","level":2,"color":"parent"},{"label":"最短路","children":[{"label":"bellman-ford","children":[],"id":"xcpc-bellman-ford-1","level":2,"color":"beginner"},{"label":"dijkstra","children":[],"id":"xcpc-dijkstra-1","level":2,"color":"beginner"},{"label":"最短路径树","children":[],"id":"xcpc-最短路径树-1","level":2,"color":"advanced"}],"id":"xcpc-最短路-1","level":2,"color":"parent"},{"label":"最小生成树","children":[{"label":"prim","children":[],"id":"xcpc-prim-1","level":2,"color":"beginner"},{"label":"kruskal","children":[],"id":"xcpc-kruskal-1","level":2,"color":"beginner"},{"label":"boruvka","children":[],"id":"xcpc-boruvka-1","level":2,"color":"advanced"}],"id":"xcpc-最小生成树-1","level":2,"color":"parent"},{"label":"点（边）双连通分量","children":[{"label":"tarjan","children":[],"id":"xcpc-tarjan-1","level":2,"color":"intermediate"},{"label":"割点、割边","children":[],"id":"xcpc-割点-割边-1","level":2,"color":"parent"},{"label":"圆方树","children":[],"id":"xcpc-圆方树-1","level":2,"color":"advanced"},{"label":"kosaraju","children":[],"id":"xcpc-kosaraju-1","level":2,"color":"board"}],"id":"xcpc-点-边-双连通分量-1","level":2,"color":"parent"},{"label":"二分图","children":[{"label":"二分图判定","children":[],"id":"xcpc-二分图判定-1","level":2,"color":"beginner"},{"label":"匈牙利算法","children":[],"id":"xcpc-匈牙利算法-1","level":2,"color":"intermediate"},{"label":"KM","children":[],"id":"xcpc-km-1","level":2,"color":"parent"},{"label":"hopcroft-karp","children":[],"id":"xcpc-hopcroft-karp-1","level":2,"color":"board"}],"id":"xcpc-二分图-1","level":2,"color":"parent"},{"label":"网络流","children":[{"label":"最大流（最小割）","children":[{"label":"dinic","children":[],"id":"xcpc-dinic-1","level":2,"color":"advanced"},{"label":"sap","children":[],"id":"xcpc-sap-1","level":2,"color":"parent"}],"id":"xcpc-最大流-最小割-1","level":2,"color":"parent"},{"label":"费用流","children":[{"label":"最大流","children":[],"id":"xcpc-最大流-1","level":2,"color":"advanced"},{"label":"可行流","children":[],"id":"xcpc-可行流-1","level":2,"color":"advanced"},{"label":"ZKW费用流","children":[],"id":"xcpc-zkw费用流-1","level":2,"color":"useless"}],"id":"xcpc-费用流-1","level":2,"color":"parent"},{"label":"上下界网络流","children":[],"id":"xcpc-上下界网络流-1","level":2,"color":"expert"}],"id":"xcpc-网络流-1","level":2,"color":"parent"},{"label":"欧拉（回）路","children":[],"id":"xcpc-欧拉-回-路-1","level":2,"color":"beginner"},{"label":"2-sat","children":[],"id":"xcpc-2-sat-1","level":2,"color":"intermediate"},{"label":"竞赛图","children":[],"id":"xcpc-竞赛图-1","level":2,"color":"intermediate"},{"label":"差分约束","children":[],"id":"xcpc-差分约束-1","level":2,"color":"intermediate"},{"label":"斯坦纳树","children":[],"id":"xcpc-斯坦纳树-1","level":2,"color":"advanced"},{"label":"仙人掌","children":[],"id":"xcpc-仙人掌-1","level":2,"color":"advanced"},{"label":"最小树形图","children":[],"id":"xcpc-最小树形图-1","level":2,"color":"expert"},{"label":"一般图匹配","children":[],"id":"xcpc-一般图匹配-1","level":2,"color":"parent"},{"label":"k短路","children":[],"id":"xcpc-k短路-1","level":2,"color":"board"},{"label":"支配树","children":[],"id":"xcpc-支配树-1","level":2,"color":"board"},{"label":"全局最小割","children":[],"id":"xcpc-全局最小割-1","level":2,"color":"board"},{"label":"弦图","children":[],"id":"xcpc-弦图-1","level":2,"color":"useless"}],"id":"xcpc-图论-1","level":1,"color":"parent"},{"label":"动态规划","children":[{"label":"记忆化搜索","children":[],"id":"xcpc-记忆化搜索-1","level":2,"color":"beginner"},{"label":"动态规划基础","children":[{"label":"最优子结构","children":[],"id":"xcpc-最优子结构-1","level":2,"color":"beginner"},{"label":"无后效性","children":[],"id":"xcpc-无后效性-1","level":2,"color":"beginner"},{"label":"状态","children":[],"id":"xcpc-状态-1","level":2,"color":"beginner"},{"label":"转移","children":[],"id":"xcpc-转移-1","level":2,"color":"beginner"}],"id":"xcpc-动态规划基础-1","level":2,"color":"parent"},{"label":"背包问题","children":[{"label":"01背包","children":[],"id":"xcpc-01背包-1","level":2,"color":"beginner"},{"label":"无限背包","children":[],"id":"xcpc-无限背包-1","level":2,"color":"beginner"},{"label":"多重背包","children":[{"label":"O(nml)","children":[],"id":"xcpc-o-nml-1","level":2,"color":"beginner"},{"label":"O(nm log l)","children":[],"id":"xcpc-o-nm-log-l-1","level":2,"color":"parent"},{"label":"O(nm)","children":[],"id":"xcpc-o-nm-1","level":2,"color":"intermediate"}],"id":"xcpc-多重背包-1","level":2,"color":"parent"},{"label":"树形背包","children":[{"label":"O(n^3)","children":[],"id":"xcpc-o-n-3-1","level":2,"color":"beginner"},{"label":"O(n^2)","children":[],"id":"xcpc-o-n-2-1","level":2,"color":"intermediate"}],"id":"xcpc-树形背包-1","level":2,"color":"parent"},{"label":"分组背包","children":[],"id":"xcpc-分组背包-1","level":2,"color":"beginner"},{"label":"混合背包","children":[],"id":"xcpc-混合背包-1","level":2,"color":"beginner"},{"label":"多维背包","children":[],"id":"xcpc-多维背包-1","level":2,"color":"beginner"}],"id":"xcpc-背包问题-1","level":2,"color":"parent"},{"label":"区间dp","children":[{"label":"基础","children":[],"id":"xcpc-基础-3","level":2,"color":"parent"},{"label":"进阶","children":[],"id":"xcpc-进阶-1","level":2,"color":"intermediate"}],"id":"xcpc-区间dp-1","level":2,"color":"parent"},{"label":"数位dp","children":[{"label":"基础","children":[],"id":"xcpc-基础-4","level":2,"color":"parent"},{"label":"进阶","children":[],"id":"xcpc-进阶-2","level":2,"color":"intermediate"}],"id":"xcpc-数位dp-1","level":2,"color":"parent"},{"label":"树形dp（普通形，换根型）","children":[{"label":"基础","children":[],"id":"xcpc-基础-5","level":2,"color":"parent"},{"label":"进阶","children":[],"id":"xcpc-进阶-3","level":2,"color":"intermediate"},{"label":"高级","children":[],"id":"xcpc-高级-1","level":2,"color":"advanced"}],"id":"xcpc-树形dp-普通形-换根型-1","level":2,"color":"parent"},{"label":"状压dp","children":[{"label":"普通型","children":[],"id":"xcpc-普通型-1","level":2,"color":"parent"},{"label":"轮廓线型","children":[],"id":"xcpc-轮廓线型-1","level":2,"color":"intermediate"},{"label":"高维前缀和","children":[],"id":"xcpc-高维前缀和-1","level":2,"color":"intermediate"},{"label":"动态高维前缀和","children":[],"id":"xcpc-动态高维前缀和-1","level":2,"color":"advanced"},{"label":"插头dp","children":[],"id":"xcpc-插头dp-1","level":2,"color":"parent"}],"id":"xcpc-状压dp-1","level":2,"color":"parent"},{"label":"概率dp","children":[{"label":"基础","children":[],"id":"xcpc-基础-6","level":2,"color":"parent"},{"label":"进阶","children":[],"id":"xcpc-进阶-4","level":2,"color":"intermediate"}],"id":"xcpc-概率dp-1","level":2,"color":"parent"},{"label":"计数dp","children":[{"label":"基础","children":[],"id":"xcpc-基础-7","level":2,"color":"parent"},{"label":"进阶","children":[],"id":"xcpc-进阶-5","level":2,"color":"intermediate"},{"label":"高级","children":[],"id":"xcpc-高级-2","level":2,"color":"advanced"}],"id":"xcpc-计数dp-1","level":2,"color":"parent"},{"label":"其他类型","children":[{"label":"图上dp","children":[],"id":"xcpc-图上dp-1","level":2,"color":"intermediate"},{"label":"基环树上dp","children":[],"id":"xcpc-基环树上dp-1","level":2,"color":"intermediate"},{"label":"自动机上dp","children":[],"id":"xcpc-自动机上dp-1","level":2,"color":"advanced"},{"label":"分治dp","children":[],"id":"xcpc-分治dp-1","level":2,"color":"advanced"},{"label":"填坑dp","children":[],"id":"xcpc-填坑dp-1","level":2,"color":"advanced"},{"label":"动态dp","children":[],"id":"xcpc-动态dp-1","level":2,"color":"parent"},{"label":"dp套dp","children":[],"id":"xcpc-dp套dp-1","level":2,"color":"expert"}],"id":"xcpc-其他类型-1","level":2,"color":"parent"},{"label":"dp优化","children":[{"label":"单调栈优化","children":[],"id":"xcpc-单调栈优化-1","level":2,"color":"intermediate"},{"label":"单调队列优化","children":[],"id":"xcpc-单调队列优化-1","level":2,"color":"intermediate"},{"label":"四边形不等式优化","children":[],"id":"xcpc-四边形不等式优化-1","level":2,"color":"intermediate"},{"label":"斜率优化","children":[],"id":"xcpc-斜率优化-1","level":2,"color":"intermediate"},{"label":"数据结构优化","children":[],"id":"xcpc-数据结构优化-1","level":2,"color":"advanced"},{"label":"决策单调性","children":[],"id":"xcpc-决策单调性-1","level":2,"color":"advanced"}],"id":"xcpc-dp优化-1","level":2,"color":"parent"}],"id":"xcpc-动态规划-1","level":1,"color":"parent"},{"label":"数据结构","children":[{"label":"队列","children":[{"label":"普通队列","children":[],"id":"xcpc-普通队列-1","level":2,"color":"beginner"},{"label":"双端队列","children":[],"id":"xcpc-双端队列-1","level":2,"color":"beginner"},{"label":"单调队列","children":[],"id":"xcpc-单调队列-1","level":2,"color":"beginner"}],"id":"xcpc-队列-1","level":2,"color":"parent"},{"label":"栈","children":[{"label":"普通栈","children":[],"id":"xcpc-普通栈-1","level":2,"color":"beginner"},{"label":"单调栈","children":[],"id":"xcpc-单调栈-1","level":2,"color":"parent"}],"id":"xcpc-栈-1","level":2,"color":"useless"},{"label":"链表","children":[{"label":"普通链表","children":[],"id":"xcpc-普通链表-1","level":2,"color":"parent"},{"label":"双向链表","children":[],"id":"xcpc-双向链表-1","level":2,"color":"beginner"},{"label":"循环链表","children":[],"id":"xcpc-循环链表-1","level":2,"color":"beginner"}],"id":"xcpc-链表-1","level":2,"color":"parent"},{"label":"堆","children":[{"label":"普通堆","children":[],"id":"xcpc-普通堆-1","level":2,"color":"beginner"},{"label":"对顶堆","children":[],"id":"xcpc-对顶堆-1","level":2,"color":"beginner"},{"label":"斐波那契堆","children":[],"id":"xcpc-斐波那契堆-1","level":2,"color":"parent"},{"label":"左偏堆","children":[],"id":"xcpc-左偏堆-1","level":2,"color":"useless"}],"id":"xcpc-堆-1","level":2,"color":"parent"},{"label":"树","children":[{"label":"树的基础","children":[{"label":"树的基本概念","children":[],"id":"xcpc-树的基本概念-1","level":2,"color":"beginner"},{"label":"树的遍历","children":[],"id":"xcpc-树的遍历-1","level":2,"color":"beginner"},{"label":"树的重心","children":[],"id":"xcpc-树的重心-1","level":2,"color":"beginner"},{"label":"树的直径","children":[],"id":"xcpc-树的直径-1","level":2,"color":"beginner"},{"label":"LCA","children":[],"id":"xcpc-lca-1","level":2,"color":"beginner"},{"label":"dfn","children":[],"id":"xcpc-dfn-1","level":2,"color":"parent"},{"label":"括号序","children":[],"id":"xcpc-括号序-1","level":2,"color":"intermediate"}],"id":"xcpc-树的基础-1","level":2,"color":"parent"},{"label":"线段树","children":[{"label":"基础线段树","children":[],"id":"xcpc-基础线段树-1","level":2,"color":"intermediate"},{"label":"带标记的线段树","children":[],"id":"xcpc-带标记的线段树-1","level":2,"color":"intermediate"},{"label":"可持久化线段树","children":[],"id":"xcpc-可持久化线段树-1","level":2,"color":"advanced"},{"label":"李超线段树","children":[],"id":"xcpc-李超线段树-1","level":2,"color":"expert"},{"label":"线段树合并","children":[],"id":"xcpc-线段树合并-1","level":2,"color":"expert"},{"label":"ZKW线段树","children":[],"id":"xcpc-zkw线段树-1","level":2,"color":"useless"}],"id":"xcpc-线段树-1","level":2,"color":"parent"},{"label":"树状数组","children":[{"label":"树状数组基础","children":[],"id":"xcpc-树状数组基础-1","level":2,"color":"intermediate"},{"label":"树状数组求第k大","children":[],"id":"xcpc-树状数组求第k大-1","level":2,"color":"intermediate"},{"label":"多维树状数组","children":[],"id":"xcpc-多维树状数组-1","level":2,"color":"intermediate"}],"id":"xcpc-树状数组-1","level":2,"color":"parent"},{"label":"平衡树","children":[{"label":"splay","children":[],"id":"xcpc-splay-1","level":2,"color":"advanced"},{"label":"treap","children":[],"id":"xcpc-treap-1","level":2,"color":"advanced"},{"label":"fhqtreap","children":[],"id":"xcpc-fhqtreap-1","level":2,"color":"advanced"},{"label":"可持久化平衡树","children":[],"id":"xcpc-可持久化平衡树-1","level":2,"color":"expert"},{"label":"其他","children":[{"label":"替罪羊树","children":[],"id":"xcpc-替罪羊树-1","level":2,"color":"expert"},{"label":"AVL","children":[],"id":"xcpc-avl-1","level":2,"color":"useless"},{"label":"SBT","children":[],"id":"xcpc-sbt-1","level":2,"color":"useless"},{"label":"红黑树","children":[],"id":"xcpc-红黑树-1","level":2,"color":"useless"}],"id":"xcpc-其他-1","level":2,"color":"parent"}],"id":"xcpc-平衡树-1","level":2,"color":"parent"},{"label":"树套树","children":[{"label":"线段树套线段树","children":[],"id":"xcpc-线段树套线段树-1","level":2,"color":"advanced"},{"label":"线段树套平衡树","children":[],"id":"xcpc-线段树套平衡树-1","level":2,"color":"advanced"}],"id":"xcpc-树套树-1","level":2,"color":"parent"},{"label":"树链剖分","children":[{"label":"重链剖分","children":[],"id":"xcpc-重链剖分-1","level":2,"color":"intermediate"},{"label":"长链剖分","children":[],"id":"xcpc-长链剖分-1","level":2,"color":"expert"}],"id":"xcpc-树链剖分-1","level":2,"color":"parent"},{"label":"笛卡尔树","children":[],"id":"xcpc-笛卡尔树-1","level":2,"color":"intermediate"},{"label":"树的启发式合并","children":[],"id":"xcpc-树的启发式合并-1","level":2,"color":"intermediate"},{"label":"DSU on tree","children":[],"id":"xcpc-dsu-on-tree-1","level":2,"color":"intermediate"},{"label":"LCT","children":[],"id":"xcpc-lct-1","level":2,"color":"advanced"},{"label":"虚树","children":[],"id":"xcpc-虚树-1","level":2,"color":"advanced"},{"label":"KD树","children":[],"id":"xcpc-kd树-1","level":2,"color":"advanced"},{"label":"树的哈希","children":[],"id":"xcpc-树的哈希-1","level":2,"color":"advanced"},{"label":"树套表","children":[],"id":"xcpc-树套表-1","level":2,"color":"useless"},{"label":"划分树","children":[],"id":"xcpc-划分树-1","level":2,"color":"useless"},{"label":"析合树","children":[],"id":"xcpc-析合树-1","level":2,"color":"board"}],"id":"xcpc-树-1","level":2,"color":"parent"},{"label":"并查集","children":[{"label":"并查集基础","children":[],"id":"xcpc-并查集基础-1","level":2,"color":"beginner"},{"label":"带权并查集","children":[],"id":"xcpc-带权并查集-1","level":2,"color":"intermediate"},{"label":"可持久化并查集","children":[],"id":"xcpc-可持久化并查集-1","level":2,"color":"advanced"}],"id":"xcpc-并查集-1","level":2,"color":"parent"},{"label":"分块","children":[{"label":"莫队","children":[],"id":"xcpc-莫队-1","level":2,"color":"intermediate"},{"label":"链上分块","children":[],"id":"xcpc-链上分块-1","level":2,"color":"parent"},{"label":"树上分块","children":[],"id":"xcpc-树上分块-1","level":2,"color":"parent"}],"id":"xcpc-分块-1","level":2,"color":"parent"},{"label":"STL","children":[{"label":"pair","children":[],"id":"xcpc-pair-1","level":2,"color":"beginner"},{"label":"vector","children":[],"id":"xcpc-vector-1","level":2,"color":"beginner"},{"label":"priority_queue","children":[],"id":"xcpc-priority-queue-1","level":2,"color":"beginner"},{"label":"set","children":[],"id":"xcpc-set-1","level":2,"color":"parent"},{"label":"map","children":[],"id":"xcpc-map-1","level":2,"color":"parent"},{"label":"multiset","children":[],"id":"xcpc-multiset-1","level":2,"color":"beginner"},{"label":"bitset","children":[],"id":"xcpc-bitset-1","level":2,"color":"intermediate"},{"label":"pbds","children":[],"id":"xcpc-pbds-1","level":2,"color":"advanced"},{"label":"unordered_set","children":[],"id":"xcpc-unordered-set-1","level":2,"color":"useless"},{"label":"unordered_map","children":[],"id":"xcpc-unordered-map-1","level":2,"color":"useless"}],"id":"xcpc-stl-1","level":2,"color":"beginner"},{"label":"ST表","children":[],"id":"xcpc-st表-1","level":2,"color":"beginner"},{"label":"Dancing Links","children":[],"id":"xcpc-dancing-links-1","level":2,"color":"useless"}],"id":"xcpc-数据结构-1","level":1,"color":"parent"}]};
-if(typeof module!=='undefined')module.exports=algorithmTree;
-if(typeof window!=='undefined')window.QMX_ALGORITHM_TREE=algorithmTree;
+// Generated by tools/build-algorithm-directory.cjs from data/algorithm-directory.json.
+const algorithmTree = {
+  "id": "root",
+  "label": "XCPC算法",
+  "color": "parent",
+  "kind": "directory",
+  "children": [
+    {
+      "id": "feishu-part-0",
+      "label": "C++ 与工具",
+      "color": "parent",
+      "kind": "directory",
+      "origin": "feishu",
+      "attributes": [],
+      "children": [
+        {
+          "id": "xcpc-语法基础-1",
+          "label": "C++ 基础",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "supplement",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-函数-1",
+              "label": "函数",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "青色：函数、指针、引用、结构体"
+              },
+              "rationale": "沿用用户明确D1标尺；本条范围为函数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "函数",
+                "青色：函数、指针、引用、结构体"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "函数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "函数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D1标尺；本条范围为函数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "fullLabel": "函数"
+            },
+            {
+              "id": "xcpc-指针-1",
+              "label": "指针",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "青色：函数、指针、引用、结构体"
+              },
+              "rationale": "沿用用户明确D1标尺；本条范围为指针的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "指针",
+                "青色：函数、指针、引用、结构体"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "指针的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "指针的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D1标尺；本条范围为指针的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "fullLabel": "指针"
+            },
+            {
+              "id": "xcpc-引用-1",
+              "label": "引用",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "青色：函数、指针、引用、结构体"
+              },
+              "rationale": "沿用用户明确D1标尺；本条范围为引用的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "引用",
+                "青色：函数、指针、引用、结构体"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "引用的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "引用的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D1标尺；本条范围为引用的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "fullLabel": "引用"
+            },
+            {
+              "id": "xcpc-结构体-类-1",
+              "label": "结构体与类",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "青色：函数、指针、引用、结构体"
+              },
+              "rationale": "沿用用户明确D1标尺；本条范围为结构体、类的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "结构体、类",
+                "青色：函数、指针、引用、结构体"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "结构体、类的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "结构体、类的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D1标尺；本条范围为结构体、类的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "aliases": [
+                "结构体、类"
+              ],
+              "fullLabel": "结构体、类"
+            }
+          ],
+          "sourceRefs": [],
+          "level": 2,
+          "sourceEvidence": [
+            "语法基础"
+          ],
+          "aliases": [
+            "语法基础",
+            "C++ 语言基础"
+          ],
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：C++ 基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：C++ 基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：C++ 基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "C++ 语言基础"
+        },
+        {
+          "id": "group-cpp-support",
+          "label": "整数与内存",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "algorithm-数组初始化与-memset",
+              "label": "数组初始化",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“数组清零、按字节填充与对象类型限制”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+              "sourceRefs": [
+                "https://oi-wiki.org/contest/roadmap/",
+                "https://oi-wiki.org/contest/io/"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "数组初始化与 memset"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "数组清零、按字节填充与对象类型限制",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "数组清零、按字节填充与对象类型限制",
+                "rationale": "在“数组清零、按字节填充与对象类型限制”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "aliases": [
+                "数组初始化与 memset"
+              ],
+              "fullLabel": "数组初始化与 memset"
+            },
+            {
+              "id": "algorithm-int128-与整数溢出",
+              "label": "整数溢出",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“大整数中间乘法、边界判断、读入输出辅助函数”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+              "sourceRefs": [
+                "https://oi-wiki.org/contest/roadmap/",
+                "https://oi-wiki.org/contest/io/"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "__int128 与整数溢出"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "大整数中间乘法、边界判断、读入输出辅助函数",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "大整数中间乘法、边界判断、读入输出辅助函数",
+                "rationale": "在“大整数中间乘法、边界判断、读入输出辅助函数”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "aliases": [
+                "__int128 与整数溢出"
+              ],
+              "fullLabel": "__int128 与整数溢出"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：整数与内存。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：整数与内存。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "整数表示与底层操作"
+          ],
+          "description": "目录导航：整数与内存。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "整数表示与底层操作"
+        },
+        {
+          "id": "feishu-part-6-1",
+          "label": "标准库与扩展",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-pair-1",
+              "label": "pair",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“二元组构造、访问与字典序比较”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "pair"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "二元组构造、访问与字典序比较",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "二元组构造、访问与字典序比较",
+                "rationale": "在“二元组构造、访问与字典序比较”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "pair"
+            },
+            {
+              "id": "xcpc-vector-1",
+              "label": "vector",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“动态数组、容量变化与迭代器失效”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "vector"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "动态数组、容量变化与迭代器失效",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "动态数组、容量变化与迭代器失效",
+                "rationale": "在“动态数组、容量变化与迭代器失效”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "vector"
+            },
+            {
+              "id": "xcpc-priority-queue-1",
+              "label": "priority_queue",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“优先队列增删顶与自定义比较器”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "priority_queue"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "优先队列增删顶与自定义比较器",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "优先队列增删顶与自定义比较器",
+                "rationale": "在“优先队列增删顶与自定义比较器”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "priority_queue"
+            },
+            {
+              "id": "xcpc-set-1",
+              "label": "set",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“有序唯一键集合的查找、插入、删除”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceEvidence": [
+                "set"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "有序唯一键集合的查找、插入、删除",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "有序唯一键集合的查找、插入、删除",
+                "rationale": "在“有序唯一键集合的查找、插入、删除”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "set"
+            },
+            {
+              "id": "xcpc-map-1",
+              "label": "map",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“有序键值映射及下界查询”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceEvidence": [
+                "map"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "有序键值映射及下界查询",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "有序键值映射及下界查询",
+                "rationale": "在“有序键值映射及下界查询”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "map"
+            },
+            {
+              "id": "xcpc-multiset-1",
+              "label": "multiset",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“有序多重集合与重复键删除”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "multiset"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "有序多重集合与重复键删除",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "有序多重集合与重复键删除",
+                "rationale": "在“有序多重集合与重复键删除”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "multiset"
+            },
+            {
+              "id": "xcpc-bitset-1",
+              "label": "bitset",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“定长位集合、位运算和移位；位并行DP组合题另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "bitset"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "定长位集合、位运算和移位；位并行DP组合题另评",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "定长位集合、位运算和移位；位并行DP组合题另评",
+                "rationale": "在“定长位集合、位运算和移位；位并行DP组合题另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "bitset"
+            },
+            {
+              "id": "xcpc-pbds-1",
+              "label": "pbds",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“GNU顺序统计树的排名与第k小接口，不涉及库内部实现”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "pbds"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "GNU顺序统计树的排名与第k小接口，不涉及库内部实现",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "GNU顺序统计树的排名与第k小接口，不涉及库内部实现",
+                "rationale": "在“GNU顺序统计树的排名与第k小接口，不涉及库内部实现”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "pbds"
+            },
+            {
+              "id": "xcpc-unordered-set-1",
+              "label": "unordered_set",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useless"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“哈希集合接口、碰撞退化与自定义哈希基本使用”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "unordered_set"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "哈希集合接口、碰撞退化与自定义哈希基本使用",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "哈希集合接口、碰撞退化与自定义哈希基本使用",
+                "rationale": "在“哈希集合接口、碰撞退化与自定义哈希基本使用”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "unordered_set"
+            },
+            {
+              "id": "xcpc-unordered-map-1",
+              "label": "unordered_map",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useless"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“哈希映射接口、碰撞退化与自定义哈希基本使用”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "unordered_map"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "哈希映射接口、碰撞退化与自定义哈希基本使用",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "哈希映射接口、碰撞退化与自定义哈希基本使用",
+                "rationale": "在“哈希映射接口、碰撞退化与自定义哈希基本使用”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "unordered_map"
+            },
+            {
+              "id": "algorithm-string",
+              "label": "string",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“字符串存取、截取、比较和基本查找”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "string"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "字符串存取、截取、比较和基本查找",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "字符串存取、截取、比较和基本查找",
+                "rationale": "在“字符串存取、截取、比较和基本查找”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "fullLabel": "string"
+            },
+            {
+              "id": "algorithm-stack-queue",
+              "label": "stack / queue",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“栈和队列适配器的基本接口”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "stack / queue"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "栈和队列适配器的基本接口",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "栈和队列适配器的基本接口",
+                "rationale": "在“栈和队列适配器的基本接口”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "stack / queue"
+            },
+            {
+              "id": "algorithm-deque",
+              "label": "deque",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“双端序列增删与随机访问”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "deque"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "双端序列增删与随机访问",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "双端序列增删与随机访问",
+                "rationale": "在“双端序列增删与随机访问”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "deque"
+            },
+            {
+              "id": "algorithm-常用算法函数与迭代器",
+              "label": "算法函数与迭代器",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“sort、lower_bound、unique等函数的前提、复杂度与迭代器范围”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "常用算法函数与迭代器"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "sort、lower_bound、unique等函数的前提、复杂度与迭代器范围",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "sort、lower_bound、unique等函数的前提、复杂度与迭代器范围",
+                "rationale": "在“sort、lower_bound、unique等函数的前提、复杂度与迭代器范围”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "aliases": [
+                "常用算法函数与迭代器"
+              ],
+              "fullLabel": "常用算法函数与迭代器"
+            },
+            {
+              "id": "algorithm-万能头文件与标准库使用",
+              "label": "头文件与标准库",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“头文件组织、命名空间和编译环境；不把非标准头文件视为跨平台承诺”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+              "sourceRefs": [
+                "https://oi-wiki.org/contest/roadmap/",
+                "https://oi-wiki.org/contest/io/"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "万能头文件与标准库使用"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "头文件组织、命名空间和编译环境；不把非标准头文件视为跨平台承诺",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "头文件组织、命名空间和编译环境；不把非标准头文件视为跨平台承诺",
+                "rationale": "在“头文件组织、命名空间和编译环境；不把非标准头文件视为跨平台承诺”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "aliases": [
+                "万能头文件与标准库使用"
+              ],
+              "fullLabel": "万能头文件与标准库使用"
+            },
+            {
+              "id": "algorithm-content-feishu-part-6-1",
+              "label": "标准库与扩展",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“标准容器接口、迭代器和常用算法；GNU PBDS 作为高级子项另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.1 STL速查"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "aliases": [
+                "STL速查",
+                "C++ 标准库与扩展库"
+              ],
+              "scope": "标准容器接口、迭代器和常用算法；GNU PBDS 作为高级子项另评",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "标准容器接口、迭代器和常用算法；GNU PBDS 作为高级子项另评",
+                "rationale": "在“标准容器接口、迭代器和常用算法；GNU PBDS 作为高级子项另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "C++ 标准库与扩展库",
+              "contentOf": "feishu-part-6-1"
+            }
+          ],
+          "sourceHeading": "Part 6.1 STL速查",
+          "part": "6.1",
+          "sourceRefs": [
+            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+            "https://oi-wiki.org/ds/",
+            "https://cp-algorithms.com/data_structures/segment_tree.html",
+            "https://cp-algorithms.com/data_structures/treap.html"
+          ],
+          "sourceBlockId": "292",
+          "legacyIds": [
+            "xcpc-stl-1"
+          ],
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 6.1 STL速查"
+          ],
+          "aliases": [
+            "STL速查",
+            "C++ 标准库与扩展库"
+          ],
+          "scope": "目录导航：标准库与扩展。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：标准库与扩展。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：标准库与扩展。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "C++ 标准库与扩展库"
+        },
+        {
+          "id": "group-contest-workflow",
+          "label": "复杂度与调试",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-时空复杂度分析-1",
+              "label": "复杂度分析",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "青色：时空复杂度分析"
+              },
+              "rationale": "沿用用户明确D1标尺；本条范围为时空复杂度分析的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "时空复杂度分析",
+                "青色：时空复杂度分析"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "时空复杂度分析的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "时空复杂度分析的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D1标尺；本条范围为时空复杂度分析的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "aliases": [
+                "时空复杂度分析"
+              ],
+              "fullLabel": "时空复杂度分析"
+            },
+            {
+              "id": "algorithm-快读快写",
+              "label": "快读快写",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "board"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“关闭流同步、缓冲读写和有符号整数解析”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+              "sourceRefs": [
+                "https://oi-wiki.org/contest/io/",
+                "https://oi-wiki.org/contest/roadmap/"
+              ],
+              "legacyIds": [
+                "xcpc-读入优化-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "快读快写"
+              ],
+              "evidenceScope": "topic-and-prerequisites",
+              "difficultyConfidence": "medium",
+              "scope": "关闭流同步、缓冲读写和有符号整数解析",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "关闭流同步、缓冲读写和有符号整数解析",
+                "rationale": "在“关闭流同步、缓冲读写和有符号整数解析”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "fullLabel": "快读快写"
+            },
+            {
+              "id": "xcpc-对拍-1",
+              "label": "对拍",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useful"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“随机数据生成、朴素解与待测解比较、缩小反例”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/contest/roadmap/",
+                "https://oi-wiki.org/contest/io/"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "对拍"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "随机数据生成、朴素解与待测解比较、缩小反例",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "随机数据生成、朴素解与待测解比较、缩小反例",
+                "rationale": "在“随机数据生成、朴素解与待测解比较、缩小反例”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "对拍"
+            },
+            {
+              "id": "xcpc-常数优化-1",
+              "label": "常数优化",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useful"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“性能测量、减少重复工作与内存访问；不改变算法渐近阶”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/contest/roadmap/",
+                "https://oi-wiki.org/contest/io/"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "常数优化"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "性能测量、减少重复工作与内存访问；不改变算法渐近阶",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "性能测量、减少重复工作与内存访问；不改变算法渐近阶",
+                "rationale": "在“性能测量、减少重复工作与内存访问；不改变算法渐近阶”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "常数优化"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：复杂度与调试。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：复杂度与调试。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "复杂度、输入输出与调试"
+          ],
+          "description": "目录导航：复杂度与调试。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "复杂度、输入输出与调试"
+        }
+      ],
+      "sourceHeading": "Part 0 好用的东西",
+      "part": "0",
+      "sourceRefs": [],
+      "sourceBlockId": "18",
+      "level": 1,
+      "sourceEvidence": [
+        "Part 0 好用的东西"
+      ],
+      "aliases": [
+        "好用的东西",
+        "C++ 基础与竞赛工具"
+      ],
+      "difficultySource": {
+        "kind": "directory",
+        "detail": "目录不参与难度评级"
+      },
+      "scope": "目录导航：C++ 与工具。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-11",
+        "type": "directory",
+        "scope": "目录导航：C++ 与工具。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+      },
+      "description": "目录导航：C++ 与工具。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "fullLabel": "C++ 基础与竞赛工具"
+    },
+    {
+      "id": "feishu-part-1",
+      "label": "基础算法",
+      "color": "parent",
+      "kind": "directory",
+      "origin": "feishu",
+      "attributes": [],
+      "children": [
+        {
+          "id": "group-basic-modeling",
+          "label": "解题策略",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-1-1",
+              "label": "枚举与模拟",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-枚举",
+                  "label": "枚举",
+                  "color": "basic",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "青色：枚举"
+                  },
+                  "rationale": "沿用用户明确D1标尺；本条范围为枚举的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "枚举",
+                    "青色：枚举"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "枚举的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "枚举的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D1标尺；本条范围为枚举的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  },
+                  "fullLabel": "枚举"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-1-1",
+                  "label": "枚举与模拟",
+                  "color": "basic",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "青色：模拟"
+                  },
+                  "rationale": "沿用用户明确D1标尺；本条范围为枚举与模拟的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 1.1 模拟",
+                    "青色：模拟"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "模拟"
+                  ],
+                  "scope": "枚举与模拟的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "枚举与模拟的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D1标尺；本条范围为枚举与模拟的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  },
+                  "fullLabel": "枚举与模拟",
+                  "contentOf": "feishu-part-1-1"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-模拟-1"
+              ],
+              "sourceHeading": "Part 1.1 模拟",
+              "part": "1.1",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "26",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 1.1 模拟",
+                "青色：模拟"
+              ],
+              "aliases": [
+                "模拟"
+              ],
+              "scope": "目录导航：枚举与模拟。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：枚举与模拟。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：枚举与模拟。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "枚举与模拟"
+            },
+            {
+              "id": "feishu-part-1-5",
+              "label": "贪心",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "useful"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-1-5",
+                  "label": "贪心",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为贪心策略的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 1.5 贪心",
+                    "绿色：贪心",
+                    "绿色：基础算法"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "贪心策略"
+                  ],
+                  "scope": "贪心策略的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "贪心策略的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为贪心策略的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "贪心策略",
+                  "contentOf": "feishu-part-1-5"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-贪心-1"
+              ],
+              "sourceHeading": "Part 1.5 贪心",
+              "part": "1.5",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "69",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 1.5 贪心",
+                "绿色：贪心",
+                "绿色：基础算法"
+              ],
+              "aliases": [
+                "贪心策略"
+              ],
+              "scope": "目录导航：贪心。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：贪心。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：贪心。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "贪心策略"
+            },
+            {
+              "id": "feishu-part-1-6",
+              "label": "构造",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-1-6",
+                  "label": "构造",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/contest/roadmap/",
+                    "https://oi-wiki.org/search/opt/",
+                    "https://oi-wiki.org/basic/divide-and-conquer/",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“根据不变量设计可验证对象和小规模反例检查；高难构造另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 1.6 构造",
+                    "研究分级：构造基础"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "aliases": [
+                    "构造方法"
+                  ],
+                  "scope": "根据不变量设计可验证对象和小规模反例检查；高难构造另评",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "根据不变量设计可验证对象和小规模反例检查；高难构造另评",
+                    "rationale": "在“根据不变量设计可验证对象和小规模反例检查；高难构造另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "构造方法",
+                  "contentOf": "feishu-part-1-6"
+                }
+              ],
+              "sourceHeading": "Part 1.6 构造",
+              "part": "1.6",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/contest/roadmap/",
+                "https://oi-wiki.org/search/opt/",
+                "https://oi-wiki.org/basic/divide-and-conquer/",
+                "https://cp-algorithms.com/"
+              ],
+              "sourceBlockId": "92",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 1.6 构造",
+                "研究分级：构造基础"
+              ],
+              "aliases": [
+                "构造方法"
+              ],
+              "scope": "目录导航：构造。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：构造。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：构造。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "构造方法"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：解题策略。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：解题策略。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "基础策略与构造"
+          ],
+          "description": "目录导航：解题策略。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "基础策略与构造"
+        },
+        {
+          "id": "group-sequence-processing",
+          "label": "序列处理",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-1-2",
+              "label": "排序",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-选择排序-1",
+                  "label": "选择排序",
+                  "color": "basic",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "青色：排序基础（冒泡 / 选择 / 插入）"
+                  },
+                  "rationale": "沿用用户明确D1标尺；本条范围为选择排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "选择排序",
+                    "青色：排序基础（冒泡 / 选择 / 插入）"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "选择排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "选择排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D1标尺；本条范围为选择排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  },
+                  "fullLabel": "选择排序"
+                },
+                {
+                  "id": "xcpc-冒泡排序-1",
+                  "label": "冒泡排序",
+                  "color": "basic",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "青色：排序基础（冒泡 / 选择 / 插入）"
+                  },
+                  "rationale": "沿用用户明确D1标尺；本条范围为冒泡排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "冒泡排序",
+                    "青色：排序基础（冒泡 / 选择 / 插入）"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "冒泡排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "冒泡排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D1标尺；本条范围为冒泡排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  },
+                  "fullLabel": "冒泡排序"
+                },
+                {
+                  "id": "xcpc-插入排序-1",
+                  "label": "插入排序",
+                  "color": "basic",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "青色：排序基础（冒泡 / 选择 / 插入）"
+                  },
+                  "rationale": "沿用用户明确D1标尺；本条范围为插入排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "插入排序",
+                    "青色：排序基础（冒泡 / 选择 / 插入）"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "插入排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "插入排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D1标尺；本条范围为插入排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  },
+                  "fullLabel": "插入排序"
+                },
+                {
+                  "id": "xcpc-快速排序-1",
+                  "label": "快速排序",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“划分不变量、递归与最坏情况、随机化基准”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/contest/roadmap/",
+                    "https://oi-wiki.org/search/opt/",
+                    "https://oi-wiki.org/basic/divide-and-conquer/",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "快速排序"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "划分不变量、递归与最坏情况、随机化基准",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "划分不变量、递归与最坏情况、随机化基准",
+                    "rationale": "在“划分不变量、递归与最坏情况、随机化基准”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "快速排序"
+                },
+                {
+                  "id": "xcpc-归并排序-1",
+                  "label": "归并排序",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“有序子数组合并与O(n log n)递归分析”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/contest/roadmap/",
+                    "https://oi-wiki.org/search/opt/",
+                    "https://oi-wiki.org/basic/divide-and-conquer/",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "归并排序"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "有序子数组合并与O(n log n)递归分析",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "有序子数组合并与O(n log n)递归分析",
+                    "rationale": "在“有序子数组合并与O(n log n)递归分析”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "归并排序"
+                },
+                {
+                  "id": "xcpc-桶排序-1",
+                  "label": "桶排序",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“值域有界条件下的桶计数与输出”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/contest/roadmap/",
+                    "https://oi-wiki.org/search/opt/",
+                    "https://oi-wiki.org/basic/divide-and-conquer/",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "桶排序"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "值域有界条件下的桶计数与输出",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "值域有界条件下的桶计数与输出",
+                    "rationale": "在“值域有界条件下的桶计数与输出”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "桶排序"
+                },
+                {
+                  "id": "xcpc-基数排序-1",
+                  "label": "基数排序",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“按数位稳定排序、位宽与复杂度”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/contest/roadmap/",
+                    "https://oi-wiki.org/search/opt/",
+                    "https://oi-wiki.org/basic/divide-and-conquer/",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "基数排序"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "按数位稳定排序、位宽与复杂度",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "按数位稳定排序、位宽与复杂度",
+                    "rationale": "在“按数位稳定排序、位宽与复杂度”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "基数排序"
+                },
+                {
+                  "id": "xcpc-堆排序-1",
+                  "label": "堆排序",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“建堆、下沉与重复取极值”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/contest/roadmap/",
+                    "https://oi-wiki.org/search/opt/",
+                    "https://oi-wiki.org/basic/divide-and-conquer/",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "堆排序"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "建堆、下沉与重复取极值",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "建堆、下沉与重复取极值",
+                    "rationale": "在“建堆、下沉与重复取极值”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "堆排序"
+                },
+                {
+                  "id": "xcpc-希尔排序-1",
+                  "label": "希尔排序",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“按增量分组插入排序，复杂度依赖增量序列”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/contest/roadmap/",
+                    "https://oi-wiki.org/search/opt/",
+                    "https://oi-wiki.org/basic/divide-and-conquer/",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "希尔排序"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "按增量分组插入排序，复杂度依赖增量序列",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "按增量分组插入排序，复杂度依赖增量序列",
+                    "rationale": "在“按增量分组插入排序，复杂度依赖增量序列”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "希尔排序"
+                },
+                {
+                  "id": "xcpc-逆序对-1",
+                  "label": "逆序对",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“归并时统计跨区间逆序对”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/contest/roadmap/",
+                    "https://oi-wiki.org/search/opt/",
+                    "https://oi-wiki.org/basic/divide-and-conquer/",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "逆序对"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "归并时统计跨区间逆序对",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "归并时统计跨区间逆序对",
+                    "rationale": "在“归并时统计跨区间逆序对”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "逆序对"
+                }
+              ],
+              "sourceHeading": "Part 1.2 排序算法",
+              "part": "1.2",
+              "sourceRefs": [],
+              "sourceBlockId": "29",
+              "legacyIds": [
+                "xcpc-排序-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 1.2 排序算法"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：排序。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：排序。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "排序算法"
+              ],
+              "description": "目录导航：排序。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "排序算法"
+            },
+            {
+              "id": "feishu-part-1-8",
+              "label": "前缀和与差分",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "useful"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-一维前缀和",
+                  "label": "一维前缀和",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为一维前缀和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "一维前缀和"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "一维前缀和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "一维前缀和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为一维前缀和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "一维前缀和"
+                },
+                {
+                  "id": "algorithm-二维前缀和",
+                  "label": "二维前缀和",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为二维前缀和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "二维前缀和"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "二维前缀和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "二维前缀和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为二维前缀和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "二维前缀和"
+                },
+                {
+                  "id": "algorithm-一维差分",
+                  "label": "一维差分",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为一维差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "一维差分"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "一维差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "一维差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为一维差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "一维差分"
+                },
+                {
+                  "id": "algorithm-二维差分",
+                  "label": "二维差分",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为二维差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "二维差分"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "二维差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "二维差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为二维差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "二维差分"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-1-8",
+                  "label": "前缀和与差分",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：前缀和与差分"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为前缀和与差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 1.8 前缀和 & 差分",
+                    "绿色：前缀和与差分"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "前缀和 & 差分"
+                  ],
+                  "scope": "前缀和与差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "前缀和与差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为前缀和与差分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "前缀和与差分",
+                  "contentOf": "feishu-part-1-8"
+                }
+              ],
+              "sourceHeading": "Part 1.8 前缀和 & 差分",
+              "part": "1.8",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "109",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "legacyIds": [
+                "xcpc-前缀和-差分-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 1.8 前缀和 & 差分",
+                "绿色：前缀和与差分"
+              ],
+              "aliases": [
+                "前缀和 & 差分"
+              ],
+              "scope": "目录导航：前缀和与差分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：前缀和与差分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：前缀和与差分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "前缀和与差分"
+            },
+            {
+              "id": "xcpc-离散-1",
+              "label": "离散化",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“排序去重、值到排名映射；保序不保数值距离”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/contest/roadmap/",
+                "https://oi-wiki.org/search/opt/",
+                "https://oi-wiki.org/basic/divide-and-conquer/",
+                "https://cp-algorithms.com/"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "离散"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "aliases": [
+                "离散"
+              ],
+              "scope": "排序去重、值到排名映射；保序不保数值距离",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "排序去重、值到排名映射；保序不保数值距离",
+                "rationale": "在“排序去重、值到排名映射；保序不保数值距离”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "离散化"
+            },
+            {
+              "id": "feishu-part-1-9",
+              "label": "双指针",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-1-9",
+                  "label": "双指针",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为双指针的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 1.9 双指针",
+                    "绿色：双指针",
+                    "绿色：基础算法"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "双指针的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "双指针的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为双指针的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "双指针",
+                  "contentOf": "feishu-part-1-9"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-双指针-1"
+              ],
+              "sourceHeading": "Part 1.9 双指针",
+              "part": "1.9",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "123",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 1.9 双指针",
+                "绿色：双指针",
+                "绿色：基础算法"
+              ],
+              "scope": "目录导航：双指针。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：双指针。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：双指针。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "双指针"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：序列处理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：序列处理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "序列处理与预处理"
+          ],
+          "description": "目录导航：序列处理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "序列处理与预处理"
+        },
+        {
+          "id": "feishu-part-1-3",
+          "label": "二分",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [],
+          "children": [
+            {
+              "id": "algorithm-二分查找",
+              "label": "二分查找",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useful"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户提供颜色难度文档对应条目"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为二分查找的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "二分查找"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "二分查找的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "二分查找的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为二分查找的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "二分查找"
+            },
+            {
+              "id": "algorithm-二分答案",
+              "label": "二分答案",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useful"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户提供颜色难度文档对应条目"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为二分答案的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "二分答案"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "二分答案的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "二分答案的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为二分答案的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "二分答案"
+            },
+            {
+              "id": "algorithm-content-feishu-part-1-3",
+              "label": "二分",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "绿色：基础算法"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为二分查找与答案二分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 1.3 二分",
+                "绿色：二分（查找 / 二分答案）",
+                "绿色：基础算法"
+              ],
+              "difficultyConfidence": "source",
+              "aliases": [
+                "二分查找与答案二分"
+              ],
+              "scope": "二分查找与答案二分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "二分查找与答案二分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为二分查找与答案二分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "二分查找与答案二分",
+              "contentOf": "feishu-part-1-3"
+            }
+          ],
+          "legacyIds": [
+            "xcpc-二分-1"
+          ],
+          "sourceHeading": "Part 1.3 二分",
+          "part": "1.3",
+          "sourceRefs": [
+            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+            "color-md"
+          ],
+          "sourceBlockId": "39",
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 1.3 二分",
+            "绿色：二分（查找 / 二分答案）",
+            "绿色：基础算法"
+          ],
+          "aliases": [
+            "二分查找与答案二分"
+          ],
+          "scope": "目录导航：二分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：二分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：二分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "二分查找与答案二分"
+        },
+        {
+          "id": "group-recursive-methods",
+          "label": "递推与分治",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-递推-1",
+              "label": "递推",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "本次审校的学习范围与前置知识评估"
+              },
+              "rationale": "在“由初值按明确依赖逐步计算序列”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+              "sourceRefs": [
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://oi-wiki.org/dp/basic/"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "递推"
+              ],
+              "difficultyConfidence": "medium",
+              "evidenceScope": "topic-and-prerequisites",
+              "scope": "由初值按明确依赖逐步计算序列",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "由初值按明确依赖逐步计算序列",
+                "rationale": "在“由初值按明确依赖逐步计算序列”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "fullLabel": "递推"
+            },
+            {
+              "id": "algorithm-迭代基础",
+              "label": "迭代",
+              "color": "basic",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "青色：递归 / 迭代基础"
+              },
+              "rationale": "沿用用户明确D1标尺；本条范围为迭代基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "difficultyConfidence": "source",
+              "level": 3,
+              "scope": "迭代基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "迭代基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D1标尺；本条范围为迭代基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 1,
+                  "max": 1
+                }
+              },
+              "aliases": [
+                "迭代基础"
+              ],
+              "fullLabel": "迭代基础"
+            },
+            {
+              "id": "feishu-part-1-4",
+              "label": "递归与分治",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-递归-回溯-1",
+                  "label": "递归",
+                  "color": "basic",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D1标尺；本条范围为递归基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "递归、回溯"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "递归、回溯",
+                    "递归基础"
+                  ],
+                  "scope": "递归基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "递归基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D1标尺；本条范围为递归基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  },
+                  "fullLabel": "递归基础"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-分治-1"
+              ],
+              "sourceHeading": "Part 1.4 分治",
+              "part": "1.4",
+              "sourceRefs": [],
+              "sourceBlockId": "66",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 1.4 分治"
+              ],
+              "aliases": [
+                "分治"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：递归与分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：递归与分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：递归与分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "递归与分治"
+            },
+            {
+              "id": "xcpc-倍增-1",
+              "label": "倍增",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“预处理2的幂步跳转、二进制拆分查询”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/contest/roadmap/",
+                "https://oi-wiki.org/search/opt/",
+                "https://oi-wiki.org/basic/divide-and-conquer/",
+                "https://cp-algorithms.com/"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "倍增"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "预处理2的幂步跳转、二进制拆分查询",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "预处理2的幂步跳转、二进制拆分查询",
+                "rationale": "在“预处理2的幂步跳转、二进制拆分查询”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "倍增"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：递推与分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：递推与分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "递推、递归与分治"
+          ],
+          "description": "目录导航：递推与分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "递推、递归与分治"
+        },
+        {
+          "id": "feishu-part-1-7",
+          "label": "高精度",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [],
+          "children": [
+            {
+              "id": "algorithm-content-feishu-part-1-7",
+              "label": "高精度",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "绿色：基础算法"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为高精度整数运算的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 1.7 高精度",
+                "绿色：高精度",
+                "绿色：基础算法"
+              ],
+              "difficultyConfidence": "source",
+              "aliases": [
+                "高精度整数运算"
+              ],
+              "scope": "高精度整数运算的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "高精度整数运算的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为高精度整数运算的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "高精度整数运算",
+              "contentOf": "feishu-part-1-7"
+            }
+          ],
+          "legacyIds": [
+            "xcpc-高精度-1"
+          ],
+          "sourceHeading": "Part 1.7 高精度",
+          "part": "1.7",
+          "sourceRefs": [
+            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+            "color-md"
+          ],
+          "sourceBlockId": "94",
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 1.7 高精度",
+            "绿色：高精度",
+            "绿色：基础算法"
+          ],
+          "aliases": [
+            "高精度整数运算"
+          ],
+          "scope": "目录导航：高精度。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：高精度。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：高精度。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "高精度整数运算"
+        }
+      ],
+      "legacyIds": [
+        "xcpc-基础-1",
+        "xcpc-算法基础-1"
+      ],
+      "sourceHeading": "Part 1 基础算法",
+      "part": "1",
+      "sourceRefs": [],
+      "sourceBlockId": "24",
+      "level": 1,
+      "sourceEvidence": [
+        "Part 1 基础算法"
+      ],
+      "aliases": [
+        "基础算法与解题方法"
+      ],
+      "difficultySource": {
+        "kind": "directory",
+        "detail": "目录不参与难度评级"
+      },
+      "scope": "目录导航：基础算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-11",
+        "type": "directory",
+        "scope": "目录导航：基础算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+      },
+      "description": "目录导航：基础算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "fullLabel": "基础算法与解题方法"
+    },
+    {
+      "id": "feishu-part-2",
+      "label": "搜索与剪枝",
+      "color": "parent",
+      "kind": "directory",
+      "origin": "feishu",
+      "attributes": [],
+      "children": [
+        {
+          "id": "group-search-foundation",
+          "label": "搜索基础",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-2-1",
+              "label": "DFS",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-backtracking",
+                  "label": "回溯",
+                  "children": [],
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "color": "beginner",
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "本次审校的学习范围与前置知识评估"
+                  },
+                  "rationale": "在“DFS的选择、递归、撤销及边界恢复”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "difficultyConfidence": "medium",
+                  "evidenceScope": "topic-and-prerequisites",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/search/backtracking/",
+                    "https://oi-wiki.org/search/opt/"
+                  ],
+                  "level": 4,
+                  "scope": "DFS的选择、递归、撤销及边界恢复",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "DFS的选择、递归、撤销及边界恢复",
+                    "rationale": "在“DFS的选择、递归、撤销及边界恢复”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "回溯与状态恢复"
+                  ],
+                  "fullLabel": "回溯与状态恢复"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-2-1",
+                  "label": "DFS",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：简单 DFS / BFS"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为深度优先搜索（DFS）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 2.1 深度优先搜索dfs",
+                    "绿色：简单 DFS / BFS"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "深度优先搜索dfs",
+                    "深度优先搜索（DFS）"
+                  ],
+                  "scope": "深度优先搜索（DFS）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "深度优先搜索（DFS）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为深度优先搜索（DFS）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "深度优先搜索（DFS）",
+                  "contentOf": "feishu-part-2-1"
+                }
+              ],
+              "sourceHeading": "Part 2.1 深度优先搜索dfs",
+              "part": "2.1",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "131",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "legacyIds": [
+                "xcpc-dfs-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 2.1 深度优先搜索dfs",
+                "绿色：简单 DFS / BFS"
+              ],
+              "aliases": [
+                "深度优先搜索dfs",
+                "深度优先搜索（DFS）"
+              ],
+              "scope": "目录导航：DFS。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：DFS。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：DFS。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "深度优先搜索（DFS）"
+            },
+            {
+              "id": "feishu-part-2-2",
+              "label": "BFS",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-2-2",
+                  "label": "BFS",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：简单 DFS / BFS"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为广度优先搜索（BFS）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 2.2 广度优先搜索bfs",
+                    "绿色：简单 DFS / BFS"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "广度优先搜索bfs",
+                    "广度优先搜索（BFS）"
+                  ],
+                  "scope": "广度优先搜索（BFS）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "广度优先搜索（BFS）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为广度优先搜索（BFS）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "广度优先搜索（BFS）",
+                  "contentOf": "feishu-part-2-2"
+                }
+              ],
+              "sourceHeading": "Part 2.2 广度优先搜索bfs",
+              "part": "2.2",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "155",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "legacyIds": [
+                "xcpc-bfs-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 2.2 广度优先搜索bfs",
+                "绿色：简单 DFS / BFS"
+              ],
+              "aliases": [
+                "广度优先搜索bfs",
+                "广度优先搜索（BFS）"
+              ],
+              "scope": "目录导航：BFS。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：BFS。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：BFS。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "广度优先搜索（BFS）"
+            },
+            {
+              "id": "feishu-part-2-3",
+              "label": "记忆化搜索",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-2-3",
+                  "label": "记忆化搜索",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "搜索章节对应算法"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为记忆化搜索的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 2.3 记忆化搜索"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "记忆化搜索的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "记忆化搜索的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为记忆化搜索的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "记忆化搜索",
+                  "contentOf": "feishu-part-2-3"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-记忆化搜索-1"
+              ],
+              "sourceHeading": "Part 2.3 记忆化搜索",
+              "part": "2.3",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "181",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 2.3 记忆化搜索"
+              ],
+              "scope": "目录导航：记忆化搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：记忆化搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：记忆化搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "记忆化搜索"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：搜索基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：搜索基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "遍历、回溯与状态复用"
+          ],
+          "description": "目录导航：搜索基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "遍历、回溯与状态复用"
+        },
+        {
+          "id": "group-search-strategy",
+          "label": "搜索优化",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-2-4",
+              "label": "搜索剪枝",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-2-4",
+                  "label": "搜索剪枝",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/contest/roadmap/",
+                    "https://oi-wiki.org/search/opt/",
+                    "https://oi-wiki.org/basic/divide-and-conquer/",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“可行性、最优性剪枝与搜索顺序；需证明剪枝不丢解”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 2.4 搜索的剪枝"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "aliases": [
+                    "搜索的剪枝"
+                  ],
+                  "scope": "可行性、最优性剪枝与搜索顺序；需证明剪枝不丢解",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "可行性、最优性剪枝与搜索顺序；需证明剪枝不丢解",
+                    "rationale": "在“可行性、最优性剪枝与搜索顺序；需证明剪枝不丢解”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "搜索剪枝",
+                  "contentOf": "feishu-part-2-4"
+                }
+              ],
+              "sourceHeading": "Part 2.4 搜索的剪枝",
+              "part": "2.4",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/contest/roadmap/",
+                "https://oi-wiki.org/search/opt/",
+                "https://oi-wiki.org/basic/divide-and-conquer/",
+                "https://cp-algorithms.com/"
+              ],
+              "sourceBlockId": "182",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "legacyIds": [
+                "xcpc-剪枝-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 2.4 搜索的剪枝"
+              ],
+              "aliases": [
+                "搜索的剪枝"
+              ],
+              "scope": "目录导航：搜索剪枝。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：搜索剪枝。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：搜索剪枝。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "搜索剪枝"
+            },
+            {
+              "id": "feishu-part-2-5",
+              "label": "双向与折半搜索",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-双向-bfs",
+                  "label": "双向 BFS",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为双向 BFS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "双向 BFS"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "双向 BFS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "双向 BFS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为双向 BFS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "双向 BFS"
+                },
+                {
+                  "id": "xcpc-折半搜索-1",
+                  "label": "折半搜索",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“将搜索空间分半、分别枚举并合并匹配”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/contest/roadmap/",
+                    "https://oi-wiki.org/search/opt/",
+                    "https://oi-wiki.org/basic/divide-and-conquer/",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "折半搜索"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "将搜索空间分半、分别枚举并合并匹配",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "将搜索空间分半、分别枚举并合并匹配",
+                    "rationale": "在“将搜索空间分半、分别枚举并合并匹配”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "折半搜索"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-2-5",
+                  "label": "双向与折半搜索",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "搜索章节对应算法"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为双向搜索与折半搜索的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 2.5 双向搜索"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "双向搜索",
+                    "双向搜索与折半搜索"
+                  ],
+                  "scope": "双向搜索与折半搜索的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "双向搜索与折半搜索的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为双向搜索与折半搜索的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "双向搜索与折半搜索",
+                  "contentOf": "feishu-part-2-5"
+                }
+              ],
+              "sourceHeading": "Part 2.5 双向搜索",
+              "part": "2.5",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "183",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 2.5 双向搜索"
+              ],
+              "aliases": [
+                "双向搜索",
+                "双向搜索与折半搜索"
+              ],
+              "scope": "目录导航：双向与折半搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：双向与折半搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：双向与折半搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "双向搜索与折半搜索"
+            },
+            {
+              "id": "feishu-part-2-6",
+              "label": "A* 搜索",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-2-6",
+                  "label": "A* 搜索",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "搜索章节对应算法"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为启发式搜索（A*）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 2.6 A*"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "A*",
+                    "启发式搜索（A*）"
+                  ],
+                  "scope": "启发式搜索（A*）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "启发式搜索（A*）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为启发式搜索（A*）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "启发式搜索（A*）",
+                  "contentOf": "feishu-part-2-6"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-a-1"
+              ],
+              "sourceHeading": "Part 2.6 A*",
+              "part": "2.6",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "184",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 2.6 A*"
+              ],
+              "aliases": [
+                "A*",
+                "启发式搜索（A*）"
+              ],
+              "scope": "目录导航：A* 搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：A* 搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：A* 搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "启发式搜索（A*）"
+            },
+            {
+              "id": "feishu-part-2-7",
+              "label": "IDA* 搜索",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-2-7",
+                  "label": "IDA* 搜索",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "搜索章节对应算法"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为迭代加深启发式搜索（IDA*）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 2.7 IDA*"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "IDA*",
+                    "迭代加深启发式搜索（IDA*）"
+                  ],
+                  "scope": "迭代加深启发式搜索（IDA*）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "迭代加深启发式搜索（IDA*）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为迭代加深启发式搜索（IDA*）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "迭代加深启发式搜索（IDA*）",
+                  "contentOf": "feishu-part-2-7"
+                }
+              ],
+              "sourceHeading": "Part 2.7 IDA*",
+              "part": "2.7",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "185",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 2.7 IDA*"
+              ],
+              "aliases": [
+                "IDA*",
+                "迭代加深启发式搜索（IDA*）"
+              ],
+              "scope": "目录导航：IDA* 搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：IDA* 搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：IDA* 搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "迭代加深启发式搜索（IDA*）"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：搜索优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：搜索优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "搜索空间优化与启发式"
+          ],
+          "description": "目录导航：搜索优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "搜索空间优化与启发式"
+        },
+        {
+          "id": "feishu-part-2-8",
+          "label": "DLX",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [
+            "board",
+            "useless"
+          ],
+          "children": [
+            {
+              "id": "algorithm-content-feishu-part-2-8",
+              "label": "DLX",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [
+                "board",
+                "useless"
+              ],
+              "children": [],
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/search/dlx/",
+                "https://oi-wiki.org/search/backtracking/",
+                "https://arxiv.org/abs/cs/0011047"
+              ],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“精确覆盖建模、Algorithm X及十字链表删除恢复”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 2.8 DLX"
+              ],
+              "evidenceScope": "topic-and-prerequisites",
+              "difficultyConfidence": "medium",
+              "aliases": [
+                "精确覆盖与 Dancing Links（DLX）"
+              ],
+              "scope": "精确覆盖建模、Algorithm X及十字链表删除恢复",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "精确覆盖建模、Algorithm X及十字链表删除恢复",
+                "rationale": "在“精确覆盖建模、Algorithm X及十字链表删除恢复”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "精确覆盖与 Dancing Links（DLX）",
+              "contentOf": "feishu-part-2-8"
+            }
+          ],
+          "legacyIds": [
+            "xcpc-dlx-1",
+            "xcpc-dancing-links-1"
+          ],
+          "sourceHeading": "Part 2.8 DLX",
+          "part": "2.8",
+          "sourceRefs": [
+            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+            "https://oi-wiki.org/search/dlx/",
+            "https://oi-wiki.org/search/backtracking/",
+            "https://arxiv.org/abs/cs/0011047"
+          ],
+          "sourceBlockId": "186",
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 2.8 DLX"
+          ],
+          "aliases": [
+            "精确覆盖与 Dancing Links（DLX）"
+          ],
+          "scope": "目录导航：DLX。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：DLX。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：DLX。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "精确覆盖与 Dancing Links（DLX）"
+        }
+      ],
+      "legacyIds": [
+        "xcpc-搜索-1"
+      ],
+      "sourceHeading": "Part 2 搜索",
+      "part": "2",
+      "sourceRefs": [],
+      "sourceBlockId": "129",
+      "level": 1,
+      "sourceEvidence": [
+        "Part 2 搜索"
+      ],
+      "aliases": [
+        "搜索"
+      ],
+      "difficultySource": {
+        "kind": "directory",
+        "detail": "目录不参与难度评级"
+      },
+      "scope": "目录导航：搜索与剪枝。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-11",
+        "type": "directory",
+        "scope": "目录导航：搜索与剪枝。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+      },
+      "description": "目录导航：搜索与剪枝。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "fullLabel": "搜索与剪枝"
+    },
+    {
+      "id": "feishu-part-3",
+      "label": "动态规划",
+      "color": "parent",
+      "kind": "directory",
+      "origin": "feishu",
+      "attributes": [],
+      "children": [
+        {
+          "id": "group-dp-principles",
+          "label": "DP 基础",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-状态-1",
+              "label": "状态",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“定义能概括未来决策的最小信息和合法状态空间”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "状态"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "定义能概括未来决策的最小信息和合法状态空间",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "定义能概括未来决策的最小信息和合法状态空间",
+                "rationale": "在“定义能概括未来决策的最小信息和合法状态空间”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "状态"
+            },
+            {
+              "id": "xcpc-转移-1",
+              "label": "转移",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“从较小问题到当前状态的递推、遍历次序和边界”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "转移"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "从较小问题到当前状态的递推、遍历次序和边界",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "从较小问题到当前状态的递推、遍历次序和边界",
+                "rationale": "在“从较小问题到当前状态的递推、遍历次序和边界”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "转移"
+            },
+            {
+              "id": "xcpc-最优子结构-1",
+              "label": "最优子结构",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“说明子问题最优解如何构成当前最优解”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "最优子结构"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "说明子问题最优解如何构成当前最优解",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "说明子问题最优解如何构成当前最优解",
+                "rationale": "在“说明子问题最优解如何构成当前最优解”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "最优子结构"
+            },
+            {
+              "id": "xcpc-无后效性-1",
+              "label": "无后效性",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“验证相同状态的后续可选行动不依赖被丢弃的历史”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "无后效性"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "验证相同状态的后续可选行动不依赖被丢弃的历史",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "验证相同状态的后续可选行动不依赖被丢弃的历史",
+                "rationale": "在“验证相同状态的后续可选行动不依赖被丢弃的历史”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "无后效性"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：DP 基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：DP 基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "状态设计与基本性质"
+          ],
+          "description": "目录导航：DP 基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "状态设计与基本性质"
+        },
+        {
+          "id": "group-dp-structural-models",
+          "label": "DP 模型",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-3-1",
+              "label": "线性 DP",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-最长上升子序列-lis",
+                  "label": "LIS",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“O(n²)状态DP及基础贪心二分优化；复杂计数另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/sequences/longest_increasing_subsequence.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "最长上升子序列（LIS）"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "O(n²)状态DP及基础贪心二分优化；复杂计数另评",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "O(n²)状态DP及基础贪心二分优化；复杂计数另评",
+                    "rationale": "在“O(n²)状态DP及基础贪心二分优化；复杂计数另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "最长上升子序列（LIS）"
+                  ],
+                  "fullLabel": "最长上升子序列（LIS）"
+                },
+                {
+                  "id": "algorithm-最长公共子序列-lcs",
+                  "label": "LCS",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“二维前缀DP、匹配与不匹配转移和滚动数组”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "最长公共子序列（LCS）"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "二维前缀DP、匹配与不匹配转移和滚动数组",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "二维前缀DP、匹配与不匹配转移和滚动数组",
+                    "rationale": "在“二维前缀DP、匹配与不匹配转移和滚动数组”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "最长公共子序列（LCS）"
+                  ],
+                  "fullLabel": "最长公共子序列（LCS）"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-3-1",
+                  "label": "线性 DP",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为线性动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.1 线性动态规划",
+                    "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "线性动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "线性动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为线性动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "线性动态规划"
+                  ],
+                  "fullLabel": "线性动态规划",
+                  "contentOf": "feishu-part-3-1"
+                }
+              ],
+              "sourceHeading": "Part 3.1 线性动态规划",
+              "part": "3.1",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "188",
+              "legacyIds": [
+                "xcpc-动态规划基础-1",
+                "xcpc-其他类型-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.1 线性动态规划",
+                "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+              ],
+              "scope": "目录导航：线性 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：线性 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "线性动态规划"
+              ],
+              "description": "目录导航：线性 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "线性动态规划"
+            },
+            {
+              "id": "feishu-part-3-2",
+              "label": "背包 DP",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "xcpc-01背包-1",
+                  "label": "01背包",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：背包（01 / 完全 / 多重 / 分组）"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为01背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "01背包",
+                    "绿色：背包（01 / 完全 / 多重 / 分组）"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "01背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "01背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为01背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "01背包"
+                },
+                {
+                  "id": "xcpc-无限背包-1",
+                  "label": "完全背包",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：背包（01 / 完全 / 多重 / 分组）"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为完全背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "aliases": [
+                    "完全背包"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "无限背包",
+                    "绿色：背包（01 / 完全 / 多重 / 分组）"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "完全背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "完全背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为完全背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "完全背包"
+                },
+                {
+                  "id": "xcpc-多重背包-1",
+                  "label": "多重背包",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-o-nml-1",
+                      "label": "朴素枚举",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“每类枚举可选件数；n种物品、容量W、件数上界C，O(nWC)”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/dp/basic/",
+                        "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                        "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "O(nml)"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "aliases": [
+                        "O(nml)",
+                        "朴素枚举件数（多重背包）"
+                      ],
+                      "scope": "每类枚举可选件数；n种物品、容量W、件数上界C，O(nWC)",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "每类枚举可选件数；n种物品、容量W、件数上界C，O(nWC)",
+                        "rationale": "在“每类枚举可选件数；n种物品、容量W、件数上界C，O(nWC)”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "朴素枚举件数（多重背包）"
+                    },
+                    {
+                      "id": "xcpc-o-nm-log-l-1",
+                      "label": "二进制分组",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://oi-wiki.org/dp/basic/",
+                        "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                        "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                      ],
+                      "level": 5,
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“将有限件数拆为二进制组后转为01背包，O(nW log C)”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                      "sourceEvidence": [
+                        "O(nm log l)"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "aliases": [
+                        "O(nm log l)",
+                        "二进制分组优化（多重背包）"
+                      ],
+                      "scope": "将有限件数拆为二进制组后转为01背包，O(nW log C)",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "将有限件数拆为二进制组后转为01背包，O(nW log C)",
+                        "rationale": "在“将有限件数拆为二进制组后转为01背包，O(nW log C)”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "二进制分组优化（多重背包）"
+                    },
+                    {
+                      "id": "xcpc-o-nm-1",
+                      "label": "单调队列优化",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“按体积余数分组，将件数约束转为滑动窗口最大值，O(nW)”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/dp/basic/",
+                        "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                        "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "O(nm)"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "aliases": [
+                        "O(nm)",
+                        "单调队列优化（多重背包）"
+                      ],
+                      "scope": "按体积余数分组，将件数约束转为滑动窗口最大值，O(nW)",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "按体积余数分组，将件数约束转为滑动窗口最大值，O(nW)",
+                        "rationale": "在“按体积余数分组，将件数约束转为滑动窗口最大值，O(nW)”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "单调队列优化（多重背包）"
+                    },
+                    {
+                      "id": "algorithm-content-xcpc-多重背包-1",
+                      "label": "多重背包",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "绿色：背包（01 / 完全 / 多重 / 分组）"
+                      },
+                      "rationale": "沿用用户明确D2标尺；本条范围为多重背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "多重背包",
+                        "绿色：背包（01 / 完全 / 多重 / 分组）"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "多重背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "多重背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D2标尺；本条范围为多重背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "多重背包",
+                      "contentOf": "xcpc-多重背包-1"
+                    }
+                  ],
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "多重背包",
+                    "绿色：背包（01 / 完全 / 多重 / 分组）"
+                  ],
+                  "scope": "目录导航：多重背包。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：多重背包。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：多重背包。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "多重背包"
+                },
+                {
+                  "id": "xcpc-树形背包-1",
+                  "label": "树形背包",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-o-n-3-1",
+                      "label": "朴素树形背包",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "rationale": "需要后序遍历、连通状态定义和逐子树容量合并；按基础树形背包的完整建模与实现定为 D3。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/dp/tree/",
+                        "https://cp-algorithms.com/dynamic_programming/knapsack.html"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "O(n^3)"
+                      ],
+                      "aliases": [
+                        "O(n^3)",
+                        "原图复杂度记录：O(n^3)",
+                        "树形背包：朴素容量枚举"
+                      ],
+                      "scope": "本次明确采用有根树连通选点模型：dp[u][k] 表示 u 子树内包含 u、恰选 k 点的最优值；合并每个子树枚举两侧容量。以 n 个节点、容量 K 计，直接上界 O(n K²)，K=n 时 O(n³)。",
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "本次明确采用的树形背包教学模型；非从原公式反推原作者模型"
+                      },
+                      "difficultyConfidence": "medium",
+                      "evidenceScope": "topic-and-prerequisites",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "model",
+                        "scope": "本次明确采用有根树连通选点模型：dp[u][k] 表示 u 子树内包含 u、恰选 k 点的最优值；合并每个子树枚举两侧容量。以 n 个节点、容量 K 计，直接上界 O(n K²)，K=n 时 O(n³)。",
+                        "rationale": "需要后序遍历、连通状态定义和逐子树容量合并；按基础树形背包的完整建模与实现定为 D3。",
+                        "reviewNote": "为原来仅有公式的历史记录明确教学模型；不是原飞书/旧图模型恢复。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "树形背包：朴素容量枚举"
+                    },
+                    {
+                      "id": "xcpc-o-n-2-1",
+                      "label": "树形背包优化",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "rationale": "需要在 D3 模型上控制可达容量边界，并用每对节点仅在相应 LCA 合并一次等计数证明总复杂度，按优化证明定为 D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/dp/tree/",
+                        "https://cp-algorithms.com/dynamic_programming/knapsack.html"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "O(n^2)"
+                      ],
+                      "aliases": [
+                        "O(n^2)",
+                        "原图复杂度记录：O(n^2)",
+                        "树形背包：按子树规模裁剪合并"
+                      ],
+                      "scope": "使用与朴素节点相同的连通选点模型，容量不超过子树可选节点数，按已合并子树大小限制循环。K=n 时通过节点对计数证明总合并枚举 O(n²)；不承诺所有树形背包都达到此界。",
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "本次明确采用的树形背包教学模型；非从原公式反推原作者模型"
+                      },
+                      "difficultyConfidence": "medium",
+                      "evidenceScope": "topic-and-prerequisites",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "model",
+                        "scope": "使用与朴素节点相同的连通选点模型，容量不超过子树可选节点数，按已合并子树大小限制循环。K=n 时通过节点对计数证明总合并枚举 O(n²)；不承诺所有树形背包都达到此界。",
+                        "rationale": "需要在 D3 模型上控制可达容量边界，并用每对节点仅在相应 LCA 合并一次等计数证明总复杂度，按优化证明定为 D4。",
+                        "reviewNote": "为原来仅有公式的历史记录明确教学模型；不是原飞书/旧图模型恢复。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "树形背包：按子树规模裁剪合并"
+                    }
+                  ],
+                  "sourceRefs": [],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树形背包"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "scope": "目录导航：树形背包。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：树形背包。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：树形背包。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "树形背包"
+                },
+                {
+                  "id": "xcpc-分组背包-1",
+                  "label": "分组背包",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：背包（01 / 完全 / 多重 / 分组）"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为分组背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "分组背包",
+                    "绿色：背包（01 / 完全 / 多重 / 分组）"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "分组背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "分组背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为分组背包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "分组背包"
+                },
+                {
+                  "id": "xcpc-混合背包-1",
+                  "label": "混合背包",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“按01、完全和多重物品类型分别选择合法更新顺序”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "混合背包"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "按01、完全和多重物品类型分别选择合法更新顺序",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "按01、完全和多重物品类型分别选择合法更新顺序",
+                    "rationale": "在“按01、完全和多重物品类型分别选择合法更新顺序”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "混合背包"
+                },
+                {
+                  "id": "xcpc-多维背包-1",
+                  "label": "多维背包",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“增加两到三个小容量维度并计算复杂度；高维压缩另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "多维背包"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "增加两到三个小容量维度并计算复杂度；高维压缩另评",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "增加两到三个小容量维度并计算复杂度；高维压缩另评",
+                    "rationale": "在“增加两到三个小容量维度并计算复杂度；高维压缩另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "多维背包"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-3-2",
+                  "label": "背包 DP",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为背包动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.2 背包动态规划",
+                    "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "背包动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "背包动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为背包动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "背包动态规划"
+                  ],
+                  "fullLabel": "背包动态规划",
+                  "contentOf": "feishu-part-3-2"
+                }
+              ],
+              "sourceHeading": "Part 3.2 背包动态规划",
+              "part": "3.2",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "189",
+              "legacyIds": [
+                "xcpc-背包问题-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.2 背包动态规划",
+                "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+              ],
+              "scope": "目录导航：背包 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：背包 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "背包动态规划"
+              ],
+              "description": "目录导航：背包 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "背包动态规划"
+            },
+            {
+              "id": "feishu-part-3-3",
+              "label": "区间 DP",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "xcpc-基础-2",
+                  "label": "基础区间 DP",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户颜色文档的明确分档"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为区间动态规划（基础）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceEvidence": [
+                    "基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "区间动态规划（基础）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "区间动态规划（基础）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为区间动态规划（基础）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "区间动态规划（基础）"
+                  ],
+                  "fullLabel": "区间动态规划（基础）"
+                },
+                {
+                  "id": "xcpc-进阶-1",
+                  "label": "进阶区间 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“在基础区间分割DP上增加边界状态、合并约束或辅助维度”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "进阶"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "在基础区间分割DP上增加边界状态、合并约束或辅助维度",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "在基础区间分割DP上增加边界状态、合并约束或辅助维度",
+                    "rationale": "在“在基础区间分割DP上增加边界状态、合并约束或辅助维度”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "区间动态规划（进阶）"
+                  ],
+                  "fullLabel": "区间动态规划（进阶）"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-3-3",
+                  "label": "区间 DP",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为区间动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.3 区间动态规划",
+                    "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "区间动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "区间动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为区间动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "区间动态规划"
+                  ],
+                  "fullLabel": "区间动态规划",
+                  "contentOf": "feishu-part-3-3"
+                }
+              ],
+              "sourceHeading": "Part 3.3 区间动态规划",
+              "part": "3.3",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "190",
+              "legacyIds": [
+                "xcpc-区间dp-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.3 区间动态规划",
+                "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+              ],
+              "scope": "目录导航：区间 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：区间 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "区间动态规划"
+              ],
+              "description": "目录导航：区间 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "区间动态规划"
+            },
+            {
+              "id": "feishu-part-3-4",
+              "label": "树形 DP",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-基础-3",
+                  "label": "基础树形 DP",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户颜色文档的明确分档"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为树形动态规划（基础）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceEvidence": [
+                    "基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "树形动态规划（基础）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "树形动态规划（基础）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为树形动态规划（基础）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "树形动态规划（基础）"
+                  ],
+                  "fullLabel": "树形动态规划（基础）"
+                },
+                {
+                  "id": "xcpc-进阶-2",
+                  "label": "进阶树形 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“子树状态合并与多状态约束；换根由独立节点介绍”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "进阶"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "子树状态合并与多状态约束；换根由独立节点介绍",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "子树状态合并与多状态约束；换根由独立节点介绍",
+                    "rationale": "在“子树状态合并与多状态约束；换根由独立节点介绍”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "树形动态规划（进阶）"
+                  ],
+                  "fullLabel": "树形动态规划（进阶）"
+                },
+                {
+                  "id": "xcpc-高级-1",
+                  "label": "高级树形 DP",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“树上DP结合路径信息、数据结构或复杂合并优化”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "高级"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "树上DP结合路径信息、数据结构或复杂合并优化",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "树上DP结合路径信息、数据结构或复杂合并优化",
+                    "rationale": "在“树上DP结合路径信息、数据结构或复杂合并优化”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "aliases": [
+                    "树形动态规划（高级）"
+                  ],
+                  "fullLabel": "树形动态规划（高级）"
+                },
+                {
+                  "id": "algorithm-树形-dp-换根",
+                  "label": "换根 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为树形 DP（换根）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树形 DP（换根）"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "树形 DP（换根）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "树形 DP（换根）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为树形 DP（换根）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "树形 DP（换根）"
+                  ],
+                  "fullLabel": "树形 DP（换根）"
+                },
+                {
+                  "id": "xcpc-基环树上dp-1",
+                  "label": "基环树 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“找环、处理挂树后在环上进行分类和状态转移”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "基环树上dp"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "aliases": [
+                    "基环树上dp",
+                    "基环树上 DP"
+                  ],
+                  "scope": "找环、处理挂树后在环上进行分类和状态转移",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "找环、处理挂树后在环上进行分类和状态转移",
+                    "rationale": "在“找环、处理挂树后在环上进行分类和状态转移”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "基环树上 DP"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-3-4",
+                  "label": "树形 DP",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为树形动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.4 树形动态规划",
+                    "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "树形动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "树形动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为树形动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "树形动态规划"
+                  ],
+                  "fullLabel": "树形动态规划",
+                  "contentOf": "feishu-part-3-4"
+                }
+              ],
+              "sourceHeading": "Part 3.4 树形动态规划",
+              "part": "3.4",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "191",
+              "legacyIds": [
+                "xcpc-树形dp-普通形-换根型-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.4 树形动态规划",
+                "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+              ],
+              "scope": "目录导航：树形 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：树形 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "树形动态规划"
+              ],
+              "description": "目录导航：树形 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "树形动态规划"
+            },
+            {
+              "id": "feishu-part-3-5",
+              "label": "状压 DP",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-普通型-1",
+                  "label": "基础状压 DP",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户颜色文档的明确分档"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为状态压缩动态规划（普通型）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceEvidence": [
+                    "普通型"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "状态压缩动态规划（普通型）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "状态压缩动态规划（普通型）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为状态压缩动态规划（普通型）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "状态压缩动态规划（普通型）"
+                  ],
+                  "fullLabel": "状态压缩动态规划（普通型）"
+                },
+                {
+                  "id": "xcpc-高维前缀和-1",
+                  "label": "高维前缀和",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“在位掩码或少数离散坐标维上逐维累积”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "高维前缀和"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "在位掩码或少数离散坐标维上逐维累积",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "在位掩码或少数离散坐标维上逐维累积",
+                    "rationale": "在“在位掩码或少数离散坐标维上逐维累积”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "高维前缀和"
+                },
+                {
+                  "id": "xcpc-动态高维前缀和-1",
+                  "label": "动态高维前缀和",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“多维状态更新与查询的分解、离线或数据结构维护”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "动态高维前缀和"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "多维状态更新与查询的分解、离线或数据结构维护",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "多维状态更新与查询的分解、离线或数据结构维护",
+                    "rationale": "在“多维状态更新与查询的分解、离线或数据结构维护”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "动态高维前缀和"
+                },
+                {
+                  "id": "algorithm-fmt-sos",
+                  "label": "子集变换",
+                  "children": [],
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "color": "intermediate",
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "本次审校的学习范围与前置知识评估"
+                  },
+                  "rationale": "在“子集zeta变换及其逆，O(k 2^k)；快速子集卷积另评”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "difficultyConfidence": "medium",
+                  "evidenceScope": "topic-and-prerequisites",
+                  "sourceRefs": [
+                    "https://usaco.guide/plat/dp-sos",
+                    "https://cp-algorithms.com/algebra/all-submasks.html"
+                  ],
+                  "level": 4,
+                  "scope": "子集zeta变换及其逆，O(k 2^k)；快速子集卷积另评",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "子集zeta变换及其逆，O(k 2^k)；快速子集卷积另评",
+                    "rationale": "在“子集zeta变换及其逆，O(k 2^k)；快速子集卷积另评”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "子集变换（FMT / SOS DP）"
+                  ],
+                  "fullLabel": "子集变换（FMT / SOS DP）"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-3-5",
+                  "label": "状压 DP",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为状态压缩动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.5 状态压缩动态规划",
+                    "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "状态压缩动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "状态压缩动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为状态压缩动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "状态压缩动态规划"
+                  ],
+                  "fullLabel": "状态压缩动态规划",
+                  "contentOf": "feishu-part-3-5"
+                }
+              ],
+              "sourceHeading": "Part 3.5 状态压缩动态规划",
+              "part": "3.5",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "192",
+              "legacyIds": [
+                "xcpc-状压dp-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.5 状态压缩动态规划",
+                "绿色：线性/背包/区间/树形基础/状态压缩 DP"
+              ],
+              "scope": "目录导航：状压 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：状压 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "状态压缩动态规划"
+              ],
+              "description": "目录导航：状压 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "状态压缩动态规划"
+            },
+            {
+              "id": "feishu-part-3-11",
+              "label": "数位 DP",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-基础-4",
+                  "label": "基础数位 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“按位构建、前导零、上界约束和记忆状态”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceEvidence": [
+                    "基础"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "按位构建、前导零、上界约束和记忆状态",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "按位构建、前导零、上界约束和记忆状态",
+                    "rationale": "在“按位构建、前导零、上界约束和记忆状态”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "数位统计类动态规划（基础）"
+                  ],
+                  "fullLabel": "数位统计类动态规划（基础）"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-3-11",
+                  "label": "数位 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "动态规划优化或数位专题"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为数位 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.11 数位统计类动态规划"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "数位统计类动态规划"
+                  ],
+                  "scope": "数位 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "数位 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为数位 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "数位 DP",
+                  "contentOf": "feishu-part-3-11"
+                }
+              ],
+              "sourceHeading": "Part 3.11 数位统计类动态规划",
+              "part": "3.11",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "198",
+              "legacyIds": [
+                "xcpc-数位dp-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.11 数位统计类动态规划"
+              ],
+              "aliases": [
+                "数位统计类动态规划"
+              ],
+              "scope": "目录导航：数位 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：数位 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：数位 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "数位 DP"
+            },
+            {
+              "id": "feishu-part-3-12",
+              "label": "轮廓线 DP",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-插头dp-1",
+                  "label": "插头 DP",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "橙色：插头 DP、动态 DP"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为插头 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "插头dp",
+                    "橙色：插头 DP、动态 DP"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "插头dp"
+                  ],
+                  "scope": "插头 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "插头 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为插头 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "插头 DP"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-3-12",
+                  "label": "轮廓线 DP",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.12 轮廓线动态规划"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "rationale": "在“按格点扫描，仅保留分界线状态与合法转移”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "scope": "按格点扫描，仅保留分界线状态与合法转移",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "按格点扫描，仅保留分界线状态与合法转移",
+                    "rationale": "在“按格点扫描，仅保留分界线状态与合法转移”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "aliases": [
+                    "轮廓线动态规划"
+                  ],
+                  "fullLabel": "轮廓线动态规划",
+                  "contentOf": "feishu-part-3-12"
+                }
+              ],
+              "sourceHeading": "Part 3.12 轮廓线动态规划",
+              "part": "3.12",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "sourceBlockId": "199",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.12 轮廓线动态规划"
+              ],
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "legacyIds": [
+                "xcpc-轮廓线型-1"
+              ],
+              "scope": "目录导航：轮廓线 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：轮廓线 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "轮廓线动态规划"
+              ],
+              "description": "目录导航：轮廓线 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "轮廓线动态规划"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：DP 模型。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：DP 模型。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "按状态结构组织的 DP"
+          ],
+          "description": "目录导航：DP 模型。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "按状态结构组织的 DP"
+        },
+        {
+          "id": "group-dp-count-probability",
+          "label": "计数与随机 DP",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-计数dp-1",
+              "label": "计数 DP",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-基础-7",
+                  "label": "基础计数 DP",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "本次审校的学习范围与前置知识评估"
+                  },
+                  "rationale": "在“简单序列或路径计数，直接递推及重复计数检查”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://oi-wiki.org/dp/basic/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "计数dp（基础）"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "legacyIds": [
+                    "xcpc-基础-6"
+                  ],
+                  "aliases": [
+                    "计数dp（基础）",
+                    "简单计数 DP"
+                  ],
+                  "scope": "简单序列或路径计数，直接递推及重复计数检查",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "简单序列或路径计数，直接递推及重复计数检查",
+                    "rationale": "在“简单序列或路径计数，直接递推及重复计数检查”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "简单计数 DP"
+                },
+                {
+                  "id": "xcpc-进阶-4",
+                  "label": "进阶计数 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“额外条件状态、去重、容斥或自动机中的一种组合”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "进阶"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "legacyIds": [
+                    "xcpc-进阶-5"
+                  ],
+                  "scope": "额外条件状态、去重、容斥或自动机中的一种组合",
+                  "aliases": [
+                    "计数dp（进阶）",
+                    "计数 DP（进阶）"
+                  ],
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "额外条件状态、去重、容斥或自动机中的一种组合",
+                    "rationale": "在“额外条件状态、去重、容斥或自动机中的一种组合”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "计数 DP（进阶）"
+                },
+                {
+                  "id": "xcpc-高级-2",
+                  "label": "高级计数 DP",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“计数模型与多项式、复杂状态或转移优化组合”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "高级"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "计数模型与多项式、复杂状态或转移优化组合",
+                  "aliases": [
+                    "计数dp（高级）",
+                    "计数 DP（高级）"
+                  ],
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "计数模型与多项式、复杂状态或转移优化组合",
+                    "rationale": "在“计数模型与多项式、复杂状态或转移优化组合”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "计数 DP（高级）"
+                },
+                {
+                  "id": "algorithm-content-xcpc-计数dp-1",
+                  "label": "计数 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：概率 / 期望 DP、计数 DP"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为计数 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "计数dp",
+                    "蓝色：概率 / 期望 DP、计数 DP"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "计数dp"
+                  ],
+                  "scope": "计数 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "计数 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为计数 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "计数 DP",
+                  "contentOf": "xcpc-计数dp-1"
+                }
+              ],
+              "sourceRefs": [
+                "color-md"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "计数dp",
+                "蓝色：概率 / 期望 DP、计数 DP"
+              ],
+              "aliases": [
+                "计数dp"
+              ],
+              "scope": "目录导航：计数 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：计数 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：计数 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "计数 DP"
+            },
+            {
+              "id": "xcpc-概率dp-1",
+              "label": "概率 DP",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-基础-5",
+                  "label": "基础概率 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“有限离散状态的概率转移、互斥事件求和”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceEvidence": [
+                    "基础"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "有限离散状态的概率转移、互斥事件求和",
+                  "aliases": [
+                    "概率dp（基础）",
+                    "概率 DP（基础）"
+                  ],
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "有限离散状态的概率转移、互斥事件求和",
+                    "rationale": "在“有限离散状态的概率转移、互斥事件求和”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "概率 DP（基础）"
+                },
+                {
+                  "id": "xcpc-进阶-3",
+                  "label": "进阶概率 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“条件转移、重复到达或简单自环方程；大型随机过程另评”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "进阶"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "条件转移、重复到达或简单自环方程；大型随机过程另评",
+                  "aliases": [
+                    "概率dp（进阶）",
+                    "概率 DP（进阶）"
+                  ],
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "条件转移、重复到达或简单自环方程；大型随机过程另评",
+                    "rationale": "在“条件转移、重复到达或简单自环方程；大型随机过程另评”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "概率 DP（进阶）"
+                },
+                {
+                  "id": "algorithm-content-xcpc-概率dp-1",
+                  "label": "概率 DP",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：概率 / 期望 DP、计数 DP"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为概率 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "概率dp",
+                    "蓝色：概率 / 期望 DP、计数 DP"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "概率dp"
+                  ],
+                  "scope": "概率 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "概率 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为概率 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "概率 DP",
+                  "contentOf": "xcpc-概率dp-1"
+                }
+              ],
+              "sourceRefs": [
+                "color-md"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "概率dp",
+                "蓝色：概率 / 期望 DP、计数 DP"
+              ],
+              "aliases": [
+                "概率dp"
+              ],
+              "scope": "目录导航：概率 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：概率 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：概率 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "概率 DP"
+            },
+            {
+              "id": "algorithm-期望dp",
+              "label": "期望 DP",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "蓝色：概率 / 期望 DP"
+              },
+              "rationale": "沿用用户明确D3标尺；本条范围为期望 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "difficultyConfidence": "source",
+              "level": 3,
+              "scope": "期望 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "期望 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D3标尺；本条范围为期望 DP的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "期望 DP"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：计数与随机 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：计数与随机 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "计数、概率与期望 DP"
+          ],
+          "description": "目录导航：计数与随机 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "计数、概率与期望 DP"
+        },
+        {
+          "id": "group-dp-optimizations",
+          "label": "DP 优化",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-3-6",
+              "label": "倍增优化",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-3-6",
+                  "label": "倍增优化",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“将重复转移合成为2的幂次块并组合”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.6 倍增优化动态规划"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "将重复转移合成为2的幂次块并组合",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "将重复转移合成为2的幂次块并组合",
+                    "rationale": "在“将重复转移合成为2的幂次块并组合”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "倍增优化动态规划"
+                  ],
+                  "fullLabel": "倍增优化动态规划",
+                  "contentOf": "feishu-part-3-6"
+                }
+              ],
+              "sourceHeading": "Part 3.6 倍增优化动态规划",
+              "part": "3.6",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "sourceBlockId": "193",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.6 倍增优化动态规划"
+              ],
+              "scope": "目录导航：倍增优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：倍增优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "倍增优化动态规划"
+              ],
+              "description": "目录导航：倍增优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "倍增优化动态规划"
+            },
+            {
+              "id": "feishu-part-3-7",
+              "label": "数据结构优化",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-动态dp-1",
+                  "label": "动态 DP",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "橙色：插头 DP、动态 DP"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为动态 DP（DDP）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "动态dp",
+                    "橙色：插头 DP、动态 DP"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "动态dp",
+                    "动态 DP（DDP）"
+                  ],
+                  "scope": "动态 DP（DDP）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "动态 DP（DDP）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为动态 DP（DDP）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "动态 DP（DDP）"
+                },
+                {
+                  "id": "xcpc-单调栈优化-1",
+                  "label": "单调栈优化",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“利用单调边界、支配关系和弹栈维护DP候选”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "单调栈优化"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "利用单调边界、支配关系和弹栈维护DP候选",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "利用单调边界、支配关系和弹栈维护DP候选",
+                    "rationale": "在“利用单调边界、支配关系和弹栈维护DP候选”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "单调栈优化"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-3-7",
+                  "label": "数据结构优化",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“把可维护的转移最值或和交给树状数组、线段树等”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.7 数据结构优化动态规划"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "把可维护的转移最值或和交给树状数组、线段树等",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "把可维护的转移最值或和交给树状数组、线段树等",
+                    "rationale": "在“把可维护的转移最值或和交给树状数组、线段树等”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "数据结构优化动态规划"
+                  ],
+                  "fullLabel": "数据结构优化动态规划",
+                  "contentOf": "feishu-part-3-7"
+                }
+              ],
+              "sourceHeading": "Part 3.7 数据结构优化动态规划",
+              "part": "3.7",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "sourceBlockId": "194",
+              "legacyIds": [
+                "xcpc-数据结构优化-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.7 数据结构优化动态规划"
+              ],
+              "scope": "目录导航：数据结构优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：数据结构优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "数据结构优化动态规划"
+              ],
+              "description": "目录导航：数据结构优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "数据结构优化动态规划"
+            },
+            {
+              "id": "feishu-part-3-8",
+              "label": "单调队列优化",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-3-8",
+                  "label": "单调队列优化",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“证明候选优先级与过期次序后维护滑动最优转移”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.8 单调队列优化动态规划"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "证明候选优先级与过期次序后维护滑动最优转移",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "证明候选优先级与过期次序后维护滑动最优转移",
+                    "rationale": "在“证明候选优先级与过期次序后维护滑动最优转移”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "单调队列优化动态规划"
+                  ],
+                  "fullLabel": "单调队列优化动态规划",
+                  "contentOf": "feishu-part-3-8"
+                }
+              ],
+              "sourceHeading": "Part 3.8 单调队列优化动态规划",
+              "part": "3.8",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "sourceBlockId": "195",
+              "legacyIds": [
+                "xcpc-单调队列优化-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.8 单调队列优化动态规划"
+              ],
+              "scope": "目录导航：单调队列优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：单调队列优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "单调队列优化动态规划"
+              ],
+              "description": "目录导航：单调队列优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "单调队列优化动态规划"
+            },
+            {
+              "id": "feishu-part-3-9",
+              "label": "斜率优化",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-3-9",
+                  "label": "斜率优化",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "动态规划优化或数位专题"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为斜率优化动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.9 斜率优化动态规划"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "斜率优化动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "斜率优化动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为斜率优化动态规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "斜率优化动态规划"
+                  ],
+                  "fullLabel": "斜率优化动态规划",
+                  "contentOf": "feishu-part-3-9"
+                }
+              ],
+              "sourceHeading": "Part 3.9 斜率优化动态规划",
+              "part": "3.9",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "196",
+              "legacyIds": [
+                "xcpc-斜率优化-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.9 斜率优化动态规划"
+              ],
+              "scope": "目录导航：斜率优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：斜率优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "斜率优化动态规划"
+              ],
+              "description": "目录导航：斜率优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "斜率优化动态规划"
+            },
+            {
+              "id": "feishu-part-3-10",
+              "label": "决策单调性",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-四边形不等式优化-1",
+                  "label": "四边形不等式",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：四边形不等式优化"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为四边形不等式优化的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "四边形不等式优化",
+                    "蓝色：四边形不等式优化"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "四边形不等式优化的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "四边形不等式优化的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为四边形不等式优化的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "四边形不等式优化"
+                  ],
+                  "fullLabel": "四边形不等式优化"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-3-10",
+                  "label": "决策单调性",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/dp/basic/",
+                    "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                    "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“证明最优决策单调后缩小决策搜索范围”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 3.10 决策单调性优化动态规划"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "证明最优决策单调后缩小决策搜索范围",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "证明最优决策单调后缩小决策搜索范围",
+                    "rationale": "在“证明最优决策单调后缩小决策搜索范围”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "决策单调性优化动态规划"
+                  ],
+                  "fullLabel": "决策单调性优化动态规划",
+                  "contentOf": "feishu-part-3-10"
+                }
+              ],
+              "sourceHeading": "Part 3.10 决策单调性优化动态规划",
+              "part": "3.10",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "sourceBlockId": "197",
+              "legacyIds": [
+                "xcpc-决策单调性-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 3.10 决策单调性优化动态规划"
+              ],
+              "scope": "目录导航：决策单调性。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：决策单调性。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "决策单调性优化动态规划"
+              ],
+              "description": "目录导航：决策单调性。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "决策单调性优化动态规划"
+            },
+            {
+              "id": "xcpc-分治dp-1",
+              "label": "分治 DP",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“按最优决策单调性递归求一层DP；任意递推不保证可用”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "分治dp"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "aliases": [
+                "分治dp"
+              ],
+              "scope": "按最优决策单调性递归求一层DP；任意递推不保证可用",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "按最优决策单调性递归求一层DP；任意递推不保证可用",
+                "rationale": "在“按最优决策单调性递归求一层DP；任意递推不保证可用”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "分治 DP"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：DP 优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：DP 优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "DP 转移优化"
+          ],
+          "description": "目录导航：DP 优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "DP 转移优化"
+        },
+        {
+          "id": "group-dp-composite-models",
+          "label": "复合 DP",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-图上dp-1",
+              "label": "图上 DP",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“DAG拓扑序上的状态转移，环图需另作分解或方程求解”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "图上dp"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "aliases": [
+                "图上dp"
+              ],
+              "scope": "DAG拓扑序上的状态转移，环图需另作分解或方程求解",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "DAG拓扑序上的状态转移，环图需另作分解或方程求解",
+                "rationale": "在“DAG拓扑序上的状态转移，环图需另作分解或方程求解”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "图上 DP"
+            },
+            {
+              "id": "xcpc-自动机上dp-1",
+              "label": "自动机 DP",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“在已构建的AC等有限自动机上统计长度和状态；自动机构建另评”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "自动机上dp"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "aliases": [
+                "自动机上dp",
+                "自动机上 DP"
+              ],
+              "scope": "在已构建的AC等有限自动机上统计长度和状态；自动机构建另评",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "在已构建的AC等有限自动机上统计长度和状态；自动机构建另评",
+                "rationale": "在“在已构建的AC等有限自动机上统计长度和状态；自动机构建另评”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "自动机上 DP"
+            },
+            {
+              "id": "xcpc-dp套dp-1",
+              "label": "DP 套 DP",
+              "color": "expert",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“把内层DP的状态集合或转移形态作为外层状态”的范围内，涉及高抽象状态或深层代数关系，综合证明与实现负担较高，定为D5。",
+              "sourceRefs": [
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "dp套dp"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "aliases": [
+                "dp套dp"
+              ],
+              "scope": "把内层DP的状态集合或转移形态作为外层状态",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "把内层DP的状态集合或转移形态作为外层状态",
+                "rationale": "在“把内层DP的状态集合或转移形态作为外层状态”的范围内，涉及高抽象状态或深层代数关系，综合证明与实现负担较高，定为D5。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 5,
+                  "max": 5
+                }
+              },
+              "fullLabel": "DP 套 DP"
+            },
+            {
+              "id": "xcpc-填坑dp-1",
+              "label": "填坑 DP",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“按构造顺序跟踪未完成结构和待填位置，证明不重不漏”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceRefs": [
+                "https://oi-wiki.org/dp/basic/",
+                "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+                "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "填坑dp"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "aliases": [
+                "填坑dp"
+              ],
+              "scope": "按构造顺序跟踪未完成结构和待填位置，证明不重不漏",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "按构造顺序跟踪未完成结构和待填位置，证明不重不漏",
+                "rationale": "在“按构造顺序跟踪未完成结构和待填位置，证明不重不漏”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "填坑 DP"
+            }
+          ],
+          "level": 2,
+          "legacyIds": [
+            "algorithm-dp-models"
+          ],
+          "aliases": [
+            "其他 DP 模型与综合应用",
+            "补充：DP 模型与综合应用",
+            "图、自动机与复合状态"
+          ],
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：复合 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：复合 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：复合 DP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "图、自动机与复合状态"
+        }
+      ],
+      "legacyIds": [
+        "xcpc-动态规划-1",
+        "xcpc-dp优化-1"
+      ],
+      "sourceHeading": "Part 3 动态规划dp",
+      "part": "3",
+      "sourceRefs": [],
+      "sourceBlockId": "187",
+      "level": 1,
+      "sourceEvidence": [
+        "Part 3 动态规划dp"
+      ],
+      "aliases": [
+        "动态规划dp"
+      ],
+      "difficultySource": {
+        "kind": "directory",
+        "detail": "目录不参与难度评级"
+      },
+      "scope": "目录导航：动态规划。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-11",
+        "type": "directory",
+        "scope": "目录导航：动态规划。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+      },
+      "description": "目录导航：动态规划。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "fullLabel": "动态规划"
+    },
+    {
+      "id": "feishu-part-4",
+      "label": "字符串",
+      "color": "parent",
+      "kind": "directory",
+      "origin": "feishu",
+      "attributes": [],
+      "children": [
+        {
+          "id": "group-string-matching",
+          "label": "匹配与字典树",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-4-1",
+              "label": "字符串哈希",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "useful"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-4-1",
+                  "label": "字符串哈希",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：KMP / 字符串哈希 / Trie"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为字符串哈希的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 4.1 字符串哈希",
+                    "绿色：KMP / 字符串哈希 / Trie"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "字符串哈希的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "字符串哈希的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为字符串哈希的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "字符串哈希",
+                  "contentOf": "feishu-part-4-1"
+                }
+              ],
+              "sourceHeading": "Part 4.1 字符串哈希",
+              "part": "4.1",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "202",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "legacyIds": [
+                "xcpc-字符串的哈希-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 4.1 字符串哈希",
+                "绿色：KMP / 字符串哈希 / Trie"
+              ],
+              "scope": "目录导航：字符串哈希。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：字符串哈希。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：字符串哈希。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "字符串哈希"
+            },
+            {
+              "id": "feishu-part-4-2",
+              "label": "KMP",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board",
+                "useful"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-4-2",
+                  "label": "KMP",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board",
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：KMP / 字符串哈希 / Trie"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为字符串匹配（KMP）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 4.2 KMP",
+                    "绿色：KMP / 字符串哈希 / Trie"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "字符串匹配（KMP）"
+                  ],
+                  "scope": "字符串匹配（KMP）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "字符串匹配（KMP）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为字符串匹配（KMP）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "字符串匹配（KMP）",
+                  "contentOf": "feishu-part-4-2"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-kmp-1"
+              ],
+              "sourceHeading": "Part 4.2 KMP",
+              "part": "4.2",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "203",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 4.2 KMP",
+                "绿色：KMP / 字符串哈希 / Trie"
+              ],
+              "aliases": [
+                "字符串匹配（KMP）"
+              ],
+              "scope": "目录导航：KMP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：KMP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：KMP。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "字符串匹配（KMP）"
+            },
+            {
+              "id": "xcpc-扩展kmp-1",
+              "label": "Z 函数",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "board"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“线性Z数组、匹配区间复用和跨串匹配”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/string/z-func/",
+                "https://cp-algorithms.com/string/z-function.html",
+                "https://cp-algorithms.com/string/suffix-tree-ukkonen.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "扩展kmp"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "aliases": [
+                "扩展kmp",
+                "Z 函数（扩展 KMP）"
+              ],
+              "scope": "线性Z数组、匹配区间复用和跨串匹配",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "线性Z数组、匹配区间复用和跨串匹配",
+                "rationale": "在“线性Z数组、匹配区间复用和跨串匹配”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "Z 函数（扩展 KMP）"
+            },
+            {
+              "id": "feishu-part-4-4",
+              "label": "Trie",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-4-4",
+                  "label": "Trie",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：KMP / 字符串哈希 / Trie"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为字典树（Trie）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 4.4 Trie树（字典树）",
+                    "绿色：KMP / 字符串哈希 / Trie"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "Trie树（字典树）",
+                    "字典树（Trie）"
+                  ],
+                  "scope": "字典树（Trie）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "字典树（Trie）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为字典树（Trie）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "字典树（Trie）",
+                  "contentOf": "feishu-part-4-4"
+                }
+              ],
+              "sourceHeading": "Part 4.4 Trie树（字典树）",
+              "part": "4.4",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "205",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "legacyIds": [
+                "xcpc-字典树-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 4.4 Trie树（字典树）",
+                "绿色：KMP / 字符串哈希 / Trie"
+              ],
+              "aliases": [
+                "Trie树（字典树）",
+                "字典树（Trie）"
+              ],
+              "scope": "目录导航：Trie。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：Trie。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：Trie。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "字典树（Trie）"
+            },
+            {
+              "id": "feishu-part-4-5",
+              "label": "AC 自动机",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-4-5",
+                  "label": "AC 自动机",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：AC 自动机 / 后缀数组 / Manacher"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为多模式匹配（AC 自动机）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 4.5 AC自动机",
+                    "蓝色：AC 自动机 / 后缀数组 / Manacher"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "AC自动机",
+                    "多模式匹配（AC 自动机）"
+                  ],
+                  "scope": "多模式匹配（AC 自动机）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "多模式匹配（AC 自动机）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为多模式匹配（AC 自动机）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "多模式匹配（AC 自动机）",
+                  "contentOf": "feishu-part-4-5"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-ac自动机-1"
+              ],
+              "sourceHeading": "Part 4.5 AC自动机",
+              "part": "4.5",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "212",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 4.5 AC自动机",
+                "蓝色：AC 自动机 / 后缀数组 / Manacher"
+              ],
+              "aliases": [
+                "AC自动机",
+                "多模式匹配（AC 自动机）"
+              ],
+              "scope": "目录导航：AC 自动机。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：AC 自动机。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：AC 自动机。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "多模式匹配（AC 自动机）"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：匹配与字典树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：匹配与字典树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "字符串匹配与字典结构"
+          ],
+          "description": "目录导航：匹配与字典树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "字符串匹配与字典结构"
+        },
+        {
+          "id": "group-string-palindromes",
+          "label": "回文结构",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-4-3",
+              "label": "Manacher",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-4-3",
+                  "label": "Manacher",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：AC 自动机 / 后缀数组 / Manacher"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为回文半径（Manacher）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 4.3 Manacher",
+                    "蓝色：AC 自动机 / 后缀数组 / Manacher"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "回文半径（Manacher）"
+                  ],
+                  "scope": "回文半径（Manacher）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "回文半径（Manacher）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为回文半径（Manacher）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "回文半径（Manacher）",
+                  "contentOf": "feishu-part-4-3"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-manacher-1"
+              ],
+              "sourceHeading": "Part 4.3 Manacher",
+              "part": "4.3",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "204",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 4.3 Manacher",
+                "蓝色：AC 自动机 / 后缀数组 / Manacher"
+              ],
+              "aliases": [
+                "回文半径（Manacher）"
+              ],
+              "scope": "目录导航：Manacher。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：Manacher。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：Manacher。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "回文半径（Manacher）"
+            },
+            {
+              "id": "feishu-part-4-6",
+              "label": "回文自动机",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-4-6",
+                  "label": "回文自动机",
+                  "color": "expert",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "红色：挑战"
+                  },
+                  "rationale": "沿用用户明确D5标尺；本条范围为回文自动机（PAM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 4.6 回文自动机",
+                    "红色：后缀自动机 / 回文自动机",
+                    "红色：挑战"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "PAM",
+                    "Eertree",
+                    "回文自动机（PAM）"
+                  ],
+                  "scope": "回文自动机（PAM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "回文自动机（PAM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D5标尺；本条范围为回文自动机（PAM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 5,
+                      "max": 5
+                    }
+                  },
+                  "fullLabel": "回文自动机（PAM）",
+                  "contentOf": "feishu-part-4-6"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-回文自动机-1"
+              ],
+              "sourceHeading": "Part 4.6 回文自动机",
+              "part": "4.6",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "213",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 4.6 回文自动机",
+                "红色：后缀自动机 / 回文自动机",
+                "红色：挑战"
+              ],
+              "aliases": [
+                "PAM",
+                "Eertree",
+                "回文自动机（PAM）"
+              ],
+              "scope": "目录导航：回文自动机。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：回文自动机。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：回文自动机。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "回文自动机（PAM）"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：回文结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：回文结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：回文结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "回文结构"
+        },
+        {
+          "id": "group-string-suffixes",
+          "label": "后缀结构",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-4-7",
+              "label": "后缀数组",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-4-7",
+                  "label": "后缀数组",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：AC 自动机 / 后缀数组 / Manacher"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为后缀数组（SA）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 4.7 后缀数组",
+                    "蓝色：AC 自动机 / 后缀数组 / Manacher"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "后缀数组（SA）"
+                  ],
+                  "scope": "后缀数组（SA）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "后缀数组（SA）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为后缀数组（SA）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "后缀数组（SA）",
+                  "contentOf": "feishu-part-4-7"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-后缀数组-1"
+              ],
+              "sourceHeading": "Part 4.7 后缀数组",
+              "part": "4.7",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "214",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 4.7 后缀数组",
+                "蓝色：AC 自动机 / 后缀数组 / Manacher"
+              ],
+              "aliases": [
+                "后缀数组（SA）"
+              ],
+              "scope": "目录导航：后缀数组。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：后缀数组。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：后缀数组。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "后缀数组（SA）"
+            },
+            {
+              "id": "feishu-part-4-8",
+              "label": "后缀自动机",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-4-8",
+                  "label": "后缀自动机",
+                  "color": "expert",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "红色：挑战"
+                  },
+                  "rationale": "沿用用户明确D5标尺；本条范围为后缀自动机（SAM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 4.8 后缀自动机",
+                    "红色：后缀自动机 / 回文自动机",
+                    "红色：挑战"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "SAM",
+                    "Suffix Automaton",
+                    "后缀自动机（SAM）"
+                  ],
+                  "scope": "后缀自动机（SAM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "后缀自动机（SAM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D5标尺；本条范围为后缀自动机（SAM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 5,
+                      "max": 5
+                    }
+                  },
+                  "fullLabel": "后缀自动机（SAM）",
+                  "contentOf": "feishu-part-4-8"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-后缀自动机-1"
+              ],
+              "sourceHeading": "Part 4.8 后缀自动机",
+              "part": "4.8",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "215",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 4.8 后缀自动机",
+                "红色：后缀自动机 / 回文自动机",
+                "红色：挑战"
+              ],
+              "aliases": [
+                "SAM",
+                "Suffix Automaton",
+                "后缀自动机（SAM）"
+              ],
+              "scope": "目录导航：后缀自动机。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：后缀自动机。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：后缀自动机。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "后缀自动机（SAM）"
+            },
+            {
+              "id": "xcpc-后缀树-1",
+              "label": "后缀树",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useless"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“压缩边后缀树、在线构造不变量与子串查询”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceRefs": [
+                "https://oi-wiki.org/string/z-func/",
+                "https://cp-algorithms.com/string/z-function.html",
+                "https://cp-algorithms.com/string/suffix-tree-ukkonen.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "后缀树"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "压缩边后缀树、在线构造不变量与子串查询",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "压缩边后缀树、在线构造不变量与子串查询",
+                "rationale": "在“压缩边后缀树、在线构造不变量与子串查询”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "后缀树"
+            },
+            {
+              "id": "algorithm-后缀平衡树",
+              "label": "后缀平衡树",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useless"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“用平衡树维护后缀字典序及比较信息”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceRefs": [
+                "https://oi-wiki.org/string/suffix-bst/",
+                "https://oi-wiki.org/ds/sgt/",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "后缀平衡树"
+              ],
+              "evidenceScope": "topic-and-prerequisites",
+              "difficultyConfidence": "medium",
+              "scope": "用平衡树维护后缀字典序及比较信息",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "用平衡树维护后缀字典序及比较信息",
+                "rationale": "在“用平衡树维护后缀字典序及比较信息”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "后缀平衡树"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：后缀结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：后缀结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：后缀结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "后缀结构"
+        },
+        {
+          "id": "group-string-period-order",
+          "label": "循环与 Lyndon",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-最小表示法-1",
+              "label": "最小表示法",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "board",
+                "useless"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“双指针跳过劣候选，求循环同构的最小字典序表示”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/string/minimal-string/",
+                "https://cp-algorithms.com/string/lyndon_factorization.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "最小表示法"
+              ],
+              "evidenceScope": "topic-and-prerequisites",
+              "difficultyConfidence": "medium",
+              "aliases": [
+                "最小循环表示"
+              ],
+              "scope": "双指针跳过劣候选，求循环同构的最小字典序表示",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "双指针跳过劣候选，求循环同构的最小字典序表示",
+                "rationale": "在“双指针跳过劣候选，求循环同构的最小字典序表示”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "最小表示法"
+            },
+            {
+              "id": "xcpc-lyndon-分解-1",
+              "label": "Lyndon 分解",
+              "color": "expert",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "board"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "红色：挑战"
+              },
+              "rationale": "沿用用户明确D5标尺；本条范围为Lyndon 分解 / Duval 算法的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Lyndon 分解",
+                "红色：Lyndon 分解 / Duval 算法",
+                "红色：挑战"
+              ],
+              "difficultyConfidence": "source",
+              "aliases": [
+                "Duval 算法",
+                "Lyndon 分解 / Duval 算法"
+              ],
+              "scope": "Lyndon 分解 / Duval 算法的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "Lyndon 分解 / Duval 算法的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D5标尺；本条范围为Lyndon 分解 / Duval 算法的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 5,
+                  "max": 5
+                }
+              },
+              "fullLabel": "Lyndon 分解 / Duval 算法"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：循环与 Lyndon。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：循环与 Lyndon。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "循环表示与 Lyndon 分解"
+          ],
+          "description": "目录导航：循环与 Lyndon。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "循环表示与 Lyndon 分解"
+        }
+      ],
+      "legacyIds": [
+        "xcpc-字符串-1"
+      ],
+      "sourceHeading": "Part 4 字符串",
+      "part": "4",
+      "sourceRefs": [],
+      "sourceBlockId": "200",
+      "level": 1,
+      "sourceEvidence": [
+        "Part 4 字符串"
+      ],
+      "aliases": [
+        "字符串算法"
+      ],
+      "difficultySource": {
+        "kind": "directory",
+        "detail": "目录不参与难度评级"
+      },
+      "scope": "目录导航：字符串。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-11",
+        "type": "directory",
+        "scope": "目录导航：字符串。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+      },
+      "description": "目录导航：字符串。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "fullLabel": "字符串算法"
+    },
+    {
+      "id": "feishu-part-5",
+      "label": "竞赛数学",
+      "color": "parent",
+      "kind": "directory",
+      "origin": "feishu",
+      "attributes": [],
+      "children": [
+        {
+          "id": "group-math-discrete",
+          "label": "位运算与编码",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-5-1",
+              "label": "位运算",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-枚举子集-超集-1",
+                  "label": "子集与超集枚举",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“位掩码子集枚举及所有掩码总量O(3^k)分析”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "枚举子集、超集"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "位掩码子集枚举及所有掩码总量O(3^k)分析",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "位掩码子集枚举及所有掩码总量O(3^k)分析",
+                    "rationale": "在“位掩码子集枚举及所有掩码总量O(3^k)分析”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "枚举子集、超集"
+                  ],
+                  "fullLabel": "枚举子集、超集"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-5-1",
+                  "label": "位运算",
+                  "color": "basic",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "青色：位运算基础"
+                  },
+                  "rationale": "沿用用户明确D1标尺；本条范围为位运算的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.1 位运算",
+                    "青色：位运算基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "位运算的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "位运算的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D1标尺；本条范围为位运算的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  },
+                  "fullLabel": "位运算",
+                  "contentOf": "feishu-part-5-1"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-位运算-1"
+              ],
+              "sourceHeading": "Part 5.1 位运算",
+              "part": "5.1",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "219",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.1 位运算",
+                "青色：位运算基础"
+              ],
+              "scope": "目录导航：位运算。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：位运算。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：位运算。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "位运算"
+            },
+            {
+              "id": "feishu-part-5-14",
+              "label": "格雷码",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-5-14",
+                  "label": "格雷码",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://cp-algorithms.com/algebra/gray-code.html",
+                    "https://oi-wiki.org/contest/roadmap/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.14 格雷码"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“相邻二进制码仅一位变化的构造和转换”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "相邻二进制码仅一位变化的构造和转换",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "相邻二进制码仅一位变化的构造和转换",
+                    "rationale": "在“相邻二进制码仅一位变化的构造和转换”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "格雷码",
+                  "contentOf": "feishu-part-5-14"
+                }
+              ],
+              "sourceHeading": "Part 5.14 格雷码",
+              "part": "5.14",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://cp-algorithms.com/algebra/gray-code.html",
+                "https://oi-wiki.org/contest/roadmap/"
+              ],
+              "sourceBlockId": "287",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.14 格雷码"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "scope": "目录导航：格雷码。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：格雷码。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：格雷码。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "格雷码"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：位运算与编码。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：位运算与编码。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "位运算与离散编码"
+          ],
+          "description": "目录导航：位运算与编码。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "位运算与离散编码"
+        },
+        {
+          "id": "group-math-number-theory",
+          "label": "数论与模运算",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-5-2",
+              "label": "整除与整数方程",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "feishu-part-5-2-1",
+                  "label": "素性与分解",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-miller-rabin-1",
+                      "label": "Miller–Rabin",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“强伪素数测试、快速模幂与64位范围确定性基选择”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/number-theory/prime/",
+                        "https://cp-algorithms.com/algebra/primality_tests.html"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Miller Rabin"
+                      ],
+                      "evidenceScope": "topic-and-prerequisites",
+                      "difficultyConfidence": "medium",
+                      "aliases": [
+                        "Miller-Rabin",
+                        "Miller Rabin"
+                      ],
+                      "scope": "强伪素数测试、快速模幂与64位范围确定性基选择",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "强伪素数测试、快速模幂与64位范围确定性基选择",
+                        "rationale": "在“强伪素数测试、快速模幂与64位范围确定性基选择”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "Miller–Rabin"
+                    },
+                    {
+                      "id": "xcpc-pollard-rho-1",
+                      "label": "Pollard–Rho",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "橙色：高级"
+                      },
+                      "rationale": "沿用用户明确D4标尺；本条范围为Pollard–Rho的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Pollard Rho",
+                        "橙色：高级"
+                      ],
+                      "difficultyConfidence": "source",
+                      "aliases": [
+                        "Pollard-Rho",
+                        "Pollard Rho"
+                      ],
+                      "scope": "Pollard–Rho的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "Pollard–Rho的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D4标尺；本条范围为Pollard–Rho的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "Pollard–Rho"
+                    }
+                  ],
+                  "sourceHeading": "Part 5.2.1 素数",
+                  "part": "5.2.1",
+                  "sourceRefs": [],
+                  "sourceBlockId": "221",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.2.1 素数"
+                  ],
+                  "aliases": [
+                    "素数",
+                    "素性测试与整数分解"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "scope": "目录导航：素性与分解。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：素性与分解。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：素性与分解。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "素性测试与整数分解"
+                },
+                {
+                  "id": "feishu-part-5-2-2",
+                  "label": "GCD 与 LCM",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-lcm",
+                      "label": "最小公倍数",
+                      "children": [],
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "color": "beginner",
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户文档第73行 GCD / LCM"
+                      },
+                      "difficultyConfidence": "source",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "rationale": "沿用用户明确D2标尺；本条范围为最小公倍数（LCM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "scope": "最小公倍数（LCM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "最小公倍数（LCM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D2标尺；本条范围为最小公倍数（LCM）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "aliases": [
+                        "最小公倍数（LCM）"
+                      ],
+                      "fullLabel": "最小公倍数（LCM）"
+                    },
+                    {
+                      "id": "algorithm-content-feishu-part-5-2-2",
+                      "label": "GCD 与 LCM",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "绿色：GCD / LCM"
+                      },
+                      "rationale": "沿用用户明确D2标尺；本条范围为最大公约数与最小公倍数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 5.2.2 最大公约数",
+                        "绿色：GCD / LCM"
+                      ],
+                      "difficultyConfidence": "source",
+                      "aliases": [
+                        "最大公约数",
+                        "最大公约数与最小公倍数"
+                      ],
+                      "scope": "最大公约数与最小公倍数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "最大公约数与最小公倍数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D2标尺；本条范围为最大公约数与最小公倍数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "最大公约数与最小公倍数",
+                      "contentOf": "feishu-part-5-2-2"
+                    }
+                  ],
+                  "sourceHeading": "Part 5.2.2 最大公约数",
+                  "part": "5.2.2",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "222",
+                  "legacyIds": [
+                    "xcpc-gcd-lcm-1"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.2.2 最大公约数",
+                    "绿色：GCD / LCM"
+                  ],
+                  "aliases": [
+                    "最大公约数",
+                    "最大公约数与最小公倍数"
+                  ],
+                  "scope": "目录导航：GCD 与 LCM。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：GCD 与 LCM。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：GCD 与 LCM。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "最大公约数与最小公倍数"
+                },
+                {
+                  "id": "feishu-part-5-2-3",
+                  "label": "欧拉函数与定理",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-费马定理-欧拉定理-1",
+                      "label": "费马与欧拉定理",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“满足素数或互素条件时化简幂；不省略使用前提”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "费马定理/欧拉定理"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "满足素数或互素条件时化简幂；不省略使用前提",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "满足素数或互素条件时化简幂；不省略使用前提",
+                        "rationale": "在“满足素数或互素条件时化简幂；不省略使用前提”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "aliases": [
+                        "费马定理/欧拉定理"
+                      ],
+                      "fullLabel": "费马定理/欧拉定理"
+                    },
+                    {
+                      "id": "xcpc-扩展欧拉定理-1",
+                      "label": "扩展欧拉定理",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“非互素幂降阶的条件、指数阈值与补周期”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "扩展欧拉定理"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "非互素幂降阶的条件、指数阈值与补周期",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "非互素幂降阶的条件、指数阈值与补周期",
+                        "rationale": "在“非互素幂降阶的条件、指数阈值与补周期”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "扩展欧拉定理"
+                    },
+                    {
+                      "id": "algorithm-content-feishu-part-5-2-3",
+                      "label": "欧拉函数与定理",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "绿色：欧拉函数"
+                      },
+                      "rationale": "沿用用户明确D2标尺；本条范围为欧拉函数与相关定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 5.2.3 欧拉函数",
+                        "绿色：欧拉函数"
+                      ],
+                      "difficultyConfidence": "source",
+                      "aliases": [
+                        "欧拉函数",
+                        "欧拉函数与相关定理"
+                      ],
+                      "scope": "欧拉函数与相关定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "欧拉函数与相关定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D2标尺；本条范围为欧拉函数与相关定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "欧拉函数与相关定理",
+                      "contentOf": "feishu-part-5-2-3"
+                    }
+                  ],
+                  "sourceHeading": "Part 5.2.3 欧拉函数",
+                  "part": "5.2.3",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "223",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.2.3 欧拉函数",
+                    "绿色：欧拉函数"
+                  ],
+                  "legacyIds": [
+                    "algorithm-欧拉函数"
+                  ],
+                  "aliases": [
+                    "欧拉函数",
+                    "欧拉函数与相关定理"
+                  ],
+                  "scope": "目录导航：欧拉函数与定理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：欧拉函数与定理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：欧拉函数与定理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "欧拉函数与相关定理"
+                },
+                {
+                  "id": "xcpc-类欧几里得-1",
+                  "label": "类欧几里得",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“floor-sum整数求和的取整变换和递归化简”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/number-theory/euclidean/",
+                    "https://cp-algorithms.com/algebra/euclid-algorithm.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "类欧几里得"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "floor-sum整数求和的取整变换和递归化简",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "floor-sum整数求和的取整变换和递归化简",
+                    "rationale": "在“floor-sum整数求和的取整变换和递归化简”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "类欧几里得"
+                },
+                {
+                  "id": "xcpc-佩尔方程-1",
+                  "label": "佩尔方程",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“利用连分数求基础整数解并递推解族”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "佩尔方程"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "利用连分数求基础整数解并递推解族",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "利用连分数求基础整数解并递推解族",
+                    "rationale": "在“利用连分数求基础整数解并递推解族”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "佩尔方程"
+                }
+              ],
+              "sourceHeading": "Part 5.2 整除相关",
+              "part": "5.2",
+              "sourceRefs": [],
+              "sourceBlockId": "220",
+              "legacyIds": [
+                "xcpc-数论-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.2 整除相关"
+              ],
+              "aliases": [
+                "整除相关",
+                "整除、素数与整数方程"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：整除与整数方程。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：整除与整数方程。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：整除与整数方程。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "整除、素数与整数方程"
+            },
+            {
+              "id": "feishu-part-5-3",
+              "label": "同余与模运算",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "feishu-part-5-3-1",
+                  "label": "线性同余",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-扩展欧几里得-1",
+                      "label": "扩展欧几里得",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "蓝色：数学"
+                      },
+                      "rationale": "沿用用户明确D3标尺；本条范围为扩展欧几里得的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "扩展欧几里得",
+                        "蓝色：数学"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "扩展欧几里得的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "扩展欧几里得的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D3标尺；本条范围为扩展欧几里得的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "扩展欧几里得"
+                    },
+                    {
+                      "id": "xcpc-逆元-1",
+                      "label": "逆元",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board",
+                        "useful"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "绿色：数学基础"
+                      },
+                      "rationale": "沿用用户明确D2标尺；本条范围为模逆元存在当且仅当与模数互质；费马小定理版本还需素数模等条件。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "逆元",
+                        "绿色：数学基础"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "模逆元存在当且仅当与模数互质；费马小定理版本还需素数模等条件。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "模逆元存在当且仅当与模数互质；费马小定理版本还需素数模等条件。",
+                        "rationale": "沿用用户明确D2标尺；本条范围为模逆元存在当且仅当与模数互质；费马小定理版本还需素数模等条件。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "逆元"
+                    },
+                    {
+                      "id": "xcpc-快速幂-1",
+                      "label": "快速幂",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board",
+                        "useful"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户提供颜色难度文档对应条目"
+                      },
+                      "rationale": "沿用用户明确D2标尺；本条范围为快速幂的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "快速幂"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "快速幂的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "快速幂的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D2标尺；本条范围为快速幂的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "快速幂"
+                    }
+                  ],
+                  "sourceHeading": "Part 5.3.1 线性同余方程&乘法逆元",
+                  "part": "5.3.1",
+                  "sourceRefs": [],
+                  "sourceBlockId": "265",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.3.1 线性同余方程&乘法逆元"
+                  ],
+                  "aliases": [
+                    "线性同余方程&乘法逆元",
+                    "线性同余、模逆元与快速幂"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "scope": "目录导航：线性同余。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：线性同余。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：线性同余。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "线性同余、模逆元与快速幂"
+                },
+                {
+                  "id": "feishu-part-5-3-2",
+                  "label": "CRT 与扩展",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [
+                    {
+                      "id": "xcpc-扩展中国剩余定理-1",
+                      "label": "扩展 CRT",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“非互素模数的相容性检验与两两合并”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "扩展中国剩余定理"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "非互素模数的相容性检验与两两合并",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "非互素模数的相容性检验与两两合并",
+                        "rationale": "在“非互素模数的相容性检验与两两合并”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "aliases": [
+                        "扩展中国剩余定理"
+                      ],
+                      "fullLabel": "扩展中国剩余定理"
+                    },
+                    {
+                      "id": "algorithm-content-feishu-part-5-3-2",
+                      "label": "CRT 与扩展",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [
+                        "useless"
+                      ],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "蓝色：数学"
+                      },
+                      "rationale": "沿用用户明确D3标尺；本条范围为中国剩余定理（CRT）及扩展的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 5.3.2 中国剩余定理",
+                        "蓝色：中国剩余定理",
+                        "蓝色：数学"
+                      ],
+                      "difficultyConfidence": "source",
+                      "aliases": [
+                        "中国剩余定理",
+                        "中国剩余定理（CRT）及扩展"
+                      ],
+                      "scope": "中国剩余定理（CRT）及扩展的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "中国剩余定理（CRT）及扩展的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D3标尺；本条范围为中国剩余定理（CRT）及扩展的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "中国剩余定理（CRT）及扩展",
+                      "contentOf": "feishu-part-5-3-2"
+                    }
+                  ],
+                  "legacyIds": [
+                    "xcpc-中国剩余定理-1"
+                  ],
+                  "sourceHeading": "Part 5.3.2 中国剩余定理",
+                  "part": "5.3.2",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "266",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.3.2 中国剩余定理",
+                    "蓝色：中国剩余定理",
+                    "蓝色：数学"
+                  ],
+                  "aliases": [
+                    "中国剩余定理",
+                    "中国剩余定理（CRT）及扩展"
+                  ],
+                  "scope": "目录导航：CRT 与扩展。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：CRT 与扩展。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：CRT 与扩展。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "中国剩余定理（CRT）及扩展"
+                },
+                {
+                  "id": "feishu-part-5-3-3",
+                  "label": "离散对数与剩余",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-离散对数-1",
+                      "label": "离散对数",
+                      "color": "parent",
+                      "kind": "directory",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [
+                        {
+                          "id": "xcpc-bsgs-1",
+                          "label": "BSGS",
+                          "color": "advanced",
+                          "kind": "algorithm",
+                          "origin": "supplement",
+                          "attributes": [],
+                          "children": [],
+                          "difficultySource": {
+                            "kind": "user-md",
+                            "detail": "橙色：高级"
+                          },
+                          "rationale": "沿用用户明确D4标尺；本条范围为BSGS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                          "sourceRefs": [
+                            "color-md"
+                          ],
+                          "level": 6,
+                          "sourceEvidence": [
+                            "BSGS",
+                            "橙色：高级"
+                          ],
+                          "difficultyConfidence": "source",
+                          "scope": "BSGS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                          "rating": {
+                            "status": "confirmed",
+                            "date": "2026-11-11",
+                            "type": "knowledge",
+                            "scope": "BSGS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                            "rationale": "沿用用户明确D4标尺；本条范围为BSGS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                            "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                            "range": {
+                              "min": 4,
+                              "max": 4
+                            }
+                          },
+                          "fullLabel": "BSGS"
+                        },
+                        {
+                          "id": "xcpc-pohlig-hellman-1",
+                          "label": "Pohlig-Hellman",
+                          "color": "advanced",
+                          "kind": "algorithm",
+                          "origin": "supplement",
+                          "attributes": [
+                            "useless"
+                          ],
+                          "children": [],
+                          "difficultySource": {
+                            "kind": "research",
+                            "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                          },
+                          "rationale": "在“按群阶素幂分解离散对数并CRT合并”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                          "sourceRefs": [
+                            "https://oi-wiki.org/math/",
+                            "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                            "https://cp-algorithms.com/"
+                          ],
+                          "level": 6,
+                          "sourceEvidence": [
+                            "Pohlig-Hellman"
+                          ],
+                          "evidenceScope": "category-and-prerequisites",
+                          "difficultyConfidence": "low",
+                          "scope": "按群阶素幂分解离散对数并CRT合并",
+                          "rating": {
+                            "status": "confirmed",
+                            "date": "2026-11-11",
+                            "type": "knowledge",
+                            "scope": "按群阶素幂分解离散对数并CRT合并",
+                            "rationale": "在“按群阶素幂分解离散对数并CRT合并”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                            "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                            "range": {
+                              "min": 4,
+                              "max": 4
+                            }
+                          },
+                          "fullLabel": "Pohlig-Hellman"
+                        },
+                        {
+                          "id": "algorithm-exbsgs",
+                          "label": "exBSGS",
+                          "color": "advanced",
+                          "kind": "algorithm",
+                          "origin": "supplement",
+                          "attributes": [],
+                          "children": [],
+                          "difficultySource": {
+                            "kind": "user-md",
+                            "detail": "用户提供颜色难度文档对应条目"
+                          },
+                          "rationale": "沿用用户明确D4标尺；本条范围为exBSGS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                          "sourceRefs": [
+                            "color-md"
+                          ],
+                          "level": 6,
+                          "sourceEvidence": [
+                            "exBSGS"
+                          ],
+                          "difficultyConfidence": "source",
+                          "scope": "exBSGS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                          "rating": {
+                            "status": "confirmed",
+                            "date": "2026-11-11",
+                            "type": "knowledge",
+                            "scope": "exBSGS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                            "rationale": "沿用用户明确D4标尺；本条范围为exBSGS的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                            "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                            "range": {
+                              "min": 4,
+                              "max": 4
+                            }
+                          },
+                          "fullLabel": "exBSGS"
+                        },
+                        {
+                          "id": "algorithm-content-xcpc-离散对数-1",
+                          "label": "离散对数",
+                          "color": "advanced",
+                          "kind": "algorithm",
+                          "origin": "supplement",
+                          "attributes": [],
+                          "children": [],
+                          "sourceRefs": [
+                            "color-md"
+                          ],
+                          "difficultySource": {
+                            "kind": "user-md",
+                            "detail": "橙色：高级"
+                          },
+                          "rationale": "沿用用户明确D4标尺；本条范围为离散对数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                          "level": 6,
+                          "sourceEvidence": [
+                            "离散对数",
+                            "橙色：高级"
+                          ],
+                          "difficultyConfidence": "source",
+                          "scope": "离散对数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                          "rating": {
+                            "status": "confirmed",
+                            "date": "2026-11-11",
+                            "type": "knowledge",
+                            "scope": "离散对数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                            "rationale": "沿用用户明确D4标尺；本条范围为离散对数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                            "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                            "range": {
+                              "min": 4,
+                              "max": 4
+                            }
+                          },
+                          "fullLabel": "离散对数",
+                          "contentOf": "xcpc-离散对数-1"
+                        }
+                      ],
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "directory",
+                        "detail": "目录不参与难度评级"
+                      },
+                      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "离散对数",
+                        "橙色：高级"
+                      ],
+                      "scope": "目录导航：离散对数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                      "rating": {
+                        "status": "not-applicable",
+                        "date": "2026-11-11",
+                        "type": "directory",
+                        "scope": "目录导航：离散对数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                      },
+                      "description": "目录导航：离散对数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                      "fullLabel": "离散对数"
+                    },
+                    {
+                      "id": "xcpc-二次剩余-1",
+                      "label": "二次剩余",
+                      "color": "parent",
+                      "kind": "directory",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [
+                        {
+                          "id": "xcpc-勒让德符号-1",
+                          "label": "勒让德符号",
+                          "color": "intermediate",
+                          "kind": "algorithm",
+                          "origin": "supplement",
+                          "attributes": [],
+                          "children": [],
+                          "sourceRefs": [
+                            "https://oi-wiki.org/math/",
+                            "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                            "https://cp-algorithms.com/"
+                          ],
+                          "level": 6,
+                          "difficultySource": {
+                            "kind": "research",
+                            "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                          },
+                          "rationale": "在“奇素数模下的二次可解性判定与欧拉判别”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                          "sourceEvidence": [
+                            "勒让德符号"
+                          ],
+                          "evidenceScope": "category-and-prerequisites",
+                          "difficultyConfidence": "low",
+                          "scope": "奇素数模下的二次可解性判定与欧拉判别",
+                          "rating": {
+                            "status": "confirmed",
+                            "date": "2026-11-11",
+                            "type": "knowledge",
+                            "scope": "奇素数模下的二次可解性判定与欧拉判别",
+                            "rationale": "在“奇素数模下的二次可解性判定与欧拉判别”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                            "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                            "range": {
+                              "min": 3,
+                              "max": 3
+                            }
+                          },
+                          "fullLabel": "勒让德符号"
+                        },
+                        {
+                          "id": "xcpc-cipolla算法-1",
+                          "label": "Cipolla",
+                          "color": "advanced",
+                          "kind": "algorithm",
+                          "origin": "supplement",
+                          "attributes": [
+                            "useless"
+                          ],
+                          "children": [],
+                          "difficultySource": {
+                            "kind": "research",
+                            "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                          },
+                          "rationale": "在“有限域扩张中快速幂求模平方根”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                          "sourceRefs": [
+                            "https://oi-wiki.org/math/",
+                            "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                            "https://cp-algorithms.com/"
+                          ],
+                          "level": 6,
+                          "sourceEvidence": [
+                            "Cipolla算法"
+                          ],
+                          "evidenceScope": "category-and-prerequisites",
+                          "difficultyConfidence": "low",
+                          "scope": "有限域扩张中快速幂求模平方根",
+                          "rating": {
+                            "status": "confirmed",
+                            "date": "2026-11-11",
+                            "type": "knowledge",
+                            "scope": "有限域扩张中快速幂求模平方根",
+                            "rationale": "在“有限域扩张中快速幂求模平方根”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                            "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                            "range": {
+                              "min": 4,
+                              "max": 4
+                            }
+                          },
+                          "aliases": [
+                            "Cipolla算法"
+                          ],
+                          "fullLabel": "Cipolla算法"
+                        }
+                      ],
+                      "sourceRefs": [],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "二次剩余"
+                      ],
+                      "difficultySource": {
+                        "kind": "directory",
+                        "detail": "目录不参与难度评级"
+                      },
+                      "scope": "目录导航：二次剩余。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                      "rating": {
+                        "status": "not-applicable",
+                        "date": "2026-11-11",
+                        "type": "directory",
+                        "scope": "目录导航：二次剩余。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                      },
+                      "description": "目录导航：二次剩余。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                      "fullLabel": "二次剩余"
+                    },
+                    {
+                      "id": "xcpc-原根-阶-1",
+                      "label": "原根与阶",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“乘法群的阶、原根存在条件与因子测试”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "原根/阶"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "乘法群的阶、原根存在条件与因子测试",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "乘法群的阶、原根存在条件与因子测试",
+                        "rationale": "在“乘法群的阶、原根存在条件与因子测试”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "aliases": [
+                        "原根/阶"
+                      ],
+                      "fullLabel": "原根/阶"
+                    }
+                  ],
+                  "sourceHeading": "Part 5.3.3 高次同余方程",
+                  "part": "5.3.3",
+                  "sourceRefs": [],
+                  "sourceBlockId": "267",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.3.3 高次同余方程"
+                  ],
+                  "aliases": [
+                    "高次同余方程",
+                    "离散对数、二次剩余与原根"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "scope": "目录导航：离散对数与剩余。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：离散对数与剩余。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：离散对数与剩余。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "离散对数、二次剩余与原根"
+                }
+              ],
+              "sourceHeading": "Part 5.3 同余方程",
+              "part": "5.3",
+              "sourceRefs": [],
+              "sourceBlockId": "264",
+              "legacyIds": [
+                "xcpc-同余方程组-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.3 同余方程"
+              ],
+              "aliases": [
+                "同余方程",
+                "同余方程与模运算"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：同余与模运算。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：同余与模运算。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：同余与模运算。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "同余方程与模运算"
+            },
+            {
+              "id": "feishu-part-5-9",
+              "label": "莫比乌斯反演",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-整除分块-1",
+                  "label": "整除分块",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“按floor(n/i)相同的最大区间合并求和”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "整除分块"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "按floor(n/i)相同的最大区间合并求和",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "按floor(n/i)相同的最大区间合并求和",
+                    "rationale": "在“按floor(n/i)相同的最大区间合并求和”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "整除分块"
+                },
+                {
+                  "id": "xcpc-狄利克雷卷积-1",
+                  "label": "狄利克雷卷积",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“数论函数卷积、单位元和常用恒等式”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "狄利克雷卷积"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "数论函数卷积、单位元和常用恒等式",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "数论函数卷积、单位元和常用恒等式",
+                    "rationale": "在“数论函数卷积、单位元和常用恒等式”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "狄利克雷卷积"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-5-9",
+                  "label": "莫比乌斯反演",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：莫比乌斯反演"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为莫比乌斯反演与整除求和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.9 莫比乌斯反演",
+                    "蓝色：莫比乌斯反演"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "莫比乌斯反演与整除求和"
+                  ],
+                  "scope": "莫比乌斯反演与整除求和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "莫比乌斯反演与整除求和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为莫比乌斯反演与整除求和的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "莫比乌斯反演与整除求和",
+                  "contentOf": "feishu-part-5-9"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-莫比乌斯反演-1",
+                "xcpc-数论函数-1"
+              ],
+              "sourceHeading": "Part 5.9 莫比乌斯反演",
+              "part": "5.9",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "279",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.9 莫比乌斯反演",
+                "蓝色：莫比乌斯反演"
+              ],
+              "aliases": [
+                "莫比乌斯反演与整除求和"
+              ],
+              "scope": "目录导航：莫比乌斯反演。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：莫比乌斯反演。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：莫比乌斯反演。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "莫比乌斯反演与整除求和"
+            },
+            {
+              "id": "feishu-part-5-10",
+              "label": "筛法与数论求和",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-埃式筛-1",
+                  "label": "埃式筛",
+                  "color": "basic",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“标记合数并分析O(n log log n)时间与空间”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "埃式筛"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "标记合数并分析O(n log log n)时间与空间",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "标记合数并分析O(n log log n)时间与空间",
+                    "rationale": "在“标记合数并分析O(n log log n)时间与空间”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 1,
+                      "max": 1
+                    }
+                  },
+                  "fullLabel": "埃式筛"
+                },
+                {
+                  "id": "xcpc-杜教筛-1",
+                  "label": "杜教筛",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "橙色：高级"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为杜教筛的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "杜教筛",
+                    "橙色：高级"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "杜教筛的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "杜教筛的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为杜教筛的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "杜教筛"
+                },
+                {
+                  "id": "xcpc-min25筛-1",
+                  "label": "min25筛",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "橙色：高级"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为min25筛的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "min25筛",
+                    "橙色：高级"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "min25筛的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "min25筛的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为min25筛的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "min25筛"
+                },
+                {
+                  "id": "algorithm-线性筛-素数",
+                  "label": "线性筛",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为线性筛（素数）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "线性筛（素数）"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "线性筛（素数）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "线性筛（素数）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为线性筛（素数）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "线性筛（素数）"
+                  ],
+                  "fullLabel": "线性筛（素数）"
+                }
+              ],
+              "sourceHeading": "Part 5.10 筛法",
+              "part": "5.10",
+              "sourceRefs": [],
+              "sourceBlockId": "280",
+              "legacyIds": [
+                "xcpc-线性筛-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.10 筛法"
+              ],
+              "aliases": [
+                "筛法",
+                "素数筛与数论函数求和"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：筛法与数论求和。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：筛法与数论求和。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：筛法与数论求和。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "素数筛与数论函数求和"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：数论与模运算。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：数论与模运算。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：数论与模运算。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "数论与模运算"
+        },
+        {
+          "id": "group-math-combinatorics",
+          "label": "计数与对称",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-5-6",
+              "label": "组合数学",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "feishu-part-5-6-1",
+                  "label": "排列组合",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-杨辉三角-1",
+                      "label": "杨辉三角",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "绿色：数学基础"
+                      },
+                      "rationale": "沿用用户明确D2标尺；本条范围为杨辉三角的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "杨辉三角",
+                        "绿色：数学基础"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "杨辉三角的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "杨辉三角的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D2标尺；本条范围为杨辉三角的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "杨辉三角"
+                    },
+                    {
+                      "id": "xcpc-多重集组合数-1",
+                      "label": "多重集组合数",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“隔板法及非负/正整数解的边界”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "多重集组合数"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "隔板法及非负/正整数解的边界",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "隔板法及非负/正整数解的边界",
+                        "rationale": "在“隔板法及非负/正整数解的边界”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "多重集组合数"
+                    },
+                    {
+                      "id": "xcpc-二项式定理-1",
+                      "label": "二项式定理",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“展开、系数提取与基础组合恒等式”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "二项式定理"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "展开、系数提取与基础组合恒等式",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "展开、系数提取与基础组合恒等式",
+                        "rationale": "在“展开、系数提取与基础组合恒等式”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "二项式定理"
+                    },
+                    {
+                      "id": "xcpc-prufer序列-1",
+                      "label": "Prüfer 序列",
+                      "color": "expert",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "红色：挑战"
+                      },
+                      "rationale": "沿用用户明确D5标尺；本条范围为Prüfer 序列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "prufer序列",
+                        "红色：挑战"
+                      ],
+                      "difficultyConfidence": "source",
+                      "aliases": [
+                        "Prüfer",
+                        "Prufer 序列",
+                        "prufer序列"
+                      ],
+                      "scope": "Prüfer 序列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "Prüfer 序列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D5标尺；本条范围为Prüfer 序列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 5,
+                          "max": 5
+                        }
+                      },
+                      "fullLabel": "Prüfer 序列"
+                    },
+                    {
+                      "id": "xcpc-lgv引理-1",
+                      "label": "LGV引理",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "useless"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“用路径计数行列式统计不相交路径，检查有向无环和端点条件”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "LGV引理"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "用路径计数行列式统计不相交路径，检查有向无环和端点条件",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "用路径计数行列式统计不相交路径，检查有向无环和端点条件",
+                        "rationale": "在“用路径计数行列式统计不相交路径，检查有向无环和端点条件”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "LGV引理"
+                    },
+                    {
+                      "id": "xcpc-杨表-1",
+                      "label": "杨表",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“标准Young表的钩长公式、合法形状与简单计数”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceEvidence": [
+                        "杨表"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "标准Young表的钩长公式、合法形状与简单计数",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "标准Young表的钩长公式、合法形状与简单计数",
+                        "rationale": "在“标准Young表的钩长公式、合法形状与简单计数”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "杨表"
+                    },
+                    {
+                      "id": "xcpc-lucas定理-1",
+                      "label": "Lucas 定理",
+                      "color": "parent",
+                      "kind": "directory",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board"
+                      ],
+                      "children": [
+                        {
+                          "id": "xcpc-exlucas-1",
+                          "label": "exLucas",
+                          "color": "advanced",
+                          "kind": "algorithm",
+                          "origin": "supplement",
+                          "attributes": [],
+                          "children": [],
+                          "difficultySource": {
+                            "kind": "research",
+                            "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                          },
+                          "rationale": "在“素数幂模下阶乘处理并CRT合并组合数”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                          "sourceRefs": [
+                            "https://oi-wiki.org/math/",
+                            "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                            "https://cp-algorithms.com/"
+                          ],
+                          "level": 6,
+                          "sourceEvidence": [
+                            "exLucas"
+                          ],
+                          "evidenceScope": "category-and-prerequisites",
+                          "difficultyConfidence": "low",
+                          "scope": "素数幂模下阶乘处理并CRT合并组合数",
+                          "rating": {
+                            "status": "confirmed",
+                            "date": "2026-11-11",
+                            "type": "knowledge",
+                            "scope": "素数幂模下阶乘处理并CRT合并组合数",
+                            "rationale": "在“素数幂模下阶乘处理并CRT合并组合数”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                            "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                            "range": {
+                              "min": 4,
+                              "max": 4
+                            }
+                          },
+                          "fullLabel": "exLucas"
+                        },
+                        {
+                          "id": "algorithm-content-xcpc-lucas定理-1",
+                          "label": "Lucas 定理",
+                          "color": "intermediate",
+                          "kind": "algorithm",
+                          "origin": "supplement",
+                          "attributes": [
+                            "board"
+                          ],
+                          "children": [],
+                          "sourceRefs": [
+                            "color-md"
+                          ],
+                          "difficultySource": {
+                            "kind": "user-md",
+                            "detail": "蓝色：数学"
+                          },
+                          "rationale": "沿用用户明确D3标尺；本条范围为Lucas 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                          "level": 6,
+                          "sourceEvidence": [
+                            "Lucas定理",
+                            "蓝色：数学"
+                          ],
+                          "difficultyConfidence": "source",
+                          "aliases": [
+                            "Lucas定理"
+                          ],
+                          "scope": "Lucas 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                          "rating": {
+                            "status": "confirmed",
+                            "date": "2026-11-11",
+                            "type": "knowledge",
+                            "scope": "Lucas 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                            "rationale": "沿用用户明确D3标尺；本条范围为Lucas 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                            "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                            "range": {
+                              "min": 3,
+                              "max": 3
+                            }
+                          },
+                          "fullLabel": "Lucas 定理",
+                          "contentOf": "xcpc-lucas定理-1"
+                        }
+                      ],
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "directory",
+                        "detail": "目录不参与难度评级"
+                      },
+                      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Lucas定理",
+                        "蓝色：数学"
+                      ],
+                      "legacyIds": [
+                        "xcpc-普通-1"
+                      ],
+                      "aliases": [
+                        "Lucas定理"
+                      ],
+                      "scope": "目录导航：Lucas 定理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                      "rating": {
+                        "status": "not-applicable",
+                        "date": "2026-11-11",
+                        "type": "directory",
+                        "scope": "目录导航：Lucas 定理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                      },
+                      "description": "目录导航：Lucas 定理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                      "fullLabel": "Lucas 定理"
+                    },
+                    {
+                      "id": "algorithm-content-feishu-part-5-6-1",
+                      "label": "排列组合",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "绿色：杨辉三角 / 组合数"
+                      },
+                      "rationale": "沿用用户明确D2标尺；本条范围为排列组合的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 5.6.1 排列组合",
+                        "绿色：杨辉三角 / 组合数"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "排列组合的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "排列组合的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D2标尺；本条范围为排列组合的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "排列组合",
+                      "contentOf": "feishu-part-5-6-1"
+                    }
+                  ],
+                  "sourceHeading": "Part 5.6.1 排列组合",
+                  "part": "5.6.1",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "271",
+                  "legacyIds": [
+                    "xcpc-组合数-1"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.6.1 排列组合",
+                    "绿色：杨辉三角 / 组合数"
+                  ],
+                  "scope": "目录导航：排列组合。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：排列组合。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：排列组合。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "排列组合"
+                },
+                {
+                  "id": "feishu-part-5-6-2",
+                  "label": "计数数列",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-斐波那契数列-1",
+                      "label": "斐波那契数列",
+                      "color": "basic",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“递推定义、边界和线性计算；快速倍增另评”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "斐波那契数列"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "递推定义、边界和线性计算；快速倍增另评",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "递推定义、边界和线性计算；快速倍增另评",
+                        "rationale": "在“递推定义、边界和线性计算；快速倍增另评”的范围内，以基础语法、局部计算和直接关系为主，边界可局部核查，定为D1。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 1,
+                          "max": 1
+                        }
+                      },
+                      "fullLabel": "斐波那契数列"
+                    },
+                    {
+                      "id": "xcpc-错排问题-1",
+                      "label": "错排",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "本次审校的学习范围与前置知识评估"
+                      },
+                      "rationale": "在“从元素去向分类推导错排递推与边界”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/combinatorics/derangement/",
+                        "https://cp-algorithms.com/combinatorics/inclusion-exclusion.html"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "错排问题"
+                      ],
+                      "evidenceScope": "topic-and-prerequisites",
+                      "difficultyConfidence": "medium",
+                      "scope": "从元素去向分类推导错排递推与边界",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "从元素去向分类推导错排递推与边界",
+                        "rationale": "在“从元素去向分类推导错排递推与边界”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "aliases": [
+                        "错排问题"
+                      ],
+                      "fullLabel": "错排问题"
+                    },
+                    {
+                      "id": "xcpc-卡特兰数-1",
+                      "label": "卡特兰数",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "绿色：数学基础"
+                      },
+                      "rationale": "沿用用户明确D2标尺；本条范围为卡特兰数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "卡特兰数",
+                        "绿色：数学基础"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "卡特兰数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "卡特兰数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D2标尺；本条范围为卡特兰数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "卡特兰数"
+                    },
+                    {
+                      "id": "xcpc-拆分数-1",
+                      "label": "拆分数",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“整数分拆的基础二维或完全背包递推”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "拆分数"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "整数分拆的基础二维或完全背包递推",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "整数分拆的基础二维或完全背包递推",
+                        "rationale": "在“整数分拆的基础二维或完全背包递推”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "拆分数"
+                    },
+                    {
+                      "id": "xcpc-斯特林数-1",
+                      "label": "斯特林数",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“两类斯特林数的组合含义与二次递推”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "斯特林数"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "两类斯特林数的组合含义与二次递推",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "两类斯特林数的组合含义与二次递推",
+                        "rationale": "在“两类斯特林数的组合含义与二次递推”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "斯特林数"
+                    },
+                    {
+                      "id": "xcpc-贝尔数-1",
+                      "label": "贝尔数",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "useless"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“集合划分计数及斯特林数求和或Bell三角”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "贝尔数"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "集合划分计数及斯特林数求和或Bell三角",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "集合划分计数及斯特林数求和或Bell三角",
+                        "rationale": "在“集合划分计数及斯特林数求和或Bell三角”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "贝尔数"
+                    },
+                    {
+                      "id": "xcpc-伯努利数-1",
+                      "label": "伯努利数",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "useless"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“通过生成函数或递推求系数及幂和应用”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "伯努利数"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "通过生成函数或递推求系数及幂和应用",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "通过生成函数或递推求系数及幂和应用",
+                        "rationale": "在“通过生成函数或递推求系数及幂和应用”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "伯努利数"
+                    }
+                  ],
+                  "sourceHeading": "Part 5.6.2 卡特兰数&斯特林数",
+                  "part": "5.6.2",
+                  "sourceRefs": [],
+                  "sourceBlockId": "272",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.6.2 卡特兰数&斯特林数"
+                  ],
+                  "aliases": [
+                    "卡特兰数&斯特林数",
+                    "组合数列及其递推",
+                    "组合计数数列"
+                  ],
+                  "legacyIds": [
+                    "xcpc-常见数列-1"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "scope": "目录导航：计数数列。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：计数数列。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：计数数列。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "组合计数数列"
+                },
+                {
+                  "id": "feishu-part-5-6-3",
+                  "label": "容斥原理",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-min-max容斥-1",
+                      "label": "min-max容斥",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“将集合最小值/最大值用子集交替求和转换”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "min-max容斥"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "将集合最小值/最大值用子集交替求和转换",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "将集合最小值/最大值用子集交替求和转换",
+                        "rationale": "在“将集合最小值/最大值用子集交替求和转换”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "min-max容斥"
+                    },
+                    {
+                      "id": "xcpc-二项式反演-1",
+                      "label": "二项式反演",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“识别二项式系数变换并使用逆变换恢复原序列”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "二项式反演"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "识别二项式系数变换并使用逆变换恢复原序列",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "识别二项式系数变换并使用逆变换恢复原序列",
+                        "rationale": "在“识别二项式系数变换并使用逆变换恢复原序列”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "二项式反演"
+                    },
+                    {
+                      "id": "algorithm-content-feishu-part-5-6-3",
+                      "label": "容斥原理",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "绿色：容斥原理基础"
+                      },
+                      "rationale": "沿用用户明确D2标尺；本条范围为容斥原理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 5.6.3 容斥原理",
+                        "绿色：容斥原理基础"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "容斥原理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "容斥原理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D2标尺；本条范围为容斥原理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "容斥原理",
+                      "contentOf": "feishu-part-5-6-3"
+                    }
+                  ],
+                  "legacyIds": [
+                    "xcpc-容斥原理-1"
+                  ],
+                  "sourceHeading": "Part 5.6.3 容斥原理",
+                  "part": "5.6.3",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "273",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.6.3 容斥原理",
+                    "绿色：容斥原理基础"
+                  ],
+                  "scope": "目录导航：容斥原理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：容斥原理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：容斥原理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "容斥原理"
+                },
+                {
+                  "id": "xcpc-best定理-1",
+                  "label": "BEST定理",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“有向欧拉回路计数及矩阵树因子，明确计数约定”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "BEST定理"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "crossRefs": [
+                    "feishu-part-7-13"
+                  ],
+                  "scope": "有向欧拉回路计数及矩阵树因子，明确计数约定",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "有向欧拉回路计数及矩阵树因子，明确计数约定",
+                    "rationale": "在“有向欧拉回路计数及矩阵树因子，明确计数约定”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "BEST定理"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-组合数学-1"
+              ],
+              "sourceHeading": "Part 5.6 组合数学",
+              "part": "5.6",
+              "sourceRefs": [],
+              "sourceBlockId": "270",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.6 组合数学"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：组合数学。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：组合数学。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：组合数学。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "组合数学"
+            },
+            {
+              "id": "feishu-part-5-13",
+              "label": "置换群",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-置换-1",
+                  "label": "置换",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“置换复合、逆置换、循环分解与奇偶性”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "置换"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "置换复合、逆置换、循环分解与奇偶性",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "置换复合、逆置换、循环分解与奇偶性",
+                    "rationale": "在“置换复合、逆置换、循环分解与奇偶性”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "置换"
+                },
+                {
+                  "id": "xcpc-burnside引理-1",
+                  "label": "Burnside引理",
+                  "color": "expert",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "红色：挑战"
+                  },
+                  "rationale": "沿用用户明确D5标尺；本条范围为Burnside引理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Burnside引理",
+                    "红色：挑战"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "Burnside引理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "Burnside引理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D5标尺；本条范围为Burnside引理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 5,
+                      "max": 5
+                    }
+                  },
+                  "fullLabel": "Burnside引理"
+                },
+                {
+                  "id": "xcpc-polya定理-1",
+                  "label": "Pólya 定理",
+                  "color": "expert",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "红色：挑战"
+                  },
+                  "rationale": "沿用用户明确D5标尺；本条范围为Pólya 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Polya定理",
+                    "红色：挑战"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "Polya定理"
+                  ],
+                  "scope": "Pólya 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "Pólya 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D5标尺；本条范围为Pólya 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 5,
+                      "max": 5
+                    }
+                  },
+                  "fullLabel": "Pólya 定理"
+                }
+              ],
+              "sourceHeading": "Part 5.13 置换群",
+              "part": "5.13",
+              "sourceRefs": [],
+              "sourceBlockId": "286",
+              "legacyIds": [
+                "xcpc-群论-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.13 置换群"
+              ],
+              "aliases": [
+                "置换群与对称计数"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：置换群。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：置换群。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：置换群。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "置换群与对称计数"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：计数与对称。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：计数与对称。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "组合计数与对称性"
+          ],
+          "description": "目录导航：计数与对称。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "组合计数与对称性"
+        },
+        {
+          "id": "group-math-algebra",
+          "label": "代数与变换",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-5-7",
+              "label": "线性代数",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "feishu-part-5-7-1",
+                  "label": "矩阵与递推",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-矩阵快速幂-1",
+                      "label": "矩阵快速幂",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "蓝色：数学"
+                      },
+                      "rationale": "沿用用户明确D3标尺；本条范围为矩阵快速幂的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "矩阵快速幂",
+                        "蓝色：数学"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "矩阵快速幂的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "矩阵快速幂的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D3标尺；本条范围为矩阵快速幂的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "矩阵快速幂"
+                    },
+                    {
+                      "id": "xcpc-行列式-1",
+                      "label": "行列式",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "蓝色：数学"
+                      },
+                      "rationale": "沿用用户明确D3标尺；本条范围为行列式的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "行列式",
+                        "蓝色：数学"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "行列式的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "行列式的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D3标尺；本条范围为行列式的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "行列式"
+                    },
+                    {
+                      "id": "xcpc-矩阵求逆-1",
+                      "label": "矩阵求逆",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“增广矩阵消元、可逆判定及模数条件”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "矩阵求逆"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "增广矩阵消元、可逆判定及模数条件",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "增广矩阵消元、可逆判定及模数条件",
+                        "rationale": "在“增广矩阵消元、可逆判定及模数条件”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "矩阵求逆"
+                    },
+                    {
+                      "id": "xcpc-常系数线性递推-1",
+                      "label": "常系数线性递推",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“多项式取模加速第n项；基础逐项递推另评”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "常系数线性递推"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "多项式取模加速第n项；基础逐项递推另评",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "多项式取模加速第n项；基础逐项递推另评",
+                        "rationale": "在“多项式取模加速第n项；基础逐项递推另评”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "常系数线性递推"
+                    },
+                    {
+                      "id": "xcpc-bm-1",
+                      "label": "BM",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“Berlekamp–Massey在线寻找域上最短线性递推”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "BM"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "Berlekamp–Massey在线寻找域上最短线性递推",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "Berlekamp–Massey在线寻找域上最短线性递推",
+                        "rationale": "在“Berlekamp–Massey在线寻找域上最短线性递推”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "BM"
+                    },
+                    {
+                      "id": "xcpc-特征值-特征向量-1",
+                      "label": "特征值与特征向量",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "useless"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“定义、特征多项式、简单矩阵分析；通用数值特征分解另评”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "特征值，特征向量"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "定义、特征多项式、简单矩阵分析；通用数值特征分解另评",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "定义、特征多项式、简单矩阵分析；通用数值特征分解另评",
+                        "rationale": "在“定义、特征多项式、简单矩阵分析；通用数值特征分解另评”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "aliases": [
+                        "特征值，特征向量"
+                      ],
+                      "fullLabel": "特征值，特征向量"
+                    }
+                  ],
+                  "sourceHeading": "Part 5.7.1 矩阵",
+                  "part": "5.7.1",
+                  "sourceRefs": [],
+                  "sourceBlockId": "275",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.7.1 矩阵"
+                  ],
+                  "aliases": [
+                    "矩阵",
+                    "矩阵运算与线性递推"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "scope": "目录导航：矩阵与递推。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：矩阵与递推。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：矩阵与递推。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "矩阵运算与线性递推"
+                },
+                {
+                  "id": "feishu-part-5-7-2",
+                  "label": "高斯消元",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-content-feishu-part-5-7-2",
+                      "label": "高斯消元",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "蓝色：数学"
+                      },
+                      "rationale": "沿用用户明确D3标尺；本条范围为高斯消元的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 5.7.2 高斯消元",
+                        "蓝色：高斯消元",
+                        "蓝色：数学"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "高斯消元的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "高斯消元的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D3标尺；本条范围为高斯消元的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "高斯消元",
+                      "contentOf": "feishu-part-5-7-2"
+                    }
+                  ],
+                  "legacyIds": [
+                    "xcpc-高斯消元-1"
+                  ],
+                  "sourceHeading": "Part 5.7.2 高斯消元",
+                  "part": "5.7.2",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "276",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.7.2 高斯消元",
+                    "蓝色：高斯消元",
+                    "蓝色：数学"
+                  ],
+                  "scope": "目录导航：高斯消元。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：高斯消元。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：高斯消元。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "高斯消元"
+                },
+                {
+                  "id": "feishu-part-5-7-3",
+                  "label": "线性基",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-content-feishu-part-5-7-3",
+                      "label": "线性基",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "蓝色：数学"
+                      },
+                      "rationale": "沿用用户明确D3标尺；本条范围为线性基的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 5.7.3 线性基",
+                        "蓝色：线性基",
+                        "蓝色：数学"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "线性基的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "线性基的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D3标尺；本条范围为线性基的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "线性基",
+                      "contentOf": "feishu-part-5-7-3"
+                    }
+                  ],
+                  "legacyIds": [
+                    "xcpc-线性基-1"
+                  ],
+                  "sourceHeading": "Part 5.7.3 线性基",
+                  "part": "5.7.3",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "277",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.7.3 线性基",
+                    "蓝色：线性基",
+                    "蓝色：数学"
+                  ],
+                  "scope": "目录导航：线性基。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：线性基。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：线性基。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "线性基"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-线性代数-1"
+              ],
+              "sourceHeading": "Part 5.7 线性代数",
+              "part": "5.7",
+              "sourceRefs": [],
+              "sourceBlockId": "274",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.7 线性代数"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：线性代数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：线性代数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：线性代数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "线性代数"
+            },
+            {
+              "id": "feishu-part-5-8",
+              "label": "多项式与生成函数",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "xcpc-fft-ntt-1",
+                  "label": "FFT/NTT",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-content-xcpc-fft-ntt-1",
+                      "label": "FFT/NTT",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "橙色：高级"
+                      },
+                      "rationale": "沿用用户明确D4标尺；本条范围为FFT/NTT的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "FFT/NTT",
+                        "橙色：高级"
+                      ],
+                      "difficultyConfidence": "source",
+                      "aliases": [
+                        "FFT",
+                        "NTT"
+                      ],
+                      "scope": "FFT/NTT的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "FFT/NTT的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D4标尺；本条范围为FFT/NTT的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "FFT/NTT",
+                      "contentOf": "xcpc-fft-ntt-1"
+                    }
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "FFT/NTT",
+                    "橙色：高级"
+                  ],
+                  "aliases": [
+                    "FFT",
+                    "NTT"
+                  ],
+                  "scope": "目录导航：FFT/NTT。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：FFT/NTT。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：FFT/NTT。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "FFT/NTT"
+                },
+                {
+                  "id": "xcpc-fwt-fmt-1",
+                  "label": "FWT",
+                  "color": "expert",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "红色：FWT"
+                  },
+                  "rationale": "沿用用户明确D5标尺；本条范围为快速沃尔什变换（FWT）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "FWT/FMT",
+                    "红色：FWT"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "Walsh-Hadamard Transform",
+                    "快速沃尔什变换（FWT）"
+                  ],
+                  "scope": "快速沃尔什变换（FWT）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "快速沃尔什变换（FWT）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D5标尺；本条范围为快速沃尔什变换（FWT）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 5,
+                      "max": 5
+                    }
+                  },
+                  "fullLabel": "快速沃尔什变换（FWT）"
+                },
+                {
+                  "id": "xcpc-集合幂级数-1",
+                  "label": "集合幂级数",
+                  "color": "expert",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://cp-algorithms.com/algebra/polynomial.html",
+                    "https://oi-wiki.org/math/"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“子集上的卷积代数、按集合大小分层及快速变换”的范围内，涉及高抽象状态或深层代数关系，综合证明与实现负担较高，定为D5。",
+                  "sourceEvidence": [
+                    "集合幂级数"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "子集上的卷积代数、按集合大小分层及快速变换",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "子集上的卷积代数、按集合大小分层及快速变换",
+                    "rationale": "在“子集上的卷积代数、按集合大小分层及快速变换”的范围内，涉及高抽象状态或深层代数关系，综合证明与实现负担较高，定为D5。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 5,
+                      "max": 5
+                    }
+                  },
+                  "fullLabel": "集合幂级数"
+                },
+                {
+                  "id": "xcpc-单位根反演-1",
+                  "label": "单位根反演",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“利用单位根正交性提取同余类系数”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://cp-algorithms.com/algebra/polynomial.html",
+                    "https://oi-wiki.org/math/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "单位根反演"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "利用单位根正交性提取同余类系数",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "利用单位根正交性提取同余类系数",
+                    "rationale": "在“利用单位根正交性提取同余类系数”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "单位根反演"
+                },
+                {
+                  "id": "xcpc-拉格朗日插值-1",
+                  "label": "拉格朗日插值",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-content-xcpc-拉格朗日插值-1",
+                      "label": "拉格朗日插值",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“一般点或连续点插值及分母可逆条件”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://cp-algorithms.com/algebra/polynomial.html",
+                        "https://oi-wiki.org/math/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "拉格朗日插值"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "一般点或连续点插值及分母可逆条件",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "一般点或连续点插值及分母可逆条件",
+                        "rationale": "在“一般点或连续点插值及分母可逆条件”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "拉格朗日插值",
+                      "contentOf": "xcpc-拉格朗日插值-1"
+                    }
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "sourceRefs": [
+                    "https://cp-algorithms.com/algebra/polynomial.html",
+                    "https://oi-wiki.org/math/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "拉格朗日插值"
+                  ],
+                  "scope": "目录导航：拉格朗日插值。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：拉格朗日插值。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：拉格朗日插值。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "拉格朗日插值"
+                },
+                {
+                  "id": "xcpc-生成函数-1",
+                  "label": "生成函数",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-content-xcpc-生成函数-1",
+                      "label": "生成函数",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "橙色：高级"
+                      },
+                      "rationale": "沿用用户明确D4标尺；本条范围为生成函数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "生成函数",
+                        "橙色：高级"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "生成函数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "生成函数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D4标尺；本条范围为生成函数的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "生成函数",
+                      "contentOf": "xcpc-生成函数-1"
+                    }
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "生成函数",
+                    "橙色：高级"
+                  ],
+                  "scope": "目录导航：生成函数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：生成函数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：生成函数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "生成函数"
+                },
+                {
+                  "id": "group-formal-series",
+                  "label": "形式幂级数",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "editorial",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-多项式求逆",
+                      "label": "多项式求逆",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户提供颜色难度文档对应条目"
+                      },
+                      "rationale": "沿用用户明确D4标尺；本条范围为形式幂级数常数项必须可逆；有限域常数项为零时无逆。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "多项式求逆"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "形式幂级数常数项必须可逆；有限域常数项为零时无逆。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "形式幂级数常数项必须可逆；有限域常数项为零时无逆。",
+                        "rationale": "沿用用户明确D4标尺；本条范围为形式幂级数常数项必须可逆；有限域常数项为零时无逆。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "多项式求逆"
+                    },
+                    {
+                      "id": "algorithm-多项式开方",
+                      "label": "多项式开方",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户提供颜色难度文档对应条目"
+                      },
+                      "rationale": "沿用用户明确D4标尺；本条范围为多项式开方的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "多项式开方"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "多项式开方的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "多项式开方的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D4标尺；本条范围为多项式开方的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "多项式开方"
+                    },
+                    {
+                      "id": "algorithm-多项式-ln",
+                      "label": "多项式 ln",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户提供颜色难度文档对应条目"
+                      },
+                      "rationale": "沿用用户明确D4标尺；本条范围为多项式 ln的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "多项式 ln"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "多项式 ln的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "多项式 ln的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D4标尺；本条范围为多项式 ln的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "多项式 ln"
+                    },
+                    {
+                      "id": "algorithm-多项式-exp",
+                      "label": "多项式 exp",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "board"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户提供颜色难度文档对应条目"
+                      },
+                      "rationale": "沿用用户明确D4标尺；本条范围为多项式 exp的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "多项式 exp"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "多项式 exp的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "多项式 exp的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D4标尺；本条范围为多项式 exp的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "多项式 exp"
+                    },
+                    {
+                      "id": "algorithm-多项式复合-反三角",
+                      "label": "多项式复合与反三角",
+                      "color": "expert",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户提供颜色难度文档对应条目"
+                      },
+                      "rationale": "沿用用户明确D5标尺；本条范围为多项式复合 / 反三角的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "多项式复合 / 反三角"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "多项式复合 / 反三角的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "多项式复合 / 反三角的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D5标尺；本条范围为多项式复合 / 反三角的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 5,
+                          "max": 5
+                        }
+                      },
+                      "aliases": [
+                        "多项式复合 / 反三角"
+                      ],
+                      "fullLabel": "多项式复合 / 反三角"
+                    }
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "scope": "目录导航：形式幂级数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "sourceRefs": [],
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：形式幂级数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "aliases": [
+                    "形式幂级数运算"
+                  ],
+                  "description": "目录导航：形式幂级数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "形式幂级数运算"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-多项式-1",
+                "xcpc-多项式全家桶-1"
+              ],
+              "sourceHeading": "Part 5.8 多项式",
+              "part": "5.8",
+              "sourceRefs": [],
+              "sourceBlockId": "278",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.8 多项式"
+              ],
+              "aliases": [
+                "多项式",
+                "多项式、变换与生成函数"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：多项式与生成函数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：多项式与生成函数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：多项式与生成函数。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "多项式、变换与生成函数"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：代数与变换。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：代数与变换。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "线性代数与代数变换"
+          ],
+          "description": "目录导航：代数与变换。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "线性代数与代数变换"
+        },
+        {
+          "id": "group-math-prob-game",
+          "label": "概率与博弈",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-5-5",
+              "label": "概率与期望",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-期望的线性性-1",
+                  "label": "期望的线性性",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“在不要求独立的条件下分解随机变量期望”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "期望的线性性"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "在不要求独立的条件下分解随机变量期望",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "在不要求独立的条件下分解随机变量期望",
+                    "rationale": "在“在不要求独立的条件下分解随机变量期望”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "期望的线性性"
+                },
+                {
+                  "id": "xcpc-条件概率-1",
+                  "label": "条件概率",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "本次审校的学习范围与前置知识评估"
+                  },
+                  "rationale": "在“定义、乘法和全概率公式、独立性”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/probability/conditional-probability/",
+                    "https://oi-wiki.org/math/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "条件概率"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "定义、乘法和全概率公式、独立性",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "定义、乘法和全概率公式、独立性",
+                    "rationale": "在“定义、乘法和全概率公式、独立性”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "条件概率"
+                }
+              ],
+              "sourceHeading": "Part 5.5 概率与期望",
+              "part": "5.5",
+              "sourceRefs": [],
+              "sourceBlockId": "269",
+              "legacyIds": [
+                "xcpc-概率论-1"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.5 概率与期望"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：概率与期望。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：概率与期望。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：概率与期望。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "概率与期望"
+            },
+            {
+              "id": "feishu-part-5-4",
+              "label": "组合博弈",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-sg函数-1",
+                  "label": "SG函数",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户颜色文档的明确分档"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为适用于有限无环的正常玩法无偏博弈；有环、偏置或反常玩法不能直接套用。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "SG函数",
+                    "绿色：SG基础/匈牙利"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "适用于有限无环的正常玩法无偏博弈；有环、偏置或反常玩法不能直接套用。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "适用于有限无环的正常玩法无偏博弈；有环、偏置或反常玩法不能直接套用。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为适用于有限无环的正常玩法无偏博弈；有环、偏置或反常玩法不能直接套用。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "SG函数"
+                },
+                {
+                  "id": "xcpc-常见结论-1",
+                  "label": "常见结论",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“Nim及常见无偏博弈结论的适用条件与小规模验证”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "常见结论"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "Nim及常见无偏博弈结论的适用条件与小规模验证",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "Nim及常见无偏博弈结论的适用条件与小规模验证",
+                    "rationale": "在“Nim及常见无偏博弈结论的适用条件与小规模验证”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "常见结论"
+                },
+                {
+                  "id": "xcpc-不平等博弈-1",
+                  "label": "不平等博弈",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“双方可选行动不同的偏置博弈，不直接套无偏SG异或定理”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "不平等博弈"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "双方可选行动不同的偏置博弈，不直接套无偏SG异或定理",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "双方可选行动不同的偏置博弈，不直接套无偏SG异或定理",
+                    "rationale": "在“双方可选行动不同的偏置博弈，不直接套无偏SG异或定理”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "不平等博弈"
+                },
+                {
+                  "id": "algorithm-nim-博弈",
+                  "label": "Nim 博弈",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为Nim 博弈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Nim 博弈"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "Nim 博弈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "Nim 博弈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为Nim 博弈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "Nim 博弈"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-5-4",
+                  "label": "组合博弈",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：Nim / SG基础"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为组合博弈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.4 博弈论",
+                    "绿色：Nim / SG基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "博弈论"
+                  ],
+                  "scope": "组合博弈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "组合博弈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为组合博弈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "组合博弈",
+                  "contentOf": "feishu-part-5-4"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-博弈论-1"
+              ],
+              "sourceHeading": "Part 5.4 博弈论",
+              "part": "5.4",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "268",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.4 博弈论",
+                "绿色：Nim / SG基础"
+              ],
+              "aliases": [
+                "博弈论"
+              ],
+              "scope": "目录导航：组合博弈。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：组合博弈。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：组合博弈。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "组合博弈"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：概率与博弈。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：概率与博弈。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "概率与组合博弈"
+          ],
+          "description": "目录导航：概率与博弈。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "概率与组合博弈"
+        },
+        {
+          "id": "group-math-numerics",
+          "label": "数值与优化",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-5-12",
+              "label": "数值优化与积分",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "feishu-part-5-12-1",
+                  "label": "三分法",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-content-feishu-part-5-12-1",
+                      "label": "三分法",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 5.12.1 三分法"
+                      ],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“对单峰/单谷函数缩小搜索区间，区分整数与实数边界”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "对单峰/单谷函数缩小搜索区间，区分整数与实数边界",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "对单峰/单谷函数缩小搜索区间，区分整数与实数边界",
+                        "rationale": "在“对单峰/单谷函数缩小搜索区间，区分整数与实数边界”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "三分法",
+                      "contentOf": "feishu-part-5-12-1"
+                    }
+                  ],
+                  "sourceHeading": "Part 5.12.1 三分法",
+                  "part": "5.12.1",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "sourceBlockId": "284",
+                  "legacyIds": [
+                    "xcpc-三分-1"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.12.1 三分法"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "scope": "目录导航：三分法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：三分法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：三分法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "三分法"
+                },
+                {
+                  "id": "xcpc-数值积分-1",
+                  "label": "数值积分",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-辛普森积分-1",
+                      "label": "辛普森积分",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [
+                        "useless"
+                      ],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“抛物线插值求积公式、复合使用和光滑性条件”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "辛普森积分"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "抛物线插值求积公式、复合使用和光滑性条件",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "抛物线插值求积公式、复合使用和光滑性条件",
+                        "rationale": "在“抛物线插值求积公式、复合使用和光滑性条件”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "辛普森积分"
+                    },
+                    {
+                      "id": "feishu-part-5-12-2",
+                      "label": "自适应辛普森法",
+                      "color": "parent",
+                      "kind": "directory",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [
+                        {
+                          "id": "algorithm-content-feishu-part-5-12-2",
+                          "label": "自适应辛普森法",
+                          "color": "advanced",
+                          "kind": "algorithm",
+                          "origin": "feishu",
+                          "attributes": [],
+                          "children": [],
+                          "sourceRefs": [
+                            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                            "https://cp-algorithms.com/num_methods/simpson-integration.html",
+                            "https://oi-wiki.org/geometry/"
+                          ],
+                          "level": 6,
+                          "sourceEvidence": [
+                            "Part 5.12.2 自适应辛普森法"
+                          ],
+                          "difficultySource": {
+                            "kind": "research",
+                            "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                          },
+                          "rationale": "在“用子区间估计误差递归细分并限制终止深度”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                          "evidenceScope": "topic-and-prerequisites",
+                          "difficultyConfidence": "medium",
+                          "scope": "用子区间估计误差递归细分并限制终止深度",
+                          "rating": {
+                            "status": "confirmed",
+                            "date": "2026-11-11",
+                            "type": "knowledge",
+                            "scope": "用子区间估计误差递归细分并限制终止深度",
+                            "rationale": "在“用子区间估计误差递归细分并限制终止深度”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                            "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                            "range": {
+                              "min": 4,
+                              "max": 4
+                            }
+                          },
+                          "fullLabel": "自适应辛普森法",
+                          "contentOf": "feishu-part-5-12-2"
+                        }
+                      ],
+                      "sourceHeading": "Part 5.12.2 自适应辛普森法",
+                      "part": "5.12.2",
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "https://cp-algorithms.com/num_methods/simpson-integration.html",
+                        "https://oi-wiki.org/geometry/"
+                      ],
+                      "sourceBlockId": "285",
+                      "legacyIds": [
+                        "xcpc-自适应辛普森-1"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 5.12.2 自适应辛普森法"
+                      ],
+                      "difficultySource": {
+                        "kind": "directory",
+                        "detail": "目录不参与难度评级"
+                      },
+                      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                      "scope": "目录导航：自适应辛普森法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                      "rating": {
+                        "status": "not-applicable",
+                        "date": "2026-11-11",
+                        "type": "directory",
+                        "scope": "目录导航：自适应辛普森法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                      },
+                      "description": "目录导航：自适应辛普森法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                      "fullLabel": "自适应辛普森法"
+                    },
+                    {
+                      "id": "algorithm-content-xcpc-数值积分-1",
+                      "label": "数值积分",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://oi-wiki.org/math/",
+                        "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                        "https://cp-algorithms.com/"
+                      ],
+                      "level": 5,
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“数值求积、误差控制和采样步长；不含任意函数的无条件误差保证”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceEvidence": [
+                        "数值积分"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "数值求积、误差控制和采样步长；不含任意函数的无条件误差保证",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "数值求积、误差控制和采样步长；不含任意函数的无条件误差保证",
+                        "rationale": "在“数值求积、误差控制和采样步长；不含任意函数的无条件误差保证”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "数值积分",
+                      "contentOf": "xcpc-数值积分-1"
+                    }
+                  ],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/math/",
+                    "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+                    "https://cp-algorithms.com/"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "sourceEvidence": [
+                    "数值积分"
+                  ],
+                  "scope": "目录导航：数值积分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：数值积分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：数值积分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "数值积分"
+                }
+              ],
+              "sourceHeading": "Part 5.12 数值方法",
+              "part": "5.12",
+              "sourceRefs": [],
+              "sourceBlockId": "283",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.12 数值方法"
+              ],
+              "aliases": [
+                "数值方法"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：数值优化与积分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：数值优化与积分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：数值优化与积分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "数值优化与积分"
+            },
+            {
+              "id": "feishu-part-5-11",
+              "label": "线性规划",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board",
+                "useless"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-5-11",
+                  "label": "线性规划",
+                  "color": "expert",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board",
+                    "useless"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "红色：线性规划单纯形"
+                  },
+                  "rationale": "沿用用户明确D5标尺；本条范围为线性规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 5.11 线性规划",
+                    "红色：线性规划单纯形"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "单纯形法",
+                    "Simplex"
+                  ],
+                  "scope": "线性规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "线性规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D5标尺；本条范围为线性规划的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 5,
+                      "max": 5
+                    }
+                  },
+                  "fullLabel": "线性规划",
+                  "contentOf": "feishu-part-5-11"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-线性规划-1"
+              ],
+              "sourceHeading": "Part 5.11 线性规划",
+              "part": "5.11",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "282",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 5.11 线性规划",
+                "红色：线性规划单纯形"
+              ],
+              "aliases": [
+                "单纯形法",
+                "Simplex"
+              ],
+              "scope": "目录导航：线性规划。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：线性规划。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：线性规划。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "线性规划"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：数值与优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：数值与优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "数值计算与数学优化"
+          ],
+          "description": "目录导航：数值与优化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "数值计算与数学优化"
+        }
+      ],
+      "legacyIds": [
+        "xcpc-数学-1"
+      ],
+      "sourceHeading": "Part 5 数学",
+      "part": "5",
+      "sourceRefs": [],
+      "sourceBlockId": "216",
+      "level": 1,
+      "sourceEvidence": [
+        "Part 5 数学"
+      ],
+      "aliases": [
+        "数学"
+      ],
+      "difficultySource": {
+        "kind": "directory",
+        "detail": "目录不参与难度评级"
+      },
+      "scope": "目录导航：竞赛数学。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-11",
+        "type": "directory",
+        "scope": "目录导航：竞赛数学。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+      },
+      "description": "目录导航：竞赛数学。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "fullLabel": "竞赛数学"
+    },
+    {
+      "id": "feishu-part-6",
+      "label": "数据结构",
+      "color": "parent",
+      "kind": "directory",
+      "origin": "feishu",
+      "attributes": [],
+      "children": [
+        {
+          "id": "group-ds-linear",
+          "label": "线性与单调结构",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-6-2",
+              "label": "链表",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-普通链表-1",
+                  "label": "普通链表",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“单向链接和前驱维护”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceEvidence": [
+                    "普通链表"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "单向链接和前驱维护",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "单向链接和前驱维护",
+                    "rationale": "在“单向链接和前驱维护”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "普通链表"
+                },
+                {
+                  "id": "xcpc-双向链表-1",
+                  "label": "双向链表",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“前后指针更新及边界节点”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "双向链表"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "前后指针更新及边界节点",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "前后指针更新及边界节点",
+                    "rationale": "在“前后指针更新及边界节点”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "双向链表"
+                },
+                {
+                  "id": "xcpc-循环链表-1",
+                  "label": "循环链表",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“环状指针和遍历终止条件”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "循环链表"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "环状指针和遍历终止条件",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "环状指针和遍历终止条件",
+                    "rationale": "在“环状指针和遍历终止条件”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "循环链表"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-6-2",
+                  "label": "链表",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“节点链接、插入删除与访问复杂度”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.2 链表"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "节点链接、插入删除与访问复杂度",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "节点链接、插入删除与访问复杂度",
+                    "rationale": "在“节点链接、插入删除与访问复杂度”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "链表",
+                  "contentOf": "feishu-part-6-2"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-链表-1"
+              ],
+              "sourceHeading": "Part 6.2 链表",
+              "part": "6.2",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "sourceBlockId": "321",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.2 链表"
+              ],
+              "scope": "目录导航：链表。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：链表。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：链表。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "链表"
+            },
+            {
+              "id": "feishu-part-6-3",
+              "label": "栈",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "useless"
+              ],
+              "children": [
+                {
+                  "id": "xcpc-普通栈-1",
+                  "label": "普通栈",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“后进先出接口、数组实现与边界”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "普通栈"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "后进先出接口、数组实现与边界",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "后进先出接口、数组实现与边界",
+                    "rationale": "在“后进先出接口、数组实现与边界”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "普通栈"
+                },
+                {
+                  "id": "xcpc-单调栈-1",
+                  "label": "单调栈",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为单调栈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceEvidence": [
+                    "单调栈"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "单调栈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "单调栈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为单调栈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "单调栈"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-6-3",
+                  "label": "栈",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为栈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.3 栈"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "栈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "栈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为栈的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "栈",
+                  "contentOf": "feishu-part-6-3"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-栈-1"
+              ],
+              "sourceHeading": "Part 6.3 栈",
+              "part": "6.3",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "334",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.3 栈"
+              ],
+              "scope": "目录导航：栈。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：栈。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：栈。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "栈"
+            },
+            {
+              "id": "feishu-part-6-4",
+              "label": "队列",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-普通队列-1",
+                  "label": "普通队列",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“先进先出接口和循环数组实现”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "普通队列"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "先进先出接口和循环数组实现",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "先进先出接口和循环数组实现",
+                    "rationale": "在“先进先出接口和循环数组实现”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "普通队列"
+                },
+                {
+                  "id": "xcpc-双端队列-1",
+                  "label": "双端队列",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“两端增删和环形数组索引”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "双端队列"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "两端增删和环形数组索引",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "两端增删和环形数组索引",
+                    "rationale": "在“两端增删和环形数组索引”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "双端队列"
+                },
+                {
+                  "id": "xcpc-单调队列-1",
+                  "label": "单调队列",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为单调队列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "单调队列"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "单调队列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "单调队列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为单调队列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "单调队列"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-6-4",
+                  "label": "队列",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为队列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.4 队列"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "队列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "队列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为队列的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "队列",
+                  "contentOf": "feishu-part-6-4"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-队列-1"
+              ],
+              "sourceHeading": "Part 6.4 队列",
+              "part": "6.4",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "335",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.4 队列"
+              ],
+              "scope": "目录导航：队列。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：队列。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：队列。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "队列"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：线性与单调结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：线性与单调结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "线性结构与单调结构"
+          ],
+          "description": "目录导航：线性与单调结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "线性结构与单调结构"
+        },
+        {
+          "id": "group-ds-priority",
+          "label": "堆",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-6-6",
+              "label": "二叉堆",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-普通堆-1",
+                  "label": "普通堆",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“手写二叉堆的插入、取顶与删除顶”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "普通堆"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "手写二叉堆的插入、取顶与删除顶",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "手写二叉堆的插入、取顶与删除顶",
+                    "rationale": "在“手写二叉堆的插入、取顶与删除顶”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "普通堆"
+                },
+                {
+                  "id": "xcpc-对顶堆-1",
+                  "label": "对顶堆",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“用两个堆维护中位数，证明大小和顺序不变量”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "对顶堆"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "用两个堆维护中位数，证明大小和顺序不变量",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "用两个堆维护中位数，证明大小和顺序不变量",
+                    "rationale": "在“用两个堆维护中位数，证明大小和顺序不变量”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "对顶堆"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-6-6",
+                  "label": "二叉堆",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“数组完全二叉树、上浮下沉和线性建堆”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.6 二叉堆"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "数组完全二叉树、上浮下沉和线性建堆",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "数组完全二叉树、上浮下沉和线性建堆",
+                    "rationale": "在“数组完全二叉树、上浮下沉和线性建堆”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "二叉堆",
+                  "contentOf": "feishu-part-6-6"
+                }
+              ],
+              "sourceHeading": "Part 6.6 二叉堆",
+              "part": "6.6",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "sourceBlockId": "337",
+              "legacyIds": [
+                "xcpc-堆-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.6 二叉堆"
+              ],
+              "scope": "目录导航：二叉堆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：二叉堆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：二叉堆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "二叉堆"
+            },
+            {
+              "id": "feishu-part-6-11",
+              "label": "可并堆",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-左偏堆-1",
+                  "label": "左偏堆",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：对应进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为左偏堆的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "左偏堆",
+                    "蓝色：对应进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "左偏堆的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "左偏堆的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为左偏堆的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "左偏堆"
+                },
+                {
+                  "id": "xcpc-斐波那契堆-1",
+                  "label": "斐波那契堆",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“可并堆、级联切断、势能分析与摊还复杂度”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceEvidence": [
+                    "斐波那契堆"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "可并堆、级联切断、势能分析与摊还复杂度",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "可并堆、级联切断、势能分析与摊还复杂度",
+                    "rationale": "在“可并堆、级联切断、势能分析与摊还复杂度”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "斐波那契堆"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-6-11",
+                  "label": "可并堆",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为可并堆的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.11 可并堆"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "可并堆的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "可并堆的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为可并堆的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "可并堆",
+                  "contentOf": "feishu-part-6-11"
+                }
+              ],
+              "sourceHeading": "Part 6.11 可并堆",
+              "part": "6.11",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "342",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.11 可并堆"
+              ],
+              "scope": "目录导航：可并堆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：可并堆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：可并堆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "可并堆"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：堆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：堆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "堆与优先队列"
+          ],
+          "description": "目录导航：堆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "堆与优先队列"
+        },
+        {
+          "id": "feishu-part-6-5",
+          "label": "并查集",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [
+            "board"
+          ],
+          "children": [
+            {
+              "id": "xcpc-并查集基础-1",
+              "label": "基础并查集",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "绿色：对应基础算法"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为并查集基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "并查集基础"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "并查集基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "并查集基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为并查集基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "aliases": [
+                "并查集基础"
+              ],
+              "fullLabel": "并查集基础"
+            },
+            {
+              "id": "xcpc-带权并查集-1",
+              "label": "带权并查集",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useful"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“维护到根的势差或关系，合并时更新相对量”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/dsu/",
+                "https://cp-algorithms.com/data_structures/disjoint_set_union.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "带权并查集"
+              ],
+              "evidenceScope": "topic-and-prerequisites",
+              "difficultyConfidence": "medium",
+              "scope": "维护到根的势差或关系，合并时更新相对量",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "维护到根的势差或关系，合并时更新相对量",
+                "rationale": "在“维护到根的势差或关系，合并时更新相对量”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "带权并查集"
+            },
+            {
+              "id": "algorithm-可撤销并查集",
+              "label": "可撤销并查集",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useful"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“按秩合并、修改栈与回滚；不直接使用普通路径压缩”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/dsu/",
+                "https://cp-algorithms.com/data_structures/deleting_in_log_n.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "可撤销并查集"
+              ],
+              "evidenceScope": "topic-and-prerequisites",
+              "difficultyConfidence": "medium",
+              "scope": "按秩合并、修改栈与回滚；不直接使用普通路径压缩",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "按秩合并、修改栈与回滚；不直接使用普通路径压缩",
+                "rationale": "在“按秩合并、修改栈与回滚；不直接使用普通路径压缩”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "可撤销并查集"
+            },
+            {
+              "id": "algorithm-content-feishu-part-6-5",
+              "label": "并查集",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [],
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户文档对应数据结构基础或进阶条目"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为并查集的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.5 并查集"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "并查集的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "并查集的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为并查集的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "并查集",
+              "contentOf": "feishu-part-6-5"
+            }
+          ],
+          "legacyIds": [
+            "xcpc-并查集-1"
+          ],
+          "sourceHeading": "Part 6.5 并查集",
+          "part": "6.5",
+          "sourceRefs": [
+            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+            "color-md"
+          ],
+          "sourceBlockId": "336",
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 6.5 并查集"
+          ],
+          "scope": "目录导航：并查集。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：并查集。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：并查集。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "并查集"
+        },
+        {
+          "id": "group-ds-range",
+          "label": "区间与分块",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-6-7",
+              "label": "ST 表",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-6-7",
+                  "label": "ST 表",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为稀疏表（ST 表）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.7 ST表"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "ST表",
+                    "稀疏表（ST 表）"
+                  ],
+                  "scope": "稀疏表（ST 表）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "稀疏表（ST 表）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为稀疏表（ST 表）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "稀疏表（ST 表）",
+                  "contentOf": "feishu-part-6-7"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-st表-1"
+              ],
+              "sourceHeading": "Part 6.7 ST表",
+              "part": "6.7",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "338",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.7 ST表"
+              ],
+              "aliases": [
+                "ST表",
+                "稀疏表（ST 表）"
+              ],
+              "scope": "目录导航：ST 表。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：ST 表。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：ST 表。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "稀疏表（ST 表）"
+            },
+            {
+              "id": "feishu-part-6-8",
+              "label": "树状数组",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board",
+                "useful"
+              ],
+              "children": [
+                {
+                  "id": "xcpc-树状数组基础-1",
+                  "label": "基础树状数组",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：几何/数据结构基础"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为树状数组基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树状数组基础",
+                    "绿色：几何/数据结构基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "树状数组基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "树状数组基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为树状数组基础的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "树状数组基础"
+                  ],
+                  "fullLabel": "树状数组基础"
+                },
+                {
+                  "id": "xcpc-树状数组求第k大-1",
+                  "label": "树状数组第 k 大",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“按非负频数在Fenwick树上二进制提升查找排名”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树状数组求第k大"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "按非负频数在Fenwick树上二进制提升查找排名",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "按非负频数在Fenwick树上二进制提升查找排名",
+                    "rationale": "在“按非负频数在Fenwick树上二进制提升查找排名”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "树状数组求第k大"
+                  ],
+                  "fullLabel": "树状数组求第k大"
+                },
+                {
+                  "id": "xcpc-多维树状数组-1",
+                  "label": "多维树状数组",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“二维/少维点更新与前缀查询及空间上界”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "多维树状数组"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "二维/少维点更新与前缀查询及空间上界",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "二维/少维点更新与前缀查询及空间上界",
+                    "rationale": "在“二维/少维点更新与前缀查询及空间上界”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "多维树状数组"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-6-8",
+                  "label": "树状数组",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board",
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为树状数组的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.8 树状数组"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "树状数组的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "树状数组的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为树状数组的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "树状数组",
+                  "contentOf": "feishu-part-6-8"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-树状数组-1"
+              ],
+              "sourceHeading": "Part 6.8 树状数组",
+              "part": "6.8",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "339",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.8 树状数组"
+              ],
+              "scope": "目录导航：树状数组。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：树状数组。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：树状数组。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "树状数组"
+            },
+            {
+              "id": "feishu-part-6-9",
+              "label": "线段树",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board",
+                "useful"
+              ],
+              "children": [
+                {
+                  "id": "xcpc-基础线段树-1",
+                  "label": "基础线段树",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：几何/数据结构基础"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为基础线段树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "基础线段树",
+                    "绿色：几何/数据结构基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "基础线段树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "基础线段树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为基础线段树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "基础线段树"
+                },
+                {
+                  "id": "xcpc-带标记的线段树-1",
+                  "label": "懒标记线段树",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "本次审校的学习范围与前置知识评估"
+                  },
+                  "rationale": "在“标记合成、下传不变量及区间和或极值”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/seg/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "带标记的线段树"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "legacyIds": [
+                    "algorithm-线段树区间修改-查询"
+                  ],
+                  "aliases": [
+                    "带标记的线段树",
+                    "区间修改 / 区间查询（懒标记）"
+                  ],
+                  "scope": "标记合成、下传不变量及区间和或极值",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "标记合成、下传不变量及区间和或极值",
+                    "rationale": "在“标记合成、下传不变量及区间和或极值”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "区间修改 / 区间查询（懒标记）"
+                },
+                {
+                  "id": "xcpc-李超线段树-1",
+                  "label": "李超线段树",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“维护一次函数包络、比较中点并将劣线递归到一侧”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "李超线段树"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "维护一次函数包络、比较中点并将劣线递归到一侧",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "维护一次函数包络、比较中点并将劣线递归到一侧",
+                    "rationale": "在“维护一次函数包络、比较中点并将劣线递归到一侧”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "李超线段树"
+                },
+                {
+                  "id": "xcpc-线段树合并-1",
+                  "label": "线段树合并",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：对应进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为线段树合并的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "线段树合并",
+                    "蓝色：对应进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "线段树合并的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "线段树合并的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为线段树合并的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "线段树合并"
+                },
+                {
+                  "id": "xcpc-zkw线段树-1",
+                  "label": "ZKW线段树",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“迭代式区间查询与更新、开区间哨兵和索引不变量”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "ZKW线段树"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "迭代式区间查询与更新、开区间哨兵和索引不变量",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "迭代式区间查询与更新、开区间哨兵和索引不变量",
+                    "rationale": "在“迭代式区间查询与更新、开区间哨兵和索引不变量”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "ZKW线段树"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-6-9",
+                  "label": "线段树",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board",
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为线段树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.9 线段树"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "线段树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "线段树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为线段树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "线段树",
+                  "contentOf": "feishu-part-6-9"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-线段树-1"
+              ],
+              "sourceHeading": "Part 6.9 线段树",
+              "part": "6.9",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "340",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.9 线段树"
+              ],
+              "scope": "目录导航：线段树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：线段树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：线段树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "线段树"
+            },
+            {
+              "id": "feishu-part-6-10",
+              "label": "分块",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-链上分块-1",
+                  "label": "链上分块",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“对线性序列按块维护整块信息和边界散块”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceEvidence": [
+                    "链上分块"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "对线性序列按块维护整块信息和边界散块",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "对线性序列按块维护整块信息和边界散块",
+                    "rationale": "在“对线性序列按块维护整块信息和边界散块”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "链上分块"
+                },
+                {
+                  "id": "xcpc-树上分块-1",
+                  "label": "树上分块",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“按树形划块并分析跨块跳转与局部更新”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceEvidence": [
+                    "树上分块"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "按树形划块并分析跨块跳转与局部更新",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "按树形划块并分析跨块跳转与局部更新",
+                    "rationale": "在“按树形划块并分析跨块跳转与局部更新”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "树上分块"
+                },
+                {
+                  "id": "xcpc-划分树-1",
+                  "label": "划分树",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“按值划分静态序列并映射查询区间，求第k小”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "划分树"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "按值划分静态序列并映射查询区间，求第k小",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "按值划分静态序列并映射查询区间，求第k小",
+                    "rationale": "在“按值划分静态序列并映射查询区间，求第k小”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "划分树"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-6-10",
+                  "label": "分块",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为分块的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.10 分块"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "分块的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "分块的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为分块的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "分块",
+                  "contentOf": "feishu-part-6-10"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-分块-1"
+              ],
+              "sourceHeading": "Part 6.10 分块",
+              "part": "6.10",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "341",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.10 分块"
+              ],
+              "scope": "目录导航：分块。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：分块。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：分块。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "分块"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：区间与分块。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：区间与分块。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "区间查询与分块"
+          ],
+          "description": "目录导航：区间与分块。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "区间查询与分块"
+        },
+        {
+          "id": "group-ds-ordered",
+          "label": "有序与区间集合",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-6-13",
+              "label": "平衡树",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-splay-1",
+                  "label": "Splay",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "橙色：高级"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为Splay的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "splay",
+                    "橙色：高级"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "splay"
+                  ],
+                  "scope": "Splay的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "Splay的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为Splay的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "Splay"
+                },
+                {
+                  "id": "xcpc-treap-1",
+                  "label": "Treap",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "橙色：高级"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为Treap的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "treap",
+                    "橙色：高级"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "treap"
+                  ],
+                  "scope": "Treap的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "Treap的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为Treap的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "Treap"
+                },
+                {
+                  "id": "xcpc-fhqtreap-1",
+                  "label": "fhqtreap",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "橙色：高级"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为fhqtreap的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "fhqtreap",
+                    "橙色：高级"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "fhqtreap的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "fhqtreap的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为fhqtreap的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "fhqtreap"
+                },
+                {
+                  "id": "xcpc-替罪羊树-1",
+                  "label": "替罪羊树",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "橙色：高级"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为替罪羊树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "替罪羊树",
+                    "橙色：高级"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "替罪羊树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "替罪羊树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为替罪羊树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "替罪羊树"
+                },
+                {
+                  "id": "xcpc-avl-1",
+                  "label": "AVL",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“旋转维护高度平衡，含插入删除”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/avl/",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "AVL"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "旋转维护高度平衡，含插入删除",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "旋转维护高度平衡，含插入删除",
+                    "rationale": "在“旋转维护高度平衡，含插入删除”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "AVL"
+                },
+                {
+                  "id": "xcpc-sbt-1",
+                  "label": "SBT",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“维护子树规模平衡的旋转规则与序统计”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "SBT"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "维护子树规模平衡的旋转规则与序统计",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "维护子树规模平衡的旋转规则与序统计",
+                    "rationale": "在“维护子树规模平衡的旋转规则与序统计”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "SBT"
+                },
+                {
+                  "id": "xcpc-红黑树-1",
+                  "label": "红黑树",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“颜色不变量、插入删除修复与高度界”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/rbtree/",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "红黑树"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "颜色不变量、插入删除修复与高度界",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "颜色不变量、插入删除修复与高度界",
+                    "rationale": "在“颜色不变量、插入删除修复与高度界”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "红黑树"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-6-13",
+                  "label": "平衡树",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为平衡二叉搜索树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.13 平衡树"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "其他平衡二叉搜索树",
+                    "平衡二叉搜索树"
+                  ],
+                  "scope": "平衡二叉搜索树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "平衡二叉搜索树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为平衡二叉搜索树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "平衡二叉搜索树",
+                  "contentOf": "feishu-part-6-13"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-平衡树-1",
+                "xcpc-其他-1"
+              ],
+              "sourceHeading": "Part 6.13 平衡树",
+              "part": "6.13",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "344",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.13 平衡树"
+              ],
+              "aliases": [
+                "其他平衡二叉搜索树",
+                "平衡二叉搜索树"
+              ],
+              "scope": "目录导航：平衡树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：平衡树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：平衡树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "平衡二叉搜索树"
+            },
+            {
+              "id": "feishu-part-6-19",
+              "label": "珂朵莉树",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-6-19",
+                  "label": "珂朵莉树",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“用有序区间集合split/assign及遍历；复杂度依赖区间数量和数据分布”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.19 珂朵莉树"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "用有序区间集合split/assign及遍历；复杂度依赖区间数量和数据分布",
+                  "aliases": [
+                    "区间集合维护（珂朵莉树 / ODT）"
+                  ],
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "用有序区间集合split/assign及遍历；复杂度依赖区间数量和数据分布",
+                    "rationale": "在“用有序区间集合split/assign及遍历；复杂度依赖区间数量和数据分布”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "区间集合维护（珂朵莉树 / ODT）",
+                  "contentOf": "feishu-part-6-19"
+                }
+              ],
+              "sourceHeading": "Part 6.19 珂朵莉树",
+              "part": "6.19",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "sourceBlockId": "350",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.19 珂朵莉树"
+              ],
+              "scope": "目录导航：珂朵莉树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "aliases": [
+                "区间集合维护（珂朵莉树 / ODT）"
+              ],
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：珂朵莉树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：珂朵莉树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "区间集合维护（珂朵莉树 / ODT）"
+            },
+            {
+              "id": "xcpc-析合树-1",
+              "label": "析合树",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "board"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“排列的公共连续值域区间、分解结构与构建”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "析合树"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "排列的公共连续值域区间、分解结构与构建",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "排列的公共连续值域区间、分解结构与构建",
+                "rationale": "在“排列的公共连续值域区间、分解结构与构建”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "析合树"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：有序与区间集合。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：有序与区间集合。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "有序集合与区间集合"
+          ],
+          "description": "目录导航：有序与区间集合。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "有序集合与区间集合"
+        },
+        {
+          "id": "feishu-part-6-17",
+          "label": "持久化",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-可持久化平衡树-1",
+              "label": "持久化平衡树",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“通过路径复制维护历史版本的分裂与合并”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "可持久化平衡树"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "通过路径复制维护历史版本的分裂与合并",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "通过路径复制维护历史版本的分裂与合并",
+                "rationale": "在“通过路径复制维护历史版本的分裂与合并”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "aliases": [
+                "可持久化平衡树"
+              ],
+              "fullLabel": "可持久化平衡树"
+            },
+            {
+              "id": "xcpc-可持久化并查集-1",
+              "label": "持久化并查集",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“用可持久化数组维护父指针和秩，实现历史版本合并查询”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceRefs": [
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "可持久化并查集"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "用可持久化数组维护父指针和秩，实现历史版本合并查询",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "用可持久化数组维护父指针和秩，实现历史版本合并查询",
+                "rationale": "在“用可持久化数组维护父指针和秩，实现历史版本合并查询”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "aliases": [
+                "可持久化并查集"
+              ],
+              "fullLabel": "可持久化并查集"
+            },
+            {
+              "id": "feishu-part-6-12",
+              "label": "主席树",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-6-12",
+                  "label": "主席树",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为可持久化权值线段树（主席树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.12 主席树"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "可持久化线段树",
+                    "可持久化权值线段树（主席树）"
+                  ],
+                  "scope": "可持久化权值线段树（主席树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "可持久化权值线段树（主席树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为可持久化权值线段树（主席树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "可持久化权值线段树（主席树）",
+                  "contentOf": "feishu-part-6-12"
+                }
+              ],
+              "sourceHeading": "Part 6.12 主席树",
+              "part": "6.12",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "343",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.12 主席树"
+              ],
+              "legacyIds": [
+                "xcpc-可持久化线段树-1"
+              ],
+              "aliases": [
+                "可持久化线段树",
+                "可持久化权值线段树（主席树）"
+              ],
+              "scope": "目录导航：主席树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：主席树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：主席树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "可持久化权值线段树（主席树）"
+            },
+            {
+              "id": "algorithm-content-feishu-part-6-17",
+              "label": "持久化",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/ds/",
+                "https://cp-algorithms.com/data_structures/segment_tree.html",
+                "https://cp-algorithms.com/data_structures/treap.html"
+              ],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“路径复制、版本根和共享不可变节点；具体结构分别评级”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.17 可持久化数据结构"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "路径复制、版本根和共享不可变节点；具体结构分别评级",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "路径复制、版本根和共享不可变节点；具体结构分别评级",
+                "rationale": "在“路径复制、版本根和共享不可变节点；具体结构分别评级”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "aliases": [
+                "可持久化数据结构"
+              ],
+              "fullLabel": "可持久化数据结构",
+              "contentOf": "feishu-part-6-17"
+            }
+          ],
+          "sourceHeading": "Part 6.17 可持久化数据结构",
+          "part": "6.17",
+          "sourceRefs": [
+            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+            "https://oi-wiki.org/ds/",
+            "https://cp-algorithms.com/data_structures/segment_tree.html",
+            "https://cp-algorithms.com/data_structures/treap.html"
+          ],
+          "sourceBlockId": "348",
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 6.17 可持久化数据结构"
+          ],
+          "scope": "目录导航：持久化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：持久化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "可持久化数据结构"
+          ],
+          "description": "目录导航：持久化。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "可持久化数据结构"
+        },
+        {
+          "id": "group-ds-multidimensional",
+          "label": "多维与空间查询",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-6-15",
+              "label": "树套树",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-线段树套线段树-1",
+                  "label": "线段树套线段树",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“二维查询与动态节点，分析O(log²n)级操作和空间”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "线段树套线段树"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "二维查询与动态节点，分析O(log²n)级操作和空间",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "二维查询与动态节点，分析O(log²n)级操作和空间",
+                    "rationale": "在“二维查询与动态节点，分析O(log²n)级操作和空间”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "线段树套线段树"
+                },
+                {
+                  "id": "xcpc-线段树套平衡树-1",
+                  "label": "线段树套平衡树",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“外层区间树与内层有序统计组合”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "线段树套平衡树"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "外层区间树与内层有序统计组合",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "外层区间树与内层有序统计组合",
+                    "rationale": "在“外层区间树与内层有序统计组合”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "线段树套平衡树"
+                },
+                {
+                  "id": "algorithm-树套树-进阶",
+                  "label": "进阶树套树",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为树套树（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树套树（进阶）"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "树套树（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "树套树（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为树套树（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "aliases": [
+                    "树套树（进阶）"
+                  ],
+                  "fullLabel": "树套树（进阶）"
+                },
+                {
+                  "id": "xcpc-树套表-1",
+                  "label": "树套表",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“外层分解结构与内层离线有序表结合，明确更新能力”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/ds/",
+                    "https://cp-algorithms.com/data_structures/segment_tree.html",
+                    "https://cp-algorithms.com/data_structures/treap.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树套表"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "外层分解结构与内层离线有序表结合，明确更新能力",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "外层分解结构与内层离线有序表结合，明确更新能力",
+                    "rationale": "在“外层分解结构与内层离线有序表结合，明确更新能力”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "树套表"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-6-15",
+                  "label": "树套树",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为多维查询结构（树套树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.15 树套树"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "多维查询结构（树套树）"
+                  ],
+                  "scope": "多维查询结构（树套树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "多维查询结构（树套树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为多维查询结构（树套树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "多维查询结构（树套树）",
+                  "contentOf": "feishu-part-6-15"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-树套树-1"
+              ],
+              "sourceHeading": "Part 6.15 树套树",
+              "part": "6.15",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "346",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.15 树套树"
+              ],
+              "aliases": [
+                "多维查询结构（树套树）"
+              ],
+              "scope": "目录导航：树套树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：树套树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：树套树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "多维查询结构（树套树）"
+            },
+            {
+              "id": "feishu-part-6-18",
+              "label": "K-D 树",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-6-18",
+                  "label": "K-D 树",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档对应数据结构基础或进阶条目"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为K-D 树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.18 K-D Tree"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "KD-Tree",
+                    "KD树",
+                    "K-D Tree"
+                  ],
+                  "scope": "K-D 树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "K-D 树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为K-D 树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "K-D 树",
+                  "contentOf": "feishu-part-6-18"
+                }
+              ],
+              "sourceHeading": "Part 6.18 K-D Tree",
+              "part": "6.18",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "349",
+              "legacyIds": [
+                "xcpc-kd树-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 6.18 K-D Tree"
+              ],
+              "aliases": [
+                "KD-Tree",
+                "KD树",
+                "K-D Tree"
+              ],
+              "scope": "目录导航：K-D 树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：K-D 树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：K-D 树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "K-D 树"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：多维与空间查询。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：多维与空间查询。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "多维查询与空间索引"
+          ],
+          "description": "目录导航：多维与空间查询。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "多维查询与空间索引"
+        }
+      ],
+      "legacyIds": [
+        "xcpc-数据结构-1"
+      ],
+      "sourceHeading": "Part 6 数据结构",
+      "part": "6",
+      "sourceRefs": [],
+      "sourceBlockId": "291",
+      "level": 1,
+      "sourceEvidence": [
+        "Part 6 数据结构"
+      ],
+      "difficultySource": {
+        "kind": "directory",
+        "detail": "目录不参与难度评级"
+      },
+      "scope": "目录导航：数据结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-11",
+        "type": "directory",
+        "scope": "目录导航：数据结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+      },
+      "description": "目录导航：数据结构。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "fullLabel": "数据结构"
+    },
+    {
+      "id": "feishu-part-7",
+      "label": "图与树",
+      "color": "parent",
+      "kind": "directory",
+      "origin": "feishu",
+      "attributes": [],
+      "children": [
+        {
+          "id": "feishu-part-7-1",
+          "label": "图基础",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-图的概念-1",
+              "label": "图的概念",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“有向无向、度、权、邻接表和空间复杂度”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/graph/",
+                "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                "https://cp-algorithms.com/graph/bellman_ford.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "图的概念"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "有向无向、度、权、邻接表和空间复杂度",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "有向无向、度、权、邻接表和空间复杂度",
+                "rationale": "在“有向无向、度、权、邻接表和空间复杂度”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "图的概念"
+            },
+            {
+              "id": "xcpc-图的遍历-1",
+              "label": "图的遍历",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-xcpc-图的遍历-1",
+                  "label": "图的遍历",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html",
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为图的遍历的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceEvidence": [
+                    "图的遍历"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "source",
+                  "scope": "图的遍历的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "图的遍历的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为图的遍历的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "图的遍历",
+                  "contentOf": "xcpc-图的遍历-1"
+                }
+              ],
+              "sourceRefs": [
+                "https://oi-wiki.org/graph/",
+                "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                "https://cp-algorithms.com/graph/bellman_ford.html",
+                "color-md"
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "sourceEvidence": [
+                "图的遍历"
+              ],
+              "scope": "目录导航：图的遍历。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：图的遍历。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：图的遍历。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "图的遍历"
+            },
+            {
+              "id": "xcpc-传递闭包-1",
+              "label": "传递闭包",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://oi-wiki.org/graph/",
+                "https://cp-algorithms.com/graph/strongly-connected-components.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "传递闭包"
+              ],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "布尔 Warshall 传递闭包基础应用"
+              },
+              "difficultyConfidence": "low",
+              "evidenceScope": "category-and-prerequisites",
+              "rationale": "在“用布尔Warshall或逐源搜索构建可达关系”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "crossRefs": [
+                "xcpc-floyd-1"
+              ],
+              "scope": "用布尔Warshall或逐源搜索构建可达关系",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "用布尔Warshall或逐源搜索构建可达关系",
+                "rationale": "在“用布尔Warshall或逐源搜索构建可达关系”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "传递闭包"
+            },
+            {
+              "id": "xcpc-欧拉-回-路-1",
+              "label": "欧拉路与回路",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“度数、连通条件与Hierholzer删边构造”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+              "sourceRefs": [
+                "https://oi-wiki.org/graph/",
+                "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                "https://cp-algorithms.com/graph/bellman_ford.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "欧拉（回）路"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "度数、连通条件与Hierholzer删边构造",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "度数、连通条件与Hierholzer删边构造",
+                "rationale": "在“度数、连通条件与Hierholzer删边构造”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "aliases": [
+                "欧拉（回）路"
+              ],
+              "fullLabel": "欧拉（回）路"
+            },
+            {
+              "id": "algorithm-content-feishu-part-7-1",
+              "label": "图基础",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户文档图论对应基础/进阶条目"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为图的基础、遍历与路径性质的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.1 图的存储与遍历",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "difficultyConfidence": "source",
+              "aliases": [
+                "图的存储与遍历",
+                "图的基础、遍历与路径性质"
+              ],
+              "scope": "图的基础、遍历与路径性质的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "图的基础、遍历与路径性质的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为图的基础、遍历与路径性质的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "图的基础、遍历与路径性质",
+              "contentOf": "feishu-part-7-1"
+            }
+          ],
+          "sourceHeading": "Part 7.1 图的存储与遍历",
+          "part": "7.1",
+          "sourceRefs": [
+            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+            "color-md"
+          ],
+          "sourceBlockId": "352",
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 7.1 图的存储与遍历",
+            "用户文档图论对应基础/进阶条目"
+          ],
+          "aliases": [
+            "图的存储与遍历",
+            "图的基础、遍历与路径性质"
+          ],
+          "scope": "目录导航：图基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：图基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：图基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "图的基础、遍历与路径性质"
+        },
+        {
+          "id": "feishu-part-7-2",
+          "label": "最短路",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-最短路-1",
+              "label": "单源最短路",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-bellman-ford-1",
+                  "label": "bellman-ford",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“逐轮松弛、可达负环与O(VE)复杂度”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "bellman-ford"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "逐轮松弛、可达负环与O(VE)复杂度",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "逐轮松弛、可达负环与O(VE)复杂度",
+                    "rationale": "在“逐轮松弛、可达负环与O(VE)复杂度”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "bellman-ford"
+                },
+                {
+                  "id": "xcpc-dijkstra-1",
+                  "label": "Dijkstra",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board",
+                    "useful"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为边权非负；负权图不能直接套用。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "dijkstra"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "dijkstra"
+                  ],
+                  "scope": "边权非负；负权图不能直接套用。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "边权非负；负权图不能直接套用。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为边权非负；负权图不能直接套用。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "Dijkstra"
+                },
+                {
+                  "id": "xcpc-最短路径树-1",
+                  "label": "最短路径树",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "本次审校的学习范围与前置知识评估"
+                  },
+                  "rationale": "在“在最短路中记录合法前驱构树；多解和零权边需避免选出前驱环”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://cp-algorithms.com/graph/dijkstra.html",
+                    "https://oi-wiki.org/graph/shortest-path/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "最短路径树"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "在最短路中记录合法前驱构树；多解和零权边需避免选出前驱环",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "在最短路中记录合法前驱构树；多解和零权边需避免选出前驱环",
+                    "rationale": "在“在最短路中记录合法前驱构树；多解和零权边需避免选出前驱环”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "最短路径树"
+                },
+                {
+                  "id": "algorithm-spfa",
+                  "label": "SPFA",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“队列化松弛与负环检测，最坏O(VE)”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/shortest-path/",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "SPFA"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "队列化松弛与负环检测，最坏O(VE)",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "队列化松弛与负环检测，最坏O(VE)",
+                    "rationale": "在“队列化松弛与负环检测，最坏O(VE)”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "SPFA"
+                }
+              ],
+              "sourceRefs": [],
+              "level": 3,
+              "sourceEvidence": [
+                "最短路"
+              ],
+              "aliases": [
+                "最短路",
+                "单源最短路与路径树"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：单源最短路。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：单源最短路。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：单源最短路。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "单源最短路与路径树"
+            },
+            {
+              "id": "xcpc-k短路-1",
+              "label": "k短路",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "board"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“A*枚举第k条路径的基础模型；简单路限制和更高效算法另评”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceRefs": [
+                "https://oi-wiki.org/graph/",
+                "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                "https://cp-algorithms.com/graph/bellman_ford.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "k短路"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "A*枚举第k条路径的基础模型；简单路限制和更高效算法另评",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "A*枚举第k条路径的基础模型；简单路限制和更高效算法另评",
+                "rationale": "在“A*枚举第k条路径的基础模型；简单路限制和更高效算法另评”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "k短路"
+            },
+            {
+              "id": "xcpc-floyd-1",
+              "label": "Floyd–Warshall",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "绿色：对应基础算法"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为Floyd–Warshall的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "floyd"
+              ],
+              "difficultyConfidence": "source",
+              "aliases": [
+                "floyd"
+              ],
+              "scope": "Floyd–Warshall的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "Floyd–Warshall的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为Floyd–Warshall的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "Floyd–Warshall"
+            },
+            {
+              "id": "algorithm-content-feishu-part-7-2",
+              "label": "最短路",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户文档图论对应基础/进阶条目"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为最短路径的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.2 最短路问题",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "difficultyConfidence": "source",
+              "aliases": [
+                "最短路问题",
+                "最短路径"
+              ],
+              "scope": "最短路径的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "最短路径的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为最短路径的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "最短路径",
+              "contentOf": "feishu-part-7-2"
+            }
+          ],
+          "sourceHeading": "Part 7.2 最短路问题",
+          "part": "7.2",
+          "sourceRefs": [
+            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+            "color-md"
+          ],
+          "sourceBlockId": "353",
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 7.2 最短路问题",
+            "用户文档图论对应基础/进阶条目"
+          ],
+          "aliases": [
+            "最短路问题",
+            "最短路径"
+          ],
+          "scope": "目录导航：最短路。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：最短路。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：最短路。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "最短路径"
+        },
+        {
+          "id": "group-graph-dag-constraints",
+          "label": "DAG 与约束",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-7-5",
+              "label": "拓扑排序",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "useful"
+              ],
+              "children": [
+                {
+                  "id": "xcpc-拓扑序-1",
+                  "label": "拓扑序",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为拓扑序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "拓扑序"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "拓扑序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "拓扑序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为拓扑序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "拓扑序"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-7-5",
+                  "label": "拓扑排序",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档图论对应基础/进阶条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为拓扑排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.5 拓扑排序",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "拓扑排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "拓扑排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为拓扑排序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "拓扑排序",
+                  "contentOf": "feishu-part-7-5"
+                }
+              ],
+              "sourceHeading": "Part 7.5 拓扑排序",
+              "part": "7.5",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "359",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.5 拓扑排序",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "scope": "目录导航：拓扑排序。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：拓扑排序。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：拓扑排序。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "拓扑排序"
+            },
+            {
+              "id": "feishu-part-7-6",
+              "label": "差分约束",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-7-6",
+                  "label": "差分约束",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档图论对应基础/进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为差分约束系统的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.6 差分约束",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "差分约束系统"
+                  ],
+                  "scope": "差分约束系统的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "差分约束系统的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为差分约束系统的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "差分约束系统",
+                  "contentOf": "feishu-part-7-6"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-差分约束-1"
+              ],
+              "sourceHeading": "Part 7.6 差分约束",
+              "part": "7.6",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "360",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.6 差分约束",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "aliases": [
+                "差分约束系统"
+              ],
+              "scope": "目录导航：差分约束。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：差分约束。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：差分约束。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "差分约束系统"
+            },
+            {
+              "id": "feishu-part-7-10",
+              "label": "2-SAT",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-7-10",
+                  "label": "2-SAT",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档图论对应基础/进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为2-SAT 与可满足性的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.10 2-SAT",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "2-SAT 与可满足性"
+                  ],
+                  "scope": "2-SAT 与可满足性的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "2-SAT 与可满足性的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为2-SAT 与可满足性的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "2-SAT 与可满足性",
+                  "contentOf": "feishu-part-7-10"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-2-sat-1"
+              ],
+              "sourceHeading": "Part 7.10 2-SAT",
+              "part": "7.10",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "368",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.10 2-SAT",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "aliases": [
+                "2-SAT 与可满足性"
+              ],
+              "scope": "目录导航：2-SAT。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：2-SAT。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：2-SAT。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "2-SAT 与可满足性"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：DAG 与约束。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：DAG 与约束。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "有向无环图与约束建模"
+          ],
+          "description": "目录导航：DAG 与约束。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "有向无环图与约束建模"
+        },
+        {
+          "id": "feishu-part-7-3",
+          "label": "树上算法",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [],
+          "children": [
+            {
+              "id": "group-tree-foundations",
+              "label": "树基础",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "editorial",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-树的基本概念-1",
+                  "label": "树的概念",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“根、父子、深度、子树和n-1条边性质”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树的基本概念"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "根、父子、深度、子树和n-1条边性质",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "根、父子、深度、子树和n-1条边性质",
+                    "rationale": "在“根、父子、深度、子树和n-1条边性质”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "aliases": [
+                    "树的基本概念"
+                  ],
+                  "fullLabel": "树的基本概念"
+                },
+                {
+                  "id": "feishu-part-7-3-1",
+                  "label": "二叉树",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-content-feishu-part-7-3-1",
+                      "label": "二叉树",
+                      "color": "beginner",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "https://oi-wiki.org/graph/",
+                        "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                        "https://cp-algorithms.com/graph/bellman_ford.html"
+                      ],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“左右子树、基本遍历与存储”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 7.3.1 二叉树",
+                        "用户文档图论对应基础/进阶条目"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "左右子树、基本遍历与存储",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "左右子树、基本遍历与存储",
+                        "rationale": "在“左右子树、基本遍历与存储”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 2,
+                          "max": 2
+                        }
+                      },
+                      "fullLabel": "二叉树",
+                      "contentOf": "feishu-part-7-3-1"
+                    }
+                  ],
+                  "sourceHeading": "Part 7.3.1 二叉树",
+                  "part": "7.3.1",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "sourceBlockId": "355",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.3.1 二叉树",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "scope": "目录导航：二叉树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：二叉树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：二叉树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "二叉树"
+                },
+                {
+                  "id": "xcpc-树的遍历-1",
+                  "label": "树的遍历",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“DFS/BFS、父子关系与进入退出时刻”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树的遍历"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "DFS/BFS、父子关系与进入退出时刻",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "DFS/BFS、父子关系与进入退出时刻",
+                    "rationale": "在“DFS/BFS、父子关系与进入退出时刻”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "树的遍历"
+                },
+                {
+                  "id": "xcpc-dfn-1",
+                  "label": "dfn",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“DFS进入序和子树连续区间映射”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceEvidence": [
+                    "dfn"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "DFS进入序和子树连续区间映射",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "DFS进入序和子树连续区间映射",
+                    "rationale": "在“DFS进入序和子树连续区间映射”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "dfn"
+                },
+                {
+                  "id": "xcpc-括号序-1",
+                  "label": "括号序",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“进入退出各记一次的序列及祖先嵌套关系”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "括号序"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "进入退出各记一次的序列及祖先嵌套关系",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "进入退出各记一次的序列及祖先嵌套关系",
+                    "rationale": "在“进入退出各记一次的序列及祖先嵌套关系”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "括号序"
+                },
+                {
+                  "id": "feishu-part-7-3-2",
+                  "label": "树的直径",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-content-feishu-part-7-3-2",
+                      "label": "树的直径",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "蓝色：对应进阶条目"
+                      },
+                      "rationale": "沿用用户明确D3标尺；本条范围为树的直径的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 7.3.2 树的直径",
+                        "用户文档图论对应基础/进阶条目",
+                        "蓝色：对应进阶条目"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "树的直径的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "树的直径的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D3标尺；本条范围为树的直径的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "树的直径",
+                      "contentOf": "feishu-part-7-3-2"
+                    }
+                  ],
+                  "legacyIds": [
+                    "xcpc-树的直径-1"
+                  ],
+                  "sourceHeading": "Part 7.3.2 树的直径",
+                  "part": "7.3.2",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "356",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.3.2 树的直径",
+                    "用户文档图论对应基础/进阶条目",
+                    "蓝色：对应进阶条目"
+                  ],
+                  "scope": "目录导航：树的直径。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：树的直径。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：树的直径。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "树的直径"
+                },
+                {
+                  "id": "xcpc-树的重心-1",
+                  "label": "树的重心",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：对应进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为树的重心的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树的重心",
+                    "蓝色：对应进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "树的重心的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "树的重心的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为树的重心的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "树的重心"
+                }
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：树基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "sourceRefs": [],
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：树基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "树的基础、遍历与形态"
+              ],
+              "description": "目录导航：树基础。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "树的基础、遍历与形态"
+            },
+            {
+              "id": "group-tree-queries",
+              "label": "树上查询",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "editorial",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "feishu-part-7-3-3",
+                  "label": "LCA",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [
+                    {
+                      "id": "algorithm-content-feishu-part-7-3-3",
+                      "label": "LCA",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [
+                        "useful"
+                      ],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户文档图论对应基础/进阶条目"
+                      },
+                      "rationale": "沿用用户明确D3标尺；本条范围为最近公共祖先（LCA）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 7.3.3 最近公共祖先",
+                        "用户文档图论对应基础/进阶条目"
+                      ],
+                      "difficultyConfidence": "source",
+                      "aliases": [
+                        "最近公共祖先",
+                        "最近公共祖先（LCA）"
+                      ],
+                      "scope": "最近公共祖先（LCA）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "最近公共祖先（LCA）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D3标尺；本条范围为最近公共祖先（LCA）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "最近公共祖先（LCA）",
+                      "contentOf": "feishu-part-7-3-3"
+                    }
+                  ],
+                  "sourceHeading": "Part 7.3.3 最近公共祖先",
+                  "part": "7.3.3",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "357",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.3.3 最近公共祖先",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "legacyIds": [
+                    "xcpc-lca-1"
+                  ],
+                  "aliases": [
+                    "最近公共祖先",
+                    "最近公共祖先（LCA）"
+                  ],
+                  "scope": "目录导航：LCA。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：LCA。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：LCA。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "最近公共祖先（LCA）"
+                },
+                {
+                  "id": "feishu-part-6-14",
+                  "label": "树链剖分",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-重链剖分-1",
+                      "label": "重链剖分",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“选最大子树为重儿子，链跳转和区间查询”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/ds/",
+                        "https://cp-algorithms.com/data_structures/segment_tree.html",
+                        "https://cp-algorithms.com/data_structures/treap.html"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "重链剖分"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "选最大子树为重儿子，链跳转和区间查询",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "选最大子树为重儿子，链跳转和区间查询",
+                        "rationale": "在“选最大子树为重儿子，链跳转和区间查询”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "重链剖分"
+                    },
+                    {
+                      "id": "xcpc-长链剖分-1",
+                      "label": "长链剖分",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“按深度选择长儿子，长链信息复用或DP优化”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/ds/",
+                        "https://cp-algorithms.com/data_structures/segment_tree.html",
+                        "https://cp-algorithms.com/data_structures/treap.html"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "长链剖分"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "按深度选择长儿子，长链信息复用或DP优化",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "按深度选择长儿子，长链信息复用或DP优化",
+                        "rationale": "在“按深度选择长儿子，长链信息复用或DP优化”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "长链剖分"
+                    },
+                    {
+                      "id": "algorithm-树链剖分-进阶",
+                      "label": "进阶树链剖分",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户提供颜色难度文档对应条目"
+                      },
+                      "rationale": "沿用用户明确D4标尺；本条范围为树链剖分（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "树链剖分（进阶）"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "树链剖分（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "树链剖分（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D4标尺；本条范围为树链剖分（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "aliases": [
+                        "树链剖分（进阶）"
+                      ],
+                      "fullLabel": "树链剖分（进阶）"
+                    },
+                    {
+                      "id": "algorithm-content-feishu-part-6-14",
+                      "label": "树链剖分",
+                      "color": "intermediate",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户文档对应数据结构基础或进阶条目"
+                      },
+                      "rationale": "沿用用户明确D3标尺；本条范围为树链剖分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 6.14 树链剖分"
+                      ],
+                      "difficultyConfidence": "source",
+                      "scope": "树链剖分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "树链剖分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D3标尺；本条范围为树链剖分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 3,
+                          "max": 3
+                        }
+                      },
+                      "fullLabel": "树链剖分",
+                      "contentOf": "feishu-part-6-14"
+                    }
+                  ],
+                  "legacyIds": [
+                    "xcpc-树链剖分-1"
+                  ],
+                  "sourceHeading": "Part 6.14 树链剖分",
+                  "part": "6.14",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "345",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.14 树链剖分"
+                  ],
+                  "scope": "目录导航：树链剖分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：树链剖分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：树链剖分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "树链剖分"
+                },
+                {
+                  "id": "feishu-part-7-12",
+                  "label": "虚树",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [
+                    {
+                      "id": "algorithm-content-feishu-part-7-12",
+                      "label": "虚树",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [
+                        "board"
+                      ],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "https://oi-wiki.org/graph/virtual-tree/",
+                        "https://usaco.guide/plat"
+                      ],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“关键点按DFS序排序、补LCA并用栈连边”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 7.12 虚树",
+                        "用户文档图论对应基础/进阶条目"
+                      ],
+                      "evidenceScope": "topic-and-prerequisites",
+                      "difficultyConfidence": "medium",
+                      "scope": "关键点按DFS序排序、补LCA并用栈连边",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "关键点按DFS序排序、补LCA并用栈连边",
+                        "rationale": "在“关键点按DFS序排序、补LCA并用栈连边”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "虚树",
+                      "contentOf": "feishu-part-7-12"
+                    }
+                  ],
+                  "legacyIds": [
+                    "xcpc-虚树-1"
+                  ],
+                  "sourceHeading": "Part 7.12 虚树",
+                  "part": "7.12",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/graph/virtual-tree/",
+                    "https://usaco.guide/plat"
+                  ],
+                  "sourceBlockId": "370",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.12 虚树",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "scope": "目录导航：虚树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：虚树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：虚树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "虚树"
+                },
+                {
+                  "id": "feishu-part-6-16",
+                  "label": "动态树",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "algorithm-content-feishu-part-6-16",
+                      "label": "动态树",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [],
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户文档对应数据结构基础或进阶条目"
+                      },
+                      "rationale": "沿用用户明确D4标尺；本条范围为动态树（LCT 等）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 6.16 动态树"
+                      ],
+                      "difficultyConfidence": "source",
+                      "aliases": [
+                        "LCT",
+                        "Link-Cut Tree",
+                        "动态树（LCT 等）"
+                      ],
+                      "scope": "动态树（LCT 等）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "动态树（LCT 等）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D4标尺；本条范围为动态树（LCT 等）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "动态树（LCT 等）",
+                      "contentOf": "feishu-part-6-16"
+                    }
+                  ],
+                  "sourceHeading": "Part 6.16 动态树",
+                  "part": "6.16",
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "sourceBlockId": "347",
+                  "legacyIds": [
+                    "xcpc-lct-1"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 6.16 动态树"
+                  ],
+                  "aliases": [
+                    "LCT",
+                    "Link-Cut Tree",
+                    "动态树（LCT 等）"
+                  ],
+                  "scope": "目录导航：动态树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：动态树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：动态树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "动态树（LCT 等）"
+                }
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：树上查询。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "sourceRefs": [],
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：树上查询。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "树上查询与动态维护"
+              ],
+              "description": "目录导航：树上查询。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "树上查询与动态维护"
+            },
+            {
+              "id": "group-tree-decomposition",
+              "label": "树上合并与分治",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "editorial",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-树的启发式合并-1",
+                  "label": "启发式合并",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“保留大子树信息、合并小子树并分析总遍历量”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/dsu-on-tree/",
+                    "https://usaco.guide/plat"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树的启发式合并"
+                  ],
+                  "legacyIds": [
+                    "xcpc-dsu-on-tree-1"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "aliases": [
+                    "DSU on tree",
+                    "树上启发式合并",
+                    "树的启发式合并"
+                  ],
+                  "scope": "保留大子树信息、合并小子树并分析总遍历量",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "保留大子树信息、合并小子树并分析总遍历量",
+                    "rationale": "在“保留大子树信息、合并小子树并分析总遍历量”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "树的启发式合并"
+                },
+                {
+                  "id": "xcpc-树上分治-1",
+                  "label": "树上分治",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [
+                    {
+                      "id": "xcpc-动态点分-1",
+                      "label": "动态点分",
+                      "color": "expert",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "research",
+                        "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                      },
+                      "rationale": "在“点分树上的动态修改查询、祖先路径与去重”的范围内，涉及高抽象状态或深层代数关系，综合证明与实现负担较高，定为D5。",
+                      "sourceRefs": [
+                        "https://oi-wiki.org/graph/",
+                        "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                        "https://cp-algorithms.com/graph/bellman_ford.html"
+                      ],
+                      "level": 5,
+                      "sourceEvidence": [
+                        "动态点分"
+                      ],
+                      "evidenceScope": "category-and-prerequisites",
+                      "difficultyConfidence": "low",
+                      "scope": "点分树上的动态修改查询、祖先路径与去重",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "点分树上的动态修改查询、祖先路径与去重",
+                        "rationale": "在“点分树上的动态修改查询、祖先路径与去重”的范围内，涉及高抽象状态或深层代数关系，综合证明与实现负担较高，定为D5。",
+                        "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                        "range": {
+                          "min": 5,
+                          "max": 5
+                        }
+                      },
+                      "fullLabel": "动态点分"
+                    },
+                    {
+                      "id": "xcpc-边分-1",
+                      "label": "边分治",
+                      "color": "advanced",
+                      "kind": "algorithm",
+                      "origin": "supplement",
+                      "attributes": [],
+                      "children": [],
+                      "difficultySource": {
+                        "kind": "user-md",
+                        "detail": "用户颜色文档的明确分档"
+                      },
+                      "sourceRefs": [
+                        "color-md"
+                      ],
+                      "rationale": "沿用用户明确D4标尺；本条范围为边分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "level": 5,
+                      "difficultyConfidence": "source",
+                      "scope": "边分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                      "rating": {
+                        "status": "confirmed",
+                        "date": "2026-11-11",
+                        "type": "knowledge",
+                        "scope": "边分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "rationale": "沿用用户明确D4标尺；本条范围为边分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                        "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                        "range": {
+                          "min": 4,
+                          "max": 4
+                        }
+                      },
+                      "fullLabel": "边分治"
+                    },
+                    {
+                      "id": "feishu-part-7-11",
+                      "label": "点分治",
+                      "color": "parent",
+                      "kind": "directory",
+                      "origin": "feishu",
+                      "attributes": [],
+                      "children": [
+                        {
+                          "id": "algorithm-content-feishu-part-7-11",
+                          "label": "点分治",
+                          "color": "advanced",
+                          "kind": "algorithm",
+                          "origin": "feishu",
+                          "attributes": [],
+                          "children": [],
+                          "sourceRefs": [
+                            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                            "color-md"
+                          ],
+                          "difficultySource": {
+                            "kind": "user-md",
+                            "detail": "用户文档图论对应基础/进阶条目"
+                          },
+                          "rationale": "沿用用户明确D4标尺；本条范围为点分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                          "level": 6,
+                          "sourceEvidence": [
+                            "Part 7.11 点分治",
+                            "用户文档图论对应基础/进阶条目"
+                          ],
+                          "difficultyConfidence": "source",
+                          "crossRefs": [
+                            "xcpc-树上分治-1"
+                          ],
+                          "scope": "点分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                          "rating": {
+                            "status": "confirmed",
+                            "date": "2026-11-11",
+                            "type": "knowledge",
+                            "scope": "点分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                            "rationale": "沿用用户明确D4标尺；本条范围为点分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                            "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                            "range": {
+                              "min": 4,
+                              "max": 4
+                            }
+                          },
+                          "fullLabel": "点分治",
+                          "contentOf": "feishu-part-7-11"
+                        }
+                      ],
+                      "sourceHeading": "Part 7.11 点分治",
+                      "part": "7.11",
+                      "sourceRefs": [
+                        "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                        "color-md"
+                      ],
+                      "sourceBlockId": "369",
+                      "difficultySource": {
+                        "kind": "directory",
+                        "detail": "目录不参与难度评级"
+                      },
+                      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                      "level": 5,
+                      "sourceEvidence": [
+                        "Part 7.11 点分治",
+                        "用户文档图论对应基础/进阶条目"
+                      ],
+                      "legacyIds": [
+                        "xcpc-点分-1"
+                      ],
+                      "crossRefs": [
+                        "xcpc-树上分治-1"
+                      ],
+                      "scope": "目录导航：点分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                      "rating": {
+                        "status": "not-applicable",
+                        "date": "2026-11-11",
+                        "type": "directory",
+                        "scope": "目录导航：点分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                      },
+                      "description": "目录导航：点分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                      "fullLabel": "点分治"
+                    }
+                  ],
+                  "sourceRefs": [],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树上分治"
+                  ],
+                  "crossRefs": [
+                    "feishu-part-7-11"
+                  ],
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "scope": "目录导航：树上分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：树上分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：树上分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "树上分治"
+                }
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：树上合并与分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "sourceRefs": [],
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：树上合并与分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：树上合并与分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "树上合并与分治"
+            },
+            {
+              "id": "group-tree-special",
+              "label": "特殊树与表示",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "editorial",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-笛卡尔树-1",
+                  "label": "笛卡尔树",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“同时满足中序索引顺序与堆序的单调栈构造”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "笛卡尔树"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "同时满足中序索引顺序与堆序的单调栈构造",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "同时满足中序索引顺序与堆序的单调栈构造",
+                    "rationale": "在“同时满足中序索引顺序与堆序的单调栈构造”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "笛卡尔树"
+                },
+                {
+                  "id": "xcpc-树的哈希-1",
+                  "label": "树的哈希",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“根树编码和子树多重集合哈希；概率碰撞风险与换根另论”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树的哈希"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "根树编码和子树多重集合哈希；概率碰撞风险与换根另论",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "根树编码和子树多重集合哈希；概率碰撞风险与换根另论",
+                    "rationale": "在“根树编码和子树多重集合哈希；概率碰撞风险与换根另论”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "树的哈希"
+                }
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：特殊树与表示。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "sourceRefs": [],
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：特殊树与表示。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "特殊树结构与树的表示"
+              ],
+              "description": "目录导航：特殊树与表示。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "特殊树结构与树的表示"
+            }
+          ],
+          "sourceHeading": "Part 7.3 树上问题",
+          "part": "7.3",
+          "sourceRefs": [],
+          "sourceBlockId": "354",
+          "legacyIds": [
+            "xcpc-树-1",
+            "xcpc-树的基础-1"
+          ],
+          "level": 2,
+          "sourceEvidence": [
+            "Part 7.3 树上问题"
+          ],
+          "aliases": [
+            "树上问题",
+            "树的基础与树上算法"
+          ],
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：树上算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：树上算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：树上算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "树的基础与树上算法"
+        },
+        {
+          "id": "feishu-part-7-4",
+          "label": "生成树与斯坦纳树",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [
+            "useful"
+          ],
+          "children": [
+            {
+              "id": "xcpc-最小生成树-1",
+              "label": "最小生成树",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-prim-1",
+                  "label": "Prim",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为Prim的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "prim"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "prim"
+                  ],
+                  "scope": "Prim的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "Prim的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为Prim的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "Prim"
+                },
+                {
+                  "id": "xcpc-kruskal-1",
+                  "label": "Kruskal",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为通常用于无向带权图的最小生成树；不连通时得到最小生成森林。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "kruskal"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "kruskal"
+                  ],
+                  "scope": "通常用于无向带权图的最小生成树；不连通时得到最小生成森林。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "通常用于无向带权图的最小生成树；不连通时得到最小生成森林。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为通常用于无向带权图的最小生成树；不连通时得到最小生成森林。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "Kruskal"
+                },
+                {
+                  "id": "xcpc-boruvka-1",
+                  "label": "Borůvka",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“各连通块选最小出边、并查集合并并证明阶段数”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "boruvka"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "aliases": [
+                    "boruvka"
+                  ],
+                  "scope": "各连通块选最小出边、并查集合并并证明阶段数",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "各连通块选最小出边、并查集合并并证明阶段数",
+                    "rationale": "在“各连通块选最小出边、并查集合并并证明阶段数”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "Borůvka"
+                }
+              ],
+              "sourceRefs": [],
+              "level": 3,
+              "sourceEvidence": [
+                "最小生成树"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：最小生成树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：最小生成树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：最小生成树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "最小生成树"
+            },
+            {
+              "id": "xcpc-最小树形图-1",
+              "label": "最小树形图",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "橙色：高级"
+              },
+              "rationale": "沿用用户明确D4标尺；本条范围为最小树形图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "最小树形图",
+                "橙色：高级"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "最小树形图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "最小树形图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D4标尺；本条范围为最小树形图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "最小树形图"
+            },
+            {
+              "id": "xcpc-斯坦纳树-1",
+              "label": "斯坦纳树",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "橙色：高级"
+              },
+              "rationale": "沿用用户明确D4标尺；本条范围为斯坦纳树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "斯坦纳树",
+                "橙色：高级"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "斯坦纳树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "斯坦纳树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D4标尺；本条范围为斯坦纳树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "斯坦纳树"
+            },
+            {
+              "id": "feishu-part-7-13",
+              "label": "矩阵树定理",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-7-13",
+                  "label": "矩阵树定理",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：数学"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为生成树计数（矩阵树定理）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.13 矩阵树定理",
+                    "用户文档图论对应基础/进阶条目",
+                    "蓝色：数学"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "生成树计数（矩阵树定理）"
+                  ],
+                  "scope": "生成树计数（矩阵树定理）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "生成树计数（矩阵树定理）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为生成树计数（矩阵树定理）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "生成树计数（矩阵树定理）",
+                  "contentOf": "feishu-part-7-13"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-矩阵树定理-1"
+              ],
+              "sourceHeading": "Part 7.13 矩阵树定理",
+              "part": "7.13",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "371",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.13 矩阵树定理",
+                "用户文档图论对应基础/进阶条目",
+                "蓝色：数学"
+              ],
+              "aliases": [
+                "生成树计数（矩阵树定理）"
+              ],
+              "scope": "目录导航：矩阵树定理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：矩阵树定理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：矩阵树定理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "生成树计数（矩阵树定理）"
+            },
+            {
+              "id": "algorithm-content-feishu-part-7-4",
+              "label": "生成树与斯坦纳树",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [
+                "useful"
+              ],
+              "children": [],
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户文档图论对应基础/进阶条目"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为生成树与 Steiner 树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.4 生成树",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "difficultyConfidence": "source",
+              "aliases": [
+                "生成树",
+                "生成树与 Steiner 树"
+              ],
+              "scope": "生成树与 Steiner 树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "生成树与 Steiner 树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为生成树与 Steiner 树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "生成树与 Steiner 树",
+              "contentOf": "feishu-part-7-4"
+            }
+          ],
+          "sourceHeading": "Part 7.4 生成树",
+          "part": "7.4",
+          "sourceRefs": [
+            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+            "color-md"
+          ],
+          "sourceBlockId": "358",
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 7.4 生成树",
+            "用户文档图论对应基础/进阶条目"
+          ],
+          "aliases": [
+            "生成树",
+            "生成树与 Steiner 树"
+          ],
+          "scope": "目录导航：生成树与斯坦纳树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：生成树与斯坦纳树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：生成树与斯坦纳树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "生成树与 Steiner 树"
+        },
+        {
+          "id": "feishu-part-7-7",
+          "label": "连通性",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-点-边-双连通分量-1",
+              "label": "双连通与割点桥",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-tarjan-1",
+                  "label": "Tarjan 双连通",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“DFS时间戳与low值、根特判和边栈”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "tarjan"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "aliases": [
+                    "tarjan",
+                    "Tarjan 求无向图双连通分量"
+                  ],
+                  "scope": "DFS时间戳与low值、根特判和边栈",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "DFS时间戳与low值、根特判和边栈",
+                    "rationale": "在“DFS时间戳与low值、根特判和边栈”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "Tarjan 求无向图双连通分量"
+                },
+                {
+                  "id": "xcpc-割点-割边-1",
+                  "label": "割点、割边",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“用low条件区分点删除和边删除后的连通变化”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceEvidence": [
+                    "割点、割边"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "用low条件区分点删除和边删除后的连通变化",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "用low条件区分点删除和边删除后的连通变化",
+                    "rationale": "在“用low条件区分点删除和边删除后的连通变化”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "割点、割边"
+                },
+                {
+                  "id": "xcpc-圆方树-1",
+                  "label": "圆方树",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“块割结构构造并转换路径查询”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/block-forest/",
+                    "https://cp-algorithms.com/graph/cutpoints.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "圆方树"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "块割结构构造并转换路径查询",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "块割结构构造并转换路径查询",
+                    "rationale": "在“块割结构构造并转换路径查询”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "圆方树"
+                },
+                {
+                  "id": "algorithm-边双连通分量",
+                  "label": "边双连通分量",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md"
+                  },
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "difficultyConfidence": "source",
+                  "rationale": "沿用用户明确D3标尺；本条范围为边双连通分量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "scope": "边双连通分量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "边双连通分量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为边双连通分量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "边双连通分量"
+                },
+                {
+                  "id": "algorithm-点双连通分量",
+                  "label": "点双连通分量",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md"
+                  },
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "difficultyConfidence": "source",
+                  "rationale": "沿用用户明确D3标尺；本条范围为点双连通分量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "scope": "点双连通分量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "点双连通分量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为点双连通分量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "点双连通分量"
+                }
+              ],
+              "sourceRefs": [],
+              "level": 3,
+              "sourceEvidence": [
+                "点（边）双连通分量"
+              ],
+              "aliases": [
+                "点（边）双连通分量",
+                "无向图双连通与割点、桥"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：双连通与割点桥。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：双连通与割点桥。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：双连通与割点桥。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "无向图双连通与割点、桥"
+            },
+            {
+              "id": "xcpc-支配树-1",
+              "label": "支配树",
+              "color": "expert",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "board"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "红色：挑战"
+              },
+              "rationale": "沿用用户明确D5标尺；本条范围为支配树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "支配树",
+                "红色：挑战"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "支配树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "支配树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D5标尺；本条范围为支配树的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 5,
+                  "max": 5
+                }
+              },
+              "fullLabel": "支配树"
+            },
+            {
+              "id": "algorithm-动态图连通性",
+              "label": "动态图连通性",
+              "color": "expert",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户提供颜色难度文档对应条目"
+              },
+              "rationale": "沿用用户明确D5标尺；本条范围为动态图连通性的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "动态图连通性"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "动态图连通性的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "动态图连通性的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D5标尺；本条范围为动态图连通性的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 5,
+                  "max": 5
+                }
+              },
+              "fullLabel": "动态图连通性"
+            },
+            {
+              "id": "algorithm-scc-category",
+              "label": "强连通分量",
+              "children": [
+                {
+                  "id": "algorithm-强连通分量-tarjan-",
+                  "label": "Tarjan 强连通",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md"
+                  },
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "difficultyConfidence": "source",
+                  "rationale": "沿用用户明确D3标尺；本条范围为强连通分量（Tarjan）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "scope": "强连通分量（Tarjan）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "强连通分量（Tarjan）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为强连通分量（Tarjan）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "aliases": [
+                    "强连通分量（Tarjan）"
+                  ],
+                  "fullLabel": "强连通分量（Tarjan）"
+                },
+                {
+                  "id": "xcpc-kosaraju-1",
+                  "label": "Kosaraju",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "本次审校的学习范围与前置知识评估"
+                  },
+                  "rationale": "在“完成序、反图和第二次DFS分解有向SCC”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://oi-wiki.org/graph/"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "kosaraju"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "aliases": [
+                    "kosaraju",
+                    "Kosaraju 算法"
+                  ],
+                  "scope": "完成序、反图和第二次DFS分解有向SCC",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "完成序、反图和第二次DFS分解有向SCC",
+                    "rationale": "在“完成序、反图和第二次DFS分解有向SCC”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "Kosaraju 算法"
+                }
+              ],
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "color": "parent",
+              "level": 3,
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：强连通分量。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "sourceRefs": [],
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：强连通分量。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "aliases": [
+                "强连通分量（有向图）"
+              ],
+              "description": "目录导航：强连通分量。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "强连通分量（有向图）"
+            },
+            {
+              "id": "group-graph-special-classes",
+              "label": "特殊图类",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "editorial",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-仙人掌-1",
+                  "label": "仙人掌",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“每条边至多属于一个简单环的结构分解和基础环上处理”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/block-forest/",
+                    "https://cp-algorithms.com/graph/cutpoints.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "仙人掌"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "每条边至多属于一个简单环的结构分解和基础环上处理",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "每条边至多属于一个简单环的结构分解和基础环上处理",
+                    "rationale": "在“每条边至多属于一个简单环的结构分解和基础环上处理”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "仙人掌"
+                },
+                {
+                  "id": "xcpc-弦图-1",
+                  "label": "弦图",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“完美消除序、MCS判定与基础性质应用”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "弦图"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "完美消除序、MCS判定与基础性质应用",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "完美消除序、MCS判定与基础性质应用",
+                    "rationale": "在“完美消除序、MCS判定与基础性质应用”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "弦图"
+                },
+                {
+                  "id": "xcpc-竞赛图-1",
+                  "label": "竞赛图",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“完全有向图的基本结构和哈密顿路径构造”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "竞赛图"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "完全有向图的基本结构和哈密顿路径构造",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "完全有向图的基本结构和哈密顿路径构造",
+                    "rationale": "在“完全有向图的基本结构和哈密顿路径构造”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "竞赛图"
+                }
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：特殊图类。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "sourceRefs": [],
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：特殊图类。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：特殊图类。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "特殊图类"
+            },
+            {
+              "id": "algorithm-content-feishu-part-7-7",
+              "label": "连通性",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户文档图论对应基础/进阶条目"
+              },
+              "rationale": "沿用用户明确D3标尺；本条范围为连通性与图的结构的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.7 图的连通性相关",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "difficultyConfidence": "source",
+              "aliases": [
+                "图的连通性相关",
+                "连通性与图的结构"
+              ],
+              "scope": "连通性与图的结构的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "连通性与图的结构的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D3标尺；本条范围为连通性与图的结构的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "连通性与图的结构",
+              "contentOf": "feishu-part-7-7"
+            }
+          ],
+          "sourceHeading": "Part 7.7 图的连通性相关",
+          "part": "7.7",
+          "sourceRefs": [
+            "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+            "color-md"
+          ],
+          "sourceBlockId": "361",
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 7.7 图的连通性相关",
+            "用户文档图论对应基础/进阶条目"
+          ],
+          "aliases": [
+            "图的连通性相关",
+            "连通性与图的结构"
+          ],
+          "scope": "目录导航：连通性。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：连通性。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：连通性。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "连通性与图的结构"
+        },
+        {
+          "id": "group-graph-matching",
+          "label": "图匹配",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-7-8",
+              "label": "二分图与匹配",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "useful"
+              ],
+              "children": [
+                {
+                  "id": "xcpc-二分图判定-1",
+                  "label": "二分图判定",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为二分图判定的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "二分图判定"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "二分图判定的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "二分图判定的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为二分图判定的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "二分图判定"
+                },
+                {
+                  "id": "xcpc-匈牙利算法-1",
+                  "label": "匈牙利算法",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：SG基础/匈牙利"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为匈牙利算法的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "匈牙利算法",
+                    "绿色：SG基础/匈牙利"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "匈牙利算法的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "匈牙利算法的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为匈牙利算法的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "匈牙利算法"
+                },
+                {
+                  "id": "xcpc-km-1",
+                  "label": "KM",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“二分图最大权完美匹配、顶标和松弛量维护”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceEvidence": [
+                    "KM"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "二分图最大权完美匹配、顶标和松弛量维护",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "二分图最大权完美匹配、顶标和松弛量维护",
+                    "rationale": "在“二分图最大权完美匹配、顶标和松弛量维护”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "KM"
+                },
+                {
+                  "id": "xcpc-hopcroft-karp-1",
+                  "label": "hopcroft-karp",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“分层增广二分图最大匹配及阶段复杂度”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "hopcroft-karp"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "分层增广二分图最大匹配及阶段复杂度",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "分层增广二分图最大匹配及阶段复杂度",
+                    "rationale": "在“分层增广二分图最大匹配及阶段复杂度”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "hopcroft-karp"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-7-8",
+                  "label": "二分图与匹配",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档图论对应基础/进阶条目"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为二分图与匹配的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.8 二分图",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "二分图"
+                  ],
+                  "scope": "二分图与匹配的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "二分图与匹配的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为二分图与匹配的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "二分图与匹配",
+                  "contentOf": "feishu-part-7-8"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-二分图-1"
+              ],
+              "sourceHeading": "Part 7.8 二分图",
+              "part": "7.8",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "362",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.8 二分图",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "aliases": [
+                "二分图"
+              ],
+              "scope": "目录导航：二分图与匹配。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：二分图与匹配。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：二分图与匹配。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "二分图与匹配"
+            },
+            {
+              "id": "algorithm-一般图最大匹配-带花树",
+              "label": "带花树",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户提供颜色难度文档对应条目"
+              },
+              "rationale": "沿用用户明确D4标尺；本条范围为一般图最大匹配（带花树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "一般图最大匹配（带花树）"
+              ],
+              "legacyIds": [
+                "xcpc-一般图匹配-1"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "一般图最大匹配（带花树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "一般图最大匹配（带花树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D4标尺；本条范围为一般图最大匹配（带花树）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "aliases": [
+                "一般图最大匹配（带花树）"
+              ],
+              "fullLabel": "一般图最大匹配（带花树）"
+            },
+            {
+              "id": "algorithm-一般图最大权匹配",
+              "label": "一般图最大权匹配",
+              "color": "expert",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户提供颜色难度文档对应条目"
+              },
+              "rationale": "沿用用户明确D5标尺；本条范围为一般图最大权匹配的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "一般图最大权匹配"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "一般图最大权匹配的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "一般图最大权匹配的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D5标尺；本条范围为一般图最大权匹配的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 5,
+                  "max": 5
+                }
+              },
+              "fullLabel": "一般图最大权匹配"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：图匹配。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：图匹配。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：图匹配。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "图匹配"
+        },
+        {
+          "id": "feishu-part-7-9",
+          "label": "网络流与割",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-7-9-1",
+              "label": "最大流",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-dinic-1",
+                  "label": "Dinic",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：对应进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为Dinic的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "dinic",
+                    "蓝色：对应进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "dinic"
+                  ],
+                  "scope": "Dinic的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "Dinic的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为Dinic的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "Dinic"
+                },
+                {
+                  "id": "xcpc-sap-1",
+                  "label": "sap",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“最短增广路最大流、距离标号和gap优化”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceEvidence": [
+                    "sap"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "最短增广路最大流、距离标号和gap优化",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "最短增广路最大流、距离标号和gap优化",
+                    "rationale": "在“最短增广路最大流、距离标号和gap优化”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "sap"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-7-9-1",
+                  "label": "最大流",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档图论对应基础/进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为最大流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.9.1 最大流",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "最大流算法"
+                  ],
+                  "scope": "最大流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "最大流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为最大流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "最大流",
+                  "contentOf": "feishu-part-7-9-1"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-最大流-1",
+                "xcpc-最大流-最小割-1"
+              ],
+              "sourceHeading": "Part 7.9.1 最大流",
+              "part": "7.9.1",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "364",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.9.1 最大流",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "aliases": [
+                "最大流算法"
+              ],
+              "scope": "目录导航：最大流。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：最大流。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：最大流。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "最大流"
+            },
+            {
+              "id": "feishu-part-7-9-2",
+              "label": "最小割",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-全局最小割-1",
+                  "label": "全局最小割",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“Stoer–Wagner阶段合并、割值更新和正确性”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "全局最小割"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "Stoer–Wagner阶段合并、割值更新和正确性",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "Stoer–Wagner阶段合并、割值更新和正确性",
+                    "rationale": "在“Stoer–Wagner阶段合并、割值更新和正确性”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "全局最小割"
+                },
+                {
+                  "id": "algorithm-最小割模型",
+                  "label": "最小割模型",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为最小割模型的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "最小割模型"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "最小割模型的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "最小割模型的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为最小割模型的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "最小割模型"
+                },
+                {
+                  "id": "algorithm-最大权闭合子图",
+                  "label": "最大权闭合子图",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为最大权闭合子图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "最大权闭合子图"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "最大权闭合子图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "最大权闭合子图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为最大权闭合子图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "最大权闭合子图"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-7-9-2",
+                  "label": "最小割",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档图论对应基础/进阶条目"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为最小割的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.9.2 最小割",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "最小割的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "最小割的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为最小割的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "最小割",
+                  "contentOf": "feishu-part-7-9-2"
+                }
+              ],
+              "sourceHeading": "Part 7.9.2 最小割",
+              "part": "7.9.2",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "365",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.9.2 最小割",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "scope": "目录导航：最小割。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：最小割。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：最小割。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "最小割"
+            },
+            {
+              "id": "feishu-part-7-9-3",
+              "label": "最小费用流",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "xcpc-zkw费用流-1",
+                  "label": "ZKW费用流",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“费用标号和允许边增广，区分负环及适用模型”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "ZKW费用流"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "费用标号和允许边增广，区分负环及适用模型",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "费用标号和允许边增广，区分负环及适用模型",
+                    "rationale": "在“费用标号和允许边增广，区分负环及适用模型”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "ZKW费用流"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-7-9-3",
+                  "label": "最小费用流",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档图论对应基础/进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为最小费用流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.9.3 费用流",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "费用流"
+                  ],
+                  "scope": "最小费用流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "最小费用流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为最小费用流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "最小费用流",
+                  "contentOf": "feishu-part-7-9-3"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-费用流-1"
+              ],
+              "sourceHeading": "Part 7.9.3 费用流",
+              "part": "7.9.3",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "366",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.9.3 费用流",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "aliases": [
+                "费用流"
+              ],
+              "scope": "目录导航：最小费用流。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：最小费用流。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：最小费用流。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "最小费用流"
+            },
+            {
+              "id": "feishu-part-7-9-4",
+              "label": "上下界流",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-可行流-1",
+                  "label": "可行流",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“上下界减边、附加源汇和流量守恒可行性转化”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/graph/",
+                    "https://cp-algorithms.com/graph/strongly-connected-components.html",
+                    "https://cp-algorithms.com/graph/bellman_ford.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "可行流"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "上下界减边、附加源汇和流量守恒可行性转化",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "上下界减边、附加源汇和流量守恒可行性转化",
+                    "rationale": "在“上下界减边、附加源汇和流量守恒可行性转化”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "可行流"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-7-9-4",
+                  "label": "上下界流",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户文档图论对应基础/进阶条目"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为上下界流与可行流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 7.9.4 上下界网络流",
+                    "用户文档图论对应基础/进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "aliases": [
+                    "上下界网络流",
+                    "上下界流与可行流"
+                  ],
+                  "scope": "上下界流与可行流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "上下界流与可行流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为上下界流与可行流的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "上下界流与可行流",
+                  "contentOf": "feishu-part-7-9-4"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-上下界网络流-1"
+              ],
+              "sourceHeading": "Part 7.9.4 上下界网络流",
+              "part": "7.9.4",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "367",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 7.9.4 上下界网络流",
+                "用户文档图论对应基础/进阶条目"
+              ],
+              "aliases": [
+                "上下界网络流",
+                "上下界流与可行流"
+              ],
+              "scope": "目录导航：上下界流。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：上下界流。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：上下界流。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "上下界流与可行流"
+            }
+          ],
+          "legacyIds": [
+            "xcpc-网络流-1"
+          ],
+          "sourceHeading": "Part 7.9 网络流",
+          "part": "7.9",
+          "sourceRefs": [],
+          "sourceBlockId": "363",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 7.9 网络流"
+          ],
+          "aliases": [
+            "网络流"
+          ],
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：网络流与割。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：网络流与割。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：网络流与割。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "网络流与割"
+        }
+      ],
+      "legacyIds": [
+        "xcpc-图论-1"
+      ],
+      "sourceHeading": "Part 7 图论",
+      "part": "7",
+      "sourceRefs": [],
+      "sourceBlockId": "351",
+      "level": 1,
+      "sourceEvidence": [
+        "Part 7 图论"
+      ],
+      "aliases": [
+        "图论",
+        "图与树算法"
+      ],
+      "difficultySource": {
+        "kind": "directory",
+        "detail": "目录不参与难度评级"
+      },
+      "scope": "目录导航：图与树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-11",
+        "type": "directory",
+        "scope": "目录导航：图与树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+      },
+      "description": "目录导航：图与树。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "fullLabel": "图与树算法"
+    },
+    {
+      "id": "feishu-part-8",
+      "label": "计算几何",
+      "color": "parent",
+      "kind": "directory",
+      "origin": "feishu",
+      "attributes": [],
+      "children": [
+        {
+          "id": "group-geometry-foundations",
+          "label": "平面几何",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "algorithm-点与向量",
+              "label": "点与向量",
+              "color": "beginner",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户提供颜色难度文档对应条目"
+              },
+              "rationale": "沿用用户明确D2标尺；本条范围为点与向量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "点与向量"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "点与向量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "点与向量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D2标尺；本条范围为点与向量的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 2,
+                  "max": 2
+                }
+              },
+              "fullLabel": "点与向量"
+            },
+            {
+              "id": "xcpc-点类-1",
+              "label": "向量与极角",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-点积-1",
+                  "label": "点积",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为点积的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "点积",
+                    "绿色：几何/数据结构基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "点积的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "点积的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为点积的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "点积"
+                },
+                {
+                  "id": "xcpc-叉积-1",
+                  "label": "叉积",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为叉积的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "叉积",
+                    "绿色：几何/数据结构基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "叉积的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "叉积的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为叉积的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "叉积"
+                },
+                {
+                  "id": "xcpc-极角序-1",
+                  "label": "极角序",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "绿色：对应基础算法"
+                  },
+                  "rationale": "沿用用户明确D2标尺；本条范围为极角序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "极角序",
+                    "绿色：几何/数据结构基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "极角序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "极角序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D2标尺；本条范围为极角序的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "极角序"
+                }
+              ],
+              "sourceRefs": [],
+              "level": 3,
+              "sourceEvidence": [
+                "点类"
+              ],
+              "aliases": [
+                "点类",
+                "平面向量运算与极角排序"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：向量与极角。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：向量与极角。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：向量与极角。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "平面向量运算与极角排序"
+            },
+            {
+              "id": "xcpc-线段相关-1",
+              "label": "直线与线段",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-相交判定-1",
+                  "label": "相交判定",
+                  "color": "beginner",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“线段跨立和端点共线处理”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/geometry/",
+                    "https://cp-algorithms.com/geometry/basic-geometry.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "相交判定"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "线段跨立和端点共线处理",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "线段跨立和端点共线处理",
+                    "rationale": "在“线段跨立和端点共线处理”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 2,
+                      "max": 2
+                    }
+                  },
+                  "fullLabel": "相交判定"
+                },
+                {
+                  "id": "xcpc-交点-1",
+                  "label": "交点",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“解直线交点并处理平行、重合与精度”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/geometry/",
+                    "https://cp-algorithms.com/geometry/basic-geometry.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "交点"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "解直线交点并处理平行、重合与精度",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "解直线交点并处理平行、重合与精度",
+                    "rationale": "在“解直线交点并处理平行、重合与精度”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "交点"
+                }
+              ],
+              "sourceRefs": [],
+              "level": 3,
+              "sourceEvidence": [
+                "线段相关"
+              ],
+              "aliases": [
+                "线段相关",
+                "直线与线段求交"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：直线与线段。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：直线与线段。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：直线与线段。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "直线与线段求交"
+            },
+            {
+              "id": "xcpc-多边形相关-1",
+              "label": "多边形",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-多边形包含-1",
+                  "label": "多边形包含",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“简单多边形点包含的射线法/绕数法；凸多边形二分另论”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/geometry/",
+                    "https://cp-algorithms.com/geometry/basic-geometry.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "多边形包含"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "简单多边形点包含的射线法/绕数法；凸多边形二分另论",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "简单多边形点包含的射线法/绕数法；凸多边形二分另论",
+                    "rationale": "在“简单多边形点包含的射线法/绕数法；凸多边形二分另论”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "多边形包含"
+                }
+              ],
+              "sourceRefs": [],
+              "level": 3,
+              "sourceEvidence": [
+                "多边形相关"
+              ],
+              "aliases": [
+                "多边形相关",
+                "多边形与包含关系"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：多边形。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：多边形。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：多边形。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "多边形与包含关系"
+            },
+            {
+              "id": "xcpc-圆相关-1",
+              "label": "圆",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "xcpc-交点切线-1",
+                  "label": "交点切线",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“圆线/圆圆交点与切线，分类讨论退化位置”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/geometry/",
+                    "https://cp-algorithms.com/geometry/basic-geometry.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "交点切线"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "圆线/圆圆交点与切线，分类讨论退化位置",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "圆线/圆圆交点与切线，分类讨论退化位置",
+                    "rationale": "在“圆线/圆圆交点与切线，分类讨论退化位置”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "交点切线"
+                },
+                {
+                  "id": "xcpc-面积交-并-1",
+                  "label": "面积交/并",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“圆与多边形或多圆交并的分段积分与边界分类”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/geometry/",
+                    "https://cp-algorithms.com/geometry/basic-geometry.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "面积交/并"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "scope": "圆与多边形或多圆交并的分段积分与边界分类",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "圆与多边形或多圆交并的分段积分与边界分类",
+                    "rationale": "在“圆与多边形或多圆交并的分段积分与边界分类”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "面积交/并"
+                }
+              ],
+              "sourceRefs": [],
+              "level": 3,
+              "sourceEvidence": [
+                "圆相关"
+              ],
+              "aliases": [
+                "圆相关",
+                "圆的交点、切线与面积"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：圆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：圆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：圆。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "圆的交点、切线与面积"
+            },
+            {
+              "id": "xcpc-picks定理-1",
+              "label": "Pick 定理",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useless"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "用户颜色文档的明确分档"
+              },
+              "rationale": "沿用用户明确D3标尺；本条范围为Pick 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Picks定理"
+              ],
+              "difficultyConfidence": "source",
+              "aliases": [
+                "Pick 定理",
+                "Picks定理"
+              ],
+              "scope": "Pick 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "Pick 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D3标尺；本条范围为Pick 定理的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "Pick 定理"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：平面几何。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：平面几何。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "平面几何基础与求交"
+          ],
+          "description": "目录导航：平面几何。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "平面几何基础与求交"
+        },
+        {
+          "id": "group-geometry-convex",
+          "label": "凸几何",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-8-1",
+              "label": "凸包",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-8-1",
+                  "label": "凸包",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：凸包、旋转卡壳、半平面交基础"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为凸包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 8.1 凸包",
+                    "蓝色：凸包、旋转卡壳、半平面交基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "凸包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "凸包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为凸包的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "凸包",
+                  "contentOf": "feishu-part-8-1"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-凸包-1"
+              ],
+              "sourceHeading": "Part 8.1 凸包",
+              "part": "8.1",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "373",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 8.1 凸包",
+                "蓝色：凸包、旋转卡壳、半平面交基础"
+              ],
+              "scope": "目录导航：凸包。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：凸包。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：凸包。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "凸包"
+            },
+            {
+              "id": "xcpc-凸包快速操作-1",
+              "label": "凸包快速操作",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://oi-wiki.org/geometry/",
+                "https://cp-algorithms.com/geometry/basic-geometry.html"
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“凸多边形切线、二分定位或极值点查询；动态凸包另评”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceEvidence": [
+                "凸包快速操作"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "凸多边形切线、二分定位或极值点查询；动态凸包另评",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "凸多边形切线、二分定位或极值点查询；动态凸包另评",
+                "rationale": "在“凸多边形切线、二分定位或极值点查询；动态凸包另评”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "凸包快速操作"
+            },
+            {
+              "id": "feishu-part-8-2",
+              "label": "旋转卡壳",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-8-2",
+                  "label": "旋转卡壳",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：对应进阶条目"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为旋转卡壳的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 8.2 旋转卡壳",
+                    "蓝色：凸包、旋转卡壳、半平面交基础",
+                    "蓝色：对应进阶条目"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "旋转卡壳的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "旋转卡壳的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为旋转卡壳的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "旋转卡壳",
+                  "contentOf": "feishu-part-8-2"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-旋转卡壳-1"
+              ],
+              "sourceHeading": "Part 8.2 旋转卡壳",
+              "part": "8.2",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "374",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 8.2 旋转卡壳",
+                "蓝色：凸包、旋转卡壳、半平面交基础",
+                "蓝色：对应进阶条目"
+              ],
+              "scope": "目录导航：旋转卡壳。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：旋转卡壳。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：旋转卡壳。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "旋转卡壳"
+            },
+            {
+              "id": "feishu-part-8-3",
+              "label": "半平面交",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "board"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-半平面交-进阶",
+                  "label": "进阶半平面交",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户提供颜色难度文档对应条目"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为半平面交（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "半平面交（进阶）"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "半平面交（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "半平面交（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为半平面交（进阶）的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "aliases": [
+                    "半平面交（进阶）"
+                  ],
+                  "fullLabel": "半平面交（进阶）"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-8-3",
+                  "label": "半平面交",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "board"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：凸包、旋转卡壳、半平面交基础"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为半平面交的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 8.3 半平面交",
+                    "蓝色：凸包、旋转卡壳、半平面交基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "半平面交的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "半平面交的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为半平面交的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "半平面交",
+                  "contentOf": "feishu-part-8-3"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-半平面交-1"
+              ],
+              "sourceHeading": "Part 8.3 半平面交",
+              "part": "8.3",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "375",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 8.3 半平面交",
+                "蓝色：凸包、旋转卡壳、半平面交基础"
+              ],
+              "scope": "目录导航：半平面交。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：半平面交。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：半平面交。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "半平面交"
+            },
+            {
+              "id": "xcpc-最小圆覆盖-1",
+              "label": "最小圆覆盖",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "board"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "橙色：高级"
+              },
+              "rationale": "沿用用户明确D4标尺；本条范围为最小圆覆盖的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "最小圆覆盖",
+                "橙色：高级"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "最小圆覆盖的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "最小圆覆盖的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D4标尺；本条范围为最小圆覆盖的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "最小圆覆盖"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：凸几何。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：凸几何。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "凸几何与最优化"
+          ],
+          "description": "目录导航：凸几何。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "凸几何与最优化"
+        },
+        {
+          "id": "group-geometry-spatial",
+          "label": "扫描与定位",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-扫描线-1",
+              "label": "扫描线",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "本次审校的学习范围与前置知识评估"
+              },
+              "rationale": "在“按关键事件排序并维护活动集合；复杂几何状态另评”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/geometry/scanning/",
+                "https://usaco.guide/plat/sweep-line"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "扫描线"
+              ],
+              "evidenceScope": "topic-and-prerequisites",
+              "difficultyConfidence": "medium",
+              "scope": "按关键事件排序并维护活动集合；复杂几何状态另评",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "按关键事件排序并维护活动集合；复杂几何状态另评",
+                "rationale": "在“按关键事件排序并维护活动集合；复杂几何状态另评”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "扫描线"
+            },
+            {
+              "id": "xcpc-点定位-1",
+              "label": "点定位",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“多个平面区域中批量定位查询，离线扫描或层次分解”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceRefs": [
+                "https://oi-wiki.org/geometry/",
+                "https://cp-algorithms.com/geometry/basic-geometry.html"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "点定位"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "多个平面区域中批量定位查询，离线扫描或层次分解",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "多个平面区域中批量定位查询，离线扫描或层次分解",
+                "rationale": "在“多个平面区域中批量定位查询，离线扫描或层次分解”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "点定位"
+            },
+            {
+              "id": "xcpc-voronoi图-1",
+              "label": "Voronoi图",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "board"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "橙色：高级"
+              },
+              "rationale": "沿用用户明确D4标尺；本条范围为Voronoi图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "sourceRefs": [
+                "color-md"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "Voronoi图",
+                "橙色：高级"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "Voronoi图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "Voronoi图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D4标尺；本条范围为Voronoi图的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "Voronoi图"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：扫描与定位。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：扫描与定位。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "扫描、定位与空间划分"
+          ],
+          "description": "目录导航：扫描与定位。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "扫描、定位与空间划分"
+        },
+        {
+          "id": "group-geometry-extensions",
+          "label": "变换与三维",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-圆反演-1",
+              "label": "圆反演",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "https://oi-wiki.org/geometry/",
+                "https://cp-algorithms.com/geometry/basic-geometry.html"
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“点线圆的反演对应与几何关系转换”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceEvidence": [
+                "圆反演"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "点线圆的反演对应与几何关系转换",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "点线圆的反演对应与几何关系转换",
+                "rationale": "在“点线圆的反演对应与几何关系转换”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "圆反演"
+            },
+            {
+              "id": "xcpc-三维计算几何-1",
+              "label": "三维几何",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [],
+              "children": [],
+              "sourceRefs": [
+                "color-md"
+              ],
+              "difficultySource": {
+                "kind": "user-md",
+                "detail": "橙色：高级"
+              },
+              "rationale": "沿用用户明确D4标尺；本条范围为三维计算几何的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "level": 3,
+              "sourceEvidence": [
+                "三维计算几何",
+                "橙色：高级"
+              ],
+              "difficultyConfidence": "source",
+              "scope": "三维计算几何的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "三维计算几何的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "rationale": "沿用用户明确D4标尺；本条范围为三维计算几何的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "aliases": [
+                "三维计算几何"
+              ],
+              "fullLabel": "三维计算几何"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：变换与三维。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：变换与三维。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "几何变换与三维几何"
+          ],
+          "description": "目录导航：变换与三维。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "几何变换与三维几何"
+        }
+      ],
+      "legacyIds": [
+        "xcpc-几何-1"
+      ],
+      "sourceHeading": "Part 8 计算几何",
+      "part": "8",
+      "sourceRefs": [],
+      "sourceBlockId": "372",
+      "level": 1,
+      "sourceEvidence": [
+        "Part 8 计算几何"
+      ],
+      "difficultySource": {
+        "kind": "directory",
+        "detail": "目录不参与难度评级"
+      },
+      "scope": "目录导航：计算几何。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-11",
+        "type": "directory",
+        "scope": "目录导航：计算几何。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+      },
+      "description": "目录导航：计算几何。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "fullLabel": "计算几何"
+    },
+    {
+      "id": "feishu-part-9",
+      "label": "离线与杂项",
+      "color": "parent",
+      "kind": "directory",
+      "origin": "feishu",
+      "attributes": [],
+      "children": [
+        {
+          "id": "feishu-part-9-3",
+          "label": "离线算法",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "feishu",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-9-3-1",
+              "label": "CDQ 分治",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-9-3-1",
+                  "label": "CDQ 分治",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "橙色：CDQ分治"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为CDQ 分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 9.3.1 CDQ 分治",
+                    "橙色：CDQ分治"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "CDQ 分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "CDQ 分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为CDQ 分治的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "CDQ 分治",
+                  "contentOf": "feishu-part-9-3-1"
+                }
+              ],
+              "sourceHeading": "Part 9.3.1 CDQ 分治",
+              "part": "9.3.1",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "380",
+              "legacyIds": [
+                "xcpc-cdq分治-1"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 9.3.1 CDQ 分治",
+                "橙色：CDQ分治"
+              ],
+              "scope": "目录导航：CDQ 分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：CDQ 分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：CDQ 分治。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "CDQ 分治"
+            },
+            {
+              "id": "feishu-part-9-3-2",
+              "label": "整体二分",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-9-3-2",
+                  "label": "整体二分",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "橙色：整体二分"
+                  },
+                  "rationale": "沿用用户明确D4标尺；本条范围为整体二分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 9.3.2 整体二分",
+                    "橙色：整体二分"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "整体二分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "整体二分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D4标尺；本条范围为整体二分的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "整体二分",
+                  "contentOf": "feishu-part-9-3-2"
+                }
+              ],
+              "sourceHeading": "Part 9.3.2 整体二分",
+              "part": "9.3.2",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "381",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 9.3.2 整体二分",
+                "橙色：整体二分"
+              ],
+              "scope": "目录导航：整体二分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：整体二分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：整体二分。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "整体二分"
+            },
+            {
+              "id": "feishu-part-9-3-3",
+              "label": "莫队",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "useful"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-高维带修改莫队",
+                  "label": "高维带修莫队",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "sourceRefs": [
+                    "https://oi-wiki.org/misc/modifiable-mo-algo/",
+                    "https://cp-algorithms.com/data_structures/sqrt_decomposition.html"
+                  ],
+                  "level": 4,
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "rationale": "在“多指针/时间维的离线顺序与状态迁移成本分析”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "scope": "多指针/时间维的离线顺序与状态迁移成本分析",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "多指针/时间维的离线顺序与状态迁移成本分析",
+                    "rationale": "在“多指针/时间维的离线顺序与状态迁移成本分析”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "aliases": [
+                    "高维带修改莫队"
+                  ],
+                  "fullLabel": "高维带修改莫队"
+                },
+                {
+                  "id": "algorithm-带修莫队",
+                  "label": "带修莫队",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "用户颜色文档的明确分档"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为带修莫队的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "sourceRefs": [
+                    "color-md"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "带修莫队"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "带修莫队的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "带修莫队的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为带修莫队的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "带修莫队"
+                },
+                {
+                  "id": "algorithm-树上莫队",
+                  "label": "树上莫队",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“欧拉序映射、LCA补点与区间奇偶翻转”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/misc/mo-algo-on-tree/",
+                    "https://cp-algorithms.com/data_structures/sqrt_decomposition.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "树上莫队"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "欧拉序映射、LCA补点与区间奇偶翻转",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "欧拉序映射、LCA补点与区间奇偶翻转",
+                    "rationale": "在“欧拉序映射、LCA补点与区间奇偶翻转”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "树上莫队"
+                },
+                {
+                  "id": "algorithm-回滚莫队",
+                  "label": "回滚莫队",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "rationale": "在“按块排序、只增右端和撤销临时左端”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "sourceRefs": [
+                    "https://oi-wiki.org/misc/rollback-mo-algo/",
+                    "https://cp-algorithms.com/data_structures/sqrt_decomposition.html"
+                  ],
+                  "level": 4,
+                  "sourceEvidence": [
+                    "回滚莫队"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "scope": "按块排序、只增右端和撤销临时左端",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "按块排序、只增右端和撤销临时左端",
+                    "rationale": "在“按块排序、只增右端和撤销临时左端”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "回滚莫队"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-9-3-3",
+                  "label": "莫队",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "color-md"
+                  ],
+                  "difficultySource": {
+                    "kind": "user-md",
+                    "detail": "蓝色：莫队基础"
+                  },
+                  "rationale": "沿用用户明确D3标尺；本条范围为莫队的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 9.3.3 莫队",
+                    "蓝色：莫队基础"
+                  ],
+                  "difficultyConfidence": "source",
+                  "scope": "莫队的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "莫队的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "rationale": "沿用用户明确D3标尺；本条范围为莫队的标准定义、前置概念、典型基本实现和适用条件；扩展应用按子项或具体题目另评。",
+                    "reviewNote": "保留用户明确档；不将本项目标尺宣称为各资料统一评级。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "莫队",
+                  "contentOf": "feishu-part-9-3-3"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-莫队-1"
+              ],
+              "sourceHeading": "Part 9.3.3 莫队",
+              "part": "9.3.3",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "color-md"
+              ],
+              "sourceBlockId": "382",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 9.3.3 莫队",
+                "蓝色：莫队基础"
+              ],
+              "scope": "目录导航：莫队。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：莫队。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：莫队。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "莫队"
+            }
+          ],
+          "sourceHeading": "Part 9.3 离线算法",
+          "part": "9.3",
+          "sourceRefs": [],
+          "sourceBlockId": "379",
+          "level": 2,
+          "sourceEvidence": [
+            "Part 9.3 离线算法"
+          ],
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：离线算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：离线算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "description": "目录导航：离线算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "离线算法"
+        },
+        {
+          "id": "group-optimization-methods",
+          "label": "优化搜索",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-9-2",
+              "label": "0/1 分数规划",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "useless"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-复杂分数规划",
+                  "label": "复杂分数规划",
+                  "color": "advanced",
+                  "kind": "algorithm",
+                  "origin": "supplement",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "sourceRefs": [
+                    "https://oi-wiki.org/misc/frac-programming/",
+                    "https://cp-algorithms.com/num_methods/binary_search.html"
+                  ],
+                  "level": 4,
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "rationale": "在“分数目标与网络流、生成树或其他组合优化判定结合”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                  "scope": "分数目标与网络流、生成树或其他组合优化判定结合",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "分数目标与网络流、生成树或其他组合优化判定结合",
+                    "rationale": "在“分数目标与网络流、生成树或其他组合优化判定结合”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 4,
+                      "max": 4
+                    }
+                  },
+                  "fullLabel": "复杂分数规划"
+                },
+                {
+                  "id": "algorithm-content-feishu-part-9-2",
+                  "label": "0/1 分数规划",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useless"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/misc/frac-programming/",
+                    "https://cp-algorithms.com/num_methods/binary_search.html"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 9.2 0/1 分数规划"
+                  ],
+                  "evidenceScope": "topic-and-prerequisites",
+                  "difficultyConfidence": "medium",
+                  "rationale": "在“比值最优化转判定、二分参数与可行性求解”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "scope": "比值最优化转判定、二分参数与可行性求解",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "比值最优化转判定、二分参数与可行性求解",
+                    "rationale": "在“比值最优化转判定、二分参数与可行性求解”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "0/1 分数规划",
+                  "contentOf": "feishu-part-9-2"
+                }
+              ],
+              "sourceHeading": "Part 9.2 0/1 分数规划",
+              "part": "9.2",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/misc/frac-programming/",
+                "https://cp-algorithms.com/num_methods/binary_search.html"
+              ],
+              "sourceBlockId": "378",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "level": 3,
+              "sourceEvidence": [
+                "Part 9.2 0/1 分数规划"
+              ],
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "scope": "目录导航：0/1 分数规划。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：0/1 分数规划。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：0/1 分数规划。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "0/1 分数规划"
+            },
+            {
+              "id": "xcpc-爬山-1",
+              "label": "爬山",
+              "color": "intermediate",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useful"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“邻域改进、局部最优和多起点，不承诺全局最优”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+              "sourceRefs": [
+                "https://oi-wiki.org/misc/",
+                "https://cp-algorithms.com/data_structures/sqrt_decomposition.html",
+                "https://oi-wiki.org/misc/frac-programming/"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "爬山"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "邻域改进、局部最优和多起点，不承诺全局最优",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "邻域改进、局部最优和多起点，不承诺全局最优",
+                "rationale": "在“邻域改进、局部最优和多起点，不承诺全局最优”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 3,
+                  "max": 3
+                }
+              },
+              "fullLabel": "爬山"
+            },
+            {
+              "id": "feishu-part-9-1",
+              "label": "模拟退火",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [
+                "useful"
+              ],
+              "children": [
+                {
+                  "id": "algorithm-content-feishu-part-9-1",
+                  "label": "模拟退火",
+                  "color": "intermediate",
+                  "kind": "algorithm",
+                  "origin": "feishu",
+                  "attributes": [
+                    "useful"
+                  ],
+                  "children": [],
+                  "sourceRefs": [
+                    "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                    "https://oi-wiki.org/misc/",
+                    "https://cp-algorithms.com/data_structures/sqrt_decomposition.html",
+                    "https://oi-wiki.org/misc/frac-programming/"
+                  ],
+                  "difficultySource": {
+                    "kind": "research",
+                    "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+                  },
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 9.1 模拟退火"
+                  ],
+                  "evidenceScope": "category-and-prerequisites",
+                  "difficultyConfidence": "low",
+                  "rationale": "在“邻域、温度、接受概率和调参；区分启发式与精确算法”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                  "aliases": [
+                    "模拟退火优化"
+                  ],
+                  "scope": "邻域、温度、接受概率和调参；区分启发式与精确算法",
+                  "rating": {
+                    "status": "confirmed",
+                    "date": "2026-11-11",
+                    "type": "knowledge",
+                    "scope": "邻域、温度、接受概率和调参；区分启发式与精确算法",
+                    "rationale": "在“邻域、温度、接受概率和调参；区分启发式与精确算法”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。",
+                    "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                    "range": {
+                      "min": 3,
+                      "max": 3
+                    }
+                  },
+                  "fullLabel": "模拟退火优化",
+                  "contentOf": "feishu-part-9-1"
+                }
+              ],
+              "legacyIds": [
+                "xcpc-模拟退火-1",
+                "xcpc-随机-1"
+              ],
+              "sourceHeading": "Part 9.1 模拟退火",
+              "part": "9.1",
+              "sourceRefs": [
+                "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+                "https://oi-wiki.org/misc/",
+                "https://cp-algorithms.com/data_structures/sqrt_decomposition.html",
+                "https://oi-wiki.org/misc/frac-programming/"
+              ],
+              "sourceBlockId": "377",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "level": 3,
+              "sourceEvidence": [
+                "Part 9.1 模拟退火"
+              ],
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "aliases": [
+                "模拟退火优化"
+              ],
+              "scope": "目录导航：模拟退火。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：模拟退火。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：模拟退火。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "模拟退火优化"
+            },
+            {
+              "id": "xcpc-遗传算法-1",
+              "label": "遗传算法",
+              "color": "advanced",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useless"
+              ],
+              "children": [],
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“编码、选择、交叉变异与适应度；不保证全局最优”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+              "sourceRefs": [
+                "https://oi-wiki.org/misc/",
+                "https://cp-algorithms.com/data_structures/sqrt_decomposition.html",
+                "https://oi-wiki.org/misc/frac-programming/"
+              ],
+              "level": 3,
+              "sourceEvidence": [
+                "遗传算法"
+              ],
+              "evidenceScope": "category-and-prerequisites",
+              "difficultyConfidence": "low",
+              "scope": "编码、选择、交叉变异与适应度；不保证全局最优",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "编码、选择、交叉变异与适应度；不保证全局最优",
+                "rationale": "在“编码、选择、交叉变异与适应度；不保证全局最优”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 4,
+                  "max": 4
+                }
+              },
+              "fullLabel": "遗传算法"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：优化搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：优化搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "优化与解的搜索"
+          ],
+          "description": "目录导航：优化搜索。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "优化与解的搜索"
+        },
+        {
+          "id": "group-greedy-theory",
+          "label": "贪心理论",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "xcpc-拟阵-1",
+              "label": "拟阵",
+              "color": "expert",
+              "kind": "algorithm",
+              "origin": "supplement",
+              "attributes": [
+                "useless"
+              ],
+              "children": [],
+              "sourceRefs": [
+                "https://oi-wiki.org/math/matroid/",
+                "https://oi-wiki.org/basic/",
+                "https://usaco.guide/adv/matroid"
+              ],
+              "level": 3,
+              "difficultySource": {
+                "kind": "research",
+                "detail": "多来源参考下的项目学习难度评估，非来源直接授予的统一等级"
+              },
+              "rationale": "在“独立集公理、交换性质与加权贪心证明”的范围内，涉及高抽象状态或深层代数关系，综合证明与实现负担较高，定为D5。",
+              "sourceEvidence": [
+                "拟阵"
+              ],
+              "evidenceScope": "topic-and-prerequisites",
+              "difficultyConfidence": "medium",
+              "scope": "独立集公理、交换性质与加权贪心证明",
+              "rating": {
+                "status": "confirmed",
+                "date": "2026-11-11",
+                "type": "knowledge",
+                "scope": "独立集公理、交换性质与加权贪心证明",
+                "rationale": "在“独立集公理、交换性质与加权贪心证明”的范围内，涉及高抽象状态或深层代数关系，综合证明与实现负担较高，定为D5。",
+                "reviewNote": "已明确学习边界并按统一五档作出项目判断；引用直接程度仍保留原始证据标记。",
+                "range": {
+                  "min": 5,
+                  "max": 5
+                }
+              },
+              "fullLabel": "拟阵"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：贪心理论。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：贪心理论。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "贪心的理论扩展"
+          ],
+          "description": "目录导航：贪心理论。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "贪心的理论扩展"
+        },
+        {
+          "id": "group-special-tasks",
+          "label": "特殊题型与待整理",
+          "color": "parent",
+          "kind": "directory",
+          "origin": "editorial",
+          "attributes": [],
+          "children": [
+            {
+              "id": "feishu-part-9-5",
+              "label": "评测与提交",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [
+                {
+                  "id": "feishu-part-9-5-1",
+                  "label": "提交答案题",
+                  "color": "parent",
+                  "kind": "directory",
+                  "origin": "feishu",
+                  "attributes": [],
+                  "children": [],
+                  "sourceHeading": "Part 9.5.1 提交答案题",
+                  "part": "9.5.1",
+                  "sourceRefs": [],
+                  "sourceBlockId": "385",
+                  "level": 4,
+                  "sourceEvidence": [
+                    "Part 9.5.1 提交答案题"
+                  ],
+                  "aliases": [
+                    "提交答案题（输出型任务）"
+                  ],
+                  "scope": "目录导航：提交答案题。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "difficultySource": {
+                    "kind": "directory",
+                    "detail": "目录不参与难度评级"
+                  },
+                  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+                  "rating": {
+                    "status": "not-applicable",
+                    "date": "2026-11-11",
+                    "type": "directory",
+                    "scope": "目录导航：提交答案题。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+                  },
+                  "description": "目录导航：提交答案题。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                  "fullLabel": "提交答案题（输出型任务）"
+                }
+              ],
+              "sourceHeading": "Part 9.5 非传统题",
+              "part": "9.5",
+              "sourceRefs": [],
+              "sourceBlockId": "384",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 9.5 非传统题"
+              ],
+              "aliases": [
+                "非传统题",
+                "特殊评测与提交形式"
+              ],
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "scope": "目录导航：评测与提交。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：评测与提交。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：评测与提交。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "特殊评测与提交形式"
+            },
+            {
+              "id": "feishu-part-9-4",
+              "label": "待分类专题",
+              "color": "parent",
+              "kind": "directory",
+              "origin": "feishu",
+              "attributes": [],
+              "children": [],
+              "sourceHeading": "Part 9.4 奇怪的题目",
+              "part": "9.4",
+              "sourceRefs": [],
+              "sourceBlockId": "383",
+              "level": 3,
+              "sourceEvidence": [
+                "Part 9.4 奇怪的题目"
+              ],
+              "aliases": [
+                "奇怪的题目",
+                "其他专题（待细分）"
+              ],
+              "scope": "目录导航：待分类专题。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "difficultySource": {
+                "kind": "directory",
+                "detail": "目录不参与难度评级"
+              },
+              "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+              "rating": {
+                "status": "not-applicable",
+                "date": "2026-11-11",
+                "type": "directory",
+                "scope": "目录导航：待分类专题。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+                "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+              },
+              "description": "目录导航：待分类专题。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+              "fullLabel": "其他专题（待细分）"
+            }
+          ],
+          "level": 2,
+          "difficultySource": {
+            "kind": "directory",
+            "detail": "目录不参与难度评级"
+          },
+          "scope": "目录导航：特殊题型与待整理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+          "sourceRefs": [],
+          "rating": {
+            "status": "not-applicable",
+            "date": "2026-11-11",
+            "type": "directory",
+            "scope": "目录导航：特殊题型与待整理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+            "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+          },
+          "aliases": [
+            "特殊任务与待整理来源"
+          ],
+          "description": "目录导航：特殊题型与待整理。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+          "fullLabel": "特殊任务与待整理来源"
+        }
+      ],
+      "legacyIds": [
+        "xcpc-杂-1",
+        "xcpc-杂-2"
+      ],
+      "sourceHeading": "Part 9 杂项",
+      "part": "9",
+      "sourceRefs": [],
+      "sourceBlockId": "376",
+      "level": 1,
+      "sourceEvidence": [
+        "Part 9 杂项"
+      ],
+      "aliases": [
+        "杂项",
+        "离线算法、优化方法与特殊题型"
+      ],
+      "difficultySource": {
+        "kind": "directory",
+        "detail": "目录不参与难度评级"
+      },
+      "scope": "目录导航：离线与杂项。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-11",
+        "type": "directory",
+        "scope": "目录导航：离线与杂项。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+        "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+      },
+      "description": "目录导航：离线与杂项。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+      "fullLabel": "离线算法、优化方法与特殊题型"
+    }
+  ],
+  "level": 0,
+  "attributes": [],
+  "sourceRefs": [],
+  "sourceEvidence": [],
+  "difficultySource": {
+    "kind": "directory",
+    "detail": "目录不参与难度评级"
+  },
+  "scope": "目录导航：XCPC算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+  "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+  "rating": {
+    "status": "not-applicable",
+    "date": "2026-11-11",
+    "type": "directory",
+    "scope": "目录导航：XCPC算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+    "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。"
+  },
+  "description": "目录导航：XCPC算法。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
+  "fullLabel": "XCPC算法",
+  "metadata": {
+    "schema": 1,
+    "sources": {
+      "feishu": {
+        "title": "算法板子与要点",
+        "url": "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+        "snapshot": "2026-11-10",
+        "headingCount": 126
+      },
+      "userMd": {
+        "id": "color-md",
+        "title": "XCPC算法_颜色难度对应.md",
+        "path": "E:/录屏/XCPC算法_颜色难度对应.md",
+        "role": "明确难度与额外算法补充",
+        "sha256": "5c8ad3f2287e012d50e197a84be03d32283dcbd853f287499b3f312db2aa334e"
+      },
+      "research": {
+        "date": "2026-11-11",
+        "method": "仅对具体算法与明确教学模型按统一五档定稿；目录与入口不评级，原目录中的算法内容另建子节点；引用支撑知识内容与先修，不授予官方等级。",
+        "groups": {
+          "tools": {
+            "name": "语言与工具",
+            "urls": [
+              "https://oi-wiki.org/contest/roadmap/",
+              "https://oi-wiki.org/contest/io/"
+            ],
+            "reason": "按语法前置与工具使用复杂性分级；调试方法不代表竞赛题难度。"
+          },
+          "basic": {
+            "name": "基础算法与搜索",
+            "urls": [
+              "https://oi-wiki.org/contest/roadmap/",
+              "https://oi-wiki.org/search/opt/",
+              "https://oi-wiki.org/basic/divide-and-conquer/",
+              "https://cp-algorithms.com/"
+            ],
+            "reason": "比较基础枚举/递归与搜索空间优化、正确性证明和复杂度分析的增量。"
+          },
+          "dp": {
+            "name": "动态规划",
+            "urls": [
+              "https://oi-wiki.org/dp/basic/",
+              "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+              "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html"
+            ],
+            "reason": "比较状态表达、转移结构和优化证明；基础实现与综合高阶应用分开。"
+          },
+          "string": {
+            "name": "字符串",
+            "urls": [
+              "https://oi-wiki.org/string/z-func/",
+              "https://cp-algorithms.com/string/z-function.html",
+              "https://cp-algorithms.com/string/suffix-tree-ukkonen.html"
+            ],
+            "reason": "以线性扫描不变量、后缀结构与在线维护的前置知识为依据。"
+          },
+          "math": {
+            "name": "数学与数论",
+            "urls": [
+              "https://oi-wiki.org/math/",
+              "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+              "https://cp-algorithms.com/"
+            ],
+            "reason": "比较代数/数论前置、定理证明与实现负担；数列定义与高阶求值不混为一档。"
+          },
+          "poly": {
+            "name": "多项式",
+            "urls": [
+              "https://cp-algorithms.com/algebra/polynomial.html",
+              "https://oi-wiki.org/math/"
+            ],
+            "reason": "结合卷积、形式幂级数、变换及逆运算的学习依赖综合评估。"
+          },
+          "ds": {
+            "name": "数据结构",
+            "urls": [
+              "https://oi-wiki.org/ds/",
+              "https://cp-algorithms.com/data_structures/segment_tree.html",
+              "https://cp-algorithms.com/data_structures/treap.html"
+            ],
+            "reason": "区分库容器使用、静态查询、延迟维护、旋转/持久化等实现与证明负担。"
+          },
+          "graph": {
+            "name": "图论",
+            "urls": [
+              "https://oi-wiki.org/graph/",
+              "https://cp-algorithms.com/graph/strongly-connected-components.html",
+              "https://cp-algorithms.com/graph/bellman_ford.html"
+            ],
+            "reason": "按遍历与松弛基础、连通性分解、树上维护和流/匹配建模的前置链评估。"
+          },
+          "geometry": {
+            "name": "计算几何",
+            "urls": [
+              "https://oi-wiki.org/geometry/",
+              "https://cp-algorithms.com/geometry/basic-geometry.html"
+            ],
+            "reason": "比较向量基础、交点/包含判断与数值鲁棒性、多结构组合。"
+          },
+          "misc": {
+            "name": "杂项与离线",
+            "urls": [
+              "https://oi-wiki.org/misc/",
+              "https://cp-algorithms.com/data_structures/sqrt_decomposition.html",
+              "https://oi-wiki.org/misc/frac-programming/"
+            ],
+            "reason": "比较分块排序、回滚状态、参数化判定及随机化调参的前置和实现负担。"
+          }
+        }
+      }
+    },
+    "summary": {
+      "nodes": 577,
+      "sourceHeadings": 126,
+      "oldNodesMapped": 367,
+      "graded": 386,
+      "userGraded": 181,
+      "researchGraded": 205,
+      "attributesIndependent": true,
+      "unresolvedReferences": 0,
+      "categoryGraded": 0,
+      "entryGraded": 0,
+      "confirmed": 386,
+      "difficultyHistogram": {
+        "basic": 21,
+        "beginner": 131,
+        "intermediate": 117,
+        "advanced": 101,
+        "expert": 16
+      },
+      "directories": 191,
+      "notApplicable": 191,
+      "addedAlgorithmContent": 104,
+      "originalNodesPreserved": 473
+    },
+    "ratingPolicy": {
+      "version": 2,
+      "date": "2026-11-11",
+      "status": "confirmed",
+      "scale": {
+        "D1": "语法、直接操作和简单关系；可用局部推理说明",
+        "D2": "常用基础算法、标准状态模型或直接数据结构实现",
+        "D3": "需要非平凡状态维护、组合先修或完整正确性/复杂度证明",
+        "D4": "高级优化、复杂建模、多结构组合或较重实现与证明",
+        "D5": "高抽象结构、深层代数或全局不变量，综合证明和实现负担高"
+      },
+      "finalization": "confirmed 表示本项目在所述学习范围内作出定稿选择，不是客观唯一等级或所有引用来源的共同评级。",
+      "evidenceRule": "保留原有证据范围与置信度；定稿不意味着将宽泛分类参考升级为直接专题证据。",
+      "modelClarification": "原来仅有复杂度公式的两条树形背包记录已明确采用教学模型；原作者模型未被恢复。",
+      "changes": [
+        {
+          "nodeId": "xcpc-bitset-1",
+          "label": "bitset",
+          "before": "intermediate",
+          "after": "beginner",
+          "reason": "在“定长位集合、位运算和移位；位并行DP组合题另评”的范围内，使用常用基础算法或标准状态，所需不变量与实现规模较直接，定为D2。"
+        },
+        {
+          "nodeId": "xcpc-pbds-1",
+          "label": "pbds",
+          "before": "advanced",
+          "after": "intermediate",
+          "reason": "在“GNU顺序统计树的排名与第k小接口，不涉及库内部实现”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。"
+        },
+        {
+          "nodeId": "xcpc-分治dp-1",
+          "label": "分治 DP",
+          "before": "advanced",
+          "after": "intermediate",
+          "reason": "在“按最优决策单调性递归求一层DP；任意递推不保证可用”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。"
+        },
+        {
+          "nodeId": "xcpc-自动机上dp-1",
+          "label": "自动机上 DP",
+          "before": "advanced",
+          "after": "intermediate",
+          "reason": "在“在已构建的AC等有限自动机上统计长度和状态；自动机构建另评”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。"
+        },
+        {
+          "nodeId": "xcpc-杨表-1",
+          "label": "杨表",
+          "before": "intermediate",
+          "after": "advanced",
+          "reason": "在“标准Young表的钩长公式、合法形状与简单计数”的范围内，包含高级结构、优化或较重的边界及证明负担，定为D4。"
+        },
+        {
+          "nodeId": "xcpc-贝尔数-1",
+          "label": "贝尔数",
+          "before": "advanced",
+          "after": "intermediate",
+          "reason": "在“集合划分计数及斯特林数求和或Bell三角”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。"
+        },
+        {
+          "nodeId": "xcpc-集合幂级数-1",
+          "label": "集合幂级数",
+          "before": "intermediate",
+          "after": "expert",
+          "reason": "在“子集上的卷积代数、按集合大小分层及快速变换”的范围内，涉及高抽象状态或深层代数关系，综合证明与实现负担较高，定为D5。"
+        },
+        {
+          "nodeId": "xcpc-对顶堆-1",
+          "label": "对顶堆",
+          "before": "beginner",
+          "after": "intermediate",
+          "reason": "在“用两个堆维护中位数，证明大小和顺序不变量”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。"
+        },
+        {
+          "nodeId": "xcpc-zkw线段树-1",
+          "label": "ZKW线段树",
+          "before": "advanced",
+          "after": "intermediate",
+          "reason": "在“迭代式区间查询与更新、开区间哨兵和索引不变量”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。"
+        },
+        {
+          "nodeId": "xcpc-划分树-1",
+          "label": "划分树",
+          "before": "advanced",
+          "after": "intermediate",
+          "reason": "在“按值划分静态序列并映射查询区间，求第k小”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。"
+        },
+        {
+          "nodeId": "xcpc-树的哈希-1",
+          "label": "树的哈希",
+          "before": "advanced",
+          "after": "intermediate",
+          "reason": "在“根树编码和子树多重集合哈希；概率碰撞风险与换根另论”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。"
+        },
+        {
+          "nodeId": "xcpc-boruvka-1",
+          "label": "Borůvka",
+          "before": "advanced",
+          "after": "intermediate",
+          "reason": "在“各连通块选最小出边、并查集合并并证明阶段数”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。"
+        },
+        {
+          "nodeId": "xcpc-多边形包含-1",
+          "label": "多边形包含",
+          "before": "advanced",
+          "after": "intermediate",
+          "reason": "在“简单多边形点包含的射线法/绕数法；凸多边形二分另论”的范围内，需要额外状态维护、组合先修或非平凡的正确性/复杂度论证，定为D3。"
+        },
+        {
+          "nodeId": "xcpc-o-n-3-1",
+          "label": "树形背包：朴素容量枚举",
+          "before": "parent",
+          "after": "intermediate",
+          "reason": "需要后序遍历、连通状态定义和逐子树容量合并；按基础树形背包的完整建模与实现定为 D3。"
+        },
+        {
+          "nodeId": "xcpc-o-n-2-1",
+          "label": "树形背包：按子树规模裁剪合并",
+          "before": "parent",
+          "after": "advanced",
+          "reason": "需要在 D3 模型上控制可达容量边界，并用每对节点仅在相应 LCA 合并一次等计数证明总复杂度，按优化证明定为 D4。"
+        }
+      ],
+      "directoryRule": "所有目录、分类和入口节点使用 color=parent、rating.status=not-applicable、rating.type=directory；不显示难度或难度跨度。已有目录的标识、名称、位置与笔记关联保留；具体知识或模型另建 algorithm-content-<原标识> 子节点，承接原等级与证据。"
+    },
+    "sourceIndex": [
+      {
+        "part": "0",
+        "nodeId": "feishu-part-0",
+        "sourceHeading": "Part 0 好用的东西",
+        "currentPath": "C++ 与工具"
+      },
+      {
+        "part": "1",
+        "nodeId": "feishu-part-1",
+        "sourceHeading": "Part 1 基础算法",
+        "currentPath": "基础算法"
+      },
+      {
+        "part": "1.1",
+        "nodeId": "feishu-part-1-1",
+        "sourceHeading": "Part 1.1 模拟",
+        "currentPath": "基础算法 / 解题策略 / 枚举与模拟"
+      },
+      {
+        "part": "1.2",
+        "nodeId": "feishu-part-1-2",
+        "sourceHeading": "Part 1.2 排序算法",
+        "currentPath": "基础算法 / 序列处理 / 排序"
+      },
+      {
+        "part": "1.3",
+        "nodeId": "feishu-part-1-3",
+        "sourceHeading": "Part 1.3 二分",
+        "currentPath": "基础算法 / 二分"
+      },
+      {
+        "part": "1.4",
+        "nodeId": "feishu-part-1-4",
+        "sourceHeading": "Part 1.4 分治",
+        "currentPath": "基础算法 / 递推与分治 / 递归与分治"
+      },
+      {
+        "part": "1.5",
+        "nodeId": "feishu-part-1-5",
+        "sourceHeading": "Part 1.5 贪心",
+        "currentPath": "基础算法 / 解题策略 / 贪心"
+      },
+      {
+        "part": "1.6",
+        "nodeId": "feishu-part-1-6",
+        "sourceHeading": "Part 1.6 构造",
+        "currentPath": "基础算法 / 解题策略 / 构造"
+      },
+      {
+        "part": "1.7",
+        "nodeId": "feishu-part-1-7",
+        "sourceHeading": "Part 1.7 高精度",
+        "currentPath": "基础算法 / 高精度"
+      },
+      {
+        "part": "1.8",
+        "nodeId": "feishu-part-1-8",
+        "sourceHeading": "Part 1.8 前缀和 & 差分",
+        "currentPath": "基础算法 / 序列处理 / 前缀和与差分"
+      },
+      {
+        "part": "1.9",
+        "nodeId": "feishu-part-1-9",
+        "sourceHeading": "Part 1.9 双指针",
+        "currentPath": "基础算法 / 序列处理 / 双指针"
+      },
+      {
+        "part": "2",
+        "nodeId": "feishu-part-2",
+        "sourceHeading": "Part 2 搜索",
+        "currentPath": "搜索与剪枝"
+      },
+      {
+        "part": "2.1",
+        "nodeId": "feishu-part-2-1",
+        "sourceHeading": "Part 2.1 深度优先搜索dfs",
+        "currentPath": "搜索与剪枝 / 搜索基础 / DFS"
+      },
+      {
+        "part": "2.2",
+        "nodeId": "feishu-part-2-2",
+        "sourceHeading": "Part 2.2 广度优先搜索bfs",
+        "currentPath": "搜索与剪枝 / 搜索基础 / BFS"
+      },
+      {
+        "part": "2.3",
+        "nodeId": "feishu-part-2-3",
+        "sourceHeading": "Part 2.3 记忆化搜索",
+        "currentPath": "搜索与剪枝 / 搜索基础 / 记忆化搜索"
+      },
+      {
+        "part": "2.4",
+        "nodeId": "feishu-part-2-4",
+        "sourceHeading": "Part 2.4 搜索的剪枝",
+        "currentPath": "搜索与剪枝 / 搜索优化 / 搜索剪枝"
+      },
+      {
+        "part": "2.5",
+        "nodeId": "feishu-part-2-5",
+        "sourceHeading": "Part 2.5 双向搜索",
+        "currentPath": "搜索与剪枝 / 搜索优化 / 双向与折半搜索"
+      },
+      {
+        "part": "2.6",
+        "nodeId": "feishu-part-2-6",
+        "sourceHeading": "Part 2.6 A*",
+        "currentPath": "搜索与剪枝 / 搜索优化 / A* 搜索"
+      },
+      {
+        "part": "2.7",
+        "nodeId": "feishu-part-2-7",
+        "sourceHeading": "Part 2.7 IDA*",
+        "currentPath": "搜索与剪枝 / 搜索优化 / IDA* 搜索"
+      },
+      {
+        "part": "2.8",
+        "nodeId": "feishu-part-2-8",
+        "sourceHeading": "Part 2.8 DLX",
+        "currentPath": "搜索与剪枝 / DLX"
+      },
+      {
+        "part": "3",
+        "nodeId": "feishu-part-3",
+        "sourceHeading": "Part 3 动态规划dp",
+        "currentPath": "动态规划"
+      },
+      {
+        "part": "3.1",
+        "nodeId": "feishu-part-3-1",
+        "sourceHeading": "Part 3.1 线性动态规划",
+        "currentPath": "动态规划 / DP 模型 / 线性 DP"
+      },
+      {
+        "part": "3.2",
+        "nodeId": "feishu-part-3-2",
+        "sourceHeading": "Part 3.2 背包动态规划",
+        "currentPath": "动态规划 / DP 模型 / 背包 DP"
+      },
+      {
+        "part": "3.3",
+        "nodeId": "feishu-part-3-3",
+        "sourceHeading": "Part 3.3 区间动态规划",
+        "currentPath": "动态规划 / DP 模型 / 区间 DP"
+      },
+      {
+        "part": "3.4",
+        "nodeId": "feishu-part-3-4",
+        "sourceHeading": "Part 3.4 树形动态规划",
+        "currentPath": "动态规划 / DP 模型 / 树形 DP"
+      },
+      {
+        "part": "3.5",
+        "nodeId": "feishu-part-3-5",
+        "sourceHeading": "Part 3.5 状态压缩动态规划",
+        "currentPath": "动态规划 / DP 模型 / 状压 DP"
+      },
+      {
+        "part": "3.6",
+        "nodeId": "feishu-part-3-6",
+        "sourceHeading": "Part 3.6 倍增优化动态规划",
+        "currentPath": "动态规划 / DP 优化 / 倍增优化"
+      },
+      {
+        "part": "3.7",
+        "nodeId": "feishu-part-3-7",
+        "sourceHeading": "Part 3.7 数据结构优化动态规划",
+        "currentPath": "动态规划 / DP 优化 / 数据结构优化"
+      },
+      {
+        "part": "3.8",
+        "nodeId": "feishu-part-3-8",
+        "sourceHeading": "Part 3.8 单调队列优化动态规划",
+        "currentPath": "动态规划 / DP 优化 / 单调队列优化"
+      },
+      {
+        "part": "3.9",
+        "nodeId": "feishu-part-3-9",
+        "sourceHeading": "Part 3.9 斜率优化动态规划",
+        "currentPath": "动态规划 / DP 优化 / 斜率优化"
+      },
+      {
+        "part": "3.10",
+        "nodeId": "feishu-part-3-10",
+        "sourceHeading": "Part 3.10 决策单调性优化动态规划",
+        "currentPath": "动态规划 / DP 优化 / 决策单调性"
+      },
+      {
+        "part": "3.11",
+        "nodeId": "feishu-part-3-11",
+        "sourceHeading": "Part 3.11 数位统计类动态规划",
+        "currentPath": "动态规划 / DP 模型 / 数位 DP"
+      },
+      {
+        "part": "3.12",
+        "nodeId": "feishu-part-3-12",
+        "sourceHeading": "Part 3.12 轮廓线动态规划",
+        "currentPath": "动态规划 / DP 模型 / 轮廓线 DP"
+      },
+      {
+        "part": "4",
+        "nodeId": "feishu-part-4",
+        "sourceHeading": "Part 4 字符串",
+        "currentPath": "字符串"
+      },
+      {
+        "part": "4.1",
+        "nodeId": "feishu-part-4-1",
+        "sourceHeading": "Part 4.1 字符串哈希",
+        "currentPath": "字符串 / 匹配与字典树 / 字符串哈希"
+      },
+      {
+        "part": "4.2",
+        "nodeId": "feishu-part-4-2",
+        "sourceHeading": "Part 4.2 KMP",
+        "currentPath": "字符串 / 匹配与字典树 / KMP"
+      },
+      {
+        "part": "4.3",
+        "nodeId": "feishu-part-4-3",
+        "sourceHeading": "Part 4.3 Manacher",
+        "currentPath": "字符串 / 回文结构 / Manacher"
+      },
+      {
+        "part": "4.4",
+        "nodeId": "feishu-part-4-4",
+        "sourceHeading": "Part 4.4 Trie树（字典树）",
+        "currentPath": "字符串 / 匹配与字典树 / Trie"
+      },
+      {
+        "part": "4.5",
+        "nodeId": "feishu-part-4-5",
+        "sourceHeading": "Part 4.5 AC自动机",
+        "currentPath": "字符串 / 匹配与字典树 / AC 自动机"
+      },
+      {
+        "part": "4.6",
+        "nodeId": "feishu-part-4-6",
+        "sourceHeading": "Part 4.6 回文自动机",
+        "currentPath": "字符串 / 回文结构 / 回文自动机"
+      },
+      {
+        "part": "4.7",
+        "nodeId": "feishu-part-4-7",
+        "sourceHeading": "Part 4.7 后缀数组",
+        "currentPath": "字符串 / 后缀结构 / 后缀数组"
+      },
+      {
+        "part": "4.8",
+        "nodeId": "feishu-part-4-8",
+        "sourceHeading": "Part 4.8 后缀自动机",
+        "currentPath": "字符串 / 后缀结构 / 后缀自动机"
+      },
+      {
+        "part": "5",
+        "nodeId": "feishu-part-5",
+        "sourceHeading": "Part 5 数学",
+        "currentPath": "竞赛数学"
+      },
+      {
+        "part": "5.1",
+        "nodeId": "feishu-part-5-1",
+        "sourceHeading": "Part 5.1 位运算",
+        "currentPath": "竞赛数学 / 位运算与编码 / 位运算"
+      },
+      {
+        "part": "5.2",
+        "nodeId": "feishu-part-5-2",
+        "sourceHeading": "Part 5.2 整除相关",
+        "currentPath": "竞赛数学 / 数论与模运算 / 整除与整数方程"
+      },
+      {
+        "part": "5.2.1",
+        "nodeId": "feishu-part-5-2-1",
+        "sourceHeading": "Part 5.2.1 素数",
+        "currentPath": "竞赛数学 / 数论与模运算 / 整除与整数方程 / 素性与分解"
+      },
+      {
+        "part": "5.2.2",
+        "nodeId": "feishu-part-5-2-2",
+        "sourceHeading": "Part 5.2.2 最大公约数",
+        "currentPath": "竞赛数学 / 数论与模运算 / 整除与整数方程 / GCD 与 LCM"
+      },
+      {
+        "part": "5.2.3",
+        "nodeId": "feishu-part-5-2-3",
+        "sourceHeading": "Part 5.2.3 欧拉函数",
+        "currentPath": "竞赛数学 / 数论与模运算 / 整除与整数方程 / 欧拉函数与定理"
+      },
+      {
+        "part": "5.3",
+        "nodeId": "feishu-part-5-3",
+        "sourceHeading": "Part 5.3 同余方程",
+        "currentPath": "竞赛数学 / 数论与模运算 / 同余与模运算"
+      },
+      {
+        "part": "5.3.1",
+        "nodeId": "feishu-part-5-3-1",
+        "sourceHeading": "Part 5.3.1 线性同余方程&乘法逆元",
+        "currentPath": "竞赛数学 / 数论与模运算 / 同余与模运算 / 线性同余"
+      },
+      {
+        "part": "5.3.2",
+        "nodeId": "feishu-part-5-3-2",
+        "sourceHeading": "Part 5.3.2 中国剩余定理",
+        "currentPath": "竞赛数学 / 数论与模运算 / 同余与模运算 / CRT 与扩展"
+      },
+      {
+        "part": "5.3.3",
+        "nodeId": "feishu-part-5-3-3",
+        "sourceHeading": "Part 5.3.3 高次同余方程",
+        "currentPath": "竞赛数学 / 数论与模运算 / 同余与模运算 / 离散对数与剩余"
+      },
+      {
+        "part": "5.4",
+        "nodeId": "feishu-part-5-4",
+        "sourceHeading": "Part 5.4 博弈论",
+        "currentPath": "竞赛数学 / 概率与博弈 / 组合博弈"
+      },
+      {
+        "part": "5.5",
+        "nodeId": "feishu-part-5-5",
+        "sourceHeading": "Part 5.5 概率与期望",
+        "currentPath": "竞赛数学 / 概率与博弈 / 概率与期望"
+      },
+      {
+        "part": "5.6",
+        "nodeId": "feishu-part-5-6",
+        "sourceHeading": "Part 5.6 组合数学",
+        "currentPath": "竞赛数学 / 计数与对称 / 组合数学"
+      },
+      {
+        "part": "5.6.1",
+        "nodeId": "feishu-part-5-6-1",
+        "sourceHeading": "Part 5.6.1 排列组合",
+        "currentPath": "竞赛数学 / 计数与对称 / 组合数学 / 排列组合"
+      },
+      {
+        "part": "5.6.2",
+        "nodeId": "feishu-part-5-6-2",
+        "sourceHeading": "Part 5.6.2 卡特兰数&斯特林数",
+        "currentPath": "竞赛数学 / 计数与对称 / 组合数学 / 计数数列"
+      },
+      {
+        "part": "5.6.3",
+        "nodeId": "feishu-part-5-6-3",
+        "sourceHeading": "Part 5.6.3 容斥原理",
+        "currentPath": "竞赛数学 / 计数与对称 / 组合数学 / 容斥原理"
+      },
+      {
+        "part": "5.7",
+        "nodeId": "feishu-part-5-7",
+        "sourceHeading": "Part 5.7 线性代数",
+        "currentPath": "竞赛数学 / 代数与变换 / 线性代数"
+      },
+      {
+        "part": "5.7.1",
+        "nodeId": "feishu-part-5-7-1",
+        "sourceHeading": "Part 5.7.1 矩阵",
+        "currentPath": "竞赛数学 / 代数与变换 / 线性代数 / 矩阵与递推"
+      },
+      {
+        "part": "5.7.2",
+        "nodeId": "feishu-part-5-7-2",
+        "sourceHeading": "Part 5.7.2 高斯消元",
+        "currentPath": "竞赛数学 / 代数与变换 / 线性代数 / 高斯消元"
+      },
+      {
+        "part": "5.7.3",
+        "nodeId": "feishu-part-5-7-3",
+        "sourceHeading": "Part 5.7.3 线性基",
+        "currentPath": "竞赛数学 / 代数与变换 / 线性代数 / 线性基"
+      },
+      {
+        "part": "5.8",
+        "nodeId": "feishu-part-5-8",
+        "sourceHeading": "Part 5.8 多项式",
+        "currentPath": "竞赛数学 / 代数与变换 / 多项式与生成函数"
+      },
+      {
+        "part": "5.9",
+        "nodeId": "feishu-part-5-9",
+        "sourceHeading": "Part 5.9 莫比乌斯反演",
+        "currentPath": "竞赛数学 / 数论与模运算 / 莫比乌斯反演"
+      },
+      {
+        "part": "5.10",
+        "nodeId": "feishu-part-5-10",
+        "sourceHeading": "Part 5.10 筛法",
+        "currentPath": "竞赛数学 / 数论与模运算 / 筛法与数论求和"
+      },
+      {
+        "part": "5.11",
+        "nodeId": "feishu-part-5-11",
+        "sourceHeading": "Part 5.11 线性规划",
+        "currentPath": "竞赛数学 / 数值与优化 / 线性规划"
+      },
+      {
+        "part": "5.12",
+        "nodeId": "feishu-part-5-12",
+        "sourceHeading": "Part 5.12 数值方法",
+        "currentPath": "竞赛数学 / 数值与优化 / 数值优化与积分"
+      },
+      {
+        "part": "5.12.1",
+        "nodeId": "feishu-part-5-12-1",
+        "sourceHeading": "Part 5.12.1 三分法",
+        "currentPath": "竞赛数学 / 数值与优化 / 数值优化与积分 / 三分法"
+      },
+      {
+        "part": "5.12.2",
+        "nodeId": "feishu-part-5-12-2",
+        "sourceHeading": "Part 5.12.2 自适应辛普森法",
+        "currentPath": "竞赛数学 / 数值与优化 / 数值优化与积分 / 数值积分 / 自适应辛普森法"
+      },
+      {
+        "part": "5.13",
+        "nodeId": "feishu-part-5-13",
+        "sourceHeading": "Part 5.13 置换群",
+        "currentPath": "竞赛数学 / 计数与对称 / 置换群"
+      },
+      {
+        "part": "5.14",
+        "nodeId": "feishu-part-5-14",
+        "sourceHeading": "Part 5.14 格雷码",
+        "currentPath": "竞赛数学 / 位运算与编码 / 格雷码"
+      },
+      {
+        "part": "6",
+        "nodeId": "feishu-part-6",
+        "sourceHeading": "Part 6 数据结构",
+        "currentPath": "数据结构"
+      },
+      {
+        "part": "6.1",
+        "nodeId": "feishu-part-6-1",
+        "sourceHeading": "Part 6.1 STL速查",
+        "currentPath": "C++ 与工具 / 标准库与扩展"
+      },
+      {
+        "part": "6.2",
+        "nodeId": "feishu-part-6-2",
+        "sourceHeading": "Part 6.2 链表",
+        "currentPath": "数据结构 / 线性与单调结构 / 链表"
+      },
+      {
+        "part": "6.3",
+        "nodeId": "feishu-part-6-3",
+        "sourceHeading": "Part 6.3 栈",
+        "currentPath": "数据结构 / 线性与单调结构 / 栈"
+      },
+      {
+        "part": "6.4",
+        "nodeId": "feishu-part-6-4",
+        "sourceHeading": "Part 6.4 队列",
+        "currentPath": "数据结构 / 线性与单调结构 / 队列"
+      },
+      {
+        "part": "6.5",
+        "nodeId": "feishu-part-6-5",
+        "sourceHeading": "Part 6.5 并查集",
+        "currentPath": "数据结构 / 并查集"
+      },
+      {
+        "part": "6.6",
+        "nodeId": "feishu-part-6-6",
+        "sourceHeading": "Part 6.6 二叉堆",
+        "currentPath": "数据结构 / 堆 / 二叉堆"
+      },
+      {
+        "part": "6.7",
+        "nodeId": "feishu-part-6-7",
+        "sourceHeading": "Part 6.7 ST表",
+        "currentPath": "数据结构 / 区间与分块 / ST 表"
+      },
+      {
+        "part": "6.8",
+        "nodeId": "feishu-part-6-8",
+        "sourceHeading": "Part 6.8 树状数组",
+        "currentPath": "数据结构 / 区间与分块 / 树状数组"
+      },
+      {
+        "part": "6.9",
+        "nodeId": "feishu-part-6-9",
+        "sourceHeading": "Part 6.9 线段树",
+        "currentPath": "数据结构 / 区间与分块 / 线段树"
+      },
+      {
+        "part": "6.10",
+        "nodeId": "feishu-part-6-10",
+        "sourceHeading": "Part 6.10 分块",
+        "currentPath": "数据结构 / 区间与分块 / 分块"
+      },
+      {
+        "part": "6.11",
+        "nodeId": "feishu-part-6-11",
+        "sourceHeading": "Part 6.11 可并堆",
+        "currentPath": "数据结构 / 堆 / 可并堆"
+      },
+      {
+        "part": "6.12",
+        "nodeId": "feishu-part-6-12",
+        "sourceHeading": "Part 6.12 主席树",
+        "currentPath": "数据结构 / 持久化 / 主席树"
+      },
+      {
+        "part": "6.13",
+        "nodeId": "feishu-part-6-13",
+        "sourceHeading": "Part 6.13 平衡树",
+        "currentPath": "数据结构 / 有序与区间集合 / 平衡树"
+      },
+      {
+        "part": "6.14",
+        "nodeId": "feishu-part-6-14",
+        "sourceHeading": "Part 6.14 树链剖分",
+        "currentPath": "图与树 / 树上算法 / 树上查询 / 树链剖分"
+      },
+      {
+        "part": "6.15",
+        "nodeId": "feishu-part-6-15",
+        "sourceHeading": "Part 6.15 树套树",
+        "currentPath": "数据结构 / 多维与空间查询 / 树套树"
+      },
+      {
+        "part": "6.16",
+        "nodeId": "feishu-part-6-16",
+        "sourceHeading": "Part 6.16 动态树",
+        "currentPath": "图与树 / 树上算法 / 树上查询 / 动态树"
+      },
+      {
+        "part": "6.17",
+        "nodeId": "feishu-part-6-17",
+        "sourceHeading": "Part 6.17 可持久化数据结构",
+        "currentPath": "数据结构 / 持久化"
+      },
+      {
+        "part": "6.18",
+        "nodeId": "feishu-part-6-18",
+        "sourceHeading": "Part 6.18 K-D Tree",
+        "currentPath": "数据结构 / 多维与空间查询 / K-D 树"
+      },
+      {
+        "part": "6.19",
+        "nodeId": "feishu-part-6-19",
+        "sourceHeading": "Part 6.19 珂朵莉树",
+        "currentPath": "数据结构 / 有序与区间集合 / 珂朵莉树"
+      },
+      {
+        "part": "7",
+        "nodeId": "feishu-part-7",
+        "sourceHeading": "Part 7 图论",
+        "currentPath": "图与树"
+      },
+      {
+        "part": "7.1",
+        "nodeId": "feishu-part-7-1",
+        "sourceHeading": "Part 7.1 图的存储与遍历",
+        "currentPath": "图与树 / 图基础"
+      },
+      {
+        "part": "7.2",
+        "nodeId": "feishu-part-7-2",
+        "sourceHeading": "Part 7.2 最短路问题",
+        "currentPath": "图与树 / 最短路"
+      },
+      {
+        "part": "7.3",
+        "nodeId": "feishu-part-7-3",
+        "sourceHeading": "Part 7.3 树上问题",
+        "currentPath": "图与树 / 树上算法"
+      },
+      {
+        "part": "7.3.1",
+        "nodeId": "feishu-part-7-3-1",
+        "sourceHeading": "Part 7.3.1 二叉树",
+        "currentPath": "图与树 / 树上算法 / 树基础 / 二叉树"
+      },
+      {
+        "part": "7.3.2",
+        "nodeId": "feishu-part-7-3-2",
+        "sourceHeading": "Part 7.3.2 树的直径",
+        "currentPath": "图与树 / 树上算法 / 树基础 / 树的直径"
+      },
+      {
+        "part": "7.3.3",
+        "nodeId": "feishu-part-7-3-3",
+        "sourceHeading": "Part 7.3.3 最近公共祖先",
+        "currentPath": "图与树 / 树上算法 / 树上查询 / LCA"
+      },
+      {
+        "part": "7.4",
+        "nodeId": "feishu-part-7-4",
+        "sourceHeading": "Part 7.4 生成树",
+        "currentPath": "图与树 / 生成树与斯坦纳树"
+      },
+      {
+        "part": "7.5",
+        "nodeId": "feishu-part-7-5",
+        "sourceHeading": "Part 7.5 拓扑排序",
+        "currentPath": "图与树 / DAG 与约束 / 拓扑排序"
+      },
+      {
+        "part": "7.6",
+        "nodeId": "feishu-part-7-6",
+        "sourceHeading": "Part 7.6 差分约束",
+        "currentPath": "图与树 / DAG 与约束 / 差分约束"
+      },
+      {
+        "part": "7.7",
+        "nodeId": "feishu-part-7-7",
+        "sourceHeading": "Part 7.7 图的连通性相关",
+        "currentPath": "图与树 / 连通性"
+      },
+      {
+        "part": "7.8",
+        "nodeId": "feishu-part-7-8",
+        "sourceHeading": "Part 7.8 二分图",
+        "currentPath": "图与树 / 图匹配 / 二分图与匹配"
+      },
+      {
+        "part": "7.9",
+        "nodeId": "feishu-part-7-9",
+        "sourceHeading": "Part 7.9 网络流",
+        "currentPath": "图与树 / 网络流与割"
+      },
+      {
+        "part": "7.9.1",
+        "nodeId": "feishu-part-7-9-1",
+        "sourceHeading": "Part 7.9.1 最大流",
+        "currentPath": "图与树 / 网络流与割 / 最大流"
+      },
+      {
+        "part": "7.9.2",
+        "nodeId": "feishu-part-7-9-2",
+        "sourceHeading": "Part 7.9.2 最小割",
+        "currentPath": "图与树 / 网络流与割 / 最小割"
+      },
+      {
+        "part": "7.9.3",
+        "nodeId": "feishu-part-7-9-3",
+        "sourceHeading": "Part 7.9.3 费用流",
+        "currentPath": "图与树 / 网络流与割 / 最小费用流"
+      },
+      {
+        "part": "7.9.4",
+        "nodeId": "feishu-part-7-9-4",
+        "sourceHeading": "Part 7.9.4 上下界网络流",
+        "currentPath": "图与树 / 网络流与割 / 上下界流"
+      },
+      {
+        "part": "7.10",
+        "nodeId": "feishu-part-7-10",
+        "sourceHeading": "Part 7.10 2-SAT",
+        "currentPath": "图与树 / DAG 与约束 / 2-SAT"
+      },
+      {
+        "part": "7.11",
+        "nodeId": "feishu-part-7-11",
+        "sourceHeading": "Part 7.11 点分治",
+        "currentPath": "图与树 / 树上算法 / 树上合并与分治 / 树上分治 / 点分治"
+      },
+      {
+        "part": "7.12",
+        "nodeId": "feishu-part-7-12",
+        "sourceHeading": "Part 7.12 虚树",
+        "currentPath": "图与树 / 树上算法 / 树上查询 / 虚树"
+      },
+      {
+        "part": "7.13",
+        "nodeId": "feishu-part-7-13",
+        "sourceHeading": "Part 7.13 矩阵树定理",
+        "currentPath": "图与树 / 生成树与斯坦纳树 / 矩阵树定理"
+      },
+      {
+        "part": "8",
+        "nodeId": "feishu-part-8",
+        "sourceHeading": "Part 8 计算几何",
+        "currentPath": "计算几何"
+      },
+      {
+        "part": "8.1",
+        "nodeId": "feishu-part-8-1",
+        "sourceHeading": "Part 8.1 凸包",
+        "currentPath": "计算几何 / 凸几何 / 凸包"
+      },
+      {
+        "part": "8.2",
+        "nodeId": "feishu-part-8-2",
+        "sourceHeading": "Part 8.2 旋转卡壳",
+        "currentPath": "计算几何 / 凸几何 / 旋转卡壳"
+      },
+      {
+        "part": "8.3",
+        "nodeId": "feishu-part-8-3",
+        "sourceHeading": "Part 8.3 半平面交",
+        "currentPath": "计算几何 / 凸几何 / 半平面交"
+      },
+      {
+        "part": "9",
+        "nodeId": "feishu-part-9",
+        "sourceHeading": "Part 9 杂项",
+        "currentPath": "离线与杂项"
+      },
+      {
+        "part": "9.1",
+        "nodeId": "feishu-part-9-1",
+        "sourceHeading": "Part 9.1 模拟退火",
+        "currentPath": "离线与杂项 / 优化搜索 / 模拟退火"
+      },
+      {
+        "part": "9.2",
+        "nodeId": "feishu-part-9-2",
+        "sourceHeading": "Part 9.2 0/1 分数规划",
+        "currentPath": "离线与杂项 / 优化搜索 / 0/1 分数规划"
+      },
+      {
+        "part": "9.3",
+        "nodeId": "feishu-part-9-3",
+        "sourceHeading": "Part 9.3 离线算法",
+        "currentPath": "离线与杂项 / 离线算法"
+      },
+      {
+        "part": "9.3.1",
+        "nodeId": "feishu-part-9-3-1",
+        "sourceHeading": "Part 9.3.1 CDQ 分治",
+        "currentPath": "离线与杂项 / 离线算法 / CDQ 分治"
+      },
+      {
+        "part": "9.3.2",
+        "nodeId": "feishu-part-9-3-2",
+        "sourceHeading": "Part 9.3.2 整体二分",
+        "currentPath": "离线与杂项 / 离线算法 / 整体二分"
+      },
+      {
+        "part": "9.3.3",
+        "nodeId": "feishu-part-9-3-3",
+        "sourceHeading": "Part 9.3.3 莫队",
+        "currentPath": "离线与杂项 / 离线算法 / 莫队"
+      },
+      {
+        "part": "9.4",
+        "nodeId": "feishu-part-9-4",
+        "sourceHeading": "Part 9.4 奇怪的题目",
+        "currentPath": "离线与杂项 / 特殊题型与待整理 / 待分类专题"
+      },
+      {
+        "part": "9.5",
+        "nodeId": "feishu-part-9-5",
+        "sourceHeading": "Part 9.5 非传统题",
+        "currentPath": "离线与杂项 / 特殊题型与待整理 / 评测与提交"
+      },
+      {
+        "part": "9.5.1",
+        "nodeId": "feishu-part-9-5-1",
+        "sourceHeading": "Part 9.5.1 提交答案题",
+        "currentPath": "离线与杂项 / 特殊题型与待整理 / 评测与提交 / 提交答案题"
+      }
+    ],
+    "legacyNodeMap": {
+      "root": "root",
+      "xcpc-基础-1": "feishu-part-1",
+      "xcpc-模拟-1": "feishu-part-1-1",
+      "xcpc-二分-1": "feishu-part-1-3",
+      "xcpc-分治-1": "feishu-part-1-4",
+      "xcpc-贪心-1": "feishu-part-1-5",
+      "xcpc-高精度-1": "feishu-part-1-7",
+      "xcpc-双指针-1": "feishu-part-1-9",
+      "xcpc-搜索-1": "feishu-part-2",
+      "xcpc-记忆化搜索-1": "feishu-part-2-3",
+      "xcpc-a-1": "feishu-part-2-6",
+      "xcpc-dlx-1": "feishu-part-2-8",
+      "xcpc-动态规划-1": "feishu-part-3",
+      "xcpc-字符串-1": "feishu-part-4",
+      "xcpc-kmp-1": "feishu-part-4-2",
+      "xcpc-manacher-1": "feishu-part-4-3",
+      "xcpc-ac自动机-1": "feishu-part-4-5",
+      "xcpc-回文自动机-1": "feishu-part-4-6",
+      "xcpc-后缀数组-1": "feishu-part-4-7",
+      "xcpc-后缀自动机-1": "feishu-part-4-8",
+      "xcpc-数学-1": "feishu-part-5",
+      "xcpc-位运算-1": "feishu-part-5-1",
+      "xcpc-中国剩余定理-1": "feishu-part-5-3-2",
+      "xcpc-博弈论-1": "feishu-part-5-4",
+      "xcpc-组合数学-1": "feishu-part-5-6",
+      "xcpc-容斥原理-1": "feishu-part-5-6-3",
+      "xcpc-线性代数-1": "feishu-part-5-7",
+      "xcpc-高斯消元-1": "feishu-part-5-7-2",
+      "xcpc-线性基-1": "feishu-part-5-7-3",
+      "xcpc-多项式-1": "feishu-part-5-8",
+      "xcpc-莫比乌斯反演-1": "feishu-part-5-9",
+      "xcpc-线性规划-1": "feishu-part-5-11",
+      "xcpc-数据结构-1": "feishu-part-6",
+      "xcpc-链表-1": "feishu-part-6-2",
+      "xcpc-栈-1": "feishu-part-6-3",
+      "xcpc-队列-1": "feishu-part-6-4",
+      "xcpc-并查集-1": "feishu-part-6-5",
+      "xcpc-st表-1": "feishu-part-6-7",
+      "xcpc-树状数组-1": "feishu-part-6-8",
+      "xcpc-线段树-1": "feishu-part-6-9",
+      "xcpc-分块-1": "feishu-part-6-10",
+      "xcpc-平衡树-1": "feishu-part-6-13",
+      "xcpc-树链剖分-1": "feishu-part-6-14",
+      "xcpc-树套树-1": "feishu-part-6-15",
+      "xcpc-图论-1": "feishu-part-7",
+      "xcpc-树的直径-1": "feishu-part-7-3-2",
+      "xcpc-差分约束-1": "feishu-part-7-6",
+      "xcpc-二分图-1": "feishu-part-7-8",
+      "xcpc-网络流-1": "feishu-part-7-9",
+      "xcpc-最大流-1": "feishu-part-7-9-1",
+      "xcpc-费用流-1": "feishu-part-7-9-3",
+      "xcpc-上下界网络流-1": "feishu-part-7-9-4",
+      "xcpc-2-sat-1": "feishu-part-7-10",
+      "xcpc-虚树-1": "feishu-part-7-12",
+      "xcpc-矩阵树定理-1": "feishu-part-7-13",
+      "xcpc-几何-1": "feishu-part-8",
+      "xcpc-凸包-1": "feishu-part-8-1",
+      "xcpc-旋转卡壳-1": "feishu-part-8-2",
+      "xcpc-半平面交-1": "feishu-part-8-3",
+      "xcpc-杂-1": "feishu-part-9",
+      "xcpc-模拟退火-1": "feishu-part-9-1",
+      "xcpc-莫队-1": "feishu-part-9-3-3",
+      "xcpc-语法基础-1": "xcpc-语法基础-1",
+      "xcpc-函数-1": "xcpc-函数-1",
+      "xcpc-指针-1": "xcpc-指针-1",
+      "xcpc-引用-1": "xcpc-引用-1",
+      "xcpc-结构体-类-1": "xcpc-结构体-类-1",
+      "xcpc-读入优化-1": "algorithm-快读快写",
+      "xcpc-对拍-1": "xcpc-对拍-1",
+      "xcpc-常数优化-1": "xcpc-常数优化-1",
+      "xcpc-时空复杂度分析-1": "xcpc-时空复杂度分析-1",
+      "xcpc-排序-1": "feishu-part-1-2",
+      "xcpc-选择排序-1": "xcpc-选择排序-1",
+      "xcpc-冒泡排序-1": "xcpc-冒泡排序-1",
+      "xcpc-插入排序-1": "xcpc-插入排序-1",
+      "xcpc-快速排序-1": "xcpc-快速排序-1",
+      "xcpc-归并排序-1": "xcpc-归并排序-1",
+      "xcpc-桶排序-1": "xcpc-桶排序-1",
+      "xcpc-基数排序-1": "xcpc-基数排序-1",
+      "xcpc-堆排序-1": "xcpc-堆排序-1",
+      "xcpc-希尔排序-1": "xcpc-希尔排序-1",
+      "xcpc-逆序对-1": "xcpc-逆序对-1",
+      "xcpc-递归-回溯-1": "xcpc-递归-回溯-1",
+      "xcpc-递推-1": "xcpc-递推-1",
+      "xcpc-前缀和-差分-1": "feishu-part-1-8",
+      "xcpc-离散-1": "xcpc-离散-1",
+      "xcpc-倍增-1": "xcpc-倍增-1",
+      "xcpc-dfs-1": "feishu-part-2-1",
+      "xcpc-bfs-1": "feishu-part-2-2",
+      "xcpc-剪枝-1": "feishu-part-2-4",
+      "xcpc-dancing-links-1": "feishu-part-2-8",
+      "xcpc-折半搜索-1": "xcpc-折半搜索-1",
+      "xcpc-最优子结构-1": "xcpc-最优子结构-1",
+      "xcpc-无后效性-1": "xcpc-无后效性-1",
+      "xcpc-状态-1": "xcpc-状态-1",
+      "xcpc-转移-1": "xcpc-转移-1",
+      "xcpc-动态规划基础-1": "feishu-part-3-1",
+      "xcpc-01背包-1": "xcpc-01背包-1",
+      "xcpc-无限背包-1": "xcpc-无限背包-1",
+      "xcpc-多重背包-1": "xcpc-多重背包-1",
+      "xcpc-o-nml-1": "xcpc-o-nml-1",
+      "xcpc-o-nm-log-l-1": "xcpc-o-nm-log-l-1",
+      "xcpc-o-nm-1": "xcpc-o-nm-1",
+      "xcpc-树形背包-1": "xcpc-树形背包-1",
+      "xcpc-o-n-3-1": "xcpc-o-n-3-1",
+      "xcpc-o-n-2-1": "xcpc-o-n-2-1",
+      "xcpc-分组背包-1": "xcpc-分组背包-1",
+      "xcpc-混合背包-1": "xcpc-混合背包-1",
+      "xcpc-多维背包-1": "xcpc-多维背包-1",
+      "xcpc-背包问题-1": "feishu-part-3-2",
+      "xcpc-基础-2": "xcpc-基础-2",
+      "xcpc-进阶-1": "xcpc-进阶-1",
+      "xcpc-区间dp-1": "feishu-part-3-3",
+      "xcpc-基础-3": "xcpc-基础-3",
+      "xcpc-进阶-2": "xcpc-进阶-2",
+      "xcpc-高级-1": "xcpc-高级-1",
+      "xcpc-树形dp-普通形-换根型-1": "feishu-part-3-4",
+      "xcpc-普通型-1": "xcpc-普通型-1",
+      "xcpc-轮廓线型-1": "feishu-part-3-12",
+      "xcpc-高维前缀和-1": "xcpc-高维前缀和-1",
+      "xcpc-动态高维前缀和-1": "xcpc-动态高维前缀和-1",
+      "xcpc-插头dp-1": "xcpc-插头dp-1",
+      "xcpc-状压dp-1": "feishu-part-3-5",
+      "xcpc-数据结构优化-1": "feishu-part-3-7",
+      "xcpc-单调队列优化-1": "feishu-part-3-8",
+      "xcpc-斜率优化-1": "feishu-part-3-9",
+      "xcpc-决策单调性-1": "feishu-part-3-10",
+      "xcpc-基础-4": "xcpc-基础-4",
+      "xcpc-数位dp-1": "feishu-part-3-11",
+      "xcpc-概率dp-1": "xcpc-概率dp-1",
+      "xcpc-基础-5": "xcpc-基础-5",
+      "xcpc-进阶-3": "xcpc-进阶-3",
+      "xcpc-计数dp-1": "xcpc-计数dp-1",
+      "xcpc-基础-6": "xcpc-基础-7",
+      "xcpc-进阶-4": "xcpc-进阶-4",
+      "xcpc-高级-2": "xcpc-高级-2",
+      "xcpc-动态dp-1": "xcpc-动态dp-1",
+      "xcpc-图上dp-1": "xcpc-图上dp-1",
+      "xcpc-基环树上dp-1": "xcpc-基环树上dp-1",
+      "xcpc-自动机上dp-1": "xcpc-自动机上dp-1",
+      "xcpc-分治dp-1": "xcpc-分治dp-1",
+      "xcpc-填坑dp-1": "xcpc-填坑dp-1",
+      "xcpc-dp套dp-1": "xcpc-dp套dp-1",
+      "xcpc-单调栈优化-1": "xcpc-单调栈优化-1",
+      "xcpc-四边形不等式优化-1": "xcpc-四边形不等式优化-1",
+      "xcpc-字符串的哈希-1": "feishu-part-4-1",
+      "xcpc-字典树-1": "feishu-part-4-4",
+      "xcpc-扩展kmp-1": "xcpc-扩展kmp-1",
+      "xcpc-最小表示法-1": "xcpc-最小表示法-1",
+      "xcpc-lyndon-分解-1": "xcpc-lyndon-分解-1",
+      "xcpc-后缀树-1": "xcpc-后缀树-1",
+      "xcpc-枚举子集-超集-1": "xcpc-枚举子集-超集-1",
+      "xcpc-gcd-lcm-1": "feishu-part-5-2-2",
+      "xcpc-同余方程组-1": "feishu-part-5-3",
+      "xcpc-概率论-1": "feishu-part-5-5",
+      "xcpc-组合数-1": "feishu-part-5-6-1",
+      "xcpc-线性筛-1": "feishu-part-5-10",
+      "xcpc-三分-1": "feishu-part-5-12-1",
+      "xcpc-自适应辛普森-1": "feishu-part-5-12-2",
+      "xcpc-群论-1": "feishu-part-5-13",
+      "xcpc-miller-rabin-1": "xcpc-miller-rabin-1",
+      "xcpc-pollard-rho-1": "xcpc-pollard-rho-1",
+      "xcpc-费马定理-欧拉定理-1": "xcpc-费马定理-欧拉定理-1",
+      "xcpc-扩展欧拉定理-1": "xcpc-扩展欧拉定理-1",
+      "xcpc-扩展欧几里得-1": "xcpc-扩展欧几里得-1",
+      "xcpc-逆元-1": "xcpc-逆元-1",
+      "xcpc-扩展中国剩余定理-1": "xcpc-扩展中国剩余定理-1",
+      "xcpc-离散对数-1": "xcpc-离散对数-1",
+      "xcpc-bsgs-1": "xcpc-bsgs-1",
+      "xcpc-pohlig-hellman-1": "xcpc-pohlig-hellman-1",
+      "xcpc-二次剩余-1": "xcpc-二次剩余-1",
+      "xcpc-勒让德符号-1": "xcpc-勒让德符号-1",
+      "xcpc-cipolla算法-1": "xcpc-cipolla算法-1",
+      "xcpc-原根-阶-1": "xcpc-原根-阶-1",
+      "xcpc-佩尔方程-1": "xcpc-佩尔方程-1",
+      "xcpc-sg函数-1": "xcpc-sg函数-1",
+      "xcpc-常见结论-1": "xcpc-常见结论-1",
+      "xcpc-不平等博弈-1": "xcpc-不平等博弈-1",
+      "xcpc-期望的线性性-1": "xcpc-期望的线性性-1",
+      "xcpc-条件概率-1": "xcpc-条件概率-1",
+      "xcpc-杨辉三角-1": "xcpc-杨辉三角-1",
+      "xcpc-多重集组合数-1": "xcpc-多重集组合数-1",
+      "xcpc-二项式定理-1": "xcpc-二项式定理-1",
+      "xcpc-prufer序列-1": "xcpc-prufer序列-1",
+      "xcpc-lgv引理-1": "xcpc-lgv引理-1",
+      "xcpc-杨表-1": "xcpc-杨表-1",
+      "xcpc-lucas定理-1": "xcpc-lucas定理-1",
+      "xcpc-普通-1": "xcpc-lucas定理-1",
+      "xcpc-exlucas-1": "xcpc-exlucas-1",
+      "xcpc-常见数列-1": "feishu-part-5-6-2",
+      "xcpc-斐波那契数列-1": "xcpc-斐波那契数列-1",
+      "xcpc-错排问题-1": "xcpc-错排问题-1",
+      "xcpc-卡特兰数-1": "xcpc-卡特兰数-1",
+      "xcpc-拆分数-1": "xcpc-拆分数-1",
+      "xcpc-斯特林数-1": "xcpc-斯特林数-1",
+      "xcpc-贝尔数-1": "xcpc-贝尔数-1",
+      "xcpc-伯努利数-1": "xcpc-伯努利数-1",
+      "xcpc-min-max容斥-1": "xcpc-min-max容斥-1",
+      "xcpc-二项式反演-1": "xcpc-二项式反演-1",
+      "xcpc-矩阵快速幂-1": "xcpc-矩阵快速幂-1",
+      "xcpc-行列式-1": "xcpc-行列式-1",
+      "xcpc-矩阵求逆-1": "xcpc-矩阵求逆-1",
+      "xcpc-常系数线性递推-1": "xcpc-常系数线性递推-1",
+      "xcpc-bm-1": "xcpc-bm-1",
+      "xcpc-best定理-1": "xcpc-best定理-1",
+      "xcpc-特征值-特征向量-1": "xcpc-特征值-特征向量-1",
+      "xcpc-fft-ntt-1": "xcpc-fft-ntt-1",
+      "xcpc-拉格朗日插值-1": "xcpc-拉格朗日插值-1",
+      "xcpc-生成函数-1": "xcpc-生成函数-1",
+      "xcpc-多项式全家桶-1": "feishu-part-5-8",
+      "xcpc-fwt-fmt-1": "xcpc-fwt-fmt-1",
+      "xcpc-集合幂级数-1": "xcpc-集合幂级数-1",
+      "xcpc-单位根反演-1": "xcpc-单位根反演-1",
+      "xcpc-整除分块-1": "xcpc-整除分块-1",
+      "xcpc-狄利克雷卷积-1": "xcpc-狄利克雷卷积-1",
+      "xcpc-埃式筛-1": "xcpc-埃式筛-1",
+      "xcpc-杜教筛-1": "xcpc-杜教筛-1",
+      "xcpc-min25筛-1": "xcpc-min25筛-1",
+      "xcpc-辛普森积分-1": "xcpc-辛普森积分-1",
+      "xcpc-类欧几里得-1": "xcpc-类欧几里得-1",
+      "xcpc-置换-1": "xcpc-置换-1",
+      "xcpc-burnside引理-1": "xcpc-burnside引理-1",
+      "xcpc-polya定理-1": "xcpc-polya定理-1",
+      "xcpc-快速幂-1": "xcpc-快速幂-1",
+      "xcpc-pair-1": "xcpc-pair-1",
+      "xcpc-vector-1": "xcpc-vector-1",
+      "xcpc-priority-queue-1": "xcpc-priority-queue-1",
+      "xcpc-set-1": "xcpc-set-1",
+      "xcpc-map-1": "xcpc-map-1",
+      "xcpc-multiset-1": "xcpc-multiset-1",
+      "xcpc-bitset-1": "xcpc-bitset-1",
+      "xcpc-pbds-1": "xcpc-pbds-1",
+      "xcpc-unordered-set-1": "xcpc-unordered-set-1",
+      "xcpc-unordered-map-1": "xcpc-unordered-map-1",
+      "xcpc-stl-1": "feishu-part-6-1",
+      "xcpc-普通链表-1": "xcpc-普通链表-1",
+      "xcpc-双向链表-1": "xcpc-双向链表-1",
+      "xcpc-循环链表-1": "xcpc-循环链表-1",
+      "xcpc-普通栈-1": "xcpc-普通栈-1",
+      "xcpc-单调栈-1": "xcpc-单调栈-1",
+      "xcpc-普通队列-1": "xcpc-普通队列-1",
+      "xcpc-双端队列-1": "xcpc-双端队列-1",
+      "xcpc-单调队列-1": "xcpc-单调队列-1",
+      "xcpc-并查集基础-1": "xcpc-并查集基础-1",
+      "xcpc-带权并查集-1": "xcpc-带权并查集-1",
+      "xcpc-可持久化并查集-1": "xcpc-可持久化并查集-1",
+      "xcpc-普通堆-1": "xcpc-普通堆-1",
+      "xcpc-对顶堆-1": "xcpc-对顶堆-1",
+      "xcpc-斐波那契堆-1": "xcpc-斐波那契堆-1",
+      "xcpc-左偏堆-1": "xcpc-左偏堆-1",
+      "xcpc-堆-1": "feishu-part-6-6",
+      "xcpc-树状数组基础-1": "xcpc-树状数组基础-1",
+      "xcpc-树状数组求第k大-1": "xcpc-树状数组求第k大-1",
+      "xcpc-多维树状数组-1": "xcpc-多维树状数组-1",
+      "xcpc-基础线段树-1": "xcpc-基础线段树-1",
+      "xcpc-带标记的线段树-1": "xcpc-带标记的线段树-1",
+      "xcpc-可持久化线段树-1": "feishu-part-6-12",
+      "xcpc-李超线段树-1": "xcpc-李超线段树-1",
+      "xcpc-线段树合并-1": "xcpc-线段树合并-1",
+      "xcpc-zkw线段树-1": "xcpc-zkw线段树-1",
+      "xcpc-链上分块-1": "xcpc-链上分块-1",
+      "xcpc-树上分块-1": "xcpc-树上分块-1",
+      "xcpc-splay-1": "xcpc-splay-1",
+      "xcpc-treap-1": "xcpc-treap-1",
+      "xcpc-fhqtreap-1": "xcpc-fhqtreap-1",
+      "xcpc-可持久化平衡树-1": "xcpc-可持久化平衡树-1",
+      "xcpc-其他-1": "feishu-part-6-13",
+      "xcpc-替罪羊树-1": "xcpc-替罪羊树-1",
+      "xcpc-avl-1": "xcpc-avl-1",
+      "xcpc-sbt-1": "xcpc-sbt-1",
+      "xcpc-红黑树-1": "xcpc-红黑树-1",
+      "xcpc-重链剖分-1": "xcpc-重链剖分-1",
+      "xcpc-长链剖分-1": "xcpc-长链剖分-1",
+      "xcpc-线段树套线段树-1": "xcpc-线段树套线段树-1",
+      "xcpc-线段树套平衡树-1": "xcpc-线段树套平衡树-1",
+      "xcpc-lct-1": "feishu-part-6-16",
+      "xcpc-kd树-1": "feishu-part-6-18",
+      "xcpc-图的概念-1": "xcpc-图的概念-1",
+      "xcpc-图的遍历-1": "xcpc-图的遍历-1",
+      "xcpc-传递闭包-1": "xcpc-传递闭包-1",
+      "xcpc-floyd-1": "xcpc-floyd-1",
+      "xcpc-最短路-1": "xcpc-最短路-1",
+      "xcpc-bellman-ford-1": "xcpc-bellman-ford-1",
+      "xcpc-dijkstra-1": "xcpc-dijkstra-1",
+      "xcpc-最短路径树-1": "xcpc-最短路径树-1",
+      "xcpc-k短路-1": "xcpc-k短路-1",
+      "xcpc-树的基本概念-1": "xcpc-树的基本概念-1",
+      "xcpc-树的遍历-1": "xcpc-树的遍历-1",
+      "xcpc-树的重心-1": "xcpc-树的重心-1",
+      "xcpc-dfn-1": "xcpc-dfn-1",
+      "xcpc-括号序-1": "xcpc-括号序-1",
+      "xcpc-笛卡尔树-1": "xcpc-笛卡尔树-1",
+      "xcpc-树的哈希-1": "xcpc-树的哈希-1",
+      "xcpc-树的启发式合并-1": "xcpc-树的启发式合并-1",
+      "xcpc-dsu-on-tree-1": "xcpc-树的启发式合并-1",
+      "xcpc-树上分治-1": "xcpc-树上分治-1",
+      "xcpc-点分-1": "feishu-part-7-11",
+      "xcpc-边分-1": "xcpc-边分-1",
+      "xcpc-动态点分-1": "xcpc-动态点分-1",
+      "xcpc-lca-1": "feishu-part-7-3-3",
+      "xcpc-最小生成树-1": "xcpc-最小生成树-1",
+      "xcpc-prim-1": "xcpc-prim-1",
+      "xcpc-kruskal-1": "xcpc-kruskal-1",
+      "xcpc-boruvka-1": "xcpc-boruvka-1",
+      "xcpc-最小树形图-1": "xcpc-最小树形图-1",
+      "xcpc-斯坦纳树-1": "xcpc-斯坦纳树-1",
+      "xcpc-拓扑序-1": "xcpc-拓扑序-1",
+      "xcpc-点-边-双连通分量-1": "xcpc-点-边-双连通分量-1",
+      "xcpc-tarjan-1": "xcpc-tarjan-1",
+      "xcpc-割点-割边-1": "xcpc-割点-割边-1",
+      "xcpc-圆方树-1": "xcpc-圆方树-1",
+      "xcpc-kosaraju-1": "xcpc-kosaraju-1",
+      "xcpc-支配树-1": "xcpc-支配树-1",
+      "xcpc-仙人掌-1": "xcpc-仙人掌-1",
+      "xcpc-弦图-1": "xcpc-弦图-1",
+      "xcpc-一般图匹配-1": "algorithm-一般图最大匹配-带花树",
+      "xcpc-最大流-最小割-1": "feishu-part-7-9-1",
+      "xcpc-dinic-1": "xcpc-dinic-1",
+      "xcpc-sap-1": "xcpc-sap-1",
+      "xcpc-全局最小割-1": "xcpc-全局最小割-1",
+      "xcpc-欧拉-回-路-1": "xcpc-欧拉-回-路-1",
+      "xcpc-竞赛图-1": "xcpc-竞赛图-1",
+      "xcpc-点类-1": "xcpc-点类-1",
+      "xcpc-点积-1": "xcpc-点积-1",
+      "xcpc-叉积-1": "xcpc-叉积-1",
+      "xcpc-极角序-1": "xcpc-极角序-1",
+      "xcpc-线段相关-1": "xcpc-线段相关-1",
+      "xcpc-相交判定-1": "xcpc-相交判定-1",
+      "xcpc-交点-1": "xcpc-交点-1",
+      "xcpc-多边形相关-1": "xcpc-多边形相关-1",
+      "xcpc-多边形包含-1": "xcpc-多边形包含-1",
+      "xcpc-圆相关-1": "xcpc-圆相关-1",
+      "xcpc-交点切线-1": "xcpc-交点切线-1",
+      "xcpc-面积交-并-1": "xcpc-面积交-并-1",
+      "xcpc-凸包快速操作-1": "xcpc-凸包快速操作-1",
+      "xcpc-三维计算几何-1": "xcpc-三维计算几何-1",
+      "xcpc-数值积分-1": "xcpc-数值积分-1",
+      "xcpc-点定位-1": "xcpc-点定位-1",
+      "xcpc-最小圆覆盖-1": "xcpc-最小圆覆盖-1",
+      "xcpc-voronoi图-1": "xcpc-voronoi图-1",
+      "xcpc-圆反演-1": "xcpc-圆反演-1",
+      "xcpc-picks定理-1": "xcpc-picks定理-1",
+      "xcpc-cdq分治-1": "feishu-part-9-3-1",
+      "xcpc-爬山-1": "xcpc-爬山-1",
+      "xcpc-遗传算法-1": "xcpc-遗传算法-1",
+      "xcpc-拟阵-1": "xcpc-拟阵-1",
+      "xcpc-算法基础-1": "feishu-part-1",
+      "xcpc-数论-1": "feishu-part-5-2",
+      "xcpc-数论函数-1": "feishu-part-5-9",
+      "xcpc-dp优化-1": "feishu-part-3",
+      "xcpc-其他类型-1": "feishu-part-3-1",
+      "xcpc-树-1": "feishu-part-7-3",
+      "xcpc-树的基础-1": "feishu-part-7-3",
+      "xcpc-随机-1": "feishu-part-9-1",
+      "xcpc-杂-2": "feishu-part-9",
+      "xcpc-扫描线-1": "xcpc-扫描线-1",
+      "xcpc-二分图判定-1": "xcpc-二分图判定-1",
+      "xcpc-匈牙利算法-1": "xcpc-匈牙利算法-1",
+      "xcpc-km-1": "xcpc-km-1",
+      "xcpc-hopcroft-karp-1": "xcpc-hopcroft-karp-1",
+      "xcpc-可行流-1": "xcpc-可行流-1",
+      "xcpc-zkw费用流-1": "xcpc-zkw费用流-1",
+      "xcpc-基础-7": "xcpc-基础-7",
+      "xcpc-进阶-5": "xcpc-进阶-4",
+      "xcpc-树套表-1": "xcpc-树套表-1",
+      "xcpc-划分树-1": "xcpc-划分树-1",
+      "xcpc-析合树-1": "xcpc-析合树-1"
+    }
+  }
+};
+if (typeof module !== 'undefined') module.exports = algorithmTree;
+if (typeof window !== 'undefined') window.QMX_ALGORITHM_TREE = algorithmTree;

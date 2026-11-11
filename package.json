@@ -1,6 +1,6 @@
 {
   "name": "qmx-acm-notebook",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "启明星 ACM 共享错题与算法资料客户端",
   "main": "electron/main.cjs",
   "private": true,
@@ -12,9 +12,11 @@
   "scripts": {
     "start": "electron .",
     "test": "node --test --test-isolation=none tests/*.test.cjs",
-    "check": "node --check electron/main.cjs && node --check electron/preload.cjs && node --check electron/contests.cjs && node --check electron/contest-sources.cjs && node --check electron/github.cjs && node --check electron/updater.cjs && node --check electron/upgrade.cjs && node --check electron/file-upgrade.cjs && node --check electron/update-helper.cjs && node --check electron/update-storage.cjs && node --check electron/delta-codec.cjs && node --check electron/delta-manifest.cjs && node --check tools/delta-feed.cjs && node --check electron/update-key.cjs && node --check tools/update-manifest.cjs && node --check tools/release-feed.cjs && node --check ui/app.js && node --check ui/algorithm-tree.js && node --check ui/algorithm-browser.js && node --check ui/search.js && node --check ui/platforms.js && node --check ui/planner.js && node --check ui/planner-deadline.js && node --check electron/planner-service.cjs && node --check electron/platform-data.cjs && node --check electron/platform-service.cjs && node --check electron/platform-page.cjs && node --check tools/package.cjs && node --check tools/installer.cjs",
+    "check": "node --check electron/main.cjs && node --check electron/preload.cjs && node --check electron/contests.cjs && node --check electron/contest-sources.cjs && node --check electron/github.cjs && node --check electron/updater.cjs && node --check electron/upgrade.cjs && node --check electron/file-upgrade.cjs && node --check electron/update-helper.cjs && node --check electron/update-storage.cjs && node --check electron/delta-codec.cjs && node --check electron/delta-manifest.cjs && node --check tools/delta-feed.cjs && node --check electron/update-key.cjs && node --check tools/update-manifest.cjs && node --check tools/release-feed.cjs && node --check ui/app.js && node --check ui/algorithm-tree.js && node --check ui/algorithm-browser.js && node --check ui/algorithm-directory.js && node --check ui/algorithm-learning-path.js && node --check ui/algorithm-learning-path-data.js && node --check electron/algorithm-topics.cjs && node tools/build-algorithm-learning-path.cjs --check && node --check ui/search.js && node --check ui/platforms.js && node --check ui/planner.js && node --check ui/planner-deadline.js && node --check electron/planner-service.cjs && node --check electron/platform-data.cjs && node --check electron/platform-service.cjs && node --check electron/platform-page.cjs && node --check tools/package.cjs && node --check tools/installer.cjs",
     "package": "node tools/package.cjs",
     "update:manifest": "node tools/update-manifest.cjs",
+    "algorithms:build": "node tools/build-algorithm-directory.cjs && node tools/render-algorithm-directory.cjs && node tools/build-algorithm-learning-path.cjs",
+    "algorithms:check": "node tools/build-algorithm-directory.cjs --check && node tools/render-algorithm-directory.cjs --check && node tools/build-algorithm-learning-path.cjs --check",
     "dist": "node tools/package.cjs && node tools/installer.cjs"
   },
   "dependencies": {

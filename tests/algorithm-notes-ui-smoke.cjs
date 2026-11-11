@@ -1,21 +1,32 @@
 'use strict';
 // Run with: node tests/algorithm-notes-ui-smoke.cjs (Playwright + Microsoft Edge).
 const assert = require('node:assert/strict');
-const crypto = require('node:crypto');
+const directory = require('../data/algorithm-directory.json');
+const legacy = require('../docs/algorithm-research/legacy-node-map.json');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const { chromium } = require('playwright');
 const tree = require('../ui/algorithm-tree.js');
 
-const DP = 'xcpc-动态规划-1';
-const PACK = 'xcpc-01背包-1';
-const FUNCTION = 'xcpc-函数-1';
+const nodes = []; (function walk(node) { nodes.push(node); (node.children || []).forEach(walk); })(tree);
+const byId = new Map(nodes.flatMap(node => [node.id, ...(node.legacyIds || [])].map(id => [id, node])));
+const canonical = id => {
+  const node = byId.get(id);
+  assert.ok(node, `legacy node ${id} resolves to a current directory`);
+  return node.id;
+};
+const OLD_DP = 'xcpc-动态规划-1';
+const DP = canonical(OLD_DP);
+const PACK = canonical('xcpc-01背包-1');
+const FUNCTION = canonical('xcpc-函数-1');
+const hasAttribute = (node, attribute) => (node.attributes || []).includes(attribute);
+const nodeForNote = note => byId.get(note.nodeId);
 const MALICIOUS_TITLE = '<img src=x onerror="window.__algorithmXss=1">恶意标题';
 const MALICIOUS_TAG = '<svg onload="window.__algorithmXss=2">标签';
 const MALICIOUS_AUTHOR = '<img src=x onerror="window.__algorithmXss=3">';
 const NOTES = [
   { id: 'n1', noteScope: 'public', nodeId: DP, title: '背包状态设计', author: 'admin', authorId: 1, tags: ['动态规划', '背包'], featured: true, updatedAt: '2026-11-08', body: '# 状态转移\n\n复杂度为 $O(nW)$。\n\n```cpp\nint answer = 42;\n```\n\n<img src="missing" onerror="window.__algorithmXss=4"><script>window.__algorithmXss=5</script>\n\n[危险链接](javascript:window.__algorithmXss=6)\n\n<iframe src="https://example.invalid"></iframe><style>body{display:none}</style>' },
-  { id: 'n2', noteScope: 'public', nodeId: DP, title: '线性 DP 入门', author: 'alice', authorId: 2, tags: ['动态规划'], updatedAt: '2026-11-07', body: '线性状态。' },
+  { id: 'n2', noteScope: 'public', nodeId: OLD_DP, title: '线性 DP 入门', author: 'alice', authorId: 2, tags: ['动态规划'], updatedAt: '2026-11-07', body: '线性状态。' },
   { id: 'n3', noteScope: 'personal', nodeId: DP, title: '我的状态机笔记', author: 'alice', authorId: 2, tags: ['状态机', 'private-only-token'], updatedAt: '2026-11-06', body: '个人内容。' },
   { id: 'n4', noteScope: 'public', nodeId: FUNCTION, title: '青档函数笔记', author: 'bob', authorId: 3, tags: ['语法', 'tag-only-token'], updatedAt: '2026-11-05', body: '入门内容。' },
   { id: 'n5', noteScope: 'public', nodeId: PACK, title: '01背包子节点笔记', author: 'carol', authorId: 4, tags: ['背包'], updatedAt: '2026-11-04', body: '子节点内容。' },
@@ -23,16 +34,16 @@ const NOTES = [
   { id: 'unsafe', noteScope: 'public', nodeId: DP, title: MALICIOUS_TITLE, author: MALICIOUS_AUTHOR, authorId: 99, tags: [MALICIOUS_TAG], updatedAt: '2026-11-03', body: '安全显示字符串。' },
   ...['basic', 'beginner', 'intermediate', 'advanced', 'expert', 'board', 'useful', 'useless'].map((color, index) => {
     const nodes = []; (function walk(node) { nodes.push(node); (node.children || []).forEach(walk); })(tree);
-    return { id: `category-${color}`, noteScope: 'public', nodeId: nodes.find(node => node.color === color).id, title: `分类样本 ${color}`, author: `level-author-${index}`, authorId: 10 + index, tags: [`level-${color}`], updatedAt: '2026-11-01', body: `${color} 样本内容。` };
+    return { id: `category-${color}`, noteScope: 'public', nodeId: nodes.find(node => node.color === color || hasAttribute(node, color)).id, title: `分类样本 ${color}`, author: `level-author-${index}`, authorId: 10 + index, tags: [`level-${color}`], updatedAt: '2026-11-01', body: `${color} 样本内容。` };
   }),
 ].map(note => ({ kind: 'algorithm-note', featured: false, ...note }));
 
 function checkTreeContract() {
-  const nodes = []; (function walk(node) { nodes.push(node); (node.children || []).forEach(walk); })(tree);
-  assert.equal(nodes.length, 367, 'the complete XCPC tree retains 367 nodes');
-  assert.equal(new Set(nodes.map(node => node.id)).size, 367, 'node IDs remain unique');
-  assert.equal(crypto.createHash('sha256').update(JSON.stringify(nodes.map(node => node.id).sort())).digest('hex'),
-    '89a4b5c166522d0c1ee14306730aaa353d25f3f75851b0cb27605b2bf3f02d98', 'the persisted node ID set must not change');
+  assert.equal(nodes.length, directory.summary.nodes);
+  assert.equal(new Set(nodes.map(node => node.id)).size, nodes.length);
+  assert.equal(nodes.filter(node => node.sourceHeading).length, 126);
+  for (const [oldId, targetId] of Object.entries(legacy.map)) assert.equal(canonical(oldId), targetId);
+  assert.equal(Object.keys(legacy.map).length, 367);
 }
 
 async function openAlgorithms(browser, errors, { signedIn = true, push = true, admin = false, width = 1440 } = {}) {
@@ -42,7 +53,7 @@ async function openAlgorithms(browser, errors, { signedIn = true, push = true, a
   await page.addInitScript(({ notes, signedIn, push, admin }) => {
     window.__algorithmXss = 0;
     window.__algorithmSaved = [];
-    const payload = { records: [], issues: [], algorithmNotes: notes,
+    const payload = { records: [], issues: [], algorithmNotes: notes, algorithmTopics: JSON.parse(sessionStorage.getItem('algorithm-topics-fixture') || '[]'),
       account: signedIn ? { id: 2, login: 'alice', name: 'Alice' } : null,
       permissions: { repo: 'team/notebook', push, admin },
       settings: { repo: 'team/notebook', autoSync: false },
@@ -50,6 +61,7 @@ async function openAlgorithms(browser, errors, { signedIn = true, push = true, a
     window.notebook = {
       bootstrap: async () => payload, sync: async () => payload,
       saveAlgorithmNote: async record => { window.__algorithmSaved.push(record); return { ...record, id: 'new-note', path: 'personal/new-note.md', kind: 'algorithm-note', author: 'alice', authorId: 2, updatedAt: '2026-11-10' }; },
+      saveAlgorithmTopic: async record => { if (!admin) throw new Error('管理员权限'); const topic = { ...record, id: `custom-${crypto.randomUUID()}`, repo: 'team/notebook' }; payload.algorithmTopics.push(topic); sessionStorage.setItem('algorithm-topics-fixture', JSON.stringify(payload.algorithmTopics)); return topic; },
       updateLocal: async () => {}, saveSettings: async settings => settings, openExternal: async () => {},
     };
   }, { notes: NOTES, signedIn, push, admin });
@@ -109,6 +121,7 @@ async function clearFilters(page) {
   await page.locator('.alg-search').fill('');
   await page.locator('.alg-attribute').selectOption('');
   await page.locator('.alg-legend-button[data-level=""]').click();
+  await page.locator('.alg-search-submit').click();
 }
 async function assertNoOverflow(page, label) {
   const dimensions = await page.evaluate(() => ({
@@ -138,12 +151,15 @@ async function assertNoOverflow(page, label) {
   try {
     const page = await openAlgorithms(browser, errors);
     const difficultyIds = ['basic', 'beginner', 'intermediate', 'advanced', 'expert'];
-    assert.deepEqual(await page.locator('.alg-legend-button[data-level]').evaluateAll(nodes => nodes.map(node => node.dataset.level)), ['', ...difficultyIds, 'unrated']);
+    assert.deepEqual(await page.locator('.alg-legend-button[data-level]').evaluateAll(nodes => nodes.map(node => node.dataset.level)), ['', ...difficultyIds]);
     assert.deepEqual(await page.locator('.alg-attribute option').evaluateAll(nodes => nodes.map(node => node.value)), ['', 'board', 'useful', 'useless']);
-    assert.match(await page.locator('.alg-tier-hint').innerText(), /模板、常用、低频是独立属性/);
-    assert.match(await page.locator('.alg-tree-status').innerText(), /367/);
+    assert.match(await page.locator('.alg-tier-hint:not(.alg-search-hint)').innerText(), /模板、常用、低频是独立属性/);
+    assert.ok((await page.locator('.alg-tree-status').innerText()).includes(String(nodes.length)));
     assert.equal(await item(page, 'root').getAttribute('aria-selected'), 'true');
-    assert.equal(await row(page, DP).locator('.alg-badge').innerText(), '目录');
+    assert.equal(await row(page, DP).locator('.alg-badge').count(), 0, 'directory has no difficulty badge');
+    assert.equal(await page.locator('.alg-detail-heading .alg-badge').count(), 0, 'directory detail has no difficulty badge');
+    assert.equal(await row(page, DP).locator('.alg-node-kind').textContent(), '目录');
+    assert.equal(await page.locator('.alg-detail-heading').innerText().then(text => /难度依据|覆盖 D/.test(text)), false);
     assert.equal(await item(page, DP).getAttribute('aria-expanded'), 'false');
 
     // Expanding a directory and selecting its title are separate operations.
@@ -168,7 +184,7 @@ async function assertNoOverflow(page, label) {
 
     // All nodes can be reached without losing or changing their persisted IDs.
     await page.evaluate(() => {
-      for (let pass = 0; pass < 367; pass++) {
+      for (let pass = 0; pass < 1000; pass++) {
         const collapsed = Array.from(document.querySelectorAll('.alg-tree-item[aria-expanded="false"] > .alg-tree-row > button.alg-disclosure'));
         if (!collapsed.length) return;
         collapsed[0].click();
@@ -176,10 +192,25 @@ async function assertNoOverflow(page, label) {
       throw new Error('Directory expansion did not converge');
     });
     const ids = await page.locator('.alg-tree-item').evaluateAll(nodes => nodes.map(node => node.dataset.nodeId).sort());
-    assert.equal(ids.length, 367);
-    assert.equal(crypto.createHash('sha256').update(JSON.stringify(ids)).digest('hex'), '89a4b5c166522d0c1ee14306730aaa353d25f3f75851b0cb27605b2bf3f02d98');
+    assert.deepEqual(ids, nodes.map(node => node.id).sort());
     await row(page, PACK).locator('.alg-tree-label').click();
     assert.ok((await noteTitles(page)).includes('01背包子节点笔记'));
+
+    // Draft changes must leave both the current tree and results unchanged until submitted.
+    const beforeDraft = await page.locator('.alg-workspace').innerHTML();
+    await page.locator('.alg-search').fill('不存在的算法');
+    await page.locator('.alg-legend-button[data-level="expert"]').click();
+    assert.equal(await page.locator('.alg-workspace').innerHTML(), beforeDraft);
+    await page.locator('.alg-search-submit').click();
+    assert.equal(await page.locator('.alg-result-topic').count(), 0);
+    await clearFilters(page);
+    await page.locator('.alg-search').fill('迭代加深启发式搜索');
+    await page.locator('.alg-search').press('Enter');
+    assert.equal(await page.locator('.alg-result-topic-name').first().innerText(), 'IDA* 搜索');
+    await page.locator('.alg-result-topic').first().click();
+    assert.equal(await page.locator('.alg-detail-title').innerText(), '迭代加深启发式搜索（IDA*）');
+    await clearFilters(page);
+    assert.equal(await page.locator('.alg-add-topic').count(), 0, 'non-admin has no add-topic controls');
 
     // Search independently covers a node label, note title, tag and author.
     const searches = [
@@ -190,17 +221,25 @@ async function assertNoOverflow(page, label) {
     ];
     for (const [query, title, nodeId] of searches) {
       await page.locator('.alg-search').fill(query);
+
+      await page.locator('.alg-search-submit').click();
       assert.deepEqual(await noteTitles(page), [title], `global search for ${query}`);
       assert.equal(await item(page, nodeId).count(), 1, `${query} reveals its associated directory`);
       assert.equal(await item(page, 'root').count(), 1, `${query} preserves the ancestor chain`);
     }
     await page.locator('.alg-search').fill('private-only-token');
+
+    await page.locator('.alg-search-submit').click();
     assert.deepEqual(await noteTitles(page), [], 'public search excludes personal notes');
     await scopeButton(page, 'personal').click();
     assert.deepEqual(await noteTitles(page), ['我的状态机笔记']);
     await page.locator('.alg-search').fill('状态机');
+
+    await page.locator('.alg-search-submit').click();
     assert.deepEqual(await noteTitles(page), ['我的状态机笔记'], 'personal scope excludes other authors');
     await page.locator('.alg-search').fill('背包状态设计');
+
+    await page.locator('.alg-search-submit').click();
     assert.deepEqual(await noteTitles(page), [], 'personal search excludes public notes');
     await scopeButton(page, 'public').click();
     assert.deepEqual(await noteTitles(page), ['背包状态设计']);
@@ -210,13 +249,15 @@ async function assertNoOverflow(page, label) {
     // directories give context without receiving a child difficulty themselves.
     for (const level of difficultyIds) {
       await page.locator(`.alg-legend-button[data-level="${level}"]`).click();
+
+      await page.locator('.alg-search-submit').click();
       const expected = NOTES.filter(note => note.noteScope === 'public').filter(note => {
         const nodes = []; (function walk(node) { nodes.push(node); (node.children || []).forEach(walk); })(tree);
-        return nodes.find(node => node.id === note.nodeId).color === level;
+        return nodeForNote(note).color === level;
       }).map(note => note.title).sort();
       assert.deepEqual((await noteTitles(page)).sort(), expected, `${level} note results`);
       assert.equal(await item(page, 'root').count(), 1);
-      assert.equal(await row(page, 'root').locator('.alg-badge').innerText(), '目录');
+      assert.equal(await row(page, 'root').locator('.alg-badge').count(), 0, 'retained ancestor is a directory, never rated');
       const renderedIds = await page.locator('.alg-tree-item').evaluateAll(nodes => nodes.map(node => node.dataset.nodeId));
       const expectedIds = new Set();
       (function collect(node, ancestors = []) {
@@ -228,10 +269,11 @@ async function assertNoOverflow(page, label) {
     await page.locator('.alg-legend-button[data-level=""]').click();
     for (const attribute of ['board', 'useful', 'useless']) {
       await page.locator('.alg-attribute').selectOption(attribute);
-      assert.deepEqual(await noteTitles(page), [`分类样本 ${attribute}`]);
+      await page.locator('.alg-search-submit').click();
+      assert.deepEqual((await noteTitles(page)).sort(), NOTES.filter(note => note.noteScope === 'public' && hasAttribute(nodeForNote(note), attribute)).map(note => note.title).sort());
       assert.equal(await page.locator('.alg-legend-button[data-level=""]').getAttribute('aria-pressed'), 'true', 'usage attributes do not select a difficulty');
       assert.ok((await page.locator('.alg-pane .alg-attribute-badge').allTextContents()).length > 0);
-      assert.ok((await page.locator('.alg-pane .alg-badge').allTextContents()).includes('未分级'));
+      assert.ok(!(await page.locator('.alg-pane .alg-badge').allTextContents()).includes('未分级'), 'attributes retain independent algorithm difficulties');
     }
     await clearFilters(page);
 
@@ -240,6 +282,8 @@ async function assertNoOverflow(page, label) {
     await row(page, PACK).locator('.alg-tree-label').click();
     await page.locator('.alg-legend-button[data-level="beginner"]').click();
     await page.locator('.alg-search').fill('背包');
+
+    await page.locator('.alg-search-submit').click();
     const beforeReader = await page.locator('.alg-tree').evaluate(node => ({ html: node.innerHTML, scroll: node.parentElement.scrollTop }));
     const beforeTitles = await noteTitles(page);
     assert.equal(await page.locator('.alg-selected-note-list .alg-note-title').innerText(), '01背包子节点笔记', 'selected topic notes remain available alongside difficulty results');
@@ -269,7 +313,7 @@ async function assertNoOverflow(page, label) {
     await page.locator('#algorithm-upload-button').click();
     assert.equal(await page.locator('#algorithm-note-dialog').evaluate(node => node.open), true);
     assert.equal(await page.locator('#algorithm-note-node').inputValue(), PACK);
-    assert.equal(await page.locator('#algorithm-note-node option').count(), 367);
+    assert.equal(await page.locator('#algorithm-note-node option').count(), nodes.length);
     assert.equal(await page.locator('#algorithm-note-form [name="noteScope"]').inputValue(), 'personal');
     assert.equal(await page.locator('#algorithm-note-form [name="noteScope"]').isDisabled(), true);
     await page.locator('#algorithm-note-form [name="noteTitle"]').fill('新上传的背包笔记');
@@ -303,7 +347,7 @@ async function assertNoOverflow(page, label) {
     assert.equal(await page.evaluate(() => document.activeElement.dataset.nodeId), firstId);
     await page.keyboard.press('Enter');
     assert.equal(await item(page, firstId).getAttribute('aria-selected'), 'true');
-    assert.equal(await page.locator('.alg-detail-title').innerText(), tree.children[0].label);
+    assert.equal(await page.locator('.alg-detail-title').innerText(), tree.children[0].fullLabel);
     await page.keyboard.press('ArrowLeft');
     assert.equal(await item(page, firstId).getAttribute('aria-expanded'), 'false');
     await page.keyboard.press('ArrowRight');
@@ -320,9 +364,11 @@ async function assertNoOverflow(page, label) {
       await page.locator('#theme-select').selectOption(theme);
       await page.waitForFunction(theme => document.body.dataset.theme === theme, theme);
       // All categories and all badges appear in unfiltered, fully expanded tree.
-      await page.evaluate(() => { for (let i = 0; i < 367; i++) { const button = document.querySelector('.alg-tree-item[aria-expanded="false"] > .alg-tree-row > button.alg-disclosure'); if (!button) break; button.click(); } });
+      await page.evaluate(() => { for (let i = 0; i < 1000; i++) { const button = document.querySelector('.alg-tree-item[aria-expanded="false"] > .alg-tree-row > button.alg-disclosure'); if (!button) break; button.click(); } });
       measured += await assertTextContrast(page, '.alg-tree-label, .alg-badge, .alg-attribute-badge, .alg-legend-button, .alg-legend-button > span:not(.alg-legend-dot)', theme);
       await page.locator('.alg-search').fill('背包状态设计');
+
+      await page.locator('.alg-search-submit').click();
       measured += await assertTextContrast(page, '.alg-note-title, .alg-featured, .alg-tag', theme);
       await assertNoOverflow(page, `${theme} desktop`);
       await page.setViewportSize({ width: 390, height: 844 });
@@ -356,20 +402,54 @@ async function assertNoOverflow(page, label) {
     assert.equal(await adminPage.locator('#algorithm-note-node').inputValue(), DP);
     assert.equal(await adminPage.locator('#algorithm-note-form [name="noteScope"]').isDisabled(), false);
     assert.equal(await adminPage.locator('#algorithm-note-form [name="noteScope"]').inputValue(), 'public');
+    await adminPage.locator('[data-close="algorithm-note-dialog"]').first().click();
+    await row(adminPage, DP).locator('.alg-add-topic').click();
+    assert.equal(await adminPage.locator('#algorithm-topic-form [name="parentId"]').inputValue(), DP);
+    await adminPage.locator('#algorithm-topic-form [name="label"]').fill('测试算法');
+    await adminPage.locator('#algorithm-topic-form [name="fullLabel"]').fill('测试算法完整名称');
+    await adminPage.locator('#algorithm-topic-form [name="scope"]').fill('测试学习范围');
+    await adminPage.locator('#algorithm-topic-form button[type="submit"]').click();
+    await adminPage.waitForFunction(() => !document.querySelector('#algorithm-topic-dialog').open);
+    assert.equal(await adminPage.locator('.alg-detail-title').innerText(), '测试算法完整名称');
+    const added = await adminPage.locator('.alg-tree-item[aria-selected="true"]').getAttribute('data-node-id');
+    await row(adminPage, added).locator('.alg-add-topic').click();
+    assert.equal(await adminPage.locator('#algorithm-topic-form [name="parentId"]').inputValue(), added);
+    await adminPage.locator('#algorithm-topic-form [name="kind"]').selectOption('directory');
+    assert.equal(await adminPage.locator('#algorithm-topic-difficulty').isVisible(), false);
+    assert.equal(await adminPage.locator('#algorithm-topic-form [name="color"]').isDisabled(), true);
+    await adminPage.locator('#algorithm-topic-form [name="label"]').fill('测试子目录');
+    await adminPage.locator('#algorithm-topic-form button[type="submit"]').click();
+    await adminPage.waitForFunction(() => !document.querySelector('#algorithm-topic-dialog').open);
+    assert.equal(await adminPage.locator('.alg-detail-title').innerText(), '测试子目录');
+    assert.equal(await adminPage.locator('.alg-detail-heading .alg-badge').count(), 0);
+    assert.equal(await row(adminPage, added).locator('.alg-badge').count(), 0, 'algorithm parent becomes ungraded directory');
+    await row(adminPage, added).locator('.alg-tree-label').click();
+    const content = `algorithm-content-${added}`;
+    assert.equal(await row(adminPage, content).locator('.alg-badge').innerText(), '中级', 'original algorithm remains a rated child');
+    await row(adminPage, content).locator('.alg-tree-label').click();
+    assert.equal(await adminPage.locator('.alg-detail-title').innerText(), '测试算法完整名称');
+    await adminPage.locator('.rail-nav-item[data-view="home"]').click();
+    await adminPage.locator('.rail-nav-item[data-view="algorithms"]').click();
+    assert.equal(await item(adminPage, added).count(), 1, 'new topic survives view changes');
+    await adminPage.reload();
+    await adminPage.locator('.rail-nav-item[data-view="algorithms"]').click();
+    await adminPage.locator('.alg-search').fill('测试算法');
+    await adminPage.locator('.alg-search-submit').click();
+    assert.ok((await adminPage.locator('.alg-result-topic-name').allTextContents()).includes('测试算法'), 'bootstrap reload restores stored custom topic');
     await adminPage.close();
 
     // Node labels follow the same text-only boundary as note metadata. Mutate
     // only this page's in-memory fixture, retaining every node ID and app code.
     const hostileNode = await openAlgorithms(browser, errors);
     await hostileNode.evaluate(() => { window.QMX_ALGORITHM_TREE.children[0].label = '<img src=x onerror="window.__algorithmXss=7">目录'; });
-    await hostileNode.locator('.rail-nav-item[data-view="home"]').click();
-    await hostileNode.locator('.rail-nav-item[data-view="algorithms"]').click();
+    await hostileNode.locator('#sync-button').click();
+    await hostileNode.waitForFunction(() => !document.querySelector('#sync-button').disabled);
     await hostileNode.waitForSelector('.alg-browser');
     assert.equal(await row(hostileNode, tree.children[0].id).locator('.alg-tree-label').innerText(), '<img src=x onerror="window.__algorithmXss=7">目录');
     assert.equal(await row(hostileNode, tree.children[0].id).locator('img, script').count(), 0);
     assert.equal(await hostileNode.evaluate(() => window.__algorithmXss), 0);
     await hostileNode.close();
     assert.deepEqual(errors, [], 'no renderer errors');
-    console.log('ALGORITHM NOTES UI PASS (367 stable IDs, directory/keyboard, search/scopes/filters, reader/sanitization, uploads, themes, 390px)');
+    console.log('ALGORITHM NOTES UI PASS (all legacy IDs mapped, directory/keyboard, search/scopes/filters, reader/sanitization, uploads, themes, 390px)');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

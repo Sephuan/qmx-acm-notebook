@@ -1,0 +1,552 @@
+{
+  "schema": 1,
+  "notice": "引文为短摘录；来源介绍知识与先修，五档数字为项目学习评估，不是来源给出的官方等级。分类导航证据弱于专题正文，已在条目标记低置信度。",
+  "sources": [
+    {
+      "url": "https://oi-wiki.org/contest/io/",
+      "title": "读入、输出优化 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "读入、输出优化 本文将介绍如何优化基于流的 I/O 与 C 风格的 I/O． 注意 基于流的 I/O 与 C 风格的 I/O 的实际速度会随环境的不同（如编译器，操作系统与硬件规格）发生一定的改变．如果想要进行更进一步的分析，请以实验结果为准．但需要注意实验中的变量控制，避免因多变量影响导致结论错误． 基于流的 I/O 对于基于流的 I/O（如 std::cin 与 std::cout ），最常用的优化方法为关闭与 C 流的同步与解除输入输出流的关联． 关闭同步 使用 std::ios::sync_with_stdio(false) 函数来关闭与 C 流的同步．C++ 为了兼容 C，也就是为了保证程序在同时使用了 printf 和 std::cout 时不发生混乱，因此对这两种流进行了同步．同步的 C++ 流保证是线程安全的． 这其实是 C++ 为了兼容而采取的保守措施．若开启同步，在每一次 I/O 操作时，C++ 流会立即将此操作应用于对应的 C 缓冲区中，而如果代码中并不涉及 C 风格的 I/O，这一操作便是多余的．因此可以在进行 I/O 操作之前关闭与 C 流的同步，但是在这样做之后要注意后续代码中不能同时使用 std::cin 和 scanf ，也不能同时使用 std::cout 和 printf ，但是可以同时使用 std::cin 和 printf ，也可以同时使用 scanf 和 std::cout ． 解除关联 使用 tie() 函数解除输入流与输出流的关联． 在默认的情况下 std::cin 关联的是 &std::cout ，因此每次进行格式化输入的时候都要调",
+      "bodySha256": "8e694056459b2a39e7486c7330d1fe7d22150b301fa77081745d1a1ff02c0776"
+    },
+    {
+      "url": "https://oi-wiki.org/contest/roadmap/",
+      "title": "学习路线 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "学习路线 提示 本文章正在编辑讨论中，欢迎补充更进一步的学习路线或在评论区提出你的想法！ 本文将会介绍算法竞赛的学习路线． 该学习路线既是新手学习算法竞赛知识的指南，也是一份复习清单． 1 C++ 语言基础 先从 C++ 语法学起，一步一步来． 1.1 Hello, World! 以一句 Hello, World! ，开始算法竞赛之旅吧！ 同时了解一下 C++ 的源程序的大致框架是什么样子的． Hello, World! C++ 语法基础 1.2 变量与运算 计算机出现的最初目的就是计算．因此我们先学习如何完成一些简单的运算任务吧． 变量 运算 1.3 流程控制 1.3.1 分支结构 有的时候，我们需要在不同的条件下，选择执行不同的语句，这时候我们就需要借助分支语句． 分支 分支语句包括下面几种： if 语句 if-else 语句 if-else if-else 语句 switch 语句 1.3.2 循环结构 将若干条语句重复执行多次，就需要用到循环语句． 循环 循环语句包括下面几种： for 语句 while 语句 do-while 语句 1.4 数组与结构体 数组用于存储大量相同类型的数据．而结构体则可以将若干变量捆绑起来． 数组 结构体 1.5 函数与递归 使用函数来让程序变得模块化，降低实现成本． 递归则是新手入门的一道坎，「自己调用自己」听起来并不是那么容易理解，不过仔细深究根本，就会发现「自己调用自己」和「自己调用别人」并没有本质差别． 函数 递归 & 分治 2 CSP-J 入门级 2.1 枚举与模拟 从现在开始，你已经会使用 C++ 语言完成一些简单的任务了，但是",
+      "bodySha256": "aa0ae4bf3761af26fe6da1a02d199942be46f8fae2a69c85186b800f75d4b6d2"
+    },
+    {
+      "url": "https://oi-wiki.org/search/opt/",
+      "title": "优化 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "优化 前言 DFS（深度优先搜索）是一种常见的算法，大部分的题目都可以用 DFS 解决，但是大部分情况下，这都是骗分算法，很少会有爆搜为正解的题目．因为 DFS 的时间复杂度特别高．（没学过 DFS 的请自行补上这一课） 既然不能成为正解，那就多骗一点分吧．那么这一篇文章将介绍一些实用的优化算法（俗称「剪枝」）． 先来一段深搜模板，之后的模板将在此基础上进行修改． 1 2 3 4 5 6 7 8 9 10 11 int ans = 最坏情况 , now ; // now 为当前答案 void dfs ( 传入数值 ) { if ( 到达目的地 ) ans = 从当前解与已有解中选最优 ; for ( 遍历所有可能性 ) if ( 可行 ) { 进行操作 ; dfs ( 缩小规模 ); 撤回操作 ; } } 其中的 ans 可以是解的记录，那么从当前解与已有解中选最优就变成了输出解． 剪枝方法 最常用的剪枝有三种，记忆化搜索、最优性剪枝、可行性剪枝． 记忆化搜索 因为在搜索中，相同的传入值往往会带来相同的解，那我们就可以用数组来记忆，详见 记忆化搜索 ． 模板： 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 int g [ MAXN ]; // 定义记忆化数组 int ans = 最坏情况 , now ; void dfs ( 传入数值 ) { if ( g [ 规模 ] != 无效数值 ) return ; // 或记录解，视情况而定 if ( 到达目的地 ) ans = 从当前解与已有解中选最优 ; // 输出解，视情况而定 ",
+      "bodySha256": "07705d44ff1f8f58d35f2809f53540a54b8388e2ae1273c70991a8cdc138497a"
+    },
+    {
+      "url": "https://oi-wiki.org/basic/divide-and-conquer/",
+      "title": "递归 & 分治 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "递归 & 分治 本页面将介绍递归与分治算法的区别与结合运用． 递归 定义 递归（Recursion），在数学和计算机科学中是指在函数的定义中使用函数自身的方法，在计算机科学中还额外指一种通过重复将问题分解为同类的子问题而解决问题的方法． 引入 要理解递归，就得先理解什么是递归． 递归的基本思想是某个函数直接或者间接地调用自身，这样原问题的求解就转换为了许多性质相同但是规模更小的子问题．求解时只需要关注如何把原问题划分成符合条件的子问题，而不需要过分关注这个子问题是如何被解决的． 以下是一些有助于理解递归的例子： 什么是递归？ 如何给一堆数字排序？答：分成两半，先排左半边再排右半边，最后合并就行了，至于怎么排左边和右边，请重新阅读这句话． 你今年几岁？答：去年的岁数加一岁，1999 年我出生． 递归在数学中非常常见．例如，集合论对自然数的正式定义是：1 是一个自然数，每个自然数都有一个后继，这一个后继也是自然数． 递归代码最重要的两个特征：结束条件和自我调用．自我调用是在解决子问题，而结束条件定义了最简子问题的答案． 1 2 3 4 int func ( 传入数值 ) { if ( 终止条件 ) return 最小子问题解 ; return func ( 缩小规模 ); } 为什么要写递归 结构清晰，可读性强．例如，分别用不同的方法实现 归并排序 ： C++ Python 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 // 不使用递归的归并排序算法 template < typename T > void merge_sort ( ve",
+      "bodySha256": "e93a411f1cd44baf7bc9fa5765706296e627b6680ce01b94e7a58fa1294ea35e"
+    },
+    {
+      "url": "https://cp-algorithms.com/",
+      "title": "Main Page - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: April 17, 2024 Created: July 24, 2014 Algorithms for Competitive Programming ¶ This project translates e-maxx.ru/algo into English. It describes algorithms and data structures that are popular in competitive programming. We also extend the translated articles and add new ones. We're an ad-free, volunteer-run website that's free for everyone. Users can contribute articles or help sponsor bounties on articles for greater algorithmic coverage. Your help is greatly appreciated. Compiled pages are published at https://cp-algorithms.com/ . Become a Contributor ¶ How to Contribute Code of Conduct Article Preview Sponsor Us ¶ Become a Financial Supporter Changelog ¶ August, 2025: Overha",
+      "bodySha256": "265590c30ad1a7e81f5488cf66267085c899618ab8cb40f4e9bfeb2f49fa4f91"
+    },
+    {
+      "url": "https://oi-wiki.org/search/dlx/",
+      "title": "Dancing Links - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Dancing Links 本页面将介绍精确覆盖问题、重复覆盖问题，解决这两个问题的算法「X 算法」，以及用来优化 X 算法的双向十字链表 Dancing Links．本页也将介绍如何在建模的配合下使用 DLX 解决一些搜索题． 精确覆盖问题 定义 精确覆盖问题（英文：Exact Cover Problem）是指给定许多集合 𝑆 𝑖 ( 1 ≤ 𝑖 ≤ 𝑛 ) S i ( 1 ≤ i ≤ n ) 以及一个集合 𝑋 X ，求满足以下条件的无序多元组 ( 𝑇 1 , 𝑇 2 , ⋯ , 𝑇 𝑚 ) ( T 1 , T 2 , ⋯ , T m ) ： ∀ 𝑖 , 𝑗 ∈ [ 1 , 𝑚 ] , 𝑇 𝑖 ⋂ 𝑇 𝑗 = ∅ ( 𝑖 ≠ 𝑗 ) ∀ i , j ∈ [ 1 , m ] , T i ⋂ T j = ∅ ( i ≠ j ) 𝑋 = 𝑚 ⋃ 𝑖 = 1 𝑇 𝑖 X = ⋃ i = 1 m T i ∀ 𝑖 ∈ [ 1 , 𝑚 ] , 𝑇 𝑖 ∈ { 𝑆 1 , 𝑆 2 , ⋯ , 𝑆 𝑛 } ∀ i ∈ [ 1 , m ] , T i ∈ { S 1 , S 2 , ⋯ , S n } 解释 例如，若给出 𝑆 1 = { 5 , 9 , 1 7 } 𝑆 2 = { 1 , 8 , 1 1 9 } 𝑆 3 = { 3 , 5 , 1 7 } 𝑆 4 = { 1 , 8 } 𝑆 5 = { 3 , 1 1 9 } 𝑆 6 = { 8 , 9 , 1 1 9 } 𝑋 = { 1 , 3 , 5 , 8 , 9 ",
+      "bodySha256": "98c1a9eb84eb233632b3ac5ac14e6fb3d80b9cedd84521a46dda25724b38076e"
+    },
+    {
+      "url": "https://oi-wiki.org/search/backtracking/",
+      "title": "回溯法 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "回溯法 本页面将简要介绍回溯法的概念和应用． 简介 回溯法是一种经常被用在 深度优先搜索（DFS） 和 广度优先搜索（BFS） 中的技巧． 其本质是：走不通就回头． 过程 构造空间树； 进行遍历； 如遇到边界条件，即不再向下搜索，转而搜索另一条链； 达到目标条件，输出结果． 例题 USACO 1.5.4 Checker Challenge 现在有一个如下的 6 × 6 6 × 6 的跳棋棋盘，有六个棋子被放置在棋盘上，使得每行，每列，每条对角线（包括两条主对角线）上都至多有一个棋子． 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0 1 2 3 4 5 6 ------------------------- 1 | | O | | | | | ------------------------- 2 | | | | O | | | ------------------------- 3 | | | | | | O | ------------------------- 4 | O | | | | | | ------------------------- 5 | | | O | | | | ------------------------- 6 | | | | | O | | ------------------------- 上面的布局可以用序列 { 2 , 4 , 6 , 1 , 3 , 5 } { 2 , 4 , 6 , 1 , 3 , 5 } 来描述，第 𝑖 i 个数字表示在第 𝑖 i 行的第 𝑎 𝑖 a i 列有一个棋子，如下所示： 行号 \ud835",
+      "bodySha256": "743876fc3381da3a8838f381f23dc4176f16d1aaccf29d8225d559416b2a6ab9"
+    },
+    {
+      "url": "https://oi-wiki.org/dp/basic/",
+      "title": "动态规划基础 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "动态规划基础 本页面主要介绍了动态规划的基本思想，以及动态规划中状态及状态转移方程的设计思路，帮助各位初学者对动态规划有一个初步的了解． 本部分的其他页面，将介绍各种类型问题中动态规划模型的建立方法，以及一些动态规划的优化技巧． 引入 [IOI1994] 数字三角形 给定一个 𝑟 r 行的数字三角形（ 𝑟 ≤ 1 0 0 0 r ≤ 1000 ），需要找到一条从最高点到底部任意处结束的路径，使路径经过数字的和最大．每一步可以走到当前点左下方的点或右下方的点． 1 2 3 4 5 7 3 8 8 1 0 2 7 4 4 4 5 2 6 5 在上面这个例子中，最优路径是 7 → 3 → 8 → 7 → 5 7 → 3 → 8 → 7 → 5 ． 最简单粗暴的思路是尝试所有的路径．因为路径条数是 𝑂 ( 2 𝑟 ) O ( 2 r ) 级别的，这样的做法无法接受． 注意到这样一个事实，一条最优的路径，它的每一步决策都是最优的． 以例题里提到的最优路径为例，只考虑前四步 7 → 3 → 8 → 7 7 → 3 → 8 → 7 ，不存在一条从最顶端到 4 4 行第 2 2 个数的权值更大的路径． 而对于每一个点，它的下一步决策只有两种：往左下角或者往右下角（如果存在）．因此只需要记录当前点的最大权值，用这个最大权值执行下一步决策，来更新后续点的最大权值． 这样做还有一个好处：我们成功缩小了问题的规模，将一个问题分成了多个规模更小的问题．要想得到从顶端到第 𝑟 r 行的最优方案，只需要知道从顶端到第 𝑟 − 1 r − 1 行的最优方案的信息就可以了． 这时候还存在一个问题：子",
+      "bodySha256": "8159c6e286ee62ceed85332e29dcebbb2ec472c3fae94fb7b8029b2258b1840f"
+    },
+    {
+      "url": "https://cp-algorithms.com/dynamic_programming/intro-to-dp.html",
+      "title": "Introduction to Dynamic Programming - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: July 4, 2026 Created: November 29, 2023 Original Introduction to Dynamic Programming ¶ The essence of dynamic programming is to avoid repeated calculation. Often, dynamic programming problems are naturally solvable by recursion. In such cases, it's easiest to write the recursive solution, then save repeated states in a lookup table. This process is known as top-down dynamic programming with memoization. That's read \"memoization\" (like we are writing in a memo pad) not memorization. One of the most basic, classic examples of this process is the fibonacci sequence. Its recursive formulation is $f(n) = f(n-1) + f(n-2)$ where $n \\ge 2$ and $f(0)=0$ and $f(1)=1$ . In C++, this would ",
+      "bodySha256": "fd45c24ea19e8ff8eb35d1f916f216d8e95d9fd0177de17f80ddffb44afab957"
+    },
+    {
+      "url": "https://cp-algorithms.com/dynamic_programming/divide-and-conquer-dp.html",
+      "title": "Divide and Conquer DP - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: February 26, 2026 Created: October 4, 2018 Original Divide and Conquer DP ¶ Divide and Conquer is a dynamic programming optimization. Preconditions ¶ Some dynamic programming problems have a recurrence of this form: $$ dp(i, j) = \\min_{0 \\leq k \\leq j} \\\\{ dp(i - 1, k - 1) + C(k, j) \\\\} $$ where $C(k, j)$ is a cost function and $dp(i, j) = 0$ when $j \\lt 0$ . Say $0 \\leq i \\lt m$ and $0 \\leq j \\lt n$ , and evaluating $C$ takes $O(1)$ time. Then the straightforward evaluation of the above recurrence is $O(m n^2)$ . There are $m \\times n$ states, and $n$ transitions for each state. Let $opt(i, j)$ be the value of $k$ that minimizes the above expression. Assuming that the cost func",
+      "bodySha256": "dacca2523f393cf34139b88bbd6966e071d47241bf5b6864b2ace6e3477f5692"
+    },
+    {
+      "url": "https://cp-algorithms.com/sequences/longest_increasing_subsequence.html",
+      "title": "Longest increasing subsequence - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: August 25, 2025 Created: May 11, 2018 Longest increasing subsequence ¶ This article has been moved to a Longest increasing subsequence . Contributors: mhayter (66.67%) jakobkogler (33.33%)",
+      "bodySha256": "d3973ba23e0e3091fbc64a04c804cb1b5a6a64ba44b752f77f7df256bb0fc676"
+    },
+    {
+      "url": "https://oi-wiki.org/string/z-func/",
+      "title": "Z 函数（扩展 KMP） - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Z 函数（扩展 KMP） 约定：字符串下标以 0 0 为起点． 定义 对于一个长度为 𝑛 n 的字符串 𝑠 s ，定义函数 𝑧 [ 𝑖 ] z [ i ] 表示 𝑠 s 和 𝑠 [ 𝑖 , 𝑛 − 1 ] s [ i , n − 1 ] （即以 𝑠 [ 𝑖 ] s [ i ] 开头的后缀）的最长公共前缀（LCP）的长度，则 𝑧 z 被称为 𝑠 s 的 Z 函数 ．特别地， 𝑧 [ 0 ] = 0 z [ 0 ] = 0 ． 国外一般将计算该数组的算法称为 Z Algorithm ，而国内则称其为 扩展 KMP （exKMP）． 这篇文章介绍在 𝑂 ( 𝑛 ) O ( n ) 时间复杂度内计算 Z 函数的算法以及其各种应用． 解释 下面若干样例展示了对于不同字符串的 Z 函数： 𝑧 ( 𝚊 𝚊 𝚊 𝚊 𝚊 ) = [ 0 , 4 , 3 , 2 , 1 ] z ( aaaaa ) = [ 0 , 4 , 3 , 2 , 1 ] 𝑧 ( 𝚊 𝚊 𝚊 𝚋 𝚊 𝚊 𝚋 ) = [ 0 , 2 , 1 , 0 , 2 , 1 , 0 ] z ( aaabaab ) = [ 0 , 2 , 1 , 0 , 2 , 1 , 0 ] 𝑧 ( 𝚊 𝚋 𝚊 𝚌 𝚊 𝚋 𝚊 ) = [ 0 , 0 , 1 , 0 , 3 , 0 , 1 ] z ( abacaba ) = [ 0 , 0 , 1 , 0 , 3 , 0 , 1 ] 朴素算法 Z 函数的朴素算法复杂度为 𝑂 ( 𝑛 2 ) O ( n 2 ) ： 实现 C+",
+      "bodySha256": "0202a34a4e346044a5db4f32fc1a24bf27a92832bde362e1b7da650360bc44d3"
+    },
+    {
+      "url": "https://cp-algorithms.com/string/z-function.html",
+      "title": "Z-function - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: July 18, 2026 Created: August 4, 2014 Translated From: e-maxx.ru Z-function and its calculation ¶ Suppose we are given a string $s$ of length $n$ . The Z-function for this string is an array of length $n$ where the $i$ -th element is equal to the greatest number of characters starting from the position $i$ that coincide with the first characters of $s$ . In other words, $z[i]$ is the length of the longest string that is, at the same time, a prefix of $s$ and a prefix of the suffix of $s$ starting at $i$ . Note. In this article, to avoid ambiguity, we assume $0$ -based indexes; that is: the first character of $s$ has index $0$ and the last one has index $n-1$ . The first element ",
+      "bodySha256": "3cc4892b8bf0cdb7494614686985b7a0215788a0c048a29ce0344094b82b99de"
+    },
+    {
+      "url": "https://cp-algorithms.com/string/suffix-tree-ukkonen.html",
+      "title": "Suffix Tree - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: July 14, 2022 Created: September 27, 2017 Translated From: e-maxx.ru Suffix Tree. Ukkonen's Algorithm ¶ This article is a stub and doesn't contain any descriptions. For a description of the algorithm, refer to other sources, such as Algorithms on Strings, Trees, and Sequences by Dan Gusfield. This algorithm builds a suffix tree for a given string $s$ of length $n$ in $O(n\\log(k))$ ) time, where $k$ is the size of the alphabet (if $k$ is considered to be a constant, the asymptotic behavior is linear). The input to the algorithm are the string $s$ and its length $n$ , which are passed as global variables. The main function build_tree builds a suffix tree. It is stored as an array ",
+      "bodySha256": "c60712ea7a5b045ac8abd7ee8ac60ab596b065fc2f487f374093643bb891bbc2"
+    },
+    {
+      "url": "https://oi-wiki.org/string/minimal-string/",
+      "title": "最小表示法 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "最小表示法 定义 最小表示法是用于解决字符串最小表示问题的方法． 字符串的最小表示 循环同构 当字符串 𝑆 S 中可以选定一个位置 𝑖 i 满足 𝑆 [ 𝑖 ⋯ 𝑛 ] + 𝑆 [ 1 ⋯ 𝑖 − 1 ] = 𝑇 S [ i ⋯ n ] + S [ 1 ⋯ i − 1 ] = T 则称 𝑆 S 与 𝑇 T 循环同构 最小表示 字符串 𝑆 S 的最小表示为与 𝑆 S 循环同构的所有字符串中字典序最小的字符串 simple 的暴力 我们每次比较 𝑖 i 和 𝑗 j 开始的循环同构，把当前比较到的位置记作 𝑘 k ，每次遇到不一样的字符时便把大的跳过，最后剩下的就是最优解． 实现 C++ Python 1 2 3 4 5 6 7 8 9 10 11 12 13 14 int k = 0 , i = 0 , j = 1 ; while ( k < n && i < n && j < n ) { if ( sec [( i + k ) % n ] == sec [( j + k ) % n ]) { ++ k ; } else { if ( sec [( i + k ) % n ] > sec [( j + k ) % n ]) ++ i ; else ++ j ; k = 0 ; if ( i == j ) i ++ ; } } i = min ( i , j ); 1 2 3 4 5 6 7 8 9 10 11 12 13 k , i , j = 0 , 0 , 1 while k < n and i < n and j < n : if sec [( ",
+      "bodySha256": "faa36df7ccab96241a7e094bfa22eaeef66bbfb2dbc4e45e79f15061ab8a7e7c"
+    },
+    {
+      "url": "https://cp-algorithms.com/string/lyndon_factorization.html",
+      "title": "Lyndon factorization - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: June 8, 2022 Created: March 11, 2018 Translated From: e-maxx.ru Lyndon factorization ¶ Lyndon factorization ¶ First let us define the notion of the Lyndon factorization. A string is called simple (or a Lyndon word), if it is strictly smaller than any of its own nontrivial suffixes . Examples of simple strings are: $a$ , $b$ , $ab$ , $aab$ , $abb$ , $ababb$ , $abcd$ . It can be shown that a string is simple, if and only if it is strictly smaller than all its nontrivial cyclic shifts . Next, let there be a given string $s$ . The Lyndon factorization of the string $s$ is a factorization $s = w_1 w_2 \\dots w_k$ , where all strings $w_i$ are simple, and they are in non-increasing ord",
+      "bodySha256": "7df19e6c943a87d30b4bc06b5e50126377557a46b1822b5e2990d7f87d108ad0"
+    },
+    {
+      "url": "https://oi-wiki.org/string/suffix-bst/",
+      "title": "后缀平衡树 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "后缀平衡树 定义 后缀之间的大小由字典序定义，后缀平衡树就是一个维护这些后缀顺序的平衡树，即字符串 𝑇 T 的后缀平衡树是 𝑇 T 所有后缀的有序集合．后缀平衡树上的一个节点相当于原字符串的一个后缀． 特别地，后缀平衡树的中序遍历即为后缀数组． 构造过程 对长度为 𝑛 n 的字符串 𝑇 T 建立其后缀平衡树，考虑逆序将其后缀加入后缀平衡树． 记后缀平衡树维护的集合为 𝑋 X ，当前添加的后缀为 𝑆 S ，则添加下一个后缀就是向 𝑋 X 中加入 𝚌 𝑆 c S （亦可理解为后缀平衡树维护的字符串为 𝑆 S ，下一步往 𝑆 S 前加入一个字符 𝚌 c ）．这一操作其实就是向平衡树中插入节点． 这里使用期望树高为 𝑂 ( l o g ⁡ 𝑛 ) O ( log ⁡ n ) 的平衡树，例如替罪羊树或 Treap 等． 做法 1 插入时，暴力比较两个后缀之间的大小关系，从而判断之后是往哪一个子树添加．这样子，单次插入至多比较 𝑂 ( l o g ⁡ 𝑛 ) O ( log ⁡ n ) 次，单次比较的时间复杂度至多为 𝑂 ( 𝑛 ) O ( n ) ，一共 𝑂 ( 𝑛 l o g ⁡ 𝑛 ) O ( n log ⁡ n ) ． 一共会插入 𝑛 n 次，所以该做法的时间复杂度存在上界 𝑂 ( 𝑛 2 l o g ⁡ 𝑛 ) O ( n 2 log ⁡ n ) ． 做法 2 注意到 𝚌 𝑆 c S 与 𝑆 S 的区别仅在于 𝚌 c ，且 𝑆 S 已经属于 𝑋 X 了，可以利用这一点来优化插入操作． 假设当前要比较 𝚌 𝑆 c S",
+      "bodySha256": "ea0fd1d3ff3145017835604ca8a959db386cd390949ee100bafbb19b397b4e54"
+    },
+    {
+      "url": "https://oi-wiki.org/ds/sgt/",
+      "title": "替罪羊树 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "替罪羊树 引入 替罪羊树 是一种依靠重构操作维持平衡的重量平衡树．替罪羊树会在插入、删除操作后，检测树是否发生失衡；如果失衡，将有针对性地进行重构以恢复平衡． 一般地，替罪羊树不支持区间操作，且无法完全持久化；但它具有实现简单、常数较小的优点． 基本结构和操作 替罪羊树的核心操作是重构、插入和删除操作． 节点信息 替罪羊树需要存储以下信息，用于树的自平衡操作： 树的结构信息： id ：已使用节点数目； rt ：根节点； lc[x] ， rc[x] ：左、右子节点； tot[x] ：以 𝑥 x 为根的子树大小（每个节点计数为 1 1 ） 3 ； tot_active ：整个树中未删除（即 cnt[x] != 0 ）的节点的数目． 当使用替罪羊树实现平衡树时，还需要存储如下信息： 平衡树的节点信息： val[x] ：节点存储的值； cnt[x] ：节点存储的值的计数（可能为 0 0 ）； sz[x] ：以 𝑥 x 为根的子树存储的值的计数之和． 为了维护节点信息，可以实现 push_up 操作： 参考实现 1 2 3 4 5 // Update node info from its children. void push_up ( int x ) { tot [ x ] = 1 + tot [ lc [ x ]] + tot [ rc [ x ]]; sz [ x ] = cnt [ x ] + sz [ lc [ x ]] + sz [ rc [ x ]]; } 应注意 tot[x] 和 sz[x] 的更新方式的不同． 重构操作 当树发生失衡时，需要对某个子树进行重构，使之尽",
+      "bodySha256": "712463b470015be42a3583df8c02dc778cd59f0d04d69d7f70dcd329c4e3bcdb"
+    },
+    {
+      "url": "https://cp-algorithms.com/data_structures/treap.html",
+      "title": "Treap - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: October 26, 2026 Created: November 26, 2016 Translated From: e-maxx.ru Treap (Cartesian tree) ¶ A treap is a data structure which combines binary tree and binary heap (hence the name: tree + heap $\\Rightarrow$ Treap). More specifically, treap is a data structure that stores pairs $(X, Y)$ in a binary tree in such a way that it is a binary search tree by $X$ and a binary heap by $Y$ . If some node of the tree contains values $(X_0, Y_0)$ , all nodes in the left subtree have $X \\leq X_0$ , all nodes in the right subtree have $X_0 \\leq X$ , and all nodes in both left and right subtrees have $Y \\leq Y_0$ . A treap is also often referred to as a \"cartesian tree\", as it is easy to emb",
+      "bodySha256": "cece4f95dc149b78d4f8bedef537b0cbc96d42ed439a1ac2ff7515040b5b55e9"
+    },
+    {
+      "url": "https://oi-wiki.org/math/",
+      "title": "数学部分简介 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "数学部分简介 本章介绍 OI 中可能会用到的数学知识．计算机科学与数学紧密相关，而在算法竞赛中尤其强调以数论、排列组合、概率期望、多项式为代表的离散、具体的数学：其注重程序实现和现实问题，可以出现在几乎任何类别的题目中． 实际上，算法竞赛中涉及到的算法和数据结构以及自动机等也可以被认为属于数学范畴，但是这些内容被细分到诸如字符串等的具体章节加以应用背景以更好理解．本章主要介绍数学中一些基础概念、代数、数论、博弈论及概率论等知识．运用这些知识可以帮助优化其他算法和数据结构，例如： 用多项式优化卷积形式的背包，来做一些字符串题． 很多递推类型的题背景都是排列组合或概率期望，可以更进一步用生成函数推导和解决，以及使用基于 FFT 的分治优化算法效率． 利用同余和环分析图上非简单路径在模意义下可能的权值和，并用带权并查集维护． 此外，高中数学是信息学竞赛数学的基础，学好课本上的基本概念和性质能更好地帮助学习本章内容． 本页面最近更新： 2026/11/4 20:10:15 ， 更新历史 发现错误？想一起完善？ 在 GitHub 上编辑此页！ 本页面贡献者： hsfzLZH1 , Ir1d , sshwy , Xeonacid , i-yyi , MegaOwIer , Tiphereth-A , Catreap , Chrogeek , CommonAnts , DCDCBigBig , Enter-tainer , greyqz , ksyx , luoguyuntianming , mgt , ouuan , StudyingFather , zmxqs 本页面的全部内容在 CC ",
+      "bodySha256": "ce0ced40b32c6974dfd4585078e92173dc6995966f23f49237793d54be9034a6"
+    },
+    {
+      "url": "https://cp-algorithms.com/combinatorics/binomial-coefficients.html",
+      "title": "Binomial Coefficients - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: October 22, 2024 Created: October 9, 2016 Translated From: e-maxx.ru Binomial Coefficients ¶ Binomial coefficients $\\binom n k$ are the number of ways to select a set of $k$ elements from $n$ different elements without taking into account the order of arrangement of these elements (i.e., the number of unordered sets). Binomial coefficients are also the coefficients in the expansion of $(a + b) ^ n$ (so-called binomial theorem): $$ (a+b)^n = \\binom n 0 a^n + \\binom n 1 a^{n-1} b + \\binom n 2 a^{n-2} b^2 + \\cdots + \\binom n k a^{n-k} b^k + \\cdots + \\binom n n b^n $$ It is believed that this formula, as well as the triangle which allows efficient calculation of the coefficients, wa",
+      "bodySha256": "dcd53e802983007ac531096d1b6d8be773f77ed0300650db84937f9ae7571853"
+    },
+    {
+      "url": "https://oi-wiki.org/math/number-theory/prime/",
+      "title": "素数 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "素数 素数与合数的定义，见 数论基础 ． 素数计数函数：小于或等于 𝑥 x 的素数的个数，用 𝜋 ( 𝑥 ) π ( x ) 表示．随着 𝑥 x 的增大，有这样的近似结果： 𝜋 ( 𝑥 ) ∼ 𝑥 l n ⁡ ( 𝑥 ) π ( x ) ∼ x ln ⁡ ( x ) ． 素性测试 素性测试 （Primality test）可以用于判定所给自然数是否为素数． 素性测试有两种： 确定性测试：绝对确定一个数是否为素数．常见例子包括试除法、Lucas–Lehmer 测试和椭圆曲线素性证明． 概率性测试：通常比确定性测试快很多，但有可能（尽管概率很小）错误地将 合数 识别为素数（尽管反之则不会）．因此，通过概率素性测试的数字被称为 可能素数 ，直到它们的素性可以被确定性地证明．而通过测试但实际上是合数的数字则被称为 伪素数 ．有许多特定类型的伪素数，最常见的是费马伪素数，它们是满足费马小定理的合数．概率性测试的常见例子包括 Miller–Rabin 测试． 试除法 暴力做法自然可以枚举从小到大的每个数看是否能整除． 参考实现 C++ Python 1 2 3 4 5 6 bool isPrime ( int a ) { if ( a < 2 ) return false ; for ( int i = 2 ; i < a ; ++ i ) if ( a % i == 0 ) return false ; return true ; } 1 2 3 4 5 6 7 def isPrime ( a ): if a < 2 : return False for i in ran",
+      "bodySha256": "ed697e11f7e3a2255bef6e32dcd3e0a98781727ae81f719f780bec80fe04b9e2"
+    },
+    {
+      "url": "https://cp-algorithms.com/algebra/primality_tests.html",
+      "title": "Primality tests - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: September 18, 2026 Created: March 16, 2019 Original Primality tests ¶ This article describes multiple algorithms to determine if a number is prime or not. Trial division ¶ By definition a prime number doesn't have any divisors other than $1$ and itself. A composite number has at least one additional divisor, let's call it $d$ . Naturally $\\frac{n}{d}$ is also a divisor of $n$ . It's easy to see, that either $d \\le \\sqrt{n}$ or $\\frac{n}{d} \\le \\sqrt{n}$ , therefore one of the divisors $d$ and $\\frac{n}{d}$ is $\\le \\sqrt{n}$ . We can use this information to check for primality. We try to find a non-trivial divisor, by checking if any of the numbers between $2$ and $\\sqrt{n}$ is a",
+      "bodySha256": "d1280bb223adaeb5e622cde98e679d495059cfc558481fb8bd70f0ff10a48975"
+    },
+    {
+      "url": "https://cp-algorithms.com/algebra/polynomial.html",
+      "title": "Operations on polynomials and series - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: August 7, 2025 Created: March 10, 2019 Original Operations on polynomials and series ¶ Problems in competitive programming, especially the ones involving enumeration some kind, are often solved by reducing the problem to computing something on polynomials and formal power series. This includes concepts such as polynomial multiplication, interpolation, and more complicated ones, such as polynomial logarithms and exponents. In this article, a brief overview of such operations and common approaches to them is presented. Basic Notion and facts ¶ In this section, we focus more on the definitions and \"intuitive\" properties of various polynomial operations. The technical details of the",
+      "bodySha256": "67eb44141159416f9ce13178c49e08370e616bf6c15506b12b97f34069c1d234"
+    },
+    {
+      "url": "https://cp-algorithms.com/num_methods/simpson-integration.html",
+      "title": "Integration by Simpson's formula - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: September 18, 2026 Created: October 4, 2018 Translated From: e-maxx.ru Integration by Simpson's formula ¶ We are going to calculate the value of a definite integral $$\\int_a ^ b f (x) dx$$ The solution described here was published in one of the dissertations of Thomas Simpson in 1743. Simpson's formula ¶ Let $n$ be some natural number. We divide the integration segment $[a, b]$ into $2n$ equal parts: $$x_i = a + i h, ~~ i = 0 \\ldots 2n,$$ $$h = \\frac {b-a} {2n}.$$ Now we calculate the integral separately on each of the segments $[x_ {2i-2}, x_ {2i}]$ , $i = 1 \\ldots n$ , and then add all the values. So, suppose we consider the next segment $[x_ {2i-2}, x_ {2i}], i = 1 \\ldots n$ ",
+      "bodySha256": "dd3189cf128991d9b68970040192898f4313aacc501f20fc4ee7522d032e9600"
+    },
+    {
+      "url": "https://oi-wiki.org/geometry/",
+      "title": "计算几何部分简介 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "计算几何部分简介 利用计算机建立数学模型解决几何问题． 本页面最近更新： 2026/1/7 08:56:54 ， 更新历史 发现错误？想一起完善？ 在 GitHub 上编辑此页！ 本页面贡献者： Ir1d , sshwy , Catreap , ouuan , Tiphereth-A 本页面的全部内容在 CC BY-SA 4.0 和 SATA 协议之条款下提供，附加条款亦可能应用",
+      "bodySha256": "10b1cfbc028cf3b7b0d155b4eb5b18832403754a26502d3c6b489dd8e19ff47b"
+    },
+    {
+      "url": "https://cp-algorithms.com/algebra/gray-code.html",
+      "title": "Gray code - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: October 17, 2026 Created: October 6, 2016 Translated From: e-maxx.ru Gray code ¶ Gray code is a binary numeral system where two successive values differ in only one bit. Denote by $G(n)$ the representation of the number $n$ using the Gray code. The sequence of Gray codes for 3-bit numbers is: 000, 001, 011, 010, 110, 111, 101, 100, so $G(4) = (110)_2 = 6$ . For example, $G(3) = (010)_2$ and $G(4) = (110)_2$ differ at exactly one bit, the leftmost bit. Similarly, $G(4) = (110)_2$ and $G(5) = (111)_2$ differ at exactly one bit, the rightmost one. This is true for all successive numbers. This code was invented by Frank Gray in 1953. Finding Gray code ¶ Let's look at the bits of num",
+      "bodySha256": "2d716b7b92f42f00bc9e533a52c102f7a2c028ae1871edafaac313a7db151b36"
+    },
+    {
+      "url": "https://oi-wiki.org/ds/",
+      "title": "数据结构部分简介 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "数据结构部分简介 数据结构是在计算机中存储、组织数据的方式．小到变量、数组，大到线段树、平衡树，都是数据结构． 程序运行离不开数据结构，不同的数据结构又各有优劣，能够处理的问题各不相同，而根据具体问题选取合适的数据结构，可以大大提升程序的效率．所以，学习各种各样的数据结构是很有必要的． 本页面最近更新： 2026/1/7 08:56:54 ， 更新历史 发现错误？想一起完善？ 在 GitHub 上编辑此页！ 本页面贡献者： Ir1d , bear-good , Zhoier , hsfzLZH1 , ouuan , HeRaNO , partychicken , StudyingFather , Marcythm , Tiphereth-A 本页面的全部内容在 CC BY-SA 4.0 和 SATA 协议之条款下提供，附加条款亦可能应用",
+      "bodySha256": "c5caf5809dc9b5ebdd87445081428478a35f6af3ca1673696119456a12e2f889"
+    },
+    {
+      "url": "https://cp-algorithms.com/data_structures/segment_tree.html",
+      "title": "Segment Tree - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: October 4, 2026 Created: October 29, 2017 Translated From: e-maxx.ru Segment Tree ¶ A Segment Tree is a data structure that stores information about array intervals as a tree. This allows answering range queries over an array efficiently, while still being flexible enough to allow quick modification of the array. This includes finding the sum of consecutive array elements $a[l \\dots r)$ , or finding the minimum element in a such a range in $O(\\log n)$ time. Between answering such queries, the Segment Tree allows modifying the array by replacing one element, or even changing the elements of a whole subsegment (e.g. assigning all elements $a[l \\dots r)$ to any value, or adding a v",
+      "bodySha256": "b40e1f8d8bcd44db78151af6167ac882e703c78ed9fbba5664ba5d8876a725f2"
+    },
+    {
+      "url": "https://oi-wiki.org/ds/dsu/",
+      "title": "并查集 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "并查集 引入 并查集是一种用于管理元素所属集合的数据结构，实现为一个森林，其中每棵树表示一个集合，树中的节点表示对应集合中的元素． 顾名思义，并查集支持两种操作： 合并（Unite）：合并两个元素所属集合（合并对应的树）． 查询（Find）：查询某个元素所属集合（查询对应的树的根节点），这可以用于判断两个元素是否属于同一集合． 并查集在经过修改后可以支持单个元素的删除、移动或维护树上的边权．使用动态开点线段树还可以实现 可持久化并查集 ． Warning 并查集无法以较低复杂度实现集合的分离． 初始化 初始时，每个元素都位于一个单独的集合，表示为一棵只有根节点的树．方便起见，我们将根节点的父亲设为自己． 实现 C++ Python 1 2 3 4 5 struct dsu { vector < size_t > pa ; explicit dsu ( size_t size ) : pa ( size ) { iota ( pa . begin (), pa . end (), 0 ); } }; 1 2 3 class Dsu : def __init__ ( self , size ): self . pa = list ( range ( size )) 查询 我们需要沿着树向上移动，直至找到根节点． 实现 C++ Python 1 size_t dsu::find ( size_t x ) { return pa [ x ] == x ? x : find ( pa [ x ]); } 1 2 def find ( self , x ): return x if sel",
+      "bodySha256": "48dcbdd4b0914e2cc20395fa3364a4d75d99678a919dc99e16742d11b5818a2b"
+    },
+    {
+      "url": "https://cp-algorithms.com/data_structures/disjoint_set_union.html",
+      "title": "Disjoint Set Union - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: September 19, 2026 Created: January 22, 2018 Translated From: e-maxx.ru Disjoint Set Union ¶ This article discusses the data structure Disjoint Set Union or DSU . Often it is also called Union Find because of its two main operations. This data structure provides the following capabilities. We are given several elements, each of which is a separate set. A DSU will have an operation to combine any two sets, and it will be able to tell in which set a specific element is. The classical version also introduces a third operation, it can create a set from a new element. Thus the basic interface of this data structure consists of only three operations: make_set(v) - creates a new set co",
+      "bodySha256": "d54487df0616d2a79a92e8a8b95520bd39c0844dbcc2a0ecf85458abe4b0cce5"
+    },
+    {
+      "url": "https://cp-algorithms.com/data_structures/deleting_in_log_n.html",
+      "title": "Deleting from a data structure in O(T(n) log n) - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: June 8, 2022 Created: October 14, 2018 Original Deleting from a data structure in $O(T(n)\\log n)$ ¶ Suppose you have a data structure which allows adding elements in true $O(T(n))$ . This article will describe a technique that allows deletion in $O(T(n)\\log n)$ offline. Algorithm ¶ Each element lives in the data structure for some segments of time between additions and deletions. Let's build a segment tree over the queries. Each segment when some element is alive splits into $O(\\log n)$ nodes of the tree. Let's put each query when we want to know something about the structure into the corresponding leaf. Now to process all queries we will run a DFS on the segment tree. When ente",
+      "bodySha256": "043b83a01a542a1ca5ad3ba4c57311a206489e0a06de012a1b83a27fe4e63f4c"
+    },
+    {
+      "url": "https://oi-wiki.org/ds/avl/",
+      "title": "AVL 树 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "AVL 树 AVL 树，是一种平衡的二叉搜索树．由于各种算法教材上对 AVL 的介绍十分冗长，造成了很多人对 AVL 树复杂、不实用的印象．但实际上，AVL 树的原理简单，实现也并不复杂． 性质 空二叉树是一棵 AVL 树 如果 T 是一棵 AVL 树，那么其左右子树也是 AVL 树，并且 | ℎ ( 𝑙 𝑠 ) − ℎ ( 𝑟 𝑠 ) | ≤ 1 | h ( l s ) − h ( r s ) | ≤ 1 ，h 是其左右子树的高度 树高为 𝑂 ( l o g ⁡ 𝑛 ) O ( log ⁡ n ) 平衡因子：右子树高度 - 左子树高度 树高的证明 设 𝑓 𝑛 f n 为高度为 𝑛 n 的 AVL 树所包含的最少节点数，则有 2) \\end{cases} \" aria-hidden=true class=NCM-N display=true> 𝑓 𝑛 = ⎧ { { ⎨ { { ⎩ 1 ( 𝑛 = 1 ) 2 ( 𝑛 = 2 ) 𝑓 𝑛 − 1 + 𝑓 𝑛 − 2 + 1 ( 𝑛 \" space=4> > 2 ) 2)\\end{cases}\" display=block xmlns=http://www.w3.org/1998/Math/MathML> f n = { 1 ( n = 1 ) 2 ( n = 2 ) f n − 1 + f n − 2 + 1 ( n \">> 2 ) 2) \\end{cases} \" src=data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALA",
+      "bodySha256": "5df537400f755948bfa5b5fa64e71f706b6b2aaa2f18a9b974d36fb40627e6a8"
+    },
+    {
+      "url": "https://oi-wiki.org/ds/rbtree/",
+      "title": "红黑树 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "红黑树 红黑树是一种自平衡的二叉搜索树．每个节点额外存储了一个 color 字段 (\"RED\" or \"BLACK\")，用于确保树在插入和删除时保持平衡． 红黑树是 4 阶 B 树（ 2-3-4 树 ）的变体． 1 性质 一棵合法的红黑树必须遵循以下四条性质： 节点为红色或黑色 NIL 节点（空叶子节点）为黑色 红色节点的子节点为黑色 从根节点到 NIL 节点的每条路径上的黑色节点数量相同 下图为一棵合法的红黑树： Note 部分资料中还加入了第五条性质，即根节点必须为黑色，这条性质要求完成插入操作后若根节点为红色则将其染黑，但由于将根节点染黑的操作也可以延迟至删除操作时进行，因此，该条性质并非必须满足（本文给出的代码实现中满足该性质）．为严谨起见，这里同时引用 维基百科原文 进行说明： Some authors, e.g. Cormen & al., 3 claim \"the root is black\" as fifth requirement; but not Mehlhorn & Sanders 4 or Sedgewick & Wayne. 5 Since the root can always be changed from red to black, this rule has little effect on analysis. This article also omits it, because it slightly disturbs the recursive algorithms and proofs. 红黑树类的定义 1 2 3 4 5 6 7 8 ",
+      "bodySha256": "8109b6e3346a5bb588ae018ccd5f85473651df7e8ba9d34a5d559e62ba167b00"
+    },
+    {
+      "url": "https://oi-wiki.org/graph/",
+      "title": "图论部分简介 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "图论部分简介 图论 (Graph theory) 是数学的一个分支，图是图论的主要研究对象． 图 (Graph) 是由若干给定的顶点及连接两顶点的边所构成的图形，这种图形通常用来描述某些事物之间的某种特定关系．顶点用于代表事物，连接两顶点的边则用于表示两个事物间具有这种关系． 参考资料 图论 - 维基百科，自由的百科全书 本页面最近更新： 2026/1/7 08:56:54 ， 更新历史 发现错误？想一起完善？ 在 GitHub 上编辑此页！ 本页面贡献者： hsfzLZH1 , Ir1d , sshwy , Enter-tainer , FFjet , greyqz , NachtgeistW , ouuan , StudyingFather , Tiphereth-A , Xeonacid 本页面的全部内容在 CC BY-SA 4.0 和 SATA 协议之条款下提供，附加条款亦可能应用",
+      "bodySha256": "09e37fa81476d7b5f5a505536be3dd8e7e4457dab7b39f8b72a3fbf65c09cc77"
+    },
+    {
+      "url": "https://cp-algorithms.com/graph/strongly-connected-components.html",
+      "title": "Strongly Connected Components and Condensation Graph - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: December 26, 2025 Created: October 14, 2016 Translated From: e-maxx.ru Strongly connected components and the condensation graph ¶ Definitions ¶ Let $G=(V,E)$ be a directed graph with vertices $V$ and edges $E \\subseteq V \\times V$ . We denote with $n=|V|$ the number of vertices and with $m=|E|$ the number of edges in $G$ . It is easy to extend all definitions in this article to multigraphs, but we will not focus on that. A subset of vertices $C \\subseteq V$ is called a strongly connected component if the following conditions hold: for all $u,v\\in C$ , if $u \\neq v$ there exists a path from $u$ to $v$ and a path from $v$ to $u$ , and $C$ is maximal, in the sense that no vertex ca",
+      "bodySha256": "6f38cf776555ef281f68244eabb78955da0bc258b04ee474c4616deb387bf011"
+    },
+    {
+      "url": "https://cp-algorithms.com/graph/bellman_ford.html",
+      "title": "Bellman-Ford - finding shortest paths with negative weights - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: September 18, 2026 Created: October 16, 2016 Translated From: e-maxx.ru Bellman-Ford Algorithm ¶ Single source shortest path with negative weight edges Suppose that we are given a weighted directed graph $G$ with $n$ vertices and $m$ edges, and some specified vertex $v$ . You want to find the length of shortest paths from vertex $v$ to every other vertex. Unlike the Dijkstra algorithm, this algorithm can also be applied to graphs containing negative weight edges . However, if the graph contains a negative cycle, then, clearly, the shortest path to some vertices may not exist (due to the fact that the weight of the shortest path must be equal to minus infinity); however, this alg",
+      "bodySha256": "1c60fd364b67646752ec4280555538a57014cb9fdce122a9f47ab3f24c96182c"
+    },
+    {
+      "url": "https://oi-wiki.org/graph/shortest-path/",
+      "title": "最短路 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "最短路 定义 （还记得这些定义吗？在阅读下列内容之前，请务必了解 图论相关概念 中的基础部分．） 路径 最短路 有向图中的最短路、无向图中的最短路 单源最短路、每对结点之间的最短路 记号 为了方便叙述，这里先给出下文将会用到的一些记号的含义． 𝑛 n 为图上点的数目， 𝑚 m 为图上边的数目； 𝑠 s 为最短路的源点； 𝐷 ( 𝑢 ) D ( u ) 为 𝑠 s 点到 𝑢 u 点的 实际 最短路长度； 𝑑 𝑖 𝑠 ( 𝑢 ) d i s ( u ) 为 𝑠 s 点到 𝑢 u 点的 估计 最短路长度．任何时候都有 𝑑 𝑖 𝑠 ( 𝑢 ) ≥ 𝐷 ( 𝑢 ) d i s ( u ) ≥ D ( u ) ．特别地，当最短路算法终止时，应有 𝑑 𝑖 𝑠 ( 𝑢 ) = 𝐷 ( 𝑢 ) d i s ( u ) = D ( u ) ． 𝑤 ( 𝑢 , 𝑣 ) w ( u , v ) 为 ( 𝑢 , 𝑣 ) ( u , v ) 这一条边的边权． 性质 对于边权为正的图，任意两个结点之间的最短路，不会经过重复的结点． 对于边权为正的图，任意两个结点之间的最短路，不会经过重复的边． 对于边权为正的图，任意两个结点之间的最短路，任意一条的结点数不会超过 𝑛 n ，边数不会超过 𝑛 − 1 n − 1 ． Floyd 算法 是用来求任意两个结点之间的最短路的． 复杂度比较高，但是常数小，容易实现（只有三个 for ）． 适用于任何图，不管有向无向，边权正负，但是最短路必须存在．（不能有个负环） 实现 我们定义一个数组 f[k][x][y",
+      "bodySha256": "5072399bf5e950f41c7f239362d5540ee8381193e7aa7878a520efee041ab275"
+    },
+    {
+      "url": "https://oi-wiki.org/graph/dsu-on-tree/",
+      "title": "树上启发式合并 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "树上启发式合并 引入 启发式算法是什么呢？ 启发式算法是基于人类的经验和直观感觉，对一些算法的优化． 举个例子，最常见的就是并查集的启发式合并了，代码是这样的： 1 2 3 4 5 6 void merge ( int x , int y ) { int xx = find ( x ), yy = find ( y ); if ( size [ xx ] < size [ yy ]) swap ( xx , yy ); fa [ yy ] = xx ; size [ xx ] += size [ yy ]; } 在这里，对于两个大小不一样的集合，我们将小的集合合并到大的集合中，而不是将大的集合合并到小的集合中． 为什么呢？这个集合的大小可以认为是集合的高度（在正常情况下），而我们将集合高度小的并到高度大的显然有助于我们找到父亲． 让高度小的树成为高度较大的树的子树，这个优化可以称为启发式合并算法． 算法内容 树上启发式合并（dsu on tree）是一种对于某些树上离线问题，速度大于等于大部分算法且更易于理解和实现的算法． 考虑下面的问题： 树上数颜色 ． 例题引入 给出一棵 𝑛 n 个节点以 1 1 为根的树，节点 𝑢 u 的颜色为 𝑐 𝑢 c u ，现在对于每个结点 𝑢 u 询问以 𝑢 u 为根的子树里一共出现了多少种不同的颜色． 𝑛 ≤ 2 × 1 0 5 n ≤ 2 × 10 5 ． 对于这种问题解决方式大多是运用大量的数据结构（树套树等），如果可以离线，是不是有更简单的方法？ 过程 既然支持离线，考虑预处理后 𝑂 ( 1 ) O ( 1 ) 输出答案．",
+      "bodySha256": "c7377b34b3c2ee35627f6769e86aa0722c03f38aa6660b2479f8fff09f4108b5"
+    },
+    {
+      "url": "https://usaco.guide/plat",
+      "title": "USACO Platinum Topics",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "browser-text-read",
+      "excerpt": "Platinum 目录列出 Small-To-Large Merging、Virtual Tree、Heavy-Light Decomposition 等。原站明确指出主题并非穷尽且可能跨分区，故不直接映射本项目五档。"
+    },
+    {
+      "url": "https://oi-wiki.org/graph/block-forest/",
+      "title": "圆方树 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "圆方树 在阅读下列内容之前，请务必了解 图论相关概念 部分． 相关阅读： 割点和桥 ． 引入 众所周知，树（或森林）有很好的性质，并且容易通过很多常见数据结构维护． 而一般图则没有那么好的性质，所幸有时我们可以把一般图上的某些问题转化到树上考虑． 而圆方树（Block forest 或 Round-square tree） 1 就是一种将图变成树的方法．本文将介绍圆方树的构建，性质和一些应用． 限于篇幅，本文中有一些结论未经证明，读者可以自行理解或证明． 定义 圆方树最初是处理「仙人掌图」（每条边在不超过一个简单环中的无向图）的一种工具，不过发掘它的更多性质，有时我们可以在一般无向图上使用它． 要介绍圆方树，首先要介绍 点双连通分量 ． 一个 点双连通图 的一个定义是：图中任意两不同点之间都有至少两条点不重复的路径． 点不重复既指路径上点不重复（简单路径），也指两条路径的交集为空（当然，路径必然都经过出发点和到达点，这不在考虑范围内）． 可以发现对于只有一个点的图比较难定义它是不是一个点双，这里先不考虑节点数为 1 1 的图． 一个近乎等价的定义是：不存在割点的图． 这个定义只在图中只有两个点，一条连接它们的边时失效．它没有割点，但是并不能找到两条不相交的路径，因为只有一条路径． （也可以理解为那一条路径可以算两次，的确没有交，因为不经过其他点） 虽然原始的定义的确是前者，但是为了方便，我们规定点双图的定义采用后者． 而一个图的 点双连通分量 则是一个 极大点双连通子图 ． 与强连通分量等不同，一个点可能属于多个点双，但是一条边属于恰好一个点双（如果定义采用前者则有可能不属于任",
+      "bodySha256": "bb80eabfb79a313c3430fdace9975b3e51148bf684829fd78ef091f62823f09a"
+    },
+    {
+      "url": "https://cp-algorithms.com/graph/cutpoints.html",
+      "title": "Finding articulation points in a graph in O(N+M) - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: April 17, 2023 Created: October 23, 2017 Translated From: e-maxx.ru Finding articulation points in a graph in $O(N+M)$ ¶ We are given an undirected graph. An articulation point (or cut vertex) is defined as a vertex which, when removed along with associated edges, makes the graph disconnected (or more precisely, increases the number of connected components in the graph). The task is to find all articulation points in the given graph. The algorithm described here is based on depth first search and has $O(N+M)$ complexity, where $N$ is the number of vertices and $M$ is the number of edges in the graph. Algorithm ¶ Pick an arbitrary vertex of the graph $root$ and run depth first se",
+      "bodySha256": "1d1be9bf2aea40a8f9d6160f45676a310861343b195c75a09c5a36878273a6cc"
+    },
+    {
+      "url": "https://oi-wiki.org/graph/virtual-tree/",
+      "title": "虚树 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "虚树 引入 「SDOI2011」消耗战 在一场战争中，战场由 𝑛 n 个岛屿和 𝑛 − 1 n − 1 个桥梁组成，保证每两个岛屿间有且仅有一条路径可达．现在，我军已经侦查到敌军的总部在编号为 1 1 的岛屿，而且他们已经没有足够多的能源维系战斗，我军胜利在望．已知在其他 𝑘 k 个岛屿上有丰富能源，为了防止敌军获取能源，我军的任务是炸毁一些桥梁，使得敌军不能到达任何能源丰富的岛屿．由于不同桥梁的材质和结构不同，所以炸毁不同的桥梁有不同的代价，我军希望在满足目标的同时使得总代价最小． 侦查部门还发现，敌军有一台神秘机器．即使我军切断所有能源之后，他们也可以用那台机器．机器产生的效果不仅仅会修复所有我军炸毁的桥梁，而且会重新随机资源分布（但可以保证的是，资源不会分布到 1 1 号岛屿上）．不过侦查部门还发现了这台机器只能够使用 𝑚 m 次，所以我们只需要把每次任务完成即可． 对于所有数据， 2 ≤ 𝑛 ≤ 2 . 5 × 1 0 5 , 1 ≤ 𝑚 ≤ 5 × 1 0 5 , ∑ 𝑘 𝑖 ≤ 5 × 1 0 5 , 1 ≤ 𝑘 𝑖 ≤ 𝑛 − 1 2 ≤ n ≤ 2.5 × 10 5 , 1 ≤ m ≤ 5 × 10 5 , ∑ k i ≤ 5 × 10 5 , 1 ≤ k i ≤ n − 1 ． 朴素做法 对于上面那题，我们不难发现——如果树的点数很少，那么我们可以直接跑 DP． 首先我们称某次询问中被选中的点为—— 「关键点」 ． 设 𝐷 𝑝 ( 𝑖 ) D p ( i ) 表示——使 𝑖 i 不与其子树中任意一个关键点连通的 最小代价 ． 设 ",
+      "bodySha256": "8307434d5079c70d22b76a607436fa4f2c6acb49c1d6831b4803f257bf36f483"
+    },
+    {
+      "url": "https://cp-algorithms.com/geometry/basic-geometry.html",
+      "title": "Basic Geometry - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: May 16, 2026 Created: February 11, 2018 Original Basic Geometry ¶ In this article we will consider basic operations on points in Euclidean space which maintains the foundation of the whole analytical geometry. We will consider for each point $\\mathbf r$ the vector $\\vec{\\mathbf r}$ directed from $\\mathbf 0$ to $\\mathbf r$ . Later we will not distinguish between $\\mathbf r$ and $\\vec{\\mathbf r}$ and use the term point as a synonym for vector . Linear operations ¶ Both 2D and 3D points maintain linear space, which means that for them sum of points and multiplication of point by some number are defined. Here are those basic implementations for 2D: struct point2d { ftype x , y ; poi",
+      "bodySha256": "ffd36d977a463e71e25614e7b8fb43497e566d22c4478175b78188f09951dd78"
+    },
+    {
+      "url": "https://oi-wiki.org/misc/",
+      "title": "杂项简介 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "杂项简介 这个板块主要介绍的是一些难以分类的算法及 OI 相关知识． 本页面最近更新： 2026/1/7 08:56:54 ， 更新历史 发现错误？想一起完善？ 在 GitHub 上编辑此页！ 本页面贡献者： Ir1d , Alpha1022 , Chrogeek , i-yyi , ouuan , Tiphereth-A , TrisolarisHD 本页面的全部内容在 CC BY-SA 4.0 和 SATA 协议之条款下提供，附加条款亦可能应用",
+      "bodySha256": "14720939825b2f860ba89721adb79006439bf93491046aa8fbff3e0109bed95f"
+    },
+    {
+      "url": "https://cp-algorithms.com/data_structures/sqrt_decomposition.html",
+      "title": "Sqrt Decomposition - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: August 25, 2026 Created: October 7, 2017 Translated From: e-maxx.ru Sqrt Decomposition ¶ Sqrt Decomposition is a method (or a data structure) that allows you to perform some common operations (finding sum of the elements of the sub-array, finding the minimal/maximal element, etc.) in $O(\\sqrt n)$ operations, which is much faster than $O(n)$ for the trivial algorithm. First we describe the data structure for one of the simplest applications of this idea, then show how to generalize it to solve some other problems, and finally look at a slightly different use of this idea: splitting the input requests into sqrt blocks. Sqrt-decomposition based data structure ¶ Given an array $a[0 ",
+      "bodySha256": "db854ce74d16d335c57dfec335d9fec9e693186d412c990f1eed327e0386c931"
+    },
+    {
+      "url": "https://oi-wiki.org/misc/frac-programming/",
+      "title": "分数规划 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "分数规划 分数规划用来求一个分式的极值．其形式化表述是，给出 𝑎 𝑖 a i 和 𝑏 𝑖 b i ，求一组 𝑤 𝑖 ∈ { 0 , 1 } w i ∈ { 0 , 1 } ，最小化或最大化 𝑛 ∑ 𝑖 = 1 𝑎 𝑖 × 𝑤 𝑖 𝑛 ∑ 𝑖 = 1 𝑏 𝑖 × 𝑤 𝑖 ∑ i = 1 n a i × w i ∑ i = 1 n b i × w i 通俗来讲，这类问题类似于：每种物品有两个权值 𝑎 a 和 𝑏 b ，选出若干个物品使得 ∑ 𝑎 ∑ 𝑏 ∑ a ∑ b 最小或最大． 一般分数规划问题还会有一些特殊的限制，比如「分母至少为 𝑊 W 」． 求解 二分法 分数规划问题的通用方法是二分答案法．假设当前二分到的答案为 𝑚 𝑖 𝑑 mid ，则一组满足条件的 { 𝑤 𝑖 } { w i } 会让权值大于等于 𝑚 𝑖 𝑑 mid ．根据这一条件列不等式并变形 ∑ 𝑎 𝑖 × 𝑤 𝑖 ∑ 𝑏 𝑖 × 𝑤 𝑖 ≥ 𝑚 𝑖 𝑑 ⟹ ∑ 𝑎 𝑖 × 𝑤 𝑖 − 𝑚 𝑖 𝑑 × ∑ 𝑏 𝑖 ⋅ 𝑤 𝑖 ≥ 0 ⟹ ∑ 𝑤 𝑖 × ( 𝑎 𝑖 − 𝑚 𝑖 𝑑 × 𝑏 𝑖 ) ≥ 0 ∑ a i × w i ∑ b i × w i ≥ m i d ⟹ ∑ a i × w i − m i d × ∑ b i ⋅ w i ≥ 0 ⟹ ∑ w i × ( a i − m i d × b i ) ≥ 0 那么只要求出不等号左边的式子的最大值就行了．如果最大值大于等于 0 0 ，说",
+      "bodySha256": "8d4a255eb0c7677495e5beb874117e8b214d3270ca3d48c6be274122128d68ed"
+    },
+    {
+      "url": "https://cp-algorithms.com/num_methods/binary_search.html",
+      "title": "Binary Search - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "Last update: September 19, 2026 Created: June 3, 2022 Original Binary search ¶ Binary search is a method that allows for quicker search of something by splitting the search interval into two. Its most common application is searching values in sorted arrays, however the splitting idea is crucial in many other typical tasks. Search in sorted arrays ¶ The most typical problem that leads to the binary search is as follows. You're given a sorted array $A_0 \\leq A_1 \\leq \\dots \\leq A_{n-1}$ , check if $k$ is present within the sequence. The simplest solution would be to check every element one by one and compare it with $k$ (a so-called linear search). This approach works in $O(n)$ , but doesn't u",
+      "bodySha256": "f6fd4fab54f449b72b69a34de0880616cf2517bdd1bfa142212544ce4745bb26"
+    },
+    {
+      "url": "https://oi-wiki.org/misc/modifiable-mo-algo/",
+      "title": "带修改莫队 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "带修改莫队 请确保您已经会普通莫队算法了．如果您还不会，请先阅读前面的 普通莫队算法 ． 特点 普通莫队是不能带修改的． 我们可以强行让它可以修改，就像 DP 一样，可以强行加上一维 时间维 ，表示这次操作的时间． 时间维表示经历的修改次数． 即把询问 [ 𝑙 , 𝑟 ] [ l , r ] 变成 [ 𝑙 , 𝑟 , t i m e ] [ l , r , time ] ． 那么我们的坐标也可以在时间维上移动，即 [ 𝑙 , 𝑟 , t i m e ] [ l , r , time ] 多了一维可以移动的方向，可以变成： [ 𝑙 − 1 , 𝑟 , t i m e ] [ l − 1 , r , time ] [ 𝑙 + 1 , 𝑟 , t i m e ] [ l + 1 , r , time ] [ 𝑙 , 𝑟 − 1 , t i m e ] [ l , r − 1 , time ] [ 𝑙 , 𝑟 + 1 , t i m e ] [ l , r + 1 , time ] [ 𝑙 , 𝑟 , t i m e − 1 ] [ l , r , time − 1 ] [ 𝑙 , 𝑟 , t i m e + 1 ] [ l , r , time + 1 ] 这样的转移也是 𝑂 ( 1 ) O ( 1 ) 的，但是我们排序又多了一个关键字，再搞搞就行了． 可以用和普通莫队类似的方法排序转移，做到 𝑂 ( 𝑛 5 / 3 ) O ( n 5 / 3 ) ． 这一次我们排序的方式是以 𝑛 2 / 3 n 2 / 3 为一块，分成了 𝑛 1 / ",
+      "bodySha256": "d69045945de2ab4b1cd276ebe5824b24e43029605ba9f7e6e9ba4aa5df2b0157"
+    },
+    {
+      "url": "https://oi-wiki.org/misc/mo-algo-on-tree/",
+      "title": "树上莫队 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "树上莫队 括号序树上莫队 一般的莫队只能处理线性问题，我们要把树强行压成序列． 我们可以将树的括号序跑下来，把括号序分块，在括号序上跑莫队． 具体怎么做呢？ 过程 我们通过 DFS 维护树的括号序列（进入节点 𝑥 x 时向序列加入 𝑥 x ，离开节点 𝑥 x 时再次向序列加入 𝑥 x ，序列总长为 2 𝑁 2 N ）． 我们令 𝑠 𝑡 𝑥 s t x 为 𝑥 x 进入的时间， 𝑒 𝑑 𝑥 e d x 为 𝑥 x 离开的时间． 根据括号序列的性质，对于树上路径 𝑢 → 𝑣 u → v （不妨设 𝑠 𝑡 𝑢 ≤ 𝑠 𝑡 𝑣 s t u ≤ s t v ）： 若 L C A ( 𝑢 , 𝑣 ) = 𝑢 LCA ( u , v ) = u ，路径上的节点恰好在区间 [ 𝑠 𝑡 𝑢 , 𝑠 𝑡 𝑣 ] [ s t u , s t v ] 中出现 1 次；不在路径上的节点出现 0 次或 2 次． 若 L C A ( 𝑢 , 𝑣 ) ≠ 𝑢 LCA ( u , v ) ≠ u ，路径上除 L C A ( 𝑢 , 𝑣 ) LCA ( u , v ) 外的节点恰好在区间 [ 𝑒 𝑑 𝑢 , 𝑠 𝑡 𝑣 ] [ e d u , s t v ] 中出现 1 次；不在路径上的节点出现 0 次或 2 次．注意特殊考虑 L C A ( 𝑢 , 𝑣 ) LCA ( u , v ) ，它出现次数为 0． 因此，进行莫队时，无论遇到的节点是入栈还是出栈，其本质都是改变了该节点在当前区间的出现次数．我们只需要维护每个节点 𝑥 ",
+      "bodySha256": "b1c8eae023972423c358a707b3e155eec271bfccf48a83ce1b85a0fde3aa4ab5"
+    },
+    {
+      "url": "https://oi-wiki.org/misc/rollback-mo-algo/",
+      "title": "回滚莫队 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "回滚莫队 引入 有些题目在区间转移时，可能会出现增加或者删除无法实现的问题．在只有增加不可实现或者只有删除不可实现的时候，就可以使用回滚莫队在 𝑂 ( 𝑛 √ 𝑚 ) O ( n m ) 的时间内解决问题．回滚莫队的核心思想就是：既然只能实现一个操作，那么就只使用一个操作，剩下的交给回滚解决． 回滚莫队分为只使用增加操作的回滚莫队和只使用删除操作的回滚莫队．以下仅介绍只使用增加操作的回滚莫队，只使用删除操作的回滚莫队和只使用增加操作的回滚莫队只在算法实现上有一点区别，故不再赘述． 例题 JOISC 2014 Day1 历史研究 给你一个长度为 𝑛 n 的数组 𝐴 A 和 𝑚 m 个询问 ( 1 ≤ 𝑛 , 𝑚 ≤ 1 0 5 ) ( 1 ≤ n , m ≤ 10 5 ) ，每次询问一个区间 [ 𝐿 , 𝑅 ] [ L , R ] 内重要度最大的数字，要求 输出其重要度 ．一个数字 𝑖 i 重要度的定义为 𝑖 i 乘上 𝑖 i 在区间内出现的次数． 在这个问题中，在增加的过程中更新答案是很好实现的，但是在删除的过程中更新答案是不好实现的．因为如果增加会影响答案，那么新答案必定是刚刚增加的数字的重要度，而如果删除过后区间重要度最大的数字改变，我们很难确定新的重要度最大的数字是哪一个．所以，普通的莫队很难解决这个问题． 过程 对原序列进行分块，对询问以左端点所属块编号升序为第一关键字，右端点升序为第二关键字的方式排序． 按顺序处理询问： 如果询问左端点所属块 𝐵 B 和上一个询问左端点所属块不同，那么将莫队区间的左端点初始化为 𝐵 B 的右端点加 1 1",
+      "bodySha256": "e9718fb1fbf71ba523bf6cd14f87f176336e06708496e324d02ff7a6719a00a7"
+    },
+    {
+      "url": "https://oi-wiki.org/math/matroid/",
+      "title": "拟阵 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "拟阵 引言 拟阵（Matroid） 是哈斯勒·惠特尼（Hassler Whitney）于 1935 年提出的一种抽象代数结构，旨在统一和推广关于独立性的概念，例如线性代数中的线性无关性和图论中的无环性． 拟阵为处理与独立性相关的优化问题提供了强大的理论工具，广泛应用于组合数学、图论、算法设计等领域，尤其在为贪心算法等优化方法提供数学理论支持方面发挥了重要作用． 定义 拟阵 一个 拟阵（Matroid） 可以表示为 𝑀 = ( 𝐸 , I ) M = ( E , I ) ，其中： 𝐸 E 是一个有限集，称为 基础集（Ground Set） ． I I 是 𝐸 E 的子集族，称为 独立集族（Family of Independent Sets） ，其中的集合称为 独立集（Independent Set） ．有以下三个性质： 非空性 ：空集是独立的，即 ∅ ∈ I ∅ ∈ I ． 遗传性 ：独立集的任意子集也是独立集．若 𝐼 ∈ I I ∈ I ，则对于任意 𝐼 ′ ⊆ 𝐼 I ′ ⊆ I ，都有 𝐼 ′ ∈ I I ′ ∈ I ． 扩张性 ：若 𝐼 , 𝐽 ∈ I I , J ∈ I 且 | 𝐼 | < | 𝐽 | | I | < | J | ，则存在 𝑗 ∈ 𝐽 ∖ 𝐼 j ∈ J ∖ I ，使得 𝐼 ∪ { 𝑗 } ∈ I I ∪ { j } ∈ I ． 如果一个形如 ( 𝐸 , I ) ( E , I ) 的结构满足上述三个性质，则称其为一个拟阵． 基 基（Basis） 是拟阵中极大的独立集，即无法再添加元素而保持独立性的独立集．所有基的集",
+      "bodySha256": "3188f45c4a1c50c51b9fc923f8abf744ef05c056893c355c8be959e418f23318"
+    },
+    {
+      "url": "https://oi-wiki.org/basic/",
+      "title": "算法基础简介 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-navigation",
+      "excerpt": "算法基础简介 算法 ，顾名思义，即计算的方法．算法通常用于解决特定的计算任务，但与可以直接在计算机上运行的程序不同，算法使用数学化的描述，更加侧重于思想，可以被看作抽象的程序．同一个算法可以有许多种不同的实现方式，两个不同的程序里也可能使用了同一种算法． 本章介绍一些基础算法．当一个计算任务足够通用，在各种问题中广泛出现时，解决该任务的算法就会被更多的算法所调用，拥有相当的重要性和基础性．同时，越通用的算法，通常越是简洁，越近似于思想而非程序．本章中介绍的算法具备足够的优美及趣味性，在之后的进阶内容中也常常会出现． 本页面最近更新： 2026/1/7 08:56:54 ， 更新历史 发现错误？想一起完善？ 在 GitHub 上编辑此页！ 本页面贡献者： Ir1d , ouuan , Chrogeek , HeRaNO , Marcythm , NachtgeistW , Tiphereth-A 本页面的全部内容在 CC BY-SA 4.0 和 SATA 协议之条款下提供，附加条款亦可能应用",
+      "bodySha256": "f380b45a01136716687f201acfe3d5764058d23921357bf7c54d3eba27f9f466"
+    },
+    {
+      "url": "https://arxiv.org/abs/cs/0011047",
+      "title": "Dancing links — Donald E. Knuth",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-abstract",
+      "excerpt": "以可逆双向链表局部操作加速深度优先搜索；覆盖建模、组合启发式与性能示例。高级为本目录根据建模和实现负担的评估。"
+    },
+    {
+      "url": "https://usaco.guide/adv/matroid",
+      "title": "Matroids · USACO Guide",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "拟阵推广线性独立，借交换公理刻画贪心，并作为后续拟阵交模块的先修；USACO Advanced 分类仅作参考，不直接等同D5。"
+    },
+    {
+      "url": "https://oi-wiki.org/math/probability/conditional-probability/",
+      "title": "条件概率与独立性 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "条件概率与独立性 概述 当某事件已经发生时，一些随机事件的概率会因为已知信息的增加发生变化．例如在手游抽卡时，我们可能会认为单次抽卡出六星与不出六星是等概率的，但随着我们连抽 5 0 50 发一个六星都没有，再固执地认为「出六星与不出六星等概率」就显得不是那么明智． 总之，研究在某些已知条件下事件发生的概率是必要的． 条件概率 定义 若已知事件 𝐴 A 发生，在此条件下事件 𝐵 B 发生的概率称为 条件概率 ，记作 𝑃 ( 𝐵 | 𝐴 ) P ( B | A ) ． 在概率空间 ( Ω , F , 𝑃 ) ( Ω , F , P ) 中，若事件 𝐴 ∈ F A ∈ F 满足 0\" aria-hidden=true breakable=true class=NCM-N> 𝑃 ( 𝐴 ) \"> > 0 0\" xmlns=http://www.w3.org/1998/Math/MathML> P ( A ) \">> 0 0\" src=data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7> ，则条件概率 𝑃 ( ⋅ | 𝐴 ) P ( ⋅ | A ) 定义为 𝑃 ( 𝐵 | 𝐴 ) = 𝑃 ( 𝐴 𝐵 ) 𝑃 ( 𝐴 ) ∀ 𝐵 ∈ F P ( B | A ) = P ( A B ) P ( A ) ∀ B ∈ F 可以验证根据上式定义出的 𝑃 ( ⋅ | 𝐴 ) P ( ⋅ | A ) 是 ( Ω , F ) ( Ω , F ) 上的概率",
+      "bodySha256": "afa34f53490204c4e8dd92f25e28b17a0b92f07f6d95558e79225fc269c824ed"
+    },
+    {
+      "url": "https://oi-wiki.org/math/combinatorics/derangement/",
+      "title": "错位排列 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "错位排列 错位排列 定义 错位排列（derangement）是没有任何元素出现在其有序位置的排列．即，对于 1 ∼ 𝑛 1 ∼ n 的排列 𝑃 P ，如果满足 𝑃 𝑖 ≠ 𝑖 P i ≠ i ，则称 𝑃 P 是 𝑛 n 的错位排列． 例如，三元错位排列有 { 2 , 3 , 1 } { 2 , 3 , 1 } 和 { 3 , 1 , 2 } { 3 , 1 , 2 } ．四元错位排列有 { 2 , 1 , 4 , 3 } { 2 , 1 , 4 , 3 } 、 { 2 , 3 , 4 , 1 } { 2 , 3 , 4 , 1 } 、 { 2 , 4 , 1 , 3 } { 2 , 4 , 1 , 3 } 、 { 3 , 1 , 4 , 2 } { 3 , 1 , 4 , 2 } 、 { 3 , 4 , 1 , 2 } { 3 , 4 , 1 , 2 } 、 { 3 , 4 , 2 , 1 } { 3 , 4 , 2 , 1 } 、 { 4 , 1 , 2 , 3 } { 4 , 1 , 2 , 3 } 、 { 4 , 3 , 1 , 2 } { 4 , 3 , 1 , 2 } 和 { 4 , 3 , 2 , 1 } { 4 , 3 , 2 , 1 } ．错位排列是没有不动点的排列，即没有长度为 1 的循环． 容斥原理的计算 全集 𝑈 U 即为 1 ∼ 𝑛 1 ∼ n 的排列， | 𝑈 | = 𝑛 ! | U | = n ! ；令 𝑆 𝑖 S i 是其中满足 𝑃 𝑖 ≠ 𝑖 P i ≠ i 的排列．运用补集和 容斥原理 的知识，问题变成求： ∣ ",
+      "bodySha256": "d1f36592649f8f17c2ea2266f16f29900104c813fb345137695eb93701b78430"
+    },
+    {
+      "url": "https://cp-algorithms.com/combinatorics/inclusion-exclusion.html",
+      "title": "The Inclusion-Exclusion Principle - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "Last update: September 18, 2026 Created: October 6, 2016 Translated From: e-maxx.ru The Inclusion-Exclusion Principle ¶ The inclusion-exclusion principle is an important combinatorial way to compute the size of a set or the probability of complex events. It relates the sizes of individual sets with their union. Statement ¶ The verbal formula ¶ The inclusion-exclusion principle can be expressed as follows: To compute the size of a union of multiple sets, it is necessary to sum the sizes of these sets separately , and then subtract the sizes of all pairwise intersections of the sets, then add back the size of the intersections of triples of the sets, subtract the size of quadruples of the sets",
+      "bodySha256": "c41b9ca1f78db5735a2731045593e7d52b5d05e11d6e11e0d45afeab974dc409"
+    },
+    {
+      "url": "https://cp-algorithms.com/dynamic_programming/knapsack.html",
+      "title": "Knapsack Problem - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "Last update: September 18, 2026 Created: May 18, 2024 Original Knapsack Problem ¶ Prerequisite knowledge: Introduction to Dynamic Programming Introduction ¶ Consider the following example: [USACO07 Dec] Charm Bracelet ¶ There are $n$ distinct items and a knapsack of capacity $W$ . Each item has 2 attributes, weight ( $w_{i}$ ) and value ( $v_{i}$ ). You have to select a subset of items to put into the knapsack such that the total weight does not exceed the capacity $W$ and the total value is maximized. In the example above, each object has only two possible states (taken or not taken), corresponding to binary 0 and 1. Thus, this type of problem is called the \"0-1 knapsack problem\". 0-1 Knaps",
+      "bodySha256": "30ea71cc75b24651ec666a593ee22ae7bc3a9d5c6ebbbb04f28b8cc5849d294b"
+    },
+    {
+      "url": "https://oi-wiki.org/dp/opt/monotonic-queue-stack/",
+      "title": "单调队列/单调栈优化 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "单调队列/单调栈优化 引入 前置知识： 单调队列 、 单调栈 ． 单调队列主要用于维护两端指针单调不减的区间最值，而单调栈则主要用于维护前/后第一个大于/小于当前值的数． 注意 求最小值要维护 单调递增/不减 的单调队列/单调栈，反之亦然． 维护单调递增/递减比较时用 小于等于/大于等于 ，维护单调不减/不增比较时用 小于/大于 ． 单调队列优化具体步骤 加入所需元素：向单调队列重复加入元素直到当前元素达到所求区间的右边界，这样就能保证所需元素都在单调队列中． 弹出越界队首：单调队列本质上维护的是所有已插入元素的最值，但我们想要的往往是一个区间最值．于是我们弹出在左边界外的元素，以保证单调队列中的元素都在所求区间中． 获取最值：直接取队首作为答案即可． 单调栈优化具体步骤 弹出非法栈顶：通过比较当前元素与栈顶的大小，弹出不满足单调栈性质的栈顶．以单调递增的栈（即栈顶最大，维护最小值）为例，将所有大于等于当前元素的栈内元素全部弹出． 加入当前元素：将当前元素入栈即可． 单调队列优化多重背包 问题描述 你有 𝑛 n 个物品，每个物品重量为 𝑤 𝑖 w i ，价值为 𝑣 𝑖 v i ，数量为 𝑘 𝑖 k i ．你有一个承重上限为 𝑊 W 的背包，现在要求你在不超过重量上限的情况下选取价值和尽可能大的物品放入背包．求最大价值． 不了解背包 DP 的请先阅读 背包 DP ．设 𝑓 𝑖 , 𝑗 f i , j 表示前 𝑖 i 个物品装入承重为 𝑗 j 的背包的最大价值，朴素的转移方程为 𝑓 𝑖 , 𝑗 = 𝑘 𝑖 m a x 𝑘 = 0 ( 𝑓 𝑖",
+      "bodySha256": "e1df07a9cb5ca7fb9da71f1575b08a54c025e60538a9c3dcf49ce02bed393cf6"
+    },
+    {
+      "url": "https://oi-wiki.org/math/number-theory/euclidean/",
+      "title": "类欧几里得算法 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "类欧几里得算法 引入 类欧几里得算法是洪华敦在 2016 年冬令营营员交流中提出的内容．它常用于解决形如 ⌊ 𝑎 𝑖 + 𝑏 𝑐 ⌋ ⌊ a i + b c ⌋ 结构的数列（下标为 𝑖 i ）的求和问题．它的主要想法是，利用分数自身的递归结构，将问题转化为更小规模的问题，递归求解．因为分数的递归结构和 欧几里得算法 存在直接的 联系 ，因此，这一求和方法也称为类欧几里得算法． 因为 连分数 和 Stern–Brocot 树 等方法同样刻画了分数的递归结构，所以利用类欧几里得算法可以解决的问题，通常也可以用这些方法解决．与这些方法相比，类欧几里得算法通常更容易理解，它的实现也更为简明． 类欧几里得算法 最简单的例子，就是求和问题： 𝑓 ( 𝑎 , 𝑏 , 𝑐 , 𝑛 ) = 𝑛 ∑ 𝑖 = 0 ⌊ 𝑎 𝑖 + 𝑏 𝑐 ⌋ , f ( a , b , c , n ) = ∑ i = 0 n ⌊ a i + b c ⌋ , 其中， 𝑎 , 𝑏 , 𝑐 , 𝑛 a , b , c , n 都是正整数． 代数解法 首先，将 𝑎 , 𝑏 a , b 对 𝑐 c 取模，可以简化问题，将问题转化为 0 ≤ 𝑎 , 𝑏 < 𝑐 0 ≤ a , b < c 的情形： 𝑓 ( 𝑎 , 𝑏 , 𝑐 , 𝑛 ) = 𝑛 ∑ 𝑖 = 0 ⌊ 𝑎 𝑖 + 𝑏 𝑐 ⌋ = 𝑛 ∑ 𝑖 = 0 ⌊ ( ⌊ 𝑎 𝑐 ⌋ 𝑐 + ( 𝑎 m o d 𝑐 ) ) 𝑖 + ( ⌊ 𝑏 𝑐 ⌋ 𝑐 + ( 𝑏 m o d \ud835",
+      "bodySha256": "05bacce5b8b229976bc491b23986ae65b10f947e46c904014f4ca75ac3b9706d"
+    },
+    {
+      "url": "https://cp-algorithms.com/algebra/euclid-algorithm.html",
+      "title": "Euclidean algorithm for computing the greatest common divisor - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "Last update: October 15, 2024 Created: January 13, 2017 Translated From: e-maxx.ru Euclidean algorithm for computing the greatest common divisor ¶ Given two non-negative integers $a$ and $b$ , we have to find their GCD (greatest common divisor), i.e. the largest number which is a divisor of both $a$ and $b$ . It's commonly denoted by $\\gcd(a, b)$ . Mathematically it is defined as: $$\\gcd(a, b) = \\max \\{k > 0 : (k \\mid a) \\text{ and } (k \\mid b) \\}$$ (here the symbol \" $\\mid$ \" denotes divisibility, i.e. \" $k \\mid a$ \" means \" $k$ divides $a$ \") When one of the numbers is zero, while the other is non-zero, their greatest common divisor, by definition, is the second number. When both numbers a",
+      "bodySha256": "ead542fc916db5e6fb6ef256053f7305a6036b572d6e83e4f1dcf67169edf1ac"
+    },
+    {
+      "url": "https://cp-algorithms.com/graph/dijkstra.html",
+      "title": "Dijkstra - finding shortest paths from given vertex - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "Last update: September 24, 2023 Created: October 8, 2016 Translated From: e-maxx.ru Dijkstra Algorithm ¶ You are given a directed or undirected weighted graph with $n$ vertices and $m$ edges. The weights of all edges are non-negative. You are also given a starting vertex $s$ . This article discusses finding the lengths of the shortest paths from a starting vertex $s$ to all other vertices, and output the shortest paths themselves. This problem is also called single-source shortest paths problem . Algorithm ¶ Here is an algorithm described by the Dutch computer scientist Edsger W. Dijkstra in 1959. Let's create an array $d[]$ where for each vertex $v$ we store the current length of the shorte",
+      "bodySha256": "47527781e6216285abe3a0ade1f735f28aec5c8248e6e2d9285ae0b9dd1324d5"
+    },
+    {
+      "url": "https://oi-wiki.org/geometry/scanning/",
+      "title": "扫描线 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "扫描线 引入 扫描线一般运用在图形上面，它和它的字面意思十分相似，就是一条线在整个图上扫来扫去，它一般被用来解决图形面积，周长，以及二维数点等问题． 二维矩形面积并问题 在二维坐标系上，给出多个矩形的左下以及右上坐标，求出所有矩形构成的图形的面积． 过程 根据图片可知总面积可以直接暴力求出，如果数据大了怎么办？这时就需要讲到 扫描线 算法． 现在假设我们有一根线，从下往上开始扫描： 如图所示，把整个矩形分成如图各个颜色不同的小矩形，小矩形的高是扫过的距离，然而矩形的水平宽一直在变化． 给每一个矩形的上下边进行标记，下面的边标记为 1，上面的边标记为 -1．每遇到一个水平边时，让这条边（在横轴投影区间）的权值加上这条边的标记． Note 这个操作类似遍历括号序列：开括号加 1，闭括号减 1，「权值」对应当前位置的深度，「权值」是否大于 0，对应当前在不在括号里，也就是这段区间是否记入小矩形的宽度． 小矩形（不一定只有一个）的宽度就是整个数轴上权值大于 0 的区间总长度． 实现 用线段树维护矩形的长，也就是整个数轴上覆盖次数大于 0 的点．需求列举如下： 一段区间权值加 1、减 1． 统计整个数轴上，区间权值大于 0 的「区间长度和」． 如果你尝试直接用普通线段树模板来实现的话，也许会遇到些挫折．具体地，由于在区间加时，即使修改区间和节点管理区间重合，我们还是不能常数时间知道覆盖次数如何变化．这是因为我们不能直接知道：管理范围里有多长的区间会从 1 变成 0（从 0 变成 1）． 这道题只需要朴素的分治就能实现：维护每个节点管理区间中「完全覆盖区间的次数 v[] 」（类似不用下放的",
+      "bodySha256": "96057c2021dcfeeb53a7b548de233f2cf8d9c919ca2f963fb76f8948990edca8"
+    },
+    {
+      "url": "https://cp-algorithms.com/algebra/all-submasks.html",
+      "title": "Enumerating submasks of a bitmask - Algorithms for Competitive Programming",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic",
+      "excerpt": "Last update: June 6, 2022 Created: October 3, 2016 Translated From: e-maxx.ru Submask Enumeration ¶ Enumerating all submasks of a given mask ¶ Given a bitmask $m$ , you want to efficiently iterate through all of its submasks, that is, masks $s$ in which only bits that were included in mask $m$ are set. Consider the implementation of this algorithm, based on tricks with bit operations: int s = m ; while ( s > 0 ) { ... you can use s ... s = ( s -1 ) & m ; } or, using a more compact for statement: for ( int s = m ; s ; s = ( s -1 ) & m ) ... you can use s ... In both variants of the code, the submask equal to zero will not be processed. We can either process it outside the loop, or use a less ",
+      "bodySha256": "b4d85ea488cc495c4bd416310551e7755b13fcfe6ab85c09bf75e7ffcc7d590b"
+    },
+    {
+      "url": "https://usaco.guide/plat/dp-sos",
+      "title": "Sum over Subsets DP · USACO Guide",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-text",
+      "excerpt": "通过子掩码枚举 O(3^n) 到逐维 DP O(n 2^n)，并说明 SOS DP 与高维前缀和的关系；难度五档是本目录评估。"
+    },
+    {
+      "url": "https://usaco.guide/plat/sweep-line",
+      "title": "Sweep Line · USACO Guide",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-text",
+      "excerpt": "扫描线按关键事件推进，先讲活动区间计数，再讨论最近点对、线段与径向扫描；综合应用难度高于基础事件排序。"
+    },
+    {
+      "url": "https://oi-wiki.org/ds/seg/",
+      "title": "线段树基础 - OI Wiki",
+      "checkedAt": "2026-11-10",
+      "evidenceType": "fetched-topic-or-prerequisite",
+      "excerpt": "线段树基础 引入 线段树是算法竞赛中常用的用来维护 区间信息 的数据结构． 线段树可以在 𝑂 ( l o g ⁡ 𝑁 ) O ( log ⁡ N ) 的时间复杂度内实现单点修改、单点查询、区间修改、区间查询等操作． 基本结构与操作 线段树是一棵二叉树．它的每个结点都存储一段区间的信息： 叶结点处存储的是单个元素 𝑥 x 处的信息，也可以看作是长度为 1 1 的区间 [ 𝑥 , 𝑥 ] [ x , x ] 上的信息． 以非叶结点为根的子树的叶结点构成一段连续的区间 [ 𝑙 , 𝑟 ] [ l , r ] ．那么，该结点处就存储区间 [ 𝑙 , 𝑟 ] [ l , r ] 上的信息． 非叶结点总有两个子结点，它对应的区间就恰为这两个子结点对应区间的不交并．设某个非叶结点存储区间 [ 𝑙 , 𝑟 ] ( 𝑙 < 𝑟 ) [ l , r ] ( l < r ) 上的信息，那么，它的两个子结点存储的就分别是 [ 𝑙 , 𝑚 ] [ l , m ] 和 [ 𝑚 + 1 , 𝑟 ] [ m + 1 , r ] 上的信息，其中， 𝑙 ≤ 𝑚 < 𝑟 l ≤ m < r ． 线段树的根结点处就存储着整段区间 [ 𝐿 , 𝑅 ] [ L , R ] 上的信息．线段树的规模用该区间的长度 𝑁 = 𝑅 − 𝐿 + 1 N = R − L + 1 表示． 区间信息 线段树可以维护区间信息．本节介绍区间信息需要满足的常见性质以及相应的实现方法． 一般地， 区间信息 是以区间为自变量的函数 𝜑 : I → 𝑀 φ : I → M ，其中， I I 表示 ",
+      "bodySha256": "7d8b493ad8f653d0992ab9d213963b43ef07af435966166862fd599c5194b054"
+    }
+    ,{
+      "url": "https://oi-wiki.org/dp/tree/",
+      "title": "树形 DP - OI Wiki",
+      "checkedAt": "2026-11-11",
+      "evidenceType": "fetched-topic-navigation",
+      "excerpt": "已读取树形 DP 页面及其基础主题导航；本页用于树形状态与遍历的先修参考。两条树形背包的具体连通选点教学模型由本项目明确，不宣称原来源给出同一模型或难度。"
+    }
+  ]
+}

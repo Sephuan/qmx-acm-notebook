@@ -1,0 +1,422 @@
+{
+  "stage-01-gate-01": {
+    "learningTitle": "初识 C++ · 把题意写成程序",
+    "learningDescription": "先用输入输出、分支和循环把题意逐步执行，再检查整数范围。写稳这些基本动作，后面的模拟、容器和算法才有可靠的落脚点。",
+    "threadGateIds": ["stage-01-gate-06", "stage-01-gate-07", "stage-02-gate-07"]
+  },
+  "stage-01-gate-02": {
+    "learningTitle": "初识函数 · 给重复步骤一个名字",
+    "learningDescription": "把重复步骤封装成函数，用数组保存一批数据，并明确每次初始化的范围。这种输入、处理、输出的拆分方式，也会帮助你写清后面的二分判定与搜索过程。",
+    "threadGateIds": ["stage-01-gate-04", "stage-04-gate-01", "stage-04-gate-02"]
+  },
+  "stage-01-gate-03": {
+    "learningTitle": "初识 STL（一）· 存好一串数据",
+    "learningDescription": "从固定数组走向 vector 与 string，练习按下标访问、遍历和增删。先熟悉容器怎样保存序列，再学习排序与查找，避免把算法错误和接口错误混在一起。",
+    "threadGateIds": ["stage-01-gate-05", "stage-02-gate-07", "stage-03-gate-03"]
+  },
+  "stage-01-gate-04": {
+    "learningTitle": "串联 STL · 函数处理序列",
+    "learningDescription": "用函数接收 vector 或 string，把读入、统计与结果输出连成完整流程。这里检验的不是记住几个接口，而是能否在一道题里稳定组织序列数据和处理步骤。",
+    "threadGateIds": ["stage-01-gate-02", "stage-01-gate-03", "stage-02-gate-07"]
+  },
+  "stage-01-gate-05": {
+    "learningTitle": "初识 STL（二）· 排好数据再观察",
+    "learningDescription": "用 pair 表达两个相关属性，用 sort 按明确规则排列。排序既改变处理顺序，也可能显露原来藏在题面里的结构，是后面贪心、二分与双指针的常用准备。",
+    "threadGateIds": ["stage-02-gate-10", "stage-03-gate-03", "stage-03-gate-05"]
+  },
+  "stage-01-gate-06": {
+    "learningTitle": "初识枚举 · 先把可能性走一遍",
+    "learningDescription": "把模拟写成按规则变化的状态，把枚举写成候选方案与合法性检查。朴素做法能先给出正确答案，也会成为之后复杂度优化和对拍验证的参照。",
+    "threadGateIds": ["stage-01-gate-07", "stage-01-gate-11", "stage-04-gate-02"]
+  },
+  "stage-01-gate-07": {
+    "learningTitle": "初识复杂度 · 循环能跑多远",
+    "learningDescription": "接着观察枚举会执行多少次，用数据范围估算时间和空间。先知道哪里做了重复工作，才有理由选择排序、预处理或更紧凑的搜索，而不是只凭模板猜解法。",
+    "threadGateIds": ["stage-01-gate-06", "stage-03-gate-01", "stage-04-gate-07"]
+  },
+  "stage-01-gate-08": {
+    "learningTitle": "串联排序 · 让枚举更有条理",
+    "learningDescription": "先考虑直接模拟与枚举，再判断排序能否简化处理顺序。用这一组题练习从题意到数据、从数据到步骤的完整过程，并解释每一步对答案有什么作用。",
+    "threadGateIds": ["stage-01-gate-05", "stage-01-gate-06", "stage-02-gate-04"]
+  },
+  "stage-01-gate-09": {
+    "learningTitle": "组织数据 · 引用与结构体",
+    "learningDescription": "当一条记录有多个属性时，用结构体让含义更清楚；传递与修改数据时，分清值和引用。配合已经学过的排序，你就能处理带编号、名称和数值的完整记录。",
+    "threadGateIds": ["stage-01-gate-02", "stage-01-gate-05", "stage-01-gate-12"]
+  },
+  "stage-01-gate-10": {
+    "learningTitle": "初识递推 · 从已知走向下一步",
+    "learningDescription": "用少量已知量逐步算出后续结果，写清每轮迭代保存什么。递推不一定是动态规划，但这种状态含义与更新顺序的意识，会在后面的 DP 中继续发挥作用。",
+    "threadGateIds": ["stage-05-gate-01", "stage-05-gate-02", "stage-08-gate-10"]
+  },
+  "stage-01-gate-11": {
+    "learningTitle": "初识对拍 · 用朴素答案查错误",
+    "learningDescription": "保留简单枚举作为参照，把待检查程序与它的输出逐组比较。发现不同后缩小数据、寻找最小反例，让之前学过的边界与复杂度分析真正参与调试。",
+    "threadGateIds": ["stage-01-gate-06", "stage-03-gate-11", "stage-02-gate-10"]
+  },
+  "stage-01-gate-12": {
+    "learningTitle": "基础合流 · STL、枚举与模拟",
+    "learningDescription": "不按单个知识点给提示，把容器存储、排序和逐步执行题意组合起来。做完后回看：哪些步骤负责正确性，哪些步骤只是整理数据，为下一章选择容器打好基础。",
+    "threadGateIds": ["stage-01-gate-05", "stage-01-gate-06", "stage-02-gate-12"]
+  },
+  "stage-02-gate-01": {
+    "learningTitle": "初识 STL（三）· 给频次安上键",
+    "learningDescription": "数组计数依赖合适的下标，map 则让字符串或离散数值也能对应频次。先分清键与值，再观察题目是否真正需要有序访问，后面才能比较不同映射容器。",
+    "threadGateIds": ["stage-02-gate-04", "stage-02-gate-07", "stage-02-gate-11"]
+  },
+  "stage-02-gate-02": {
+    "learningTitle": "初识 STL（四）· 集合里的重复",
+    "learningDescription": "从 map 的键转向 set 与 multiset，区分去重集合和允许重复的集合。通过插入、查找与删除维护当前元素，为后面动态窗口和顺序处理积累容器选择经验。",
+    "threadGateIds": ["stage-02-gate-01", "stage-02-gate-11", "stage-03-gate-05"]
+  },
+  "stage-02-gate-03": {
+    "learningTitle": "初识 STL（五）· 先来还是后到",
+    "learningDescription": "同样是一批待处理元素，栈与队列约定了不同的取出顺序。把这种顺序直接对应到题意中的等待和撤销，之后理解 BFS 的层次扩展会更自然。",
+    "threadGateIds": ["stage-02-gate-06", "stage-04-gate-03", "stage-07-gate-03"]
+  },
+  "stage-02-gate-04": {
+    "learningTitle": "串联计数 · map 与排序分工",
+    "learningDescription": "把频次统计交给 map，把记录的处理顺序交给排序。练习判断题目需要的是按键合并、按值排序，还是两者共同完成，避免见到计数就只用一种容器。",
+    "threadGateIds": ["stage-02-gate-01", "stage-01-gate-05", "stage-03-gate-09"]
+  },
+  "stage-02-gate-05": {
+    "learningTitle": "初识 STL（六）· 每次取出最值",
+    "learningDescription": "队列固定先后，priority_queue 则按优先级取出当前最值。理解堆维护的是可用候选集合，而不是完整排序，后面就能把它用于贪心选择和最短路扩展。",
+    "threadGateIds": ["stage-02-gate-08", "stage-02-gate-12", "stage-06-gate-02"]
+  },
+  "stage-02-gate-06": {
+    "learningTitle": "初识 STL（七）· 两端都能操作",
+    "learningDescription": "在栈和队列之后，用 deque 表达两端插入、两端删除的操作规则。先写对题目要求的顺序，再看哪些操作可以省去，为后面的单调队列准备容器基础。",
+    "threadGateIds": ["stage-02-gate-03", "stage-02-gate-08", "stage-07-gate-05"]
+  },
+  "stage-02-gate-07": {
+    "learningTitle": "进阶 string · 从存取到处理",
+    "learningDescription": "回到第一章的 string，这次用截取、查找和字符统计组合处理文本。分清每个操作的代价，后面学习哈希与 KMP 时，才能看见专门匹配算法解决的重复工作。",
+    "threadGateIds": ["stage-01-gate-03", "stage-07-gate-09", "stage-07-gate-10"]
+  },
+  "stage-02-gate-08": {
+    "learningTitle": "串联容器 · 等待队列与优先选择",
+    "learningDescription": "面对一段连续发生的操作，判断哪些元素按到达顺序处理，哪些元素应优先取出。把队列、堆和模拟组合起来，练习用不同容器表达同一个流程的不同部分。",
+    "threadGateIds": ["stage-02-gate-03", "stage-02-gate-05", "stage-02-gate-12"]
+  },
+  "stage-02-gate-09": {
+    "learningTitle": "初识数论 · GCD 与整除关系",
+    "learningDescription": "从逐个检查整除走向 GCD 与 LCM，理解它们分别描述怎样的公共关系。注意乘除顺序和溢出，再把这些关系带进枚举与搜索题，而不是只背求值函数。",
+    "threadGateIds": ["stage-03-gate-07", "stage-04-gate-06", "stage-11-gate-10"]
+  },
+  "stage-02-gate-10": {
+    "learningTitle": "初识贪心（一）· 排序后的选择",
+    "learningDescription": "排序让候选方案有了顺序，但当前最优选择未必带来整体最优。先尝试局部规则，再用反例检查；之后学习交换论证，给真正成立的规则补上理由。",
+    "threadGateIds": ["stage-01-gate-05", "stage-04-gate-09", "stage-07-gate-06"]
+  },
+  "stage-02-gate-11": {
+    "learningTitle": "容器对照 · 有序映射与哈希映射",
+    "learningDescription": "已经会用 map 与 set，再比较 unordered_map、unordered_set 的接口和代价。把是否需要有序性、平均性能与退化风险一起考虑，按数据和操作选择容器。",
+    "threadGateIds": ["stage-02-gate-01", "stage-02-gate-02", "stage-07-gate-09"]
+  },
+  "stage-02-gate-12": {
+    "learningTitle": "工具合流 · 计数、堆与贪心",
+    "learningDescription": "用 map 管理频次，用优先队列管理候选，再验证每一步贪心选择是否合理。把容器的维护规则和算法的正确性分开说明，检验能否在新题中自行组合工具。",
+    "threadGateIds": ["stage-02-gate-01", "stage-02-gate-05", "stage-02-gate-10"]
+  },
+  "stage-03-gate-01": {
+    "learningTitle": "初识前缀和（一）· 存下累计信息",
+    "learningDescription": "反复枚举区间元素会做很多重复加法，把从起点累积的和预先保存，就能用两端信息得到区间和。这是从静态预处理走向动态区间维护的第一块积木。",
+    "threadGateIds": ["stage-03-gate-10", "stage-07-gate-01", "stage-07-gate-02"]
+  },
+  "stage-03-gate-02": {
+    "learningTitle": "初识差分 · 记录变化而非全量",
+    "learningDescription": "前缀和从局部信息还原累计量，差分则把连续修改压到边界上记录。先区分修改与还原的时机，后面再思考交错查询时为什么需要更强的数据结构。",
+    "threadGateIds": ["stage-03-gate-01", "stage-04-gate-11", "stage-08-gate-01"]
+  },
+  "stage-03-gate-03": {
+    "learningTitle": "初识二分（一）· 找到有序边界",
+    "learningDescription": "在排好序的数组里，利用单调的大小关系不断缩小范围。把边界含义与相等时的去向写清楚，之后把查找对象从数组位置换成答案时，仍能复用这套思路。",
+    "threadGateIds": ["stage-01-gate-05", "stage-04-gate-01", "stage-05-gate-03"]
+  },
+  "stage-03-gate-04": {
+    "learningTitle": "串联预处理 · 排序、前缀和与二分",
+    "learningDescription": "排序确定顺序，前缀和保存累计信息，二分定位满足条件的边界。练习说明三者各自减少哪部分重复工作，并检查排序后的统计含义是否仍与原题一致。",
+    "threadGateIds": ["stage-01-gate-05", "stage-03-gate-01", "stage-03-gate-03"]
+  },
+  "stage-03-gate-05": {
+    "learningTitle": "初识双指针 · 让边界只向前走",
+    "learningDescription": "有序性不仅支持二分，也可能让两个指针有规律地移动。先证明移动不会漏掉候选，再计算每个指针的总路程，把复杂度分析从循环层数转向实际移动次数。",
+    "threadGateIds": ["stage-03-gate-03", "stage-04-gate-11", "stage-07-gate-05"]
+  },
+  "stage-03-gate-06": {
+    "learningTitle": "初识构造 · 先判断能不能做到",
+    "learningDescription": "枚举可以检验小例子，奇偶信息则可能揭示所有方案都要满足的限制。先找必要条件，再给出确实可行的构造，分清无解证明与输出方案各自要完成的任务。",
+    "threadGateIds": ["stage-04-gate-05", "stage-12-gate-11", "stage-14-gate-11"]
+  },
+  "stage-03-gate-07": {
+    "learningTitle": "初识快速幂 · 拆开重复乘法",
+    "learningDescription": "把相同底数的连乘拆成平方与选取，用指数的二进制结构减少运算次数。写清每次保留的结果与剩余指数，之后模逆元和矩阵递推会继续使用这个工具。",
+    "threadGateIds": ["stage-04-gate-05", "stage-06-gate-10", "stage-08-gate-10"]
+  },
+  "stage-03-gate-08": {
+    "learningTitle": "串联数学 · 枚举、构造与快速幂",
+    "learningDescription": "用枚举寻找小数据规律，用构造给出可行方案，再在需要重复乘法时使用快速幂。综合题里先判断数学关系与操作需求，再选择工具，避免把三种方法硬凑在一起。",
+    "threadGateIds": ["stage-01-gate-06", "stage-03-gate-06", "stage-03-gate-07"]
+  },
+  "stage-03-gate-09": {
+    "learningTitle": "进阶计数 · 用值域完成排序",
+    "learningDescription": "此前用 map 保存频次，这次在值域较小时直接用桶记录。比较按元素个数排序与按值域扫描的代价，体会数据范围本身也能成为选择算法的重要信息。",
+    "threadGateIds": ["stage-02-gate-01", "stage-01-gate-05", "stage-04-gate-10"]
+  },
+  "stage-03-gate-10": {
+    "learningTitle": "进阶前缀和（二）· 拼出矩形统计",
+    "learningDescription": "把一维的累计信息扩展到网格，使用重叠区域的加减还原矩形答案。先画清四块区域的关系，再写边界，给后面处理更复杂的重复计数积累直观经验。",
+    "threadGateIds": ["stage-03-gate-01", "stage-06-gate-11", "stage-03-gate-11"]
+  },
+  "stage-03-gate-11": {
+    "learningTitle": "验证前缀和 · 与区间枚举对拍",
+    "learningDescription": "用逐项相加作为参照，检查前缀统计在空区间、端点和重复查询下的结果。把最小反例对应回公式中的位置，练习用程序验证推导，而不是只多试几个样例。",
+    "threadGateIds": ["stage-01-gate-11", "stage-03-gate-01", "stage-03-gate-10"]
+  },
+  "stage-03-gate-12": {
+    "learningTitle": "序列合流 · 前缀、双指针与构造",
+    "learningDescription": "面对新的序列条件，分别考虑累计统计、单调移动和直接构造。先辨别题目的结构，再组合必要的方法，并用小数据枚举检查是否遗漏了边界方案。",
+    "threadGateIds": ["stage-03-gate-01", "stage-03-gate-05", "stage-03-gate-06"]
+  },
+  "stage-04-gate-01": {
+    "learningTitle": "进阶二分（二）· 把答案变成判定",
+    "learningDescription": "二分查找依赖有序数组，二分答案依赖可证明的可行性单调。先写出给定答案怎样检查，再证明边界两侧的含义，之后才能安全地缩小答案范围。",
+    "threadGateIds": ["stage-03-gate-03", "stage-04-gate-04", "stage-11-gate-08"]
+  },
+  "stage-04-gate-02": {
+    "learningTitle": "初识搜索（一）· 沿选择展开枚举",
+    "learningDescription": "把平铺的枚举变成一层层选择，用 DFS 进入分支，再在返回时撤销修改。先保证每个合法方案都能到达，后面加入剪枝时才知道哪些分支可以有理由地省去。",
+    "threadGateIds": ["stage-01-gate-06", "stage-04-gate-07", "stage-05-gate-07"]
+  },
+  "stage-04-gate-03": {
+    "learningTitle": "初识搜索（二）· BFS 一层层走近",
+    "learningDescription": "队列让 BFS 按扩展层次访问状态，在等权网格中得到最短步数。分清状态、邻接关系与访问标记；之后边的代价不同时，再比较它与 Dijkstra 的不同。",
+    "threadGateIds": ["stage-02-gate-03", "stage-05-gate-09", "stage-06-gate-02"]
+  },
+  "stage-04-gate-04": {
+    "learningTitle": "串联二分与贪心 · 判定也要证明",
+    "learningDescription": "二分负责缩小答案，贪心可能负责检查某个答案是否可行。分别证明可行性的单调与判定规则的正确性，避免用一个看似合理的局部选择破坏整套二分。",
+    "threadGateIds": ["stage-04-gate-01", "stage-02-gate-10", "stage-04-gate-09"]
+  },
+  "stage-04-gate-05": {
+    "learningTitle": "初识位运算 · 用位表达状态",
+    "learningDescription": "从奇偶信息继续观察每一位如何保存开关或集合成员，练习掩码与基本位操作。先让表示和题意对应清楚，之后状态压缩 DP 才能把集合真正放进状态里。",
+    "threadGateIds": ["stage-03-gate-06", "stage-03-gate-07", "stage-08-gate-05"]
+  },
+  "stage-04-gate-06": {
+    "learningTitle": "进阶数论 · 素数信息一次筛好",
+    "learningDescription": "当许多数都要判断素性时，逐个试除会重复检查。比较埃式筛与线性筛怎样组织标记过程，把预处理思想从区间统计带到整数性质，为后续数论工具提供基础。",
+    "threadGateIds": ["stage-02-gate-09", "stage-06-gate-10", "stage-12-gate-09"]
+  },
+  "stage-04-gate-07": {
+    "learningTitle": "进阶搜索（三）· 有依据地剪枝",
+    "learningDescription": "在能完整枚举的 DFS 上，利用当前状态判断哪些分支已经不可能成功。保留递归边界与撤销规则，并用未剪枝程序核对小数据，防止优化时误删正确方案。",
+    "threadGateIds": ["stage-04-gate-02", "stage-01-gate-11", "stage-05-gate-07"]
+  },
+  "stage-04-gate-08": {
+    "learningTitle": "搜索合流 · DFS、枚举与整除",
+    "learningDescription": "把数论限制放进搜索状态，在候选生成和合法性检查中使用整除关系。先说明搜索覆盖哪些方案，再决定哪些条件可以提前检查，让数学观察真正减少枚举工作。",
+    "threadGateIds": ["stage-04-gate-02", "stage-02-gate-09", "stage-04-gate-07"]
+  },
+  "stage-04-gate-09": {
+    "learningTitle": "进阶贪心（二）· 用交换解释选择",
+    "learningDescription": "接着第一轮的排序与反例，这次尝试把任意可行方案逐步交换成贪心方案。说明交换为何不变差，也保留寻找反例的习惯，让局部选择从猜测走向可验证的结论。",
+    "threadGateIds": ["stage-02-gate-10", "stage-07-gate-06", "stage-12-gate-11"]
+  },
+  "stage-04-gate-10": {
+    "learningTitle": "初识离散化 · 缩小值域保留顺序",
+    "learningDescription": "值很大时，先排序去重，再用排名表达相对大小。明确哪些信息被保留、哪些数值距离会丢失，为后面的树状数组与离线统计准备合适的下标。",
+    "threadGateIds": ["stage-03-gate-09", "stage-07-gate-04", "stage-12-gate-04"]
+  },
+  "stage-04-gate-11": {
+    "learningTitle": "串联扫描 · 双指针与差分分工",
+    "learningDescription": "双指针组织区间如何移动，差分记录一批区间修改。分清两种方法各自依赖的条件，再判断它们能否共同减少重复扫描，或者题目其实只需要其中一种。",
+    "threadGateIds": ["stage-03-gate-05", "stage-03-gate-02", "stage-07-gate-05"]
+  },
+  "stage-04-gate-12": {
+    "learningTitle": "方法合流 · 二分、搜索与贪心",
+    "learningDescription": "先根据状态规模与条件结构，决定枚举搜索、单调判定还是局部选择。综合挑战会混合这些入口，重点是解释为何采用某条路线，以及其他方法在哪里失效。",
+    "threadGateIds": ["stage-04-gate-01", "stage-04-gate-03", "stage-04-gate-09"]
+  },
+  "stage-05-gate-01": {
+    "learningTitle": "初识 DP（一）· 状态要说明什么",
+    "learningDescription": "在递推和搜索之后，开始明确一个状态代表哪些子问题、需要保存什么答案。状态应足以支持下一次转移，但不必保存全部历史；这会成为后面各类 DP 的共同语言。",
+    "threadGateIds": ["stage-01-gate-10", "stage-05-gate-02", "stage-05-gate-07"]
+  },
+  "stage-05-gate-02": {
+    "learningTitle": "初识 DP（二）· 沿序列汇总最优值",
+    "learningDescription": "从状态定义出发，把序列前面的结果用于当前决策，检查最优子结构和转移顺序。递推只是计算形式，能否正确概括子问题才决定这套 DP 是否成立。",
+    "threadGateIds": ["stage-05-gate-01", "stage-05-gate-03", "stage-06-gate-07"]
+  },
+  "stage-05-gate-03": {
+    "learningTitle": "进阶 DP（三）· LIS 的两种观察",
+    "learningDescription": "先用前驱关系描述最长上升子序列，再观察哪些信息可以压缩维护。把状态含义与有序边界联系起来，为比较线性 DP、二分和贪心式维护提供具体例子。",
+    "threadGateIds": ["stage-05-gate-02", "stage-03-gate-03", "stage-05-gate-04"]
+  },
+  "stage-05-gate-04": {
+    "learningTitle": "辨型练习 · 贪心、二分还是 DP",
+    "learningDescription": "三种方法都可能处理序列题，却各自依赖不同结构。用混练区分局部选择、单调边界与子问题转移；允许它们组合，也要说明组合后每一部分负责什么。",
+    "threadGateIds": ["stage-04-gate-09", "stage-03-gate-03", "stage-05-gate-02"]
+  },
+  "stage-05-gate-05": {
+    "learningTitle": "初识背包（一）· 选或不选一件物品",
+    "learningDescription": "把有限容量下的选择写成状态，比较不选与选当前物品的结果。留意每件物品只能使用一次，转移实现的循环方向必须与这个限制一致。",
+    "threadGateIds": ["stage-05-gate-01", "stage-05-gate-06", "stage-08-gate-07"]
+  },
+  "stage-05-gate-06": {
+    "learningTitle": "进阶背包（二）· 重复选择改变转移",
+    "learningDescription": "保留容量状态，把物品从只能用一次改为可以重复使用。对照 01 背包解释循环方向为何变化，再用小数据检查是否重复计数或漏掉可行选择。",
+    "threadGateIds": ["stage-05-gate-05", "stage-05-gate-08", "stage-08-gate-07"]
+  },
+  "stage-05-gate-07": {
+    "learningTitle": "搜索遇见 DP · 缓存重复子问题",
+    "learningDescription": "回看 DFS 是否反复到达含义相同的状态，在结果只由该状态决定时缓存答案。记忆化搜索和迭代 DP 可以表达相同的子问题关系，但都需要正确的依赖与边界。",
+    "threadGateIds": ["stage-04-gate-02", "stage-05-gate-01", "stage-05-gate-08"]
+  },
+  "stage-05-gate-08": {
+    "learningTitle": "状态合流 · 背包与记忆化搜索",
+    "learningDescription": "同样的选择问题，可以从递归探索，也可以按容量顺序推进。混练时先确定物品使用限制与状态含义，再选择实现方式，检查两种写法是否计算了同一组子问题。",
+    "threadGateIds": ["stage-05-gate-05", "stage-05-gate-06", "stage-05-gate-07"]
+  },
+  "stage-05-gate-09": {
+    "learningTitle": "初识图论 · 把关系连成图",
+    "learningDescription": "把网格搜索中的相邻状态推广成点与边，用遍历找出所有能互相到达的部分。图的表示与访问标记写清楚后，就能继续讨论集合连通、路径代价和依赖顺序。",
+    "threadGateIds": ["stage-04-gate-03", "stage-05-gate-10", "stage-06-gate-01"]
+  },
+  "stage-05-gate-10": {
+    "learningTitle": "初识并查集 · 只维护属于哪一组",
+    "learningDescription": "遍历可以找连通块，并查集则在不断合并时维护集合归属。理解它擅长回答哪些关系问题，也记住它不保存具体路径，为最小生成树与带权关系打下基础。",
+    "threadGateIds": ["stage-05-gate-09", "stage-07-gate-06", "stage-09-gate-03"]
+  },
+  "stage-05-gate-11": {
+    "learningTitle": "进阶 DP（四）· 从最优值到方案数",
+    "learningDescription": "状态不仅能保存最优结果，也能累计达到条件的方案数。检查方案是否重复、初始空方案怎样计入，再回看背包的循环顺序如何影响实际统计的对象。",
+    "threadGateIds": ["stage-05-gate-01", "stage-05-gate-06", "stage-06-gate-09"]
+  },
+  "stage-05-gate-12": {
+    "learningTitle": "基础模型合流 · DP、BFS 与集合",
+    "learningDescription": "用状态转移处理递推，用 BFS 处理等权步数，用并查集维护集合关系。挑战要求先辨认题目真正询问什么，再组合必要模型，而不是把所有工具都套进一道题。",
+    "threadGateIds": ["stage-05-gate-02", "stage-04-gate-03", "stage-05-gate-10"]
+  },
+  "stage-06-gate-01": {
+    "learningTitle": "进阶图论 · 沿依赖顺序处理",
+    "learningDescription": "图的遍历关注能否到达，拓扑排序关注依赖能否依次满足。找出 DAG 上合法的处理顺序后，前驱信息就能逐步传给后继，为图上的递推准备顺序。",
+    "threadGateIds": ["stage-05-gate-09", "stage-06-gate-04", "stage-09-gate-04"]
+  },
+  "stage-06-gate-02": {
+    "learningTitle": "初识最短路 · Dijkstra 挑近的走",
+    "learningDescription": "BFS 按步数分层，Dijkstra 用优先队列选择当前距离最小的候选。理解非负边条件如何支撑这个选择，再把堆、图表示和距离更新串成完整算法。",
+    "threadGateIds": ["stage-04-gate-03", "stage-02-gate-05", "stage-06-gate-03"]
+  },
+  "stage-06-gate-03": {
+    "learningTitle": "进阶最短路 · Floyd 枚举中转点",
+    "learningDescription": "从单个起点转向所有点对，Floyd 按允许使用的中转点逐步更新路径。写清外层枚举的含义，再比较它与 Dijkstra 在规模、路径需求和复杂度上的差别。",
+    "threadGateIds": ["stage-06-gate-02", "stage-05-gate-01", "stage-06-gate-04"]
+  },
+  "stage-06-gate-04": {
+    "learningTitle": "路径辨型 · BFS、Dijkstra 与 DAG",
+    "learningDescription": "先检查边权是否相同、图是否无环、问题是否只问可达，再选扩展顺序。混练把同样的点边表示放到不同约束下，体会图模型相似并不代表算法可以互换。",
+    "threadGateIds": ["stage-04-gate-03", "stage-06-gate-02", "stage-06-gate-01"]
+  },
+  "stage-06-gate-05": {
+    "learningTitle": "初识树 · 从父子关系汇总信息",
+    "learningDescription": "树没有一般图中的任意环路，确定根后就有清楚的父子与子树关系。练习在遍历时向下传递、向上汇总，给之后的树形 DP 和子树区间表示建立直觉。",
+    "threadGateIds": ["stage-05-gate-09", "stage-07-gate-07", "stage-08-gate-03"]
+  },
+  "stage-06-gate-06": {
+    "learningTitle": "进阶 DP（五）· 区间从哪里分开",
+    "learningDescription": "把子问题从序列位置扩展成左右端点，枚举分割点连接较小区间的结果。先保证计算时依赖已经就绪，再检查合并代价，让状态组织方式与实际结构一致。",
+    "threadGateIds": ["stage-05-gate-01", "stage-05-gate-02", "stage-11-gate-02"]
+  },
+  "stage-06-gate-07": {
+    "learningTitle": "进阶 DP（六）· LCS 对齐两条序列",
+    "learningDescription": "LIS 在一条序列里找上升关系，LCS 则同时考虑两条序列的前缀。用二维状态表达匹配与跳过，比较两个问题的转移含义，建立序列 DP 的共同视角。",
+    "threadGateIds": ["stage-05-gate-03", "stage-05-gate-02", "stage-06-gate-08"]
+  },
+  "stage-06-gate-08": {
+    "learningTitle": "序列 DP 合流 · 区间与匹配",
+    "learningDescription": "面对序列题，先判断子问题由一个前缀、两个前缀还是一段区间描述。混练区间 DP、LCS 与线性 DP，重点是从题目结构选状态，而不是根据数组维数猜模型。",
+    "threadGateIds": ["stage-06-gate-06", "stage-06-gate-07", "stage-05-gate-02"]
+  },
+  "stage-06-gate-09": {
+    "learningTitle": "初识组合 · 从选择数到杨辉三角",
+    "learningDescription": "计数 DP 累加方案，组合数则把某些选择关系概括成可复用公式。用杨辉三角理解选或不选的递推，再分清排列与组合统计的对象是否关心顺序。",
+    "threadGateIds": ["stage-05-gate-11", "stage-06-gate-10", "stage-13-gate-05"]
+  },
+  "stage-06-gate-10": {
+    "learningTitle": "进阶模运算 · 除法先问逆元",
+    "learningDescription": "整数除法不能直接搬进模运算，先检查逆元是否存在，再选择适用的求法。快速幂在满足条件时可以参与计算，这会把此前的数论工具连接到组合数与计数问题。",
+    "threadGateIds": ["stage-03-gate-07", "stage-06-gate-09", "stage-11-gate-10"]
+  },
+  "stage-06-gate-11": {
+    "learningTitle": "初识容斥 · 加回被重复减去的部分",
+    "learningDescription": "直接相加会重复计数，逐项扣除也可能多扣交集。画清对象之间的重叠关系，用容斥整理加减，再回看二维前缀和中为什么也要补回重叠区域。",
+    "threadGateIds": ["stage-03-gate-10", "stage-06-gate-09", "stage-09-gate-07"]
+  },
+  "stage-06-gate-12": {
+    "learningTitle": "模型合流 · 路径、状态与计数",
+    "learningDescription": "有些题先建立图或路径关系，再在结构上递推；有些题只需要组合计数。挑战时先完成题意转化，再选择 Dijkstra、DP 或组合工具，检查组合后是否仍满足各自条件。",
+    "threadGateIds": ["stage-06-gate-02", "stage-05-gate-02", "stage-06-gate-09"]
+  },
+  "stage-07-gate-01": {
+    "learningTitle": "初识树状数组 · 让前缀信息可修改",
+    "learningDescription": "静态前缀和擅长查询，但一次修改会影响许多后续前缀。树状数组把信息分块维护，用若干局部节点完成修改与查询，把前缀统计带入动态场景。",
+    "threadGateIds": ["stage-03-gate-01", "stage-07-gate-04", "stage-08-gate-04"]
+  },
+  "stage-07-gate-02": {
+    "learningTitle": "初识线段树 · 把区间逐层合并",
+    "learningDescription": "树状数组强调前缀结构，线段树则显式拆分区间并合并信息。先明确节点保存什么、相邻区间怎样合并，再考虑更复杂的修改与后续 DP 转移维护。",
+    "threadGateIds": ["stage-07-gate-01", "stage-08-gate-01", "stage-09-gate-06"]
+  },
+  "stage-07-gate-03": {
+    "learningTitle": "进阶栈 · 只留下有用的候选",
+    "learningDescription": "在普通栈的后进先出之上，增加候选值的单调性，寻找最近更大或更小的元素。证明弹出的元素为何不再需要，并按每个元素的进出次数分析总复杂度。",
+    "threadGateIds": ["stage-02-gate-03", "stage-03-gate-05", "stage-07-gate-05"]
+  },
+  "stage-07-gate-04": {
+    "learningTitle": "统计合流 · 离散化后数逆序对",
+    "learningDescription": "离散化把数值变成排名，树状数组统计已经处理过的排名数量。按顺序扫描并查询更大或更小的元素，体会排序、处理顺序与动态前缀信息怎样共同完成统计。",
+    "threadGateIds": ["stage-04-gate-10", "stage-07-gate-01", "stage-12-gate-04"]
+  },
+  "stage-07-gate-05": {
+    "learningTitle": "进阶队列 · 窗口中的最优候选",
+    "learningDescription": "窗口移动时，用双端队列移除过期元素，也淘汰永远不可能更优的候选。把双指针的移动和单调维护分开理解，后面才能把同样思想用于 DP 转移优化。",
+    "threadGateIds": ["stage-02-gate-06", "stage-03-gate-05", "stage-09-gate-05"]
+  },
+  "stage-07-gate-06": {
+    "learningTitle": "贪心遇见图 · Kruskal 逐边连接",
+    "learningDescription": "按边权排序，用并查集判断加入一条边是否产生环。这里把贪心选择与集合维护明确分工：并查集检查结构，最优性的理由仍需要由生成树的性质解释。",
+    "threadGateIds": ["stage-04-gate-09", "stage-05-gate-10", "stage-07-gate-08"]
+  },
+  "stage-07-gate-07": {
+    "learningTitle": "进阶 DP（七）· 汇合每棵子树",
+    "learningDescription": "把树遍历得到的父子顺序与 DP 的状态转移连起来，先算子树，再合并到当前节点。写清每种状态的含义，为后面换根时处理子树外的信息保留清晰接口。",
+    "threadGateIds": ["stage-06-gate-05", "stage-05-gate-01", "stage-09-gate-01"]
+  },
+  "stage-07-gate-08": {
+    "learningTitle": "树上合流 · 建树、遍历与 DP",
+    "learningDescription": "生成树负责从图中选出连接结构，树遍历组织访问顺序，树形 DP 汇总子树答案。综合练习时辨认这些步骤是否需要依次出现，不把所有树题都当成同一种模型。",
+    "threadGateIds": ["stage-07-gate-06", "stage-06-gate-05", "stage-07-gate-07"]
+  },
+  "stage-07-gate-09": {
+    "learningTitle": "初识字符串算法 · 用哈希比较片段",
+    "learningDescription": "string 的逐字符比较在大量重复查询时可能很慢，哈希把片段映射为便于比较的信息。理解碰撞风险与预处理边界，再和精确匹配算法对照选择适用的方法。",
+    "threadGateIds": ["stage-02-gate-07", "stage-07-gate-10", "stage-11-gate-08"]
+  },
+  "stage-07-gate-10": {
+    "learningTitle": "初识 KMP · 匹配失败也留下信息",
+    "learningDescription": "逐字符匹配失败后，不必把已有比较全部重做。KMP 利用前缀信息决定下一步位置，把 string 的基础操作推进到专门匹配；后续 Z 函数和 AC 自动机还会沿这条线展开。",
+    "threadGateIds": ["stage-02-gate-07", "stage-10-gate-06", "stage-10-gate-05"]
+  },
+  "stage-07-gate-11": {
+    "learningTitle": "初识 Trie · 让公共前缀共用路径",
+    "learningDescription": "单个字符串匹配之外，若要保存一组字符串，可以让相同前缀共用节点。先把插入、查询与结束标记写清，再思考如何在这棵前缀树上继续处理多模式匹配。",
+    "threadGateIds": ["stage-02-gate-07", "stage-07-gate-10", "stage-10-gate-05"]
+  },
+  "stage-07-gate-12": {
+    "learningTitle": "工具再合流 · 动态统计、图与匹配",
+    "learningDescription": "把前缀信息的动态维护、图上的连接选择和字符串匹配放进混合题组。先辨认每道题的核心对象，再调用相应知识分支，检验是否形成了可按结构检索的工具箱。",
+    "threadGateIds": ["stage-07-gate-01", "stage-07-gate-06", "stage-07-gate-10"]
+  }
+}

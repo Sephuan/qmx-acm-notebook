@@ -1,0 +1,422 @@
+{
+  "stage-08-gate-01": {
+    "learningTitle": "线段树进阶 · 让区间修改暂缓执行",
+    "learningDescription": "基础线段树已能合并区间信息，连续修改整段时却不宜逐点更新。本关用懒标记保存尚未下传的操作，理清标记合成与信息更新，为树上区间维护打底。",
+    "threadGateIds": ["stage-07-gate-02", "stage-10-gate-01", "stage-09-gate-06"]
+  },
+  "stage-08-gate-02": {
+    "learningTitle": "初识 LCA · 找到两条树路的交点",
+    "learningDescription": "树的遍历让你看清父子关系，现在把视线转向任意两点之间的路径。通过最近公共祖先计算距离、拆解路径，后续的虚树和树链方法也会再次用到这张关系图。",
+    "threadGateIds": ["stage-06-gate-05", "stage-09-gate-11", "stage-12-gate-05"]
+  },
+  "stage-08-gate-03": {
+    "learningTitle": "初识 dfn · 把整棵子树排成一段",
+    "learningDescription": "沿用 DFS 的访问顺序，为节点记下进入时刻，你会发现同一子树恰好占据连续区间。这一步把树的形状接到前缀统计和区间结构上，让两条知识支线开始汇合。",
+    "threadGateIds": ["stage-06-gate-05", "stage-07-gate-01", "stage-10-gate-01"]
+  },
+  "stage-08-gate-04": {
+    "learningTitle": "树上混练 · 用前缀工具统计子树",
+    "learningDescription": "先用 dfn 将子树映射成区间，再判断树状数组能否维护所需信息。练习重点是解释这次转化为何成立，而不只是把树遍历和数据结构模板放在一起。",
+    "threadGateIds": ["stage-08-gate-03", "stage-07-gate-01", "stage-07-gate-04"]
+  },
+  "stage-08-gate-05": {
+    "learningTitle": "状压 DP 入门 · 用二进制记住集合",
+    "learningDescription": "位运算已能表示选中与未选中，现在让一个掩码成为 DP 状态的一部分。区分枚举元素与枚举子集的代价，学会在集合规模较小时保存完整选择信息。",
+    "threadGateIds": ["stage-04-gate-05", "stage-05-gate-01", "stage-14-gate-06"]
+  },
+  "stage-08-gate-06": {
+    "learningTitle": "数位 DP 入门 · 沿数字边界做选择",
+    "learningDescription": "从逐个枚举整数转为逐位构造数字，把位置、上界限制和必要统计量写进状态。沿用记忆化搜索的思路，分清哪些状态可复用，哪些仍受当前上界约束。",
+    "threadGateIds": ["stage-05-gate-07", "stage-05-gate-11", "stage-09-gate-07"]
+  },
+  "stage-08-gate-07": {
+    "learningTitle": "背包进阶 · 把有限件数拆成选择",
+    "learningDescription": "01 背包每件只选一次，完全背包允许无限复用，多重背包则给出有限数量。用二进制分组把数量限制转成若干 01 物品，理解不同背包其实共享同一条状态主线。",
+    "threadGateIds": ["stage-05-gate-05", "stage-05-gate-06", "stage-09-gate-05"]
+  },
+  "stage-08-gate-08": {
+    "learningTitle": "状态混练 · 容量、集合与方案数",
+    "learningDescription": "面对选择题，先问必须记住的是容量、已选集合，还是某种计数约束。比较背包与状压 DP 的状态表达，再决定求最优值还是统计方案，避免按题面关键词机械套用。",
+    "threadGateIds": ["stage-05-gate-05", "stage-08-gate-05", "stage-05-gate-11"]
+  },
+  "stage-08-gate-09": {
+    "learningTitle": "初识 Manacher · 复用回文的对称性",
+    "learningDescription": "字符串匹配让你学会复用前缀信息，回文问题则提供了另一种可复用的对称结构。维护最右回文边界和半径，减少重复扩展，也为回文自动机支线建立直觉。",
+    "threadGateIds": ["stage-07-gate-10", "stage-07-gate-09", "stage-13-gate-07"]
+  },
+  "stage-08-gate-10": {
+    "learningTitle": "快速幂进阶 · 让递推一次跨多步",
+    "learningDescription": "普通快速幂压缩了重复乘法，矩阵则能把一组线性递推写成统一变换。先核对状态与转移矩阵，再用快速幂跨越大量步骤，连接递推、DP 与线性代数。",
+    "threadGateIds": ["stage-03-gate-07", "stage-01-gate-10", "stage-10-gate-09"]
+  },
+  "stage-08-gate-11": {
+    "learningTitle": "概率 DP 入门 · 分清分布与期望",
+    "learningDescription": "计数 DP 关心有多少种结果，概率 DP 进一步关心每种结果出现的机会。先写清状态之间的概率转移，再尝试用期望线性性拆开贡献，判断是否可以省去复杂分布。",
+    "threadGateIds": ["stage-05-gate-11", "stage-06-gate-09", "stage-09-gate-07"]
+  },
+  "stage-08-gate-12": {
+    "learningTitle": "组合挑战 · 识别结构再设计状态",
+    "learningDescription": "本轮综合题组混排区间修改、受限数字计数与回文问题。独立判断需要维护一段信息、记录构造状态，还是利用字符串对称性，检查自己能否从题意走到正确的知识分支。",
+    "threadGateIds": ["stage-08-gate-01", "stage-08-gate-06", "stage-08-gate-09"]
+  },
+  "stage-09-gate-01": {
+    "learningTitle": "树形 DP 进阶 · 把根移到每个节点",
+    "learningDescription": "基础树形 DP 从子树向上汇总，换根 DP 还要把子树之外的信息传回来。拆清两侧贡献后，沿一条边更新答案，让同一套局部关系服务所有根的选择。",
+    "threadGateIds": ["stage-07-gate-07", "stage-06-gate-05", "stage-09-gate-11"]
+  },
+  "stage-09-gate-02": {
+    "learningTitle": "图论进阶 · 用强连通压缩有向环",
+    "learningDescription": "拓扑排序要求有向无环，含环的依赖图却常常不能直接递推。Tarjan 将互相可达的点归为强连通分量，缩点后回到 DAG，让图结构与 DP 的关系重新清晰起来。",
+    "threadGateIds": ["stage-05-gate-09", "stage-06-gate-01", "stage-09-gate-04"]
+  },
+  "stage-09-gate-03": {
+    "learningTitle": "并查集进阶 · 合并时保留差值",
+    "learningDescription": "基础并查集只回答是否同组，带权并查集还要维护元素相对代表点的关系。沿路径累积差值，合并时核对方向，你就能把连通判断扩展到关系约束与矛盾检测。",
+    "threadGateIds": ["stage-05-gate-10", "stage-12-gate-03", "stage-14-gate-08"]
+  },
+  "stage-09-gate-04": {
+    "learningTitle": "图上混练 · 先缩环再沿依赖递推",
+    "learningDescription": "从强连通分量找出无法单独处理的环，再在缩点图上设计状态与处理顺序。练习时特别检查分量内的信息如何汇总，别让图压缩丢失原题真正需要的代价或限制。",
+    "threadGateIds": ["stage-09-gate-02", "stage-06-gate-01", "stage-05-gate-01"]
+  },
+  "stage-09-gate-05": {
+    "learningTitle": "队列进阶 · 淘汰永远不会更优的决策",
+    "learningDescription": "滑动窗口最值中的单调队列，现在可以用来维护一段候选转移。先证明新决策何时使旧决策失效，再检查有效范围，才能把 DP 的枚举量安全地压下来。",
+    "threadGateIds": ["stage-07-gate-05", "stage-05-gate-02", "stage-08-gate-07"]
+  },
+  "stage-09-gate-06": {
+    "learningTitle": "DP 优化 · 把转移交给区间结构",
+    "learningDescription": "写出朴素 DP 后，观察每次转移是否只是在某个范围里求最值或合并信息。借助线段树等结构维护候选，让状态设计与查询模型对齐，再比较优化前后的复杂度。",
+    "threadGateIds": ["stage-05-gate-02", "stage-07-gate-02", "stage-11-gate-01"]
+  },
+  "stage-09-gate-07": {
+    "learningTitle": "计数进阶 · 在状态里排除重复",
+    "learningDescription": "基础计数 DP 逐步累加方案，容斥则从集合关系修正重复统计。先明确一个方案被计算了几次，再选择直接建状态或借助容斥变换，为更复杂的计数表达作准备。",
+    "threadGateIds": ["stage-05-gate-11", "stage-06-gate-11", "stage-13-gate-05"]
+  },
+  "stage-09-gate-08": {
+    "learningTitle": "转移混练 · 先写对，再选维护工具",
+    "learningDescription": "对同一段候选转移，尝试比较朴素枚举、单调队列与区间结构。把有效范围、信息合并和淘汰条件分别写清，练习根据性质选择工具，而不是记住一套固定组合。",
+    "threadGateIds": ["stage-05-gate-02", "stage-09-gate-05", "stage-09-gate-06"]
+  },
+  "stage-09-gate-09": {
+    "learningTitle": "初识匹配 · 为选择寻找增广路",
+    "learningDescription": "图遍历能判断可达，二分图染色进一步揭示两侧关系。把一对一选择写成匹配，通过增广路改进已有方案，为后续用网络流表达更复杂的分配问题建立起点。",
+    "threadGateIds": ["stage-05-gate-09", "stage-10-gate-03", "stage-14-gate-09"]
+  },
+  "stage-09-gate-10": {
+    "learningTitle": "静态查询 · 预处理与离线各省什么",
+    "learningDescription": "前缀统计靠可相减的信息回答区间问题，ST 表利用可重复合并的性质处理静态查询。再比较调整查询顺序的离线思路，分清预先算好与改变处理顺序这两种节省。",
+    "threadGateIds": ["stage-03-gate-01", "stage-07-gate-02", "stage-10-gate-07"]
+  },
+  "stage-09-gate-11": {
+    "learningTitle": "树路进阶 · 用直径和祖先概括距离",
+    "learningDescription": "LCA 能求两点距离，树的直径则用少数关键端点描述更整体的路径信息。结合树遍历与距离关系判断哪些路径需要逐一处理，哪些可以压缩成可维护的摘要。",
+    "threadGateIds": ["stage-08-gate-02", "stage-09-gate-01", "stage-11-gate-05"]
+  },
+  "stage-09-gate-12": {
+    "learningTitle": "结构挑战 · 让图形状帮助 DP",
+    "learningDescription": "综合题组回收换根、缩点和转移维护三条支线。先利用树或图的结构找出子问题，再决定状态和优化方式，检验自己能否解释每次转化保留了哪些关键信息。",
+    "threadGateIds": ["stage-09-gate-01", "stage-09-gate-02", "stage-09-gate-06"]
+  },
+  "stage-10-gate-01": {
+    "learningTitle": "树链进阶 · 将一条路径拆成几段",
+    "learningDescription": "dfn 已把子树变成区间，重链剖分进一步把任意树路拆成少量连续段。接回熟悉的线段树维护，理解树上操作怎样沿着路径分解落到区间查询与修改。",
+    "threadGateIds": ["stage-08-gate-03", "stage-08-gate-01", "stage-14-gate-07"]
+  },
+  "stage-10-gate-02": {
+    "learningTitle": "图分解进阶 · 找到连通性的薄弱处",
+    "learningDescription": "强连通处理有向图中的互达关系，这次在无向图里寻找删点或删边后的断裂。沿 DFS 理解割点、桥与边双连通，学会先压缩结构，再讨论连通与路径问题。",
+    "threadGateIds": ["stage-05-gate-09", "stage-09-gate-02", "stage-12-gate-03"]
+  },
+  "stage-10-gate-03": {
+    "learningTitle": "初识网络流 · 让增广路带上容量",
+    "learningDescription": "匹配中的增广路可以推广到有容量限制的网络。通过残量边表达撤回与调整，再用 Dinic 寻找增广流，为分配问题以及后续的最小割建模提供统一语言。",
+    "threadGateIds": ["stage-09-gate-09", "stage-11-gate-09", "stage-12-gate-10"]
+  },
+  "stage-10-gate-04": {
+    "learningTitle": "分配混练 · 匹配何时需要变成流",
+    "learningDescription": "先将选择对象和限制画成图，比较一对一匹配与带容量网络的表达能力。练习不仅要跑出最大值，还要说明原题方案如何对应流，以及怎样从结果还原选择。",
+    "threadGateIds": ["stage-09-gate-09", "stage-10-gate-03", "stage-11-gate-09"]
+  },
+  "stage-10-gate-05": {
+    "learningTitle": "匹配进阶 · 将 Trie 接上失配跳转",
+    "learningDescription": "Trie 保存多个模式串，KMP 让单个模式复用失配信息。AC 自动机把两者串起来，在共享前缀间跳转并汇总匹配贡献，走向多模式字符串统计。",
+    "threadGateIds": ["stage-07-gate-11", "stage-07-gate-10", "stage-10-gate-08"]
+  },
+  "stage-10-gate-06": {
+    "learningTitle": "匹配再认识 · 用 Z 函数观察前缀",
+    "learningDescription": "KMP 从前缀与后缀的关系复用匹配，Z 函数改为记录每个位置与整串前缀的公共长度。比较两种视角及其可复用区间，为字符串结构与重复片段问题补充工具。",
+    "threadGateIds": ["stage-07-gate-10", "stage-11-gate-07", "stage-14-gate-10"]
+  },
+  "stage-10-gate-07": {
+    "learningTitle": "初识莫队 · 让查询共享区间变化",
+    "learningDescription": "双指针曾利用有序推进减少重复工作，莫队则重新排列离线查询，让相邻区间只需少量增删。先确认信息能随端点移动维护，再核算总移动量，理解这种换序的收益。",
+    "threadGateIds": ["stage-03-gate-05", "stage-09-gate-10", "stage-13-gate-10"]
+  },
+  "stage-10-gate-08": {
+    "learningTitle": "字符串混练 · 匹配与统计分开想",
+    "learningDescription": "面对字符串统计，先判断需要精确匹配、快速比较，还是维护查询区间中的信息。对照 AC 自动机、哈希和离线迁移的职责，练习把题目拆成可以衔接的几个步骤。",
+    "threadGateIds": ["stage-10-gate-05", "stage-07-gate-09", "stage-10-gate-07"]
+  },
+  "stage-10-gate-09": {
+    "learningTitle": "初识消元 · 用等价变形解出关系",
+    "learningDescription": "矩阵曾表达多步递推，现在转而表达同时成立的线性约束。通过消元观察主元、秩与解的情况，把方程关系化简，也为线性基中的独立性建立直觉。",
+    "threadGateIds": ["stage-08-gate-10", "stage-10-gate-10", "stage-11-gate-10"]
+  },
+  "stage-10-gate-10": {
+    "learningTitle": "异或进阶 · 用线性基压缩可选集合",
+    "learningDescription": "位运算让你直接计算异或，消元则提示我们只需保留独立的信息。在线性基里维护能够张成所有异或结果的代表，连接二进制运算与向量空间两种视角。",
+    "threadGateIds": ["stage-04-gate-05", "stage-10-gate-09", "stage-14-gate-03"]
+  },
+  "stage-10-gate-11": {
+    "learningTitle": "几何入门 · 用方向筛出外层边界",
+    "learningDescription": "排序和扫描的经验在平面上依然有用：点积描述投影，叉积判断转向。用这些关系维护凸包边界，先把几何条件化成可计算的量，再进入凸包上的优化支线。",
+    "threadGateIds": ["stage-01-gate-05", "stage-11-gate-11", "stage-13-gate-11"]
+  },
+  "stage-10-gate-12": {
+    "learningTitle": "转化挑战 · 给问题换一种坐标",
+    "learningDescription": "这一轮分别尝试路径转区间、查询换序与方程消元。它们不必出现在同一道题里，但都要求你说明换一种表达后为何更容易处理，并保留原题的限制与答案。",
+    "threadGateIds": ["stage-10-gate-01", "stage-10-gate-07", "stage-10-gate-09"]
+  },
+  "stage-11-gate-01": {
+    "learningTitle": "DP 优化进阶 · 把候选转移画成直线",
+    "learningDescription": "数据结构优化 DP 已让你关注候选转移的维护，本关继续整理式子，看能否转成直线求最值。只有满足相应形式与顺序条件才使用斜率优化，条件不足时再寻找别的结构。",
+    "threadGateIds": ["stage-09-gate-06", "stage-09-gate-05", "stage-13-gate-02"]
+  },
+  "stage-11-gate-02": {
+    "learningTitle": "DP 优化进阶 · 证明决策会向前走",
+    "learningDescription": "斜率优化利用转移的代数形式，分治 DP 则利用最优决策位置的单调性。先验证或证明这个性质，再缩小每个状态的候选范围，不能只凭样例观察就套上优化。",
+    "threadGateIds": ["stage-05-gate-02", "stage-06-gate-06", "stage-11-gate-01"]
+  },
+  "stage-11-gate-03": {
+    "learningTitle": "线段树进阶 · 保留每次修改的版本",
+    "learningDescription": "普通线段树修改后覆盖旧信息，可持久化思路只复制受影响的路径。把前缀版本与值域统计结合，理解历史查询和区间第 k 小如何从版本差异中得到答案。",
+    "threadGateIds": ["stage-07-gate-02", "stage-03-gate-01", "stage-04-gate-10"]
+  },
+  "stage-11-gate-04": {
+    "learningTitle": "版本混练 · 在值域中定位第 k 个",
+    "learningDescription": "先用离散化整理值域，再比较前缀版本中的数量差，沿左右子树定位第 k 小。把它与普通二分的判定过程对照，理解答案搜索怎样被嵌进数据结构内部。",
+    "threadGateIds": ["stage-11-gate-03", "stage-04-gate-10", "stage-03-gate-03"]
+  },
+  "stage-11-gate-05": {
+    "learningTitle": "树分治入门 · 按路径经过的位置拆开",
+    "learningDescription": "LCA 和直径从路径性质寻找摘要，点分治则选择分治中心分开统计。区分经过中心与留在子树内的路径，处理重复计数后递归，让全树路径问题逐层变小。",
+    "threadGateIds": ["stage-08-gate-02", "stage-09-gate-11", "stage-12-gate-05"]
+  },
+  "stage-11-gate-06": {
+    "learningTitle": "树上合并 · 从小并大解释总成本",
+    "learningDescription": "树形 DP 汇总子树时，复杂信息的反复合并可能成为瓶颈。让较小集合迁入较大集合，跟踪一个元素被移动多少次，学会用整体代价解释看似昂贵的局部操作。",
+    "threadGateIds": ["stage-07-gate-07", "stage-02-gate-01", "stage-13-gate-01"]
+  },
+  "stage-11-gate-07": {
+    "learningTitle": "后缀数组入门 · 把子串放进排序中",
+    "learningDescription": "前缀匹配和哈希擅长局部比较，后缀数组把所有后缀排好序，让相似片段相邻。借助 LCP 观察重复与公共子串，建立从字符串内容到有序区间的另一条路径。",
+    "threadGateIds": ["stage-10-gate-06", "stage-07-gate-09", "stage-13-gate-03"]
+  },
+  "stage-11-gate-08": {
+    "learningTitle": "子串混练 · 统一比较、排序与判定",
+    "learningDescription": "对重复片段或公共子串问题，比较哈希检查与后缀数组加 LCP 的表达。若答案满足单调性，再引入二分；用多种解法交叉验证，也说明每种方案的风险与代价。",
+    "threadGateIds": ["stage-11-gate-07", "stage-07-gate-09", "stage-04-gate-01"]
+  },
+  "stage-11-gate-09": {
+    "learningTitle": "网络流进阶 · 让割的代价等于目标",
+    "learningDescription": "最大流算出可通过的总量，最小割换个角度描述分开两侧的代价。本关从目标函数和限制逐项构图，证明合法选择与割之间的对应，为闭合子图等模型铺路。",
+    "threadGateIds": ["stage-10-gate-03", "stage-10-gate-04", "stage-13-gate-09"]
+  },
+  "stage-11-gate-10": {
+    "learningTitle": "数论进阶 · 合并多条同余约束",
+    "learningDescription": "GCD 与逆元解释了部分整除关系，现在用扩展欧几里得求解线性组合，再用 CRT 合并同余条件。遇到非互质模数时先判断兼容性，别把存在条件藏进公式。",
+    "threadGateIds": ["stage-02-gate-09", "stage-06-gate-10", "stage-12-gate-09"]
+  },
+  "stage-11-gate-11": {
+    "learningTitle": "凸包进阶 · 让指针沿边界转动",
+    "learningDescription": "凸包筛掉了内部点，旋转卡壳进一步利用凸性寻找极值位置。把双指针的有序推进迁移到边界上，核对支持点为何不必反复回退，再处理最远点等几何问题。",
+    "threadGateIds": ["stage-10-gate-11", "stage-03-gate-05", "stage-13-gate-11"]
+  },
+  "stage-11-gate-12": {
+    "learningTitle": "迁移挑战 · 证明转化带来的节省",
+    "learningDescription": "从 DP 转移、树路径与选择代价中各取新题，练习斜率表达、分治统计和割模型。重点交代优化前的朴素模型及转化成立的条件，让高级工具有清楚的来处。",
+    "threadGateIds": ["stage-11-gate-01", "stage-11-gate-05", "stage-11-gate-09"]
+  },
+  "stage-12-gate-01": {
+    "learningTitle": "离线进阶 · 用分治安排贡献顺序",
+    "learningDescription": "离线查询已让你调整处理顺序，CDQ 继续把偏序关系分到不同维度处理。先分清左右两部分谁向谁贡献，再接排序和树状数组，把高维统计拆成可管理的小步骤。",
+    "threadGateIds": ["stage-09-gate-10", "stage-07-gate-01", "stage-12-gate-04"]
+  },
+  "stage-12-gate-02": {
+    "learningTitle": "二分进阶 · 让一组查询共享判定",
+    "learningDescription": "二分答案逐题判断，整体二分则将许多查询按答案区间共同分治。设计一次批量判定与状态撤销，理解答案维上的分组，如何减少重复扫描和维护。",
+    "threadGateIds": ["stage-04-gate-01", "stage-11-gate-04", "stage-12-gate-03"]
+  },
+  "stage-12-gate-03": {
+    "learningTitle": "并查集再进阶 · 记住怎样撤回合并",
+    "learningDescription": "带权并查集维护了关系，可撤销并查集则关心如何恢复旧状态。记录每次合并的改动，配合时间维上的分治处理动态连通，注意常用路径压缩不能直接照搬。",
+    "threadGateIds": ["stage-05-gate-10", "stage-09-gate-03", "stage-14-gate-08"]
+  },
+  "stage-12-gate-04": {
+    "learningTitle": "偏序混练 · 排序、分治与前缀汇合",
+    "learningDescription": "离散化整理坐标，CDQ 安排贡献先后，树状数组回答剩余一维统计。把每个工具消去的难点逐一说明，并检查相等坐标的边界，让多维问题形成完整而可验证的链条。",
+    "threadGateIds": ["stage-12-gate-01", "stage-07-gate-01", "stage-04-gate-10"]
+  },
+  "stage-12-gate-05": {
+    "learningTitle": "树压缩进阶 · 只留下本次关键节点",
+    "learningDescription": "LCA 描述关键点相遇的位置，dfn 给出它们在树上的访问顺序。虚树保留关键点及必要祖先，把整棵树压成较小骨架，再接回熟悉的树形统计与 DP。",
+    "threadGateIds": ["stage-08-gate-02", "stage-08-gate-03", "stage-07-gate-07"]
+  },
+  "stage-12-gate-06": {
+    "learningTitle": "平衡树入门 · 同时维护顺序与随机性",
+    "learningDescription": "set 已经提供有序集合接口，现在走进实现内部观察 Treap。用键值维持搜索顺序、随机优先级控制形状，再围绕分裂与合并组织操作，理解其期望复杂度来源。",
+    "threadGateIds": ["stage-02-gate-02", "stage-07-gate-02", "stage-14-gate-07"]
+  },
+  "stage-12-gate-07": {
+    "learningTitle": "卷积入门 · 将两组选择合成系数",
+    "learningDescription": "计数 DP 常把两部分的数量相乘再按总量汇总，这正提示了卷积结构。先把下标和系数的意义写清，再学习 FFT 或 NTT 的加速条件，为生成函数支线搭好计算工具。",
+    "threadGateIds": ["stage-05-gate-11", "stage-06-gate-10", "stage-13-gate-05"]
+  },
+  "stage-12-gate-08": {
+    "learningTitle": "计数混练 · 从逐项转移走向卷积",
+    "learningDescription": "先用组合数或 DP 写出明确的计数式，再观察是否存在按下标和合并的卷积。比较朴素转移与快速变换的成本，确认模型正确后再加速，避免让多项式符号掩盖重复计数。",
+    "threadGateIds": ["stage-12-gate-07", "stage-06-gate-09", "stage-09-gate-07"]
+  },
+  "stage-12-gate-09": {
+    "learningTitle": "反演入门 · 沿整除关系还原计数",
+    "learningDescription": "容斥按集合修正计数，莫比乌斯反演则在整除关系里做类似的还原。先分清统计的是倍数还是约数，再用整除分块合并相同商值，把公式推导与求和效率接起来。",
+    "threadGateIds": ["stage-06-gate-11", "stage-04-gate-06", "stage-02-gate-09"]
+  },
+  "stage-12-gate-10": {
+    "learningTitle": "网络流再进阶 · 给每份选择标上代价",
+    "learningDescription": "最大流表达容量与可行分配，费用流进一步累积每条边的单位代价。把熟悉的残量调整与最短路思想接起来，检查目标是固定流量的最小费用，还是最小费用最大流。",
+    "threadGateIds": ["stage-10-gate-03", "stage-06-gate-02", "stage-10-gate-04"]
+  },
+  "stage-12-gate-11": {
+    "learningTitle": "贪心进阶 · 从必要条件走向可行构造",
+    "learningDescription": "排序贪心教你比较局部选择，构造题则要求交出满足全部限制的方案。先寻找必要条件，再用交换、归纳或不变量补足充分性，并用小规模枚举主动寻找反例。",
+    "threadGateIds": ["stage-02-gate-10", "stage-04-gate-09", "stage-14-gate-11"]
+  },
+  "stage-12-gate-12": {
+    "learningTitle": "压缩挑战 · 减少真正需要处理的信息",
+    "learningDescription": "CDQ 压低同时处理的维度，虚树缩小当前问题的节点集，反演改写统计对象。通过混排新题比较这些不同的压缩方式，说明被省去的信息为何不会改变答案。",
+    "threadGateIds": ["stage-12-gate-01", "stage-12-gate-05", "stage-12-gate-09"]
+  },
+  "stage-13-gate-01": {
+    "learningTitle": "线段树再进阶 · 合并整份值域信息",
+    "learningDescription": "小并大让你按元素合并子树信息，线段树合并则按值域结构直接聚合节点。跟踪被合并节点的总数量，比较它与逐元素插入的区别，将树上汇总和区间结构连成一线。",
+    "threadGateIds": ["stage-11-gate-06", "stage-07-gate-02", "stage-13-gate-04"]
+  },
+  "stage-13-gate-02": {
+    "learningTitle": "直线维护进阶 · 用李超树保留赢家",
+    "learningDescription": "斜率优化把转移变成直线查询，李超线段树为另一类直线插入与最值查询提供维护方式。利用两条直线最多相交一次的性质递归比较，明确其适用域与数值边界。",
+    "threadGateIds": ["stage-11-gate-01", "stage-07-gate-02", "stage-09-gate-06"]
+  },
+  "stage-13-gate-03": {
+    "learningTitle": "字符串选修 · 按出现位置归并子串",
+    "learningDescription": "后缀数组用排序组织子串，SAM 则按 endpos 等价关系压缩状态。沿后缀链接观察出现次数和长度区间，按字符串主线需要选修，不把它当作所有综合题的前置门槛。",
+    "threadGateIds": ["stage-11-gate-07", "stage-07-gate-11", "stage-14-gate-10"]
+  },
+  "stage-13-gate-04": {
+    "learningTitle": "汇总混练 · 离线贡献与子树合并",
+    "learningDescription": "同样的统计目标，有时适合安排离线贡献，有时适合自底向上合并值域结构。结合树遍历比较两种组织方式，先说明信息属于哪个子问题，再决定怎样复用中间结果。",
+    "threadGateIds": ["stage-12-gate-01", "stage-13-gate-01", "stage-11-gate-06"]
+  },
+  "stage-13-gate-05": {
+    "learningTitle": "生成函数入门 · 让系数记下方案数",
+    "learningDescription": "卷积已经将两组选择合并，现在用生成函数把整套计数过程写成代数表达。明确指数代表的量与系数统计的对象，观察乘法怎样对应独立选择，为形式幂级数选修提供起点。",
+    "threadGateIds": ["stage-12-gate-07", "stage-09-gate-07", "stage-14-gate-01"]
+  },
+  "stage-13-gate-06": {
+    "learningTitle": "插值入门 · 从有限点值恢复多项式",
+    "learningDescription": "快速幂和模逆元提供了计算工具，插值进一步利用次数上界恢复多项式的信息。先证明目标确实是所需次数内的多项式，再由已知点值求新值，避免只因样例吻合就外推。",
+    "threadGateIds": ["stage-06-gate-10", "stage-03-gate-07", "stage-13-gate-05"]
+  },
+  "stage-13-gate-07": {
+    "learningTitle": "回文选修 · 给每种不同回文建状态",
+    "learningDescription": "Manacher 描述以各位置为中心的回文半径，PAM 则将不同回文组织成状态与后缀关系。对比两种表示擅长的统计任务，沿字符串兴趣支线选修，完成后再回到综合训练。",
+    "threadGateIds": ["stage-08-gate-09", "stage-07-gate-11", "stage-13-gate-03"]
+  },
+  "stage-13-gate-08": {
+    "learningTitle": "代数混练 · 从计数式走到快速乘法",
+    "learningDescription": "计数 DP 给出转移，生成函数组织整套系数，NTT 执行其中符合条件的乘法。把三层职责分开，再检查截断、模数与组合系数，让加速后的表达仍忠实于原始方案。",
+    "threadGateIds": ["stage-13-gate-05", "stage-12-gate-07", "stage-12-gate-08"]
+  },
+  "stage-13-gate-09": {
+    "learningTitle": "最小割进阶 · 把依赖选择写进图",
+    "learningDescription": "最小割已经能表示部分选择代价，最大权闭合子图进一步加入选中某项必须连带选中的依赖。将收益与依赖分别建边，证明无法接受的选择会付出足够大的割代价。",
+    "threadGateIds": ["stage-11-gate-09", "stage-10-gate-03", "stage-06-gate-01"]
+  },
+  "stage-13-gate-10": {
+    "learningTitle": "莫队进阶 · 用撤销代替难做的删除",
+    "learningDescription": "普通莫队依赖端点增删都能维护，某些信息却只容易添加或回退。回滚莫队重新组织区间与临时修改，把撤销作为工具；对照并查集回滚，理解保存改动的共同思路。",
+    "threadGateIds": ["stage-10-gate-07", "stage-12-gate-03", "stage-03-gate-05"]
+  },
+  "stage-13-gate-11": {
+    "learningTitle": "几何进阶 · 用半平面逐步收紧可行域",
+    "learningDescription": "凸包描出点集的外边界，半平面交则从一组方向限制求共同可行区域。沿用叉积、排序和凸性的理解，维护仍有效的边界，并仔细处理平行线与退化情形。",
+    "threadGateIds": ["stage-10-gate-11", "stage-11-gate-11", "stage-02-gate-06"]
+  },
+  "stage-13-gate-12": {
+    "learningTitle": "主线挑战 · 比较结构解与数学解",
+    "learningDescription": "在数据结构聚合、代数计数与构造中挑选新题，练习从同一限制寻找不同表达。不要按工具数量评价解法，回顾每一步推导，比较实现成本、复杂度和证明是否完整。",
+    "threadGateIds": ["stage-13-gate-01", "stage-13-gate-05", "stage-12-gate-11"]
+  },
+  "stage-14-gate-01": {
+    "learningTitle": "多项式选修 · 用倍增逐步求出逆元",
+    "learningDescription": "生成函数把计数写成形式表达，卷积提供快速乘法，Newton 迭代再逐步翻倍正确的系数范围。先核对常数项可逆条件，按代数主线需要选修多项式求逆。",
+    "threadGateIds": ["stage-13-gate-05", "stage-12-gate-07", "stage-06-gate-10"]
+  },
+  "stage-14-gate-02": {
+    "learningTitle": "多项式选修 · 让求导、积分与求逆协作",
+    "learningDescription": "在快速乘法与求逆基础上，将形式导数、积分和迭代接成 ln 与 exp 运算。逐项核对常数项及模数条件，这是一条代数深入支线，可以按题目需求回补而非全员必修。",
+    "threadGateIds": ["stage-14-gate-01", "stage-13-gate-05", "stage-12-gate-07"]
+  },
+  "stage-14-gate-03": {
+    "learningTitle": "位运算选修 · 为异或组合换一种变换",
+    "learningDescription": "普通卷积按下标相加合并贡献，FWT 面对的却是异或、与或等位运算关系。先识别组合规则再选变换，对照状压枚举的朴素做法理解加速，按位运算计数主线选修。",
+    "threadGateIds": ["stage-08-gate-05", "stage-12-gate-07", "stage-10-gate-10"]
+  },
+  "stage-14-gate-04": {
+    "learningTitle": "表达混练 · 从状态走到代数再回到证明",
+    "learningDescription": "把陌生计数问题先写成可验证的状态，再尝试改写成生成函数或构造关系。比较不同表达保留了哪些信息，不要求使用高阶选修，重点是完整推导与反例检查。",
+    "threadGateIds": ["stage-09-gate-07", "stage-13-gate-05", "stage-12-gate-11"]
+  },
+  "stage-14-gate-05": {
+    "learningTitle": "计数选修 · 把对称方案看成同一类",
+    "learningDescription": "容斥处理重复出现，等价类计数还需要分清旋转或置换下哪些方案相同。先明确群作用与不动点，再学习 Burnside 和 Pólya；这是对称计数的可选支线，不是所有计数题的通用公式。",
+    "threadGateIds": ["stage-06-gate-11", "stage-06-gate-09", "stage-13-gate-05"]
+  },
+  "stage-14-gate-06": {
+    "learningTitle": "集合选修 · 沿子集关系组合贡献",
+    "learningDescription": "状压 DP 用掩码表示集合，集合幂级数进一步组织子集间的合并与卷积。比较普通卷积和子集卷积的下标规则，再借助子集变换减少重复枚举，按集合计数需求深入。",
+    "threadGateIds": ["stage-08-gate-05", "stage-14-gate-03", "stage-12-gate-07"]
+  },
+  "stage-14-gate-07": {
+    "learningTitle": "树结构选修 · 当连接关系也会变化",
+    "learningDescription": "重链剖分通常依赖固定树形，动态树支线则要应对连接、断开与路径访问的变化。先理清要维护的结构不变量，再按具体方法补齐平衡树基础，避免把静态树模板直接套入。",
+    "threadGateIds": ["stage-10-gate-01", "stage-12-gate-06", "stage-12-gate-03"]
+  },
+  "stage-14-gate-08": {
+    "learningTitle": "动态混练 · 比较在线维护与离线回滚",
+    "learningDescription": "同样是关系随时间变化，可以考虑固定树路径处理、离线分治或可撤销结构。先根据题意判断能否预知操作，再选择表达方式；不必依赖动态树选修，也能形成完整解法。",
+    "threadGateIds": ["stage-10-gate-01", "stage-12-gate-03", "stage-12-gate-01"]
+  },
+  "stage-14-gate-09": {
+    "learningTitle": "图论选修 · 沿结构或匹配再选一支",
+    "learningDescription": "在图论主线中，可以研究必经关系形成的支配树，也可以从二分图匹配深入一般图匹配。两者解决的任务不同，先选一条与题目相关的支线，补齐定义与证明后再实现。",
+    "threadGateIds": ["stage-05-gate-09", "stage-09-gate-09", "stage-10-gate-02"]
+  },
+  "stage-14-gate-10": {
+    "learningTitle": "字符串选修 · 从字典序寻找分解结构",
+    "learningDescription": "后缀排序和前缀匹配提供了比较字符串的工具，Lyndon 分解进一步利用字典序组织整串。观察最小表示与重复结构中的关联，沿字符串兴趣支线练习，不要求先学完全部自动机。",
+    "threadGateIds": ["stage-11-gate-07", "stage-10-gate-06", "stage-13-gate-03"]
+  },
+  "stage-14-gate-11": {
+    "learningTitle": "贪心再进阶 · 让构造与 DP 互相校验",
+    "learningDescription": "从必要条件、交换论证和状态枚举出发，为同一问题重建不同解法。用小规模 DP 检验贪心或构造的猜想，再给出独立证明，逐渐把零散技巧整理成可迁移的推理路线。",
+    "threadGateIds": ["stage-12-gate-11", "stage-04-gate-09", "stage-09-gate-07"]
+  },
+  "stage-14-gate-12": {
+    "learningTitle": "开放挑战 · 用两条主线解释陌生问题",
+    "learningDescription": "从已经深入的两条主线挑选陌生综合题，先独立推导再复盘可替换的表达。把新发现接回构造、计数或图模型的既有节点，形成个人知识树，不以学完全部选修作为终点。",
+    "threadGateIds": ["stage-14-gate-11", "stage-13-gate-05", "stage-13-gate-09"]
+  }
+}

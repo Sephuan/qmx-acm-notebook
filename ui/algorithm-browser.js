@@ -11,7 +11,7 @@
   ];
   const ATTRIBUTES = { board: '模板', useful: '常用', useless: '低频' };
   const state = {
-    search: '', level: '', attribute: '', selectedNode: null,
+    search: '', level: '', attribute: '', draftSearch: '', draftLevel: '', draftAttribute: '', selectedNode: null,
     expanded: new Set(), scope: 'public', initialized: false,
     reading: null, listScroll: 0, paneScroll: 0, treeScroll: 0
   };
@@ -30,7 +30,11 @@
     el.addEventListener('click', action);
     return el;
   }
-  function levelOf(node) { return LEVELS.find(level => level.id === node.color); }
+  function isDirectory(node) { return node.kind === 'directory' || node.kind === 'category' || node.color === 'parent'; }
+  function levelOf(node) { return isDirectory(node) ? undefined : LEVELS.find(level => level.id === node.color); }
+  function attributesOf(node) {
+    return [...new Set([...(Array.isArray(node.attributes) ? node.attributes : []), ...(ATTRIBUTES[node.color] ? [node.color] : [])])].filter(key => ATTRIBUTES[key]);
+  }
   function tagsOf(note) { return Array.isArray(note.tags) ? note.tags.map(String) : []; }
   function noteKey(note) { return String(note.path || note.id || note.clientId || `${note.nodeId}:${note.title}:${note.authorId}`); }
   function excerpt(body) {
@@ -38,7 +42,7 @@
       .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').replace(/<[^>]*>/g, '').replace(/[#*_`>~|]/g, '').replace(/\s+/g, ' ').trim().slice(0, 150);
   }
   function snapshot() {
-    return { search: state.search, level: state.level, attribute: state.attribute, selectedNode: state.selectedNode,
+    return { search: state.search, level: state.level, attribute: state.attribute, draftSearch: state.draftSearch, draftLevel: state.draftLevel, selectedNode: state.selectedNode,
       expanded: Array.from(state.expanded), scope: state.scope };
   }
 
@@ -52,19 +56,24 @@
     const all = [];
     function index(node, parent, depth, path) {
       const entry = { node, parent, depth, path: path.concat(String(node.label || '未命名节点')), descendants: 0 };
-      byId.set(node.id, entry); all.push(entry);
+      byId.set(node.id, entry);
+      (node.legacyIds || []).forEach(id => { if (!byId.has(id)) byId.set(id, entry); });
+      all.push(entry);
       (node.children || []).forEach(child => { index(child, node.id, depth + 1, entry.path); entry.descendants += 1 + byId.get(child.id).descendants; });
     }
     index(root, null, 0, []);
     if (!state.initialized) { state.expanded.add(root.id); state.initialized = true; }
-    if (!byId.has(state.selectedNode)) state.selectedNode = root.id;
+    state.selectedNode = byId.get(state.selectedNode)?.node.id || root.id;
     const nextScope = opts.scope === 'personal' ? 'personal' : opts.scope === 'public' ? 'public' : state.scope;
     if (nextScope !== state.scope) { state.reading = null; state.paneScroll = 0; }
     state.scope = nextScope;
     const accountId = opts.account && opts.account.id;
     const notes = (Array.isArray(opts.notes) ? opts.notes : []).filter(note => state.scope === 'personal'
       ? note.noteScope === 'personal' && accountId != null && String(note.authorId) === String(accountId)
-      : note.noteScope === 'public');
+      : note.noteScope === 'public').map(note => {
+        const canonicalId = byId.get(note.nodeId)?.node.id;
+        return canonicalId && canonicalId !== note.nodeId ? { ...note, nodeId: canonicalId } : note;
+      });
     const nameOf = author => {
       try { return String(opts.authorName ? opts.authorName(author) : (author && (author.name || author.login)) || author || '匿名作者'); }
       catch (_) { return '未知作者'; }
@@ -121,7 +130,7 @@
     const searchRow = element('div', 'alg-search-row');
     const searchWrap = element('label', 'alg-search-wrap');
     const searchIcon = element('span', 'alg-search-icon', '⌕'); searchIcon.setAttribute('aria-hidden', 'true');
-    const search = element('input', 'alg-search'); search.type = 'search'; search.value = state.search;
+    const search = element('input', 'alg-search'); search.type = 'search'; search.value = state.draftSearch;
     search.placeholder = '搜索算法、路径、笔记标题、标签或作者'; search.setAttribute('aria-label', '搜索算法、路径、笔记标题、标签或作者');
     searchWrap.append(searchIcon, search);
     const attributeLabel = element('label', 'alg-attribute-label', '属性');
@@ -129,26 +138,30 @@
     [['', '全部属性'], ...Object.entries(ATTRIBUTES)].forEach(([value, label]) => {
       const option = element('option', '', label); option.value = value; attribute.append(option);
     });
-    attribute.value = state.attribute; attributeLabel.append(attribute);
+    attribute.value = state.draftAttribute; attributeLabel.append(attribute);
+    const submitSearch = button('搜索', 'alg-button alg-button-primary alg-search-submit', applySearch);
     const clear = button('清除筛选', 'alg-text-button alg-clear', () => {
-      state.search = ''; state.level = ''; state.attribute = ''; state.reading = null;
+      state.search = ''; state.level = ''; state.attribute = ''; state.draftSearch = ''; state.draftLevel = ''; state.draftAttribute = ''; state.reading = null;
       search.value = ''; attribute.value = ''; refresh(); search.focus();
     });
-    searchRow.append(searchWrap, attributeLabel, clear);
+    searchRow.append(searchWrap, submitSearch, attributeLabel, clear);
     const legend = element('div', 'alg-legend'); legend.setAttribute('role', 'group'); legend.setAttribute('aria-label', '学习参考难度筛选');
     const legendButtons = [];
     const levelCounts = new Map([...LEVELS.map(level => [level.id, 0]), ['unrated', 0]]);
-    all.forEach(entry => { if (entry.node.color === 'parent') return; const level = levelOf(entry.node); const key = level ? level.id : 'unrated'; levelCounts.set(key, levelCounts.get(key) + 1); });
-    const allLevel = button(`全部 ${all.length}`, 'alg-legend-button alg-tone-neutral', () => { state.level = ''; state.reading = null; refresh(); });
+    all.forEach(entry => { if (isDirectory(entry.node)) return; const level = levelOf(entry.node); const key = level ? level.id : 'unrated'; levelCounts.set(key, levelCounts.get(key) + 1); });
+    const allLevel = button(`全部 ${all.length}`, 'alg-legend-button alg-tone-neutral', () => { state.draftLevel = ''; updateDraftControls(); });
     allLevel.dataset.level = ''; legendButtons.push(allLevel); legend.append(allLevel);
-    [...LEVELS, { id: 'unrated', label: '未分级', tone: 'neutral', number: '—' }].forEach(level => {
-      const control = button('', `alg-legend-button alg-tone-${level.tone}`, () => { state.level = state.level === level.id ? '' : level.id; state.reading = null; refresh(); });
+    [...LEVELS, ...(levelCounts.get('unrated') ? [{ id: 'unrated', label: '未分级', tone: 'neutral', number: '—' }] : [])].forEach(level => {
+      const control = button('', `alg-legend-button alg-tone-${level.tone}`, () => { state.draftLevel = state.draftLevel === level.id ? '' : level.id; updateDraftControls(); });
       control.dataset.level = level.id;
       control.append(element('span', 'alg-legend-dot'), element('span', '', `${level.number} ${level.label}`), element('span', 'alg-legend-count', levelCounts.get(level.id)));
       control.title = `${level.label}：${levelCounts.get(level.id)} 个节点；点击筛选，再次点击取消`;
       legendButtons.push(control); legend.append(control);
     });
-    filters.append(searchRow, legend, element('p', 'alg-tier-hint', '难度颜色仅作学习顺序参考，不代表客观的比赛难度。模板、常用、低频是独立属性；目录只作分类，不参与难度分级。'));
+    const searchHint = element('p', 'alg-tier-hint alg-search-hint');
+    searchHint.append(element('strong', '', '点击搜索按钮才会进行跳转哦，也可以按回车确认。'));
+    searchHint.id = `${uid}-search-hint`; search.setAttribute('aria-describedby', searchHint.id);
+    filters.append(searchRow, searchHint, legend, element('p', 'alg-tier-hint', '目录用于组织知识和保存说明，不设难度。难度筛选只匹配具体算法与知识点，并保留其上级目录。模板、常用、低频是独立属性。'));
 
     const workspace = element('div', 'alg-workspace');
     const sidebar = element('aside', 'alg-sidebar');
@@ -175,31 +188,45 @@
     let disposed = false;
     let filtering = false;
     function badge(node) {
+      if (isDirectory(node)) { const directory = element('span', 'alg-node-kind', '目录'); directory.title = '目录可保存说明和笔记，具体算法在子节点中分级'; return directory; }
       const level = levelOf(node);
       const el = element('span', `alg-badge alg-tone-${level ? level.tone : 'neutral'}`, level ? level.label : node.color === 'parent' ? '目录' : '未分级');
-      el.title = level ? `学习参考难度：${level.label}` : node.color === 'parent' ? '目录' : '未指定难度';
+      const origin = node.difficultySource?.kind === 'user-md' ? '用户颜色文档' : node.rating?.type === 'category' ? '分类基础门槛' : node.rating?.type === 'entry' ? '入口或任务形式' : '本项目逐项定稿';
+      const range = node.rating?.range;
+      const coverage = range && node.children?.length ? `；覆盖 D${range.min}–D${range.max}` : '';
+      el.title = level ? `学习难度：${level.label}；依据：${origin}${coverage}${node.scope ? `。学习范围：${node.scope}` : ''}${node.rationale ? `。${node.rationale}` : ''}` : node.color === 'parent' ? '目录' : '未指定难度';
       return el;
     }
-    function attributeBadge(node) { return ATTRIBUTES[node.color] ? element('span', 'alg-attribute-badge', ATTRIBUTES[node.color]) : null; }
+    function attributeBadge(node) {
+      const names = attributesOf(node).map(key => ATTRIBUTES[key]);
+      return names.length ? element('span', 'alg-attribute-badge', names.join(' · ')) : null;
+    }
     function pathOf(id) { return byId.get(id)?.path.join(' / ') || '未关联目录'; }
     function matchesFacets(node) {
       const level = levelOf(node);
-      return (!state.level || (state.level === 'unrated' ? !level && node.color !== 'parent' : node.color === state.level)) && (!state.attribute || node.color === state.attribute);
+      return (!state.level || (!isDirectory(node) && (state.level === 'unrated' ? !level : node.color === state.level))) && (!state.attribute || attributesOf(node).includes(state.attribute));
     }
+    const relevance = global.NotebookAlgorithmDirectory;
+    const topicScores = new Map();
     function computeResults() {
-      const q = state.search.trim().toLocaleLowerCase();
-      const tokens = q.split(/\s+/).filter(Boolean);
-      const matchesText = value => tokens.every(token => value.toLocaleLowerCase().includes(token));
+      const q = state.search.trim();
+      topicScores.clear();
       filtering = Boolean(q || state.level || state.attribute);
       matchingNotes = sortedNotes.filter(note => {
         const entry = byId.get(note.nodeId);
         if ((state.level || state.attribute) && (!entry || !matchesFacets(entry.node))) return false;
-        return matchesText([note.title || '', nameOf(note.author), String(note.author || ''), ...tagsOf(note), pathOf(note.nodeId)].join(' '));
+        return relevance.noteScore(note, entry?.node, entry?.path || [], q, nameOf(note.author)) > 0;
+      }).sort((a, b) => {
+        if (!q) return 0;
+        const ae = byId.get(a.nodeId), be = byId.get(b.nodeId);
+        return relevance.noteScore(b, be?.node, be?.path || [], q, nameOf(b.author)) - relevance.noteScore(a, ae?.node, ae?.path || [], q, nameOf(a.author));
       });
       const noteNodes = new Set(matchingNotes.map(note => note.nodeId));
       matched = new Set(); included = new Set();
       all.forEach(entry => {
-        if (!filtering || (matchesFacets(entry.node) && (matchesText(entry.path.join(' / ')) || noteNodes.has(entry.node.id)))) matched.add(entry.node.id);
+        const score = relevance.topicScore(entry.node, entry.path, q);
+        topicScores.set(entry.node.id, score);
+        if (!filtering || (matchesFacets(entry.node) && (score > 0 || noteNodes.has(entry.node.id)))) matched.add(entry.node.id);
       });
       matched.forEach(id => {
         let entry = byId.get(id);
@@ -245,7 +272,7 @@
           item.setAttribute('aria-level', String(entry.depth + 1));
           item.setAttribute('aria-posinset', String(position)); item.setAttribute('aria-setsize', String(size));
           item.setAttribute('aria-selected', String(state.selectedNode === entry.node.id));
-          item.setAttribute('aria-label', `${entry.node.label}，${levelOf(entry.node)?.label || (entry.node.color === 'parent' ? '目录' : '未分级')}${ATTRIBUTES[entry.node.color] ? `，${ATTRIBUTES[entry.node.color]}` : ''}，${counts.get(entry.node.id)} 篇笔记`);
+          item.setAttribute('aria-label', `${entry.node.label}，${levelOf(entry.node)?.label || (entry.node.color === 'parent' ? '目录' : '未分级')}${attributesOf(entry.node).length ? `，${attributesOf(entry.node).map(key => ATTRIBUTES[key]).join('、')}` : ''}，${counts.get(entry.node.id)} 篇笔记`);
           item.tabIndex = -1;
           if (kids.length) item.setAttribute('aria-expanded', String(isExpanded(entry.node.id)));
           const row = element('div', 'alg-tree-row'); row.style.setProperty('--alg-depth', String(entry.depth));
@@ -258,7 +285,11 @@
           const attr = attributeBadge(entry.node); if (attr) metadata.append(attr);
           copy.append(metadata); row.append(copy);
           const count = element('span', 'alg-node-count', counts.get(entry.node.id)); count.title = '当前范围内含子目录的笔记总数'; row.append(count);
-          row.title = entry.path.join(' / ');
+          row.title = `${entry.path.join(' / ')}${entry.node.fullLabel && entry.node.fullLabel !== entry.node.label ? `\n${entry.node.fullLabel}` : ''}`;
+           if (opts.canManage && typeof opts.onAddTopic === 'function') {
+             const add = button('＋', 'alg-add-topic', event => { event.stopPropagation(); opts.onAddTopic(entry.node.id); });
+             add.title = `在“${entry.node.label}”下添加算法`; add.setAttribute('aria-label', add.title); row.append(add);
+           }
           row.addEventListener('click', () => { selectNode(entry.node.id); focusRow(entry.node.id); });
           item.addEventListener('focus', event => { if (event.target === item) { focusedId = entry.node.id; } });
           item.append(row); group.append(item); visible.push(entry);
@@ -274,6 +305,7 @@
       treeStatus.textContent = filtering ? `${matched.size} 个匹配` : `${all.length} 个节点`;
     }
     tree.addEventListener('keydown', event => {
+      if (event.target.closest('.alg-add-topic')) return;
       const item = event.target.closest('[role="treeitem"]'); if (!item) return;
       const id = item.dataset.nodeId; const entry = byId.get(id); const i = visible.findIndex(value => value.node.id === id);
       let next = null;
@@ -357,16 +389,24 @@
       const detail = element('header', 'alg-detail-heading');
       detail.append(element('span', 'alg-eyebrow', selected.node.id === root.id ? 'EXPLORE & LEARN' : 'ALGORITHM TOPIC'));
       const titleRow = element('div', 'alg-detail-title-row');
-      const title = element('h2', 'alg-detail-title', selected.node.label); title.tabIndex = -1;
+      const title = element('h2', 'alg-detail-title', selected.node.fullLabel || selected.node.label); title.tabIndex = -1;
       titleRow.append(title, badge(selected.node)); const attr = attributeBadge(selected.node); if (attr) titleRow.append(attr);
       detail.append(titleRow, element('p', 'alg-detail-stats', `${selected.descendants} 个子节点 · ${counts.get(selected.node.id)} 篇笔记（含子目录）`));
       if (selected.node.id === root.id) detail.append(element('p', 'alg-intro', '从一条知识主线出发，逐步建立你的算法体系。展开左侧目录，或选择下方分类；每个节点都可以阅读和积累学习笔记。'));
+      if (isDirectory(selected.node)) detail.append(element('p', 'alg-intro', selected.node.origin === 'admin' && selected.node.scope ? selected.node.scope : '此目录用于分类、专题说明和学习笔记，具体算法及难度请查看子节点。'));
+      if (levelOf(selected.node) && selected.node.difficultySource) {
+        const origin = selected.node.difficultySource.kind === 'user-md' ? '难度依据：用户颜色文档' : selected.node.rating?.type === 'category' ? '难度依据：分类基础学习门槛' : selected.node.rating?.type === 'entry' ? '难度依据：入口或任务形式的使用门槛' : '难度依据：本项目逐项定稿';
+        const range = selected.node.rating?.range;
+        detail.append(element('p', 'alg-intro', `${origin}${range && selected.node.children?.length ? `；覆盖 D${range.min}–D${range.max}` : ''}${selected.node.rationale ? `。${selected.node.rationale}` : ''}${selected.node.scope ? ` 学习范围：${selected.node.scope}` : ''}`));
+      }
+      if (opts.canManage && typeof opts.onAddTopic === 'function') detail.append(button('＋ 添加算法', 'alg-text-button alg-add-topic-detail', () => opts.onAddTopic(selected.node.id)));
+      if (typeof opts.onLearningPath === 'function') detail.append(button('在学习路径中查看 →', 'alg-button alg-add-topic-detail', () => opts.onLearningPath(selected.node.id)));
       pane.append(detail);
       if (filtering) {
         // Keep the selected topic useful while the global query stays active.
         if (selected.node.id !== root.id) {
-          const selectedChildren = selected.node.children || [];
-          const selectedNotes = sortedNotes.filter(note => note.nodeId === selected.node.id);
+          const selectedChildren = (selected.node.children || []).filter(child => matched.has(child.id));
+          const selectedNotes = matchingNotes.filter(note => note.nodeId === selected.node.id);
           pane.append(heading('当前节点的笔记', selectedNotes.length));
           if (selectedNotes.length) {
             const selectedList = element('div', 'alg-note-list alg-selected-note-list');
@@ -383,7 +423,7 @@
         const resultSummary = element('div', 'alg-result-summary');
         resultSummary.append(element('strong', '', '全局筛选结果'), element('span', '', `${matched.size} 个节点 · ${matchingNotes.length} 篇笔记`));
         pane.append(resultSummary);
-        const topicMatches = all.filter(entry => matched.has(entry.node.id));
+        const topicMatches = all.filter(entry => matched.has(entry.node.id)).sort((a, b) => (topicScores.get(b.node.id) || 0) - (topicScores.get(a.node.id) || 0));
         if (topicMatches.length) {
           pane.append(heading('匹配的知识节点', topicMatches.length));
           const resultTopics = element('div', 'alg-result-topics');
@@ -427,18 +467,30 @@
       // Each new query starts with its complete matching ancestor chains expanded.
       state.expanded.forEach(key => { if (String(key).startsWith('collapsed-filter:')) state.expanded.delete(key); });
       computeResults();
-      legendButtons.forEach(control => control.setAttribute('aria-pressed', String(control.dataset.level === state.level)));
+      updateDraftControls();
       clear.hidden = !filtering;
       renderTree(); treeScroller.scrollTop = oldScroll; renderPane(); pane.scrollTop = 0;
       live.textContent = filtering ? `找到 ${matched.size} 个知识节点、${matchingNotes.length} 篇笔记` : `${all.length} 个知识节点、${notes.length} 篇笔记`;
     }
-    search.addEventListener('input', () => { state.search = search.value; state.reading = null; state.listScroll = 0; refresh(); });
-    attribute.addEventListener('change', () => { state.attribute = attribute.value; state.reading = null; refresh(); });
+    function updateDraftControls() {
+      legendButtons.forEach(control => control.setAttribute('aria-pressed', String(control.dataset.level === state.draftLevel)));
+      const changed = state.draftSearch !== state.search || state.draftLevel !== state.level || state.draftAttribute !== state.attribute;
+      submitSearch.title = changed ? '应用当前关键词、难度和属性' : '刷新搜索结果';
+      submitSearch.dataset.pending = String(changed);
+      clear.hidden = !(filtering || state.draftSearch || state.draftLevel || state.draftAttribute);
+    }
+    function applySearch() {
+      state.search = state.draftSearch.trim(); state.level = state.draftLevel; state.attribute = state.draftAttribute;
+      state.reading = null; state.listScroll = 0; refresh();
+    }
+    search.addEventListener('input', () => { state.draftSearch = search.value; updateDraftControls(); });
+    search.addEventListener('keydown', event => { if (event.key === 'Enter' && !event.isComposing) { event.preventDefault(); applySearch(); } });
+    attribute.addEventListener('change', () => { state.draftAttribute = attribute.value; updateDraftControls(); });
     treeScroller.addEventListener('scroll', () => { state.treeScroll = treeScroller.scrollTop; }, { passive: true });
     pane.addEventListener('scroll', () => { state.paneScroll = pane.scrollTop; }, { passive: true });
     refresh(); treeScroller.scrollTop = state.treeScroll; pane.scrollTop = state.paneScroll;
     const controller = {
-      selectNode(id) { selectNode(id); },
+      selectNode(id) { if (!byId.has(id)) return; state.search = ''; state.level = ''; state.attribute = ''; state.draftSearch = ''; state.draftLevel = ''; state.draftAttribute = ''; search.value = ''; attribute.value = ''; selectNode(id); refresh(); },
       getState: snapshot,
       destroy() {
         if (disposed) return;

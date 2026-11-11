@@ -1,0 +1,556 @@
+{
+  "date": "2026-11-10",
+  "before": {
+    "nodes": 436,
+    "sourceHeadings": 126,
+    "oldNodesMapped": 367,
+    "graded": 388,
+    "userGraded": 184,
+    "researchGraded": 204,
+    "attributesIndependent": true
+  },
+  "after": {
+    "nodes": 435,
+    "sourceHeadings": 126,
+    "oldNodesMapped": 367,
+    "graded": 384,
+    "userGraded": 181,
+    "researchGraded": 203,
+    "attributesIndependent": true,
+    "unresolvedReferences": 2
+  },
+  "changes": [
+    {
+      "type": "merge",
+      "nodeId": "xcpc-基础-6",
+      "before": "计数dp（基础）",
+      "after": "计数dp（基础）",
+      "reason": "同名计数 DP 基础重复且评级冲突，保留简单状态计数学习范围"
+    },
+    {
+      "type": "merge",
+      "nodeId": "xcpc-进阶-5",
+      "before": "计数dp（进阶）",
+      "after": "计数dp（进阶）",
+      "reason": "相同计数 DP 进阶重复"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-基础-7",
+      "before": "计数dp（基础）",
+      "after": "简单计数 DP",
+      "reason": "明确有限状态与直接递推的基础范围"
+    },
+    {
+      "type": "difficulty",
+      "nodeId": "xcpc-基础-7",
+      "before": "beginner / research",
+      "after": "beginner / research",
+      "reason": "只含简单序列/路径计数与直接递推；复杂计数建模仍参照计数 DP 总项 D3。"
+    },
+    {
+      "type": "merge",
+      "nodeId": "algorithm-欧拉函数",
+      "before": "欧拉函数",
+      "after": "欧拉函数",
+      "reason": "消除欧拉函数章节下同名自嵌节点"
+    },
+    {
+      "type": "merge",
+      "nodeId": "xcpc-普通-1",
+      "before": "Lucas定理（普通）",
+      "after": "Lucas定理",
+      "reason": "标准 Lucas 的重复普通节点合并；exLucas 独立保留"
+    },
+    {
+      "type": "merge",
+      "nodeId": "xcpc-轮廓线型-1",
+      "before": "轮廓线型",
+      "after": "轮廓线动态规划",
+      "reason": "轮廓线类型属于轮廓线 DP 主章，不作为另一个插头 DP 原档节点"
+    },
+    {
+      "type": "merge",
+      "nodeId": "algorithm-线段树区间修改-查询",
+      "before": "线段树区间修改 / 查询",
+      "after": "带标记的线段树",
+      "reason": "合并与懒标记区间更新相同的功能，纠正粉色属性被当作原难度"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-带标记的线段树-1",
+      "before": "带标记的线段树",
+      "after": "区间修改 / 区间查询（懒标记）",
+      "reason": "明确线段树操作范围"
+    },
+    {
+      "type": "difficulty",
+      "nodeId": "xcpc-带标记的线段树-1",
+      "before": "intermediate / research",
+      "after": "intermediate / research",
+      "reason": "基础线段树之后学习懒标记不变量、标记合成与下传；区间修改的粉色常用标记不提供原始难度。"
+    },
+    {
+      "type": "add",
+      "nodeId": "algorithm-scc-category",
+      "before": "",
+      "after": "强连通分量（有向图）",
+      "reason": "区分有向强连通与无向双连通"
+    },
+    {
+      "type": "move",
+      "nodeId": "algorithm-强连通分量-tarjan-",
+      "before": "图的连通性相关",
+      "after": "强连通分量（有向图）",
+      "reason": "Tarjan SCC 属于有向图强连通"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-kosaraju-1",
+      "before": "点（边）双连通分量",
+      "after": "强连通分量（有向图）",
+      "reason": "Kosaraju 计算强连通分量，不计算点双或边双"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-kosaraju-1",
+      "before": "kosaraju",
+      "after": "Kosaraju 算法",
+      "reason": "统一标准拼写"
+    },
+    {
+      "type": "difficulty",
+      "nodeId": "xcpc-kosaraju-1",
+      "before": "advanced / research",
+      "after": "intermediate / research",
+      "reason": "两次 DFS、完成序与反图形成 SCC 分解；先修为图遍历，与 SCC 基础同档。"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-tarjan-1",
+      "before": "tarjan",
+      "after": "Tarjan 求无向图双连通分量",
+      "reason": "避免将 Tarjan 名称误认为只对应 SCC；此节点沿用无向双连通内容"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-斐波那契堆-1",
+      "before": "二叉堆",
+      "after": "可并堆",
+      "reason": "斐波那契堆是可并优先队列，不是二叉堆的子类型"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-floyd-1",
+      "before": "传递闭包",
+      "after": "最短路问题",
+      "reason": "Floyd–Warshall 算法主体归入最短路，传递闭包是相关应用"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-边分-1",
+      "before": "点分治",
+      "after": "树上分治",
+      "reason": "边分治与点分治并列，而非点分治子类"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-best定理-1",
+      "before": "矩阵",
+      "after": "组合数学",
+      "reason": "BEST 是有向欧拉回路计数定理，矩阵树是其相关计算工具"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-类欧几里得-1",
+      "before": "数值方法",
+      "after": "整除相关",
+      "reason": "类欧几里得处理整数整除和，非数值近似方法"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-单调栈优化-1",
+      "before": "决策单调性优化动态规划",
+      "after": "数据结构优化动态规划",
+      "reason": "单调栈优化不等同于决策单调性优化"
+    },
+    {
+      "type": "add",
+      "nodeId": "algorithm-dp-models",
+      "before": "",
+      "after": "补充：DP 模型与综合应用",
+      "reason": "避免把概率、计数、图上与自动机等 DP 强行归为线性 DP"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-概率dp-1",
+      "before": "线性动态规划",
+      "after": "补充：DP 模型与综合应用",
+      "reason": "模型可采用多种状态结构，不是线性 DP 的子类型"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-计数dp-1",
+      "before": "线性动态规划",
+      "after": "补充：DP 模型与综合应用",
+      "reason": "模型可采用多种状态结构，不是线性 DP 的子类型"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-自动机上dp-1",
+      "before": "线性动态规划",
+      "after": "补充：DP 模型与综合应用",
+      "reason": "模型可采用多种状态结构，不是线性 DP 的子类型"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-分治dp-1",
+      "before": "线性动态规划",
+      "after": "补充：DP 模型与综合应用",
+      "reason": "模型可采用多种状态结构，不是线性 DP 的子类型"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-填坑dp-1",
+      "before": "线性动态规划",
+      "after": "补充：DP 模型与综合应用",
+      "reason": "模型可采用多种状态结构，不是线性 DP 的子类型"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-dp套dp-1",
+      "before": "线性动态规划",
+      "after": "补充：DP 模型与综合应用",
+      "reason": "模型可采用多种状态结构，不是线性 DP 的子类型"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-图上dp-1",
+      "before": "线性动态规划",
+      "after": "补充：DP 模型与综合应用",
+      "reason": "模型可采用多种状态结构，不是线性 DP 的子类型"
+    },
+    {
+      "type": "move",
+      "nodeId": "algorithm-期望dp",
+      "before": "线性动态规划",
+      "after": "补充：DP 模型与综合应用",
+      "reason": "模型可采用多种状态结构，不是线性 DP 的子类型"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-基环树上dp-1",
+      "before": "线性动态规划",
+      "after": "树形动态规划",
+      "reason": "基环树 DP 依赖树与环的结构"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-佩尔方程-1",
+      "before": "高次同余方程",
+      "after": "整除相关",
+      "reason": "佩尔方程是整数不定方程，不是模意义下高次同余"
+    },
+    {
+      "type": "move",
+      "nodeId": "algorithm-exbsgs",
+      "before": "高次同余方程",
+      "after": "离散对数",
+      "reason": "扩展 BSGS 属于离散对数算法族"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-o-nml-1",
+      "before": "O(nml)",
+      "after": "朴素枚举件数（多重背包）",
+      "reason": "用方法名替换单独 O 公式"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-o-nm-log-l-1",
+      "before": "O(nm log l)",
+      "after": "二进制分组优化（多重背包）",
+      "reason": "明确 O(nm log l) 所代表的方法"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-o-nm-1",
+      "before": "O(nm)",
+      "after": "单调队列优化（多重背包）",
+      "reason": "明确 O(nm) 所代表的方法"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-o-n-3-1",
+      "before": "O(n^3)",
+      "after": "原图复杂度记录：O(n^3)",
+      "reason": "复杂度公式缺少状态模型，不能当成独立算法或确定承诺"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-o-n-2-1",
+      "before": "O(n^2)",
+      "after": "原图复杂度记录：O(n^2)",
+      "reason": "复杂度公式缺少状态模型，不能当成独立算法或确定承诺"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-递归-回溯-1",
+      "before": "递归、回溯",
+      "after": "递归基础",
+      "reason": "用户原色档只覆盖递归 / 迭代，不能把回溯整体归入入门"
+    },
+    {
+      "type": "add",
+      "nodeId": "algorithm-backtracking",
+      "before": "",
+      "after": "回溯与状态恢复",
+      "reason": "回溯单列，避免沿用递归原档扩大难度来源"
+    },
+    {
+      "type": "difficulty",
+      "nodeId": "algorithm-backtracking",
+      "before": "beginner / undefined",
+      "after": "beginner / research",
+      "reason": "在 DFS 基础上维护选择、撤销和状态恢复；复杂剪枝仍单列。"
+    },
+    {
+      "type": "difficulty",
+      "nodeId": "xcpc-递推-1",
+      "before": "basic / user-md",
+      "after": "basic / research",
+      "reason": "入门只要求根据已知初值与直接关系逐步计算；该条是补评分档，原文未单独列递推。"
+    },
+    {
+      "type": "move",
+      "nodeId": "xcpc-递推-1",
+      "before": "分治",
+      "after": "基础算法",
+      "reason": "递推不必属于分治"
+    },
+    {
+      "type": "move",
+      "nodeId": "algorithm-迭代基础",
+      "before": "分治",
+      "after": "基础算法",
+      "reason": "迭代是执行方式，不是分治算法子类"
+    },
+    {
+      "type": "add",
+      "nodeId": "algorithm-lcm",
+      "before": "",
+      "after": "最小公倍数（LCM）",
+      "reason": "补回原清单明确写出但旧整合遗漏的 LCM"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-fwt-fmt-1",
+      "before": "FWT/FMT",
+      "after": "快速沃尔什变换（FWT）",
+      "reason": "用户原文 D5 指 FWT，不能捆绑到 FMT/SOS 子集变换"
+    },
+    {
+      "type": "add",
+      "nodeId": "algorithm-fmt-sos",
+      "before": "",
+      "after": "子集变换（FMT / SOS DP）",
+      "reason": "FWT 与子集 zeta/Möbius 变换分开，避免术语和评级混同"
+    },
+    {
+      "type": "difficulty",
+      "nodeId": "algorithm-fmt-sos",
+      "before": "intermediate / undefined",
+      "after": "intermediate / research",
+      "reason": "按子集维度逐位累积与逆变换；先修位掩码和子集枚举。FWT 的原档继续保留。"
+    },
+    {
+      "type": "difficulty",
+      "nodeId": "xcpc-条件概率-1",
+      "before": "advanced / research",
+      "after": "beginner / research",
+      "reason": "范围限定为条件概率定义、乘法公式、全概率公式与独立性；复杂随机过程另行学习。"
+    },
+    {
+      "type": "difficulty",
+      "nodeId": "xcpc-最短路径树-1",
+      "before": "advanced / research",
+      "after": "intermediate / research",
+      "reason": "这里仅指最短路计算中记录前驱并构建一棵树，需处理多解；最短路径树计数不在本节点基础范围。"
+    },
+    {
+      "type": "difficulty",
+      "nodeId": "xcpc-错排问题-1",
+      "before": "basic / research",
+      "after": "beginner / research",
+      "reason": "按错位排列的递推、边界与简单计数证明评级，不仅是背数列定义。"
+    },
+    {
+      "type": "difficulty",
+      "nodeId": "xcpc-扫描线-1",
+      "before": "beginner / research",
+      "after": "intermediate / research",
+      "reason": "范围为排序事件与维护活动集合；需要区间树维护的面积并等应用可更难。"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-概率dp-1",
+      "before": "概率dp",
+      "after": "概率 DP",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-计数dp-1",
+      "before": "计数dp",
+      "after": "计数 DP",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-图上dp-1",
+      "before": "图上dp",
+      "after": "图上 DP",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-动态dp-1",
+      "before": "动态dp",
+      "after": "动态 DP（DDP）",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-插头dp-1",
+      "before": "插头dp",
+      "after": "插头 DP",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-splay-1",
+      "before": "splay",
+      "after": "Splay",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-treap-1",
+      "before": "treap",
+      "after": "Treap",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-dijkstra-1",
+      "before": "dijkstra",
+      "after": "Dijkstra",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-floyd-1",
+      "before": "floyd",
+      "after": "Floyd–Warshall",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-prim-1",
+      "before": "prim",
+      "after": "Prim",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-kruskal-1",
+      "before": "kruskal",
+      "after": "Kruskal",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-boruvka-1",
+      "before": "boruvka",
+      "after": "Borůvka",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-dinic-1",
+      "before": "dinic",
+      "after": "Dinic",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-miller-rabin-1",
+      "before": "Miller Rabin",
+      "after": "Miller–Rabin",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-pollard-rho-1",
+      "before": "Pollard Rho",
+      "after": "Pollard–Rho",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-picks定理-1",
+      "before": "Picks定理",
+      "after": "Pick 定理",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-prufer序列-1",
+      "before": "prufer序列",
+      "after": "Prüfer 序列",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-polya定理-1",
+      "before": "Polya定理",
+      "after": "Pólya 定理",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-lucas定理-1",
+      "before": "Lucas定理",
+      "after": "Lucas 定理",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-lyndon-分解-1",
+      "before": "Lyndon 分解",
+      "after": "Lyndon 分解 / Duval 算法",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-扩展kmp-1",
+      "before": "扩展kmp",
+      "after": "Z 函数（扩展 KMP）",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "rename",
+      "nodeId": "xcpc-离散-1",
+      "before": "离散",
+      "after": "离散化",
+      "reason": "统一中英文拼写和常用检索别名"
+    },
+    {
+      "type": "scope",
+      "nodeId": "xcpc-传递闭包-1",
+      "before": "目录容器且算法主体Floyd移出",
+      "after": "传递闭包 D3 补充评估；交叉引用 Floyd",
+      "reason": "区分布尔可达关系与数值最短路，修复移动后无评级的知识点"
+    }
+  ]
+}

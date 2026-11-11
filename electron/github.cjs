@@ -1,5 +1,6 @@
 const YAML = require('yaml');
 const { Tags } = require('./tags.cjs');
+const { AlgorithmTopics, TOPICS_PATH, parseTopics } = require('./algorithm-topics.cjs');
 
 const API = 'https://api.github.com';
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -242,6 +243,11 @@ class GitHub {
     }
   }
 
+  async saveAlgorithmTopic(record) {
+    if (record && typeof record === 'object') this.checkScope(record);
+    return new AlgorithmTopics(this).save(record);
+  }
+
   async saveAlgorithmNote(record) {
     this.checkScope(record);
     if (record.path !== undefined) validatePath(record.path);
@@ -408,7 +414,10 @@ class GitHub {
         return this.recordResult(d.path, text, d.sha, branch);
       })));
     }
+    const additions = tree.tree.find(item => item.type === 'blob' && item.path === TOPICS_PATH);
+    const algorithmTopics = additions ? parseTopics((await this.currentDocument(TOPICS_PATH, branch))?.text).map(topic => ({ ...topic, repo: this.repo })) : [];
     return {
+      algorithmTopics,
       records: records.filter(r => r.kind === 'document'),
       algorithmNotes: records.filter(r => r.kind === 'algorithm-note'),
       issues: issues.filter(x => !x.pull_request && !/<!--\s*qmx-tag-request\s+[\s\S]*?-->/i.test(String(x.body || ''))).map(x => ({ ...issueRecord(x), repo: this.repo })),

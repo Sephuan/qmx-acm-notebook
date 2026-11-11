@@ -56,6 +56,12 @@ body[data-theme="dark"] .alg-button.alg-button-primary { background: #527e64; bo
 .alg-attribute-label { display: flex; align-items: center; gap: 9px; color: var(--alg-muted); font-size: 13px; white-space: nowrap; }
 .alg-attribute { min-height: 43px; max-width: 150px; border: 1px solid var(--line); border-radius: 8px; padding: 8px 26px 8px 10px; background: var(--surface-soft); color: var(--text); font-size: 13px !important; }
 .alg-clear { flex: none; }
+.alg-search-submit { min-height: 43px; flex: none; }
+.alg-search-submit[data-pending="true"] { box-shadow: 0 0 0 2px var(--accent-soft); }
+.alg-add-topic { flex: none; width: 26px; min-height: 28px; padding: 0; border: 1px solid transparent; border-radius: 5px; color: var(--alg-muted); background: transparent; font-size: 16px; }
+.alg-add-topic:hover,.alg-add-topic:focus-visible { color: var(--text); border-color: var(--line); background: var(--surface); }
+.alg-add-topic-detail { margin-top: 8px; }
+.alg-node-kind { display: inline-flex; flex: none; font-size: 11px; color: var(--alg-muted); font-weight: 400; white-space: nowrap; }
 .alg-legend { display: flex; gap: 7px; flex-wrap: wrap; margin-top: 15px; }
 .alg-tone-cyan { --alg-tone: var(--alg-cyan); }
 .alg-tone-green { --alg-tone: var(--alg-green); }
@@ -76,7 +82,7 @@ body[data-theme="dark"] .alg-button.alg-button-primary { background: #527e64; bo
 .alg-tree-scroll { max-height: calc(100dvh - 440px); min-height: 320px; overflow-y: auto; overflow-x: hidden; overscroll-behavior: contain; scrollbar-width: thin; padding: 8px; scroll-padding-block: 8px; }
 .alg-tree { width: 100%; min-width: 0; }
 .alg-tree-item { outline: none; min-width: 0; position: relative; }
-.alg-tree-row { position: relative; display: flex; gap: 6px; min-height: 51px; align-items: center; border: 1px solid transparent; border-radius: 7px; padding: 7px 7px 7px 3px; cursor: pointer; transition: background .12s; }
+.alg-tree-row { position: relative; display: flex; gap: 6px; min-height: 51px; align-items: center; border: 1px solid var(--line); border-radius: 7px; margin: 4px 0; padding: 7px 7px 7px 3px; background: var(--surface-soft); cursor: pointer; transition: background .12s; }
 .alg-tree-group { margin-left: 14px; padding-left: 12px; border-left: 1px solid color-mix(in srgb,var(--alg-muted) 45%,var(--line)); }
 .alg-tree-group > .alg-tree-item > .alg-tree-row::before { content: ''; position: absolute; left: -13px; top: 25px; width: 12px; border-top: 1px solid color-mix(in srgb,var(--alg-muted) 45%,var(--line)); }
 .alg-tree-item[data-depth="0"] > .alg-tree-row { background: var(--surface-soft); border-color: var(--line); margin-bottom: 8px; }

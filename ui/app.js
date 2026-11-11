@@ -22,7 +22,7 @@
   ];
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(STORAGE) || 'null'); } catch (_) { /* Storage may be disabled. */ }
-  const s = { view: 'home', records: [], algorithmNotes: [], algorithmTree: window.QMX_ALGORITHM_TREE || { id: 'root', label: 'XCPC算法', children: [] }, local: { records: [], favorites: [], mastery: {}, draft: {} }, settings: {}, account: null, authStatus: { status: 'anonymous' }, permissions: {}, issues: [], editor: null, lastSync: null, error: '', selected: null, comments: new Map(), loading: true, busy: false, tagCatalog: window.QMX_TAG_PRESETS || { version: 'local', source: 'local', categories: [] }, tagReview: null };
+  const s = { view: 'home', libraryScope: 'public', records: [], algorithmNotes: [], algorithmTree: window.QMX_ALGORITHM_TREE || { id: 'root', label: 'XCPC算法', children: [] }, local: { records: [], favorites: [], mastery: {}, draft: {} }, settings: {}, account: null, authStatus: { status: 'anonymous' }, permissions: {}, issues: [], editor: null, lastSync: null, error: '', selected: null, comments: new Map(), loading: true, busy: false, tagCatalog: window.QMX_TAG_PRESETS || { version: 'local', source: 'local', categories: [] }, tagReview: null };
   s.appVersion = ''; s.update = null;
   window.NotebookPlatforms?.init({ bridge, onSettings: () => $('#settings-button').click() });
   s.planner = { problems: [], tasks: [], layout: 'balanced' };
@@ -54,7 +54,7 @@
   function repo() { return s.permissions.repo || s.settings.repo || ''; }
   function sameRepo(record) { return !!record.repo && String(record.repo).toLowerCase() === String(repo()).toLowerCase(); }
   const migratedClientIds = new Map();
-  function normalizeLocal(local) { return { records: (Array.isArray(local?.records) ? local.records : []).filter(record => record?.kind === 'local').map(record => { const legacyKey = record.id == null ? null : String(record.id); const clientId = record.clientId || (legacyKey && migratedClientIds.get(legacyKey)) || uuid(); if (legacyKey) migratedClientIds.set(legacyKey, clientId); return { ...record, clientId, id: record.id ?? `local:${clientId}`, ownerId: record.ownerId == null ? null : String(record.ownerId) }; }), favorites: Array.isArray(local?.favorites) ? local.favorites : [], mastery: local?.mastery && typeof local.mastery === 'object' ? local.mastery : {}, draft: local?.draft && typeof local.draft === 'object' ? local.draft : {} }; }
+  function normalizeLocal(local) { return { records: (Array.isArray(local?.records) ? local.records : []).filter(record => record?.kind === 'local').map(record => { const legacyKey = record.id == null ? null : String(record.id); const clientId = record.clientId || (legacyKey && migratedClientIds.get(legacyKey)) || uuid(); if (legacyKey) migratedClientIds.set(legacyKey, clientId); return { ...record, clientId, id: record.id ?? `local:${clientId}`, ownerId: record.ownerId == null ? null : String(record.ownerId) }; }), favorites: Array.isArray(local?.favorites) ? local.favorites : [], mastery: local?.mastery && typeof local.mastery === 'object' ? local.mastery : {}, draft: local?.draft && typeof local.draft === 'object' ? local.draft : {}, learningPaths: local?.learningPaths && typeof local.learningPaths === 'object' && !Array.isArray(local.learningPaths) ? local.learningPaths : {} }; }
   function visibleLocal(record) { return record.ownerId == null || (accountId() !== null && String(record.ownerId) === accountId()); }
   function records() { return [...s.records.filter(record => record.kind === 'document' && sameRepo(record)), ...s.issues.filter(record => record.kind === 'issue' && sameRepo(record)), ...s.local.records.filter(record => record.kind === 'local' && visibleLocal(record))]; }
   function isLocal(record) { return record.kind === 'local'; }
@@ -83,6 +83,8 @@
     renderUpdate();
     s.records = (Array.isArray(payload.records) ? payload.records : []).filter(record => record.kind === 'document');
     s.algorithmNotes = (Array.isArray(payload.algorithmNotes) ? payload.algorithmNotes : []).filter(record => record.kind === 'algorithm-note');
+    s.algorithmTopics = Array.isArray(payload.algorithmTopics) ? payload.algorithmTopics : [];
+    s.algorithmTree = window.NotebookAlgorithmDirectory.hydrate(window.QMX_ALGORITHM_TREE, s.algorithmTopics);
     s.issues = (Array.isArray(payload.issues) ? payload.issues : []).filter(record => record.kind === 'issue');
     s.permissions = payload.permissions || {};
     s.settings = payload.settings && typeof payload.settings === 'object' ? payload.settings : {};
@@ -275,7 +277,7 @@
     const scores = new Map();
     const difficultyActive = [min,max,lgMin,lgMax].some(v=>v!==null) || facets.native.size>0;
     return records().filter(record => {
-      if (s.view === 'public' && record.kind !== 'document') return false;
+      if (s.view === 'public' && record.kind !== (s.libraryScope === 'local' ? 'local' : 'document')) return false;
       if (s.view === 'favorites' && !favorite(record)) return false;
       if (facets.platform.size && !facets.platform.has(facetValue(record,'platform'))) return false;
       if (facets.tags.size && !(record.tags || []).some(tag=>facets.tags.has(String(tag)))) return false;
@@ -592,6 +594,10 @@
       if (selected) { renderDetail(selected); return; }
       focusedDetail = false; document.body.classList.remove('reading-detail');
     }
+    $('#library-scope-controls').hidden = s.view !== 'public';
+    $('#library-public-button').setAttribute('aria-pressed', String(s.libraryScope !== 'local'));
+    $('#library-local-button').setAttribute('aria-pressed', String(s.libraryScope === 'local'));
+    $('#library-local-count').textContent = s.local.records.filter(record => record.kind === 'local' && visibleLocal(record)).length;
     const items = filteredRecords(); $('#result-count').textContent = items.length;
     $('.list-heading > span:last-child').textContent = facets.tags.size ? '标签命中数 ↓ · 相关度 / 更新时间' : $('#search-input').value.trim() ? '匹配程度 ↓' : '最近更新 ↓';
     if (!items.some(record => key(record) === s.selected)) s.selected = items[0] ? key(items[0]) : null;
@@ -603,7 +609,7 @@
       append(card, append(element('div', 'card-meta'), platformLabel(record), element('span', '', record.pid || `#${record.number || '本地'}`), difficultyBadge(record), supplementaryDifficultyBadge(record), badge(record)), element('h2', 'card-title', record.title || '未命名错题'), element('p', 'card-excerpt', String(record.body || '尚未补充思考过程').replace(/[#>*`]/g, '').trim()), tags(record), append(element('div', 'card-footer'), element('span', `card-state ${mastery(record)}`, stateLabels[mastery(record)]), element('span', '', `${favorite(record) ? '★ · ' : ''}${date(record.updatedAt)}`)));
       list.append(card);
     });
-    if (!items.length) list.append(empty(s.loading ? '正在载入题库' : '这里还没有题目', s.loading ? '等待客户端返回你的学习数据。' : '试试调整筛选，或记下第一道值得回顾的错题。', { label: '清空筛选', fn: clearFilters }));
+    if (!items.length) list.append(empty(s.loading ? '正在载入题库' : s.view === 'public' && s.libraryScope === 'local' ? '还没有本地题解' : '这里还没有题目', s.loading ? '等待客户端返回你的学习数据。' : '试试调整筛选，或记下第一道值得回顾的错题。', { label: '清空筛选', fn: clearFilters }));
     const record = items.find(item => key(item) === s.selected);
     if (record) renderDetail(record);
     else {
@@ -726,12 +732,48 @@
   let algorithmSelectedNode = 'root';
   function flattenTree(node, depth = 0, parent = null, out = []) { out.push({ ...node, depth, parent }); (node.children || []).forEach(child => flattenTree(child, depth + 1, node.id, out)); return out; }
   function algorithmNodes() { return flattenTree(s.algorithmTree); }
+  let algorithmMode = 'tree';
+  let algorithmPendingTopic = null;
+  let learningController = null;
+  function learningProgressKey() { return JSON.stringify([repo(), accountId() || 'anonymous', window.QMX_ALGORITHM_LEARNING_PATH?.id || 'xcpc-learning']); }
+  function setAlgorithmMode(mode) { if (s.busy) return; algorithmMode = mode; renderAlgorithmNotes(); }
+  function openLearningTopic(id) { algorithmPendingTopic = id; setAlgorithmMode('tree'); }
+  async function saveLearningProgress(value) {
+    if (s.busy) throw new Error('请等待当前操作完成后再保存学习进度');
+    const id = learningProgressKey(), previous = s.local.learningPaths?.[id];
+    setBusy(true);
+    s.local.learningPaths = { ...(s.local.learningPaths || {}), [id]: structuredClone(value) };
+    try { await persistLocal(); }
+    catch (error) {
+      if (previous === undefined) delete s.local.learningPaths[id];
+      else s.local.learningPaths[id] = previous;
+      throw error;
+    } finally { setBusy(false); }
+  }
   function renderAlgorithmNotes() {
     const panel = $('#algorithm-panel');
-    window.NotebookAlgorithms.render({
-      host: panel, tree: s.algorithmTree, notes: s.algorithmNotes,
+    window.NotebookAlgorithmsController?.destroy(); learningController?.destroy(); learningController = null;
+    panel.replaceChildren();
+    const modes = element('div', 'algorithm-view-modes'); modes.setAttribute('role', 'group'); modes.setAttribute('aria-label', '算法学习方式');
+    for (const [mode, title] of [['tree', '知识树'], ['path', '闯关学习']]) {
+      const control = button(title, 'button secondary', () => setAlgorithmMode(mode)); control.dataset.mode = mode; control.setAttribute('aria-pressed', String(algorithmMode === mode)); modes.append(control);
+    }
+    panel.append(modes); const host = element('div', 'algorithm-view-content'); panel.append(host);
+    if (algorithmMode === 'path') {
+      learningController = window.NotebookLearningPath.render({ host, tree: s.algorithmTree, curriculum: window.QMX_ALGORITHM_LEARNING_PATH,
+        progress: s.local.learningPaths?.[learningProgressKey()] || { gates: {} }, progressKey: learningProgressKey(), account: s.account, notes: s.algorithmNotes, canUpload: Boolean(s.account && s.permissions.push),
+        onProgress: saveLearningProgress, onTopic: openLearningTopic,
+        onNote(note) { panel.dataset.scope = 'public'; openLearningTopic(note.nodeId); },
+        onUpload: id => { algorithmSelectedNode = id; openAlgorithmNoteEditor(); }, toast });
+      return;
+    }
+    window.NotebookAlgorithmsController = window.NotebookAlgorithms.render({
+      host, tree: s.algorithmTree, notes: s.algorithmNotes,
+      onLearningPath(id) { setAlgorithmMode('path'); learningController?.selectTopic?.(id); },
       scope: panel.dataset.scope || 'public', account: s.account,
       canUpload: Boolean(s.account && s.permissions.push),
+      canManage: Boolean(s.account && s.permissions.admin),
+      onAddTopic: openAlgorithmTopicEditor,
       onScopeChange(scope) {
         if (scope === 'personal' && !s.account) { toast('请先登录 GitHub 账户'); return; }
         panel.dataset.scope = scope; renderAlgorithmNotes();
@@ -740,7 +782,42 @@
       onUpload(id) { algorithmSelectedNode = id; openAlgorithmNoteEditor(); },
       renderMarkdown, authorName, formatDate: date
     });
+    if (algorithmPendingTopic) { const id = algorithmPendingTopic; algorithmPendingTopic = null; window.NotebookAlgorithmsController.selectNode(id); }
   }
+  let algorithmTopicRequest = null;
+  function updateAlgorithmTopicKind() {
+    const form = $('#algorithm-topic-form'), directory = form.elements.kind.value === 'directory';
+    $('#algorithm-topic-difficulty').hidden = directory;
+    form.elements.color.disabled = directory; form.elements.color.required = !directory;
+    $('#algorithm-topic-submit').textContent = directory ? '保存目录' : '保存算法';
+  }
+  $('#algorithm-topic-form [name="kind"]').addEventListener('change', updateAlgorithmTopicKind);
+  function openAlgorithmTopicEditor(parentId) {
+    if (!s.account || !s.permissions.admin) return;
+    const parent = algorithmNodes().find(node => node.id === parentId); if (!parent) return;
+    const form = $('#algorithm-topic-form'); form.reset(); form.elements.parentId.value = parent.id;
+    $('#algorithm-topic-parent').textContent = parent.fullLabel || parent.label;
+    updateAlgorithmTopicKind();
+    $('#algorithm-topic-kind-hint').textContent = parent.kind === 'algorithm'
+      ? '添加子项后，此节点将保留为目录，原算法及难度移入同名子项。目录也可以上传笔记。'
+      : '算法需要选择难度；目录不设置难度，也可以上传笔记。';
+    $('#algorithm-topic-error').hidden = true; algorithmTopicRequest = uuid();
+    $('#algorithm-topic-dialog').showModal(); form.elements.label.focus();
+  }
+  $('#algorithm-topic-form').addEventListener('submit', async event => {
+    event.preventDefault(); if (s.busy || !s.permissions.admin || !s.account) return;
+    const form = event.currentTarget, data = Object.fromEntries(new FormData(form));
+    setBusy(true); $('#algorithm-topic-error').hidden = true;
+    try {
+      const topic = await call('saveAlgorithmTopic', { repo: repo(), parentId: data.parentId, label: data.label.trim(), fullLabel: data.fullLabel.trim() || data.label.trim(), kind: data.kind, color: data.kind === 'directory' ? 'parent' : data.color, scope: data.scope.trim(), requestId: algorithmTopicRequest });
+      s.algorithmTopics = [...(s.algorithmTopics || []).filter(record => record.id !== topic.id), topic];
+      s.algorithmTree = window.NotebookAlgorithmDirectory.hydrate(window.QMX_ALGORITHM_TREE, s.algorithmTopics);
+      algorithmSelectedNode = topic.id; $('#algorithm-topic-dialog').close();
+      renderAlgorithmNotes(); window.NotebookAlgorithmsController?.selectNode?.(topic.id);
+      toast(topic.kind === 'directory' ? '目录已添加，可继续添加子项或上传笔记' : '算法已添加，可继续上传笔记');
+    } catch (error) { $('#algorithm-topic-error').textContent = errorMessage(error); $('#algorithm-topic-error').hidden = false; }
+    finally { setBusy(false); }
+  });
   function isMineNote(note) { return accountId() !== null && String(note.authorId || '') === accountId(); }
   function openAlgorithmNoteDetail(note) { const panel=$('#algorithm-panel'); const drawer=element('div','algorithm-reading'); append(drawer,button('× 关闭算法笔记','button subtle algorithm-close-button',renderAlgorithmNotes),element('div','eyebrow','ALGORITHM NOTE'),element('h2','',note.title),append(element('div','author-row'),element('span','mini-avatar',authorName(note.author).slice(0,1)),element('span','',authorName(note.author)),element('span','separator','·'),element('span','',date(note.updatedAt)))); const body=element('div','markdown-body algorithm-reading-body');renderMarkdown(body,note.body);drawer.append(tags(note),body);panel.replaceChildren(drawer); }
   function openAlgorithmNoteEditor() { if (!s.account || !s.permissions.push) { toast('请先登录具有仓库写入权限的 GitHub 账户'); return; } const form=$('#algorithm-note-form'); form.reset(); const node=form.elements.nodeId; node.replaceChildren(...algorithmNodes().map(n=>{const o=element('option','',n.label);o.value=n.id;return o;})); node.value=algorithmSelectedNode; form.elements.noteScope.value=s.permissions.admin ? 'public' : 'personal'; form.elements.noteScope.disabled=!s.permissions.admin; $('#algorithm-note-error').hidden=true; $('#algorithm-note-dialog').showModal(); }
@@ -762,6 +839,11 @@
     const panel = $('#detail-panel'); const scroll = panel.scrollTop; panel.replaceChildren();
     if (focusedDetail) { const back = button('← 返回题目网格', 'button secondary detail-back', closeDetail); back.id = 'detail-back-button'; panel.append(back); } else { const open = button('打开详情 ↗', 'button primary detail-open', () => openDetail(record)); open.id = 'open-detail-button'; panel.append(open); }
     const actions = append(element('div', 'detail-actions'), button(favorite(record) ? '★ 已收藏' : '☆ 收藏', 'button secondary', () => changeLocal(() => { s.local.favorites = favorite(record) ? s.local.favorites.filter(value => String(value) !== key(record)) : [...s.local.favorites, key(record)]; })), button('原题 ↗', 'button subtle', () => openExternal(record.problemUrl || record.url)));
+    if (record.kind === 'document') {
+      const localSolution = button('＋ 本地题解', 'button subtle public-local-solution', () => openLocalSolution(record));
+      localSolution.id = 'local-solution-button'; localSolution.title = '为这道题写自己的本地题解；已有本地记录时继续编辑';
+      actions.append(localSolution);
+    }
     append(panel, append(element('div', 'detail-top'), append(element('div', 'detail-meta'), platformLabel(record), element('span', '', record.pid || `#${record.number || '本地'}`), difficultyBadge(record), supplementaryDifficultyBadge(record), badge(record)), actions), element('h2', 'detail-title', record.title || '未命名错题'));
     const author = authorName(record.author); append(panel, append(element('div', 'author-row'), element('span', 'mini-avatar', author.slice(0, 1)), element('span', '', author), element('span', 'separator', '·'), element('span', '', `更新于 ${date(record.updatedAt)}`), record.kind === 'document' ? element('span', 'badge document', '正式题解') : null));
     const tagrow = tags(record); tagrow.classList.add('detail-tags'); append(panel, tagrow, element('hr', 'detail-divider'), element('div', 'body-label', '思路与复盘'));
@@ -876,17 +958,34 @@
   }
   function draftKey(source, ownerId) { return JSON.stringify([source || 'new', ownerId]); }
   function editorError(error) { $('#submit-error').textContent = errorMessage(error); $('#submit-error').hidden = false; }
-  function openSubmit(record) {
+  function openLocalSolution(problem) {
+    if (s.busy || problem.kind !== 'document') return;
+    const ownerId = accountId();
+    const sourceUrl = problem.problemUrl || problem.url;
+    const sameProblem = record => {
+      if (record.sourceProblemId === key(problem) && record.sourceProblemRepo === problem.repo) return true;
+      if (sourceUrl && (record.problemUrl || record.url) === sourceUrl) return true;
+      return !!problem.pid && platformCode(record.platform) === platformCode(problem.platform) && String(record.pid || '').replace(/^CF/i, '').toLowerCase() === String(problem.pid).replace(/^CF/i, '').toLowerCase();
+    };
+    const matches = s.local.records.filter(record => visibleLocal(record) && sameProblem(record));
+    const existing = matches.find(record => record.ownerId === ownerId) || matches[0];
+    if (existing) { openSubmit(existing); return; }
+    const source = `problem:${JSON.stringify([problem.repo, key(problem)])}`;
+    const draft = { url: sourceUrl || '', title: problem.title || '', pid: problem.pid || '', platform: platformCode(problem.platform), tags: (problem.tags || []).join(', '), body: '', rating: problem.rating ?? '', difficulty: problem.difficulty || '', luoguDifficulty: problem.luoguDifficulty || '' };
+    openSubmit(null, { source, data: draft, sourceProblemId: key(problem), sourceProblemRepo: problem.repo });
+    $('#submit-title').textContent = '写本地题解';
+  }
+  function openSubmit(record, seed = null) {
     if (s.busy) return;
     if (record && !(isLocal(record) && visibleLocal(record) || canEditRemote(record))) { toast('当前账户无权编辑这条记录'); return; }
-    const source = record ? key(record) : 'new', ownerId = accountId();
+    const source = record ? key(record) : seed?.source || 'new', ownerId = accountId();
     const candidate = s.local.draft[draftKey(source, ownerId)];
     const saved = candidate?.source === source && candidate.ownerId === ownerId ? candidate : null;
     const original = record ? structuredClone(record) : null;
     if (original?.kind === 'document' && saved?.base?.path === original.path && saved.base.repo === original.repo) original.sha = saved.base.sha;
-    s.editor = { source, ownerId, clientId: saved?.clientId || record?.clientId || uuid(), record: original };
+    s.editor = { source, ownerId, clientId: saved?.clientId || record?.clientId || uuid(), record: original, ...(seed ? { sourceProblemId: seed.sourceProblemId, sourceProblemRepo: seed.sourceProblemRepo } : {}) };
     const data = record ? { url: record.problemUrl || record.url, title: record.title, pid: record.pid, platform: platformCode(record.platform), tags: (record.tags || []).join(', '), body: record.body || '', rating: record.rating ?? '', difficulty: record.difficulty || '', luoguDifficulty: record.luoguDifficulty || '' } : {};
-    fillForm(saved?.source === source && saved.ownerId === ownerId ? saved.data : data);
+    fillForm(saved?.source === source && saved.ownerId === ownerId ? saved.data : seed?.data || data);
     renderEditorDifficulty();
     renderEditorTags();
     const editing = !!record;
@@ -923,7 +1022,7 @@
     }
     const clientId = s.editor.clientId;
     const body = !existing ? [data.body, data.reason.trim() ? `## 错因分析\n${data.reason.trim()}` : '', data.trick.trim() ? `## Trick\n${data.trick.trim()}` : ''].filter(Boolean).join('\n\n') : data.body;
-    const record = { ...(existing || {}), clientId, ownerId: existing && !remote ? existing.ownerId : existing?.ownerId ?? accountId(), title: data.title.trim() || data.pid.trim() || '未命名错题', pid: data.platform === 'CF' && data.pid.trim() ? `CF${data.pid.trim().replace(/^CF/i, '')}` : data.pid.trim(), platform: data.platform, rating: data.rating.trim() ? Number(data.rating) : null, difficulty: data.difficulty.trim(), luoguDifficulty: data.platform === 'LG' ? '' : data.luoguDifficulty.trim(), tags: data.tags.split(/[,，、]/).map(tag => tag.trim()).filter(Boolean), problemUrl: parsed.href, url: parsed.href, body, updatedAt: new Date().toISOString() };
+    const record = { ...(existing || {}), ...(s.editor.sourceProblemId ? { sourceProblemId: s.editor.sourceProblemId, sourceProblemRepo: s.editor.sourceProblemRepo } : {}), clientId, ownerId: existing && !remote ? existing.ownerId : existing?.ownerId ?? accountId(), title: data.title.trim() || data.pid.trim() || '未命名错题', pid: data.platform === 'CF' && data.pid.trim() ? `CF${data.pid.trim().replace(/^CF/i, '')}` : data.pid.trim(), platform: data.platform, rating: data.rating.trim() ? Number(data.rating) : null, difficulty: data.difficulty.trim(), luoguDifficulty: data.platform === 'LG' ? '' : data.luoguDifficulty.trim(), tags: data.tags.split(/[,，、]/).map(tag => tag.trim()).filter(Boolean), problemUrl: parsed.href, url: parsed.href, body, updatedAt: new Date().toISOString() };
     setBusy(true); $('#submit-error').hidden = true;
     let wroteRemote = false; const previousLocal = structuredClone(s.local);
     try {
@@ -1016,6 +1115,10 @@
     input.addEventListener('change', () => { stateSelect.value = input.value; stateFacet.open = false; render(); }); append(label, input, element('span', '', option.textContent)); stateOptions.append(label); });
   append(stateFacet, stateSummary, stateOptions); stateSelect.hidden = true; stateSelect.after(stateFacet);
   function updateStateFacet() { stateLabel.textContent = stateSelect.selectedOptions[0]?.textContent || '全部状态'; $$('input', stateOptions).forEach(input => { input.checked = input.value === stateSelect.value; }); }
+  for (const [id, scope] of [['library-public-button', 'public'], ['library-local-button', 'local']]) $('#'+id).addEventListener('click', () => {
+    if (s.busy) return;
+    s.libraryScope = scope; s.selected = null; focusedDetail = false; document.body.classList.remove('reading-detail'); clearFilters();
+  });
   $('#search-input').addEventListener('input', render); $('#state-filter').addEventListener('change', render); $('#clear-filters').addEventListener('click', clearFilters);
   const luoguLevels=['入门','普及-','普及','普及+/提高-','提高','提高+/省选-','省选/NOI-','NOI/NOI+/CTS'];
   const luoguTones=['red','orange','yellow','green','cyan','blue','purple','black'];

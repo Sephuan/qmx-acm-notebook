@@ -110,6 +110,7 @@ function state(error) {
   return {
     records: matching ? (cache.records || []).filter(r => r.kind === 'document').map(r => ({ ...r, repo: s.repo })) : [],
     algorithmNotes: matching ? (cache.algorithmNotes || []).map(r => ({ ...r, repo: s.repo })) : [],
+    algorithmTopics: matching && Array.isArray(cache.algorithmTopics) ? cache.algorithmTopics.map(topic => ({ ...topic, repo: s.repo })) : [],
     issues: matching ? (cache.issues || (cache.records || []).filter(r => r.kind === 'issue')).map(r => ({ ...r, repo: s.repo })) : [],
     lastSync: matching ? cache.lastSync : null,
     tagCatalog: matching && cache.tagCatalog ? cache.tagCatalog : require('../ui/tag-presets.js'),
@@ -353,6 +354,15 @@ function setup() {
     }
     return result;
   }));
+  handle('saveAlgorithmTopic', data => writeOperation(async () => {
+    const repo = settings().repo;
+    const result = await client().saveAlgorithmTopic(data);
+    if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
+    // Persist only the complete additions list returned after the repository commit succeeded.
+    const cache = read('cache.json', {});
+    save('cache.json', { ...(cache.repo === repo ? cache : {}), repo, algorithmTopics: result.topics });
+    return result.topic;
+  }));
   handle('refreshAccount', async () => {
     if (!token) throw new Error('请先登录 GitHub');
     return writeOperation(() => refreshIdentity());
@@ -368,7 +378,7 @@ function setup() {
       try { tagCatalog = await client().getTagCatalog(); }
       catch (error) { tagCatalogError = error.status === 401 ? '标签目录授权已失效，请重新登录' : '标签目录暂未更新，继续使用已缓存的标签'; }
       if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
-      save('cache.json', { ...result, repo, tagCatalog, tagCatalogError, algorithmNotes: Array.isArray(result.algorithmNotes) ? result.algorithmNotes : [] });
+      save('cache.json', { ...result, repo, tagCatalog, tagCatalogError, algorithmNotes: Array.isArray(result.algorithmNotes) ? result.algorithmNotes : [], algorithmTopics: Array.isArray(result.algorithmTopics) ? result.algorithmTopics : [] });
       if (token) { try { await refreshIdentity(); } catch (error) { permissions = null; return state(`资料已同步，账号权限刷新失败：${error.message}`); } }
       return state();
     } finally { syncBusy = false; }

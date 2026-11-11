@@ -1,0 +1,511 @@
+{
+  "url": "https://qcnprxyhd32y.feishu.cn/wiki/AtYmwfZdviEk08kybLicmNDUnZf",
+  "title": "算法板子与要点",
+  "snapshot": "2026-11-10",
+  "headings": [
+    {
+      "sourceBlockId": "18",
+      "sourceHeading": "Part 0 好用的东西"
+    },
+    {
+      "sourceBlockId": "24",
+      "sourceHeading": "Part 1 基础算法"
+    },
+    {
+      "sourceBlockId": "26",
+      "sourceHeading": "Part 1.1 模拟"
+    },
+    {
+      "sourceBlockId": "29",
+      "sourceHeading": "Part 1.2 排序算法"
+    },
+    {
+      "sourceBlockId": "39",
+      "sourceHeading": "Part 1.3 二分"
+    },
+    {
+      "sourceBlockId": "66",
+      "sourceHeading": "Part 1.4 分治"
+    },
+    {
+      "sourceBlockId": "69",
+      "sourceHeading": "Part 1.5 贪心"
+    },
+    {
+      "sourceBlockId": "92",
+      "sourceHeading": "Part 1.6 构造"
+    },
+    {
+      "sourceBlockId": "94",
+      "sourceHeading": "Part 1.7 高精度"
+    },
+    {
+      "sourceBlockId": "109",
+      "sourceHeading": "Part 1.8 前缀和 & 差分"
+    },
+    {
+      "sourceBlockId": "123",
+      "sourceHeading": "Part 1.9 双指针"
+    },
+    {
+      "sourceBlockId": "129",
+      "sourceHeading": "Part 2 搜索"
+    },
+    {
+      "sourceBlockId": "131",
+      "sourceHeading": "Part 2.1 深度优先搜索dfs"
+    },
+    {
+      "sourceBlockId": "155",
+      "sourceHeading": "Part 2.2 广度优先搜索bfs"
+    },
+    {
+      "sourceBlockId": "181",
+      "sourceHeading": "Part 2.3 记忆化搜索"
+    },
+    {
+      "sourceBlockId": "182",
+      "sourceHeading": "Part 2.4 搜索的剪枝"
+    },
+    {
+      "sourceBlockId": "183",
+      "sourceHeading": "Part 2.5 双向搜索"
+    },
+    {
+      "sourceBlockId": "184",
+      "sourceHeading": "Part 2.6 A*"
+    },
+    {
+      "sourceBlockId": "185",
+      "sourceHeading": "Part 2.7 IDA*"
+    },
+    {
+      "sourceBlockId": "186",
+      "sourceHeading": "Part 2.8 DLX"
+    },
+    {
+      "sourceBlockId": "187",
+      "sourceHeading": "Part 3 动态规划dp"
+    },
+    {
+      "sourceBlockId": "188",
+      "sourceHeading": "Part 3.1 线性动态规划"
+    },
+    {
+      "sourceBlockId": "189",
+      "sourceHeading": "Part 3.2 背包动态规划"
+    },
+    {
+      "sourceBlockId": "190",
+      "sourceHeading": "Part 3.3 区间动态规划"
+    },
+    {
+      "sourceBlockId": "191",
+      "sourceHeading": "Part 3.4 树形动态规划"
+    },
+    {
+      "sourceBlockId": "192",
+      "sourceHeading": "Part 3.5 状态压缩动态规划"
+    },
+    {
+      "sourceBlockId": "193",
+      "sourceHeading": "Part 3.6 倍增优化动态规划"
+    },
+    {
+      "sourceBlockId": "194",
+      "sourceHeading": "Part 3.7 数据结构优化动态规划"
+    },
+    {
+      "sourceBlockId": "195",
+      "sourceHeading": "Part 3.8 单调队列优化动态规划"
+    },
+    {
+      "sourceBlockId": "196",
+      "sourceHeading": "Part 3.9 斜率优化动态规划"
+    },
+    {
+      "sourceBlockId": "197",
+      "sourceHeading": "Part 3.10 决策单调性优化动态规划"
+    },
+    {
+      "sourceBlockId": "198",
+      "sourceHeading": "Part 3.11 数位统计类动态规划"
+    },
+    {
+      "sourceBlockId": "199",
+      "sourceHeading": "Part 3.12 轮廓线动态规划"
+    },
+    {
+      "sourceBlockId": "200",
+      "sourceHeading": "Part 4 字符串"
+    },
+    {
+      "sourceBlockId": "202",
+      "sourceHeading": "Part 4.1 字符串哈希"
+    },
+    {
+      "sourceBlockId": "203",
+      "sourceHeading": "Part 4.2 KMP"
+    },
+    {
+      "sourceBlockId": "204",
+      "sourceHeading": "Part 4.3 Manacher"
+    },
+    {
+      "sourceBlockId": "205",
+      "sourceHeading": "Part 4.4 Trie树（字典树）"
+    },
+    {
+      "sourceBlockId": "212",
+      "sourceHeading": "Part 4.5 AC自动机"
+    },
+    {
+      "sourceBlockId": "213",
+      "sourceHeading": "Part 4.6 回文自动机"
+    },
+    {
+      "sourceBlockId": "214",
+      "sourceHeading": "Part 4.7 后缀数组"
+    },
+    {
+      "sourceBlockId": "215",
+      "sourceHeading": "Part 4.8 后缀自动机"
+    },
+    {
+      "sourceBlockId": "216",
+      "sourceHeading": "Part 5 数学"
+    },
+    {
+      "sourceBlockId": "219",
+      "sourceHeading": "Part 5.1 位运算"
+    },
+    {
+      "sourceBlockId": "220",
+      "sourceHeading": "Part 5.2 整除相关"
+    },
+    {
+      "sourceBlockId": "221",
+      "sourceHeading": "Part 5.2.1 素数"
+    },
+    {
+      "sourceBlockId": "222",
+      "sourceHeading": "Part 5.2.2 最大公约数"
+    },
+    {
+      "sourceBlockId": "223",
+      "sourceHeading": "Part 5.2.3 欧拉函数"
+    },
+    {
+      "sourceBlockId": "264",
+      "sourceHeading": "Part 5.3 同余方程"
+    },
+    {
+      "sourceBlockId": "265",
+      "sourceHeading": "Part 5.3.1 线性同余方程&乘法逆元"
+    },
+    {
+      "sourceBlockId": "266",
+      "sourceHeading": "Part 5.3.2 中国剩余定理"
+    },
+    {
+      "sourceBlockId": "267",
+      "sourceHeading": "Part 5.3.3 高次同余方程"
+    },
+    {
+      "sourceBlockId": "268",
+      "sourceHeading": "Part 5.4 博弈论"
+    },
+    {
+      "sourceBlockId": "269",
+      "sourceHeading": "Part 5.5 概率与期望"
+    },
+    {
+      "sourceBlockId": "270",
+      "sourceHeading": "Part 5.6 组合数学"
+    },
+    {
+      "sourceBlockId": "271",
+      "sourceHeading": "Part 5.6.1 排列组合"
+    },
+    {
+      "sourceBlockId": "272",
+      "sourceHeading": "Part 5.6.2 卡特兰数&斯特林数"
+    },
+    {
+      "sourceBlockId": "273",
+      "sourceHeading": "Part 5.6.3 容斥原理"
+    },
+    {
+      "sourceBlockId": "274",
+      "sourceHeading": "Part 5.7 线性代数"
+    },
+    {
+      "sourceBlockId": "275",
+      "sourceHeading": "Part 5.7.1 矩阵"
+    },
+    {
+      "sourceBlockId": "276",
+      "sourceHeading": "Part 5.7.2 高斯消元"
+    },
+    {
+      "sourceBlockId": "277",
+      "sourceHeading": "Part 5.7.3 线性基"
+    },
+    {
+      "sourceBlockId": "278",
+      "sourceHeading": "Part 5.8 多项式"
+    },
+    {
+      "sourceBlockId": "279",
+      "sourceHeading": "Part 5.9 莫比乌斯反演"
+    },
+    {
+      "sourceBlockId": "280",
+      "sourceHeading": "Part 5.10 筛法"
+    },
+    {
+      "sourceBlockId": "282",
+      "sourceHeading": "Part 5.11 线性规划"
+    },
+    {
+      "sourceBlockId": "283",
+      "sourceHeading": "Part 5.12 数值方法"
+    },
+    {
+      "sourceBlockId": "284",
+      "sourceHeading": "Part 5.12.1 三分法"
+    },
+    {
+      "sourceBlockId": "285",
+      "sourceHeading": "Part 5.12.2 自适应辛普森法"
+    },
+    {
+      "sourceBlockId": "286",
+      "sourceHeading": "Part 5.13 置换群"
+    },
+    {
+      "sourceBlockId": "287",
+      "sourceHeading": "Part 5.14 格雷码"
+    },
+    {
+      "sourceBlockId": "291",
+      "sourceHeading": "Part 6 数据结构"
+    },
+    {
+      "sourceBlockId": "292",
+      "sourceHeading": "Part 6.1 STL速查"
+    },
+    {
+      "sourceBlockId": "321",
+      "sourceHeading": "Part 6.2 链表"
+    },
+    {
+      "sourceBlockId": "334",
+      "sourceHeading": "Part 6.3 栈"
+    },
+    {
+      "sourceBlockId": "335",
+      "sourceHeading": "Part 6.4 队列"
+    },
+    {
+      "sourceBlockId": "336",
+      "sourceHeading": "Part 6.5 并查集"
+    },
+    {
+      "sourceBlockId": "337",
+      "sourceHeading": "Part 6.6 二叉堆"
+    },
+    {
+      "sourceBlockId": "338",
+      "sourceHeading": "Part 6.7 ST表"
+    },
+    {
+      "sourceBlockId": "339",
+      "sourceHeading": "Part 6.8 树状数组"
+    },
+    {
+      "sourceBlockId": "340",
+      "sourceHeading": "Part 6.9 线段树"
+    },
+    {
+      "sourceBlockId": "341",
+      "sourceHeading": "Part 6.10 分块"
+    },
+    {
+      "sourceBlockId": "342",
+      "sourceHeading": "Part 6.11 可并堆"
+    },
+    {
+      "sourceBlockId": "343",
+      "sourceHeading": "Part 6.12 主席树"
+    },
+    {
+      "sourceBlockId": "344",
+      "sourceHeading": "Part 6.13 平衡树"
+    },
+    {
+      "sourceBlockId": "345",
+      "sourceHeading": "Part 6.14 树链剖分"
+    },
+    {
+      "sourceBlockId": "346",
+      "sourceHeading": "Part 6.15 树套树"
+    },
+    {
+      "sourceBlockId": "347",
+      "sourceHeading": "Part 6.16 动态树"
+    },
+    {
+      "sourceBlockId": "348",
+      "sourceHeading": "Part 6.17 可持久化数据结构"
+    },
+    {
+      "sourceBlockId": "349",
+      "sourceHeading": "Part 6.18 K-D Tree"
+    },
+    {
+      "sourceBlockId": "350",
+      "sourceHeading": "Part 6.19 珂朵莉树"
+    },
+    {
+      "sourceBlockId": "351",
+      "sourceHeading": "Part 7 图论"
+    },
+    {
+      "sourceBlockId": "352",
+      "sourceHeading": "Part 7.1 图的存储与遍历"
+    },
+    {
+      "sourceBlockId": "353",
+      "sourceHeading": "Part 7.2 最短路问题"
+    },
+    {
+      "sourceBlockId": "354",
+      "sourceHeading": "Part 7.3 树上问题"
+    },
+    {
+      "sourceBlockId": "355",
+      "sourceHeading": "Part 7.3.1 二叉树"
+    },
+    {
+      "sourceBlockId": "356",
+      "sourceHeading": "Part 7.3.2 树的直径"
+    },
+    {
+      "sourceBlockId": "357",
+      "sourceHeading": "Part 7.3.3 最近公共祖先"
+    },
+    {
+      "sourceBlockId": "358",
+      "sourceHeading": "Part 7.4 生成树"
+    },
+    {
+      "sourceBlockId": "359",
+      "sourceHeading": "Part 7.5 拓扑排序"
+    },
+    {
+      "sourceBlockId": "360",
+      "sourceHeading": "Part 7.6 差分约束"
+    },
+    {
+      "sourceBlockId": "361",
+      "sourceHeading": "Part 7.7 图的连通性相关"
+    },
+    {
+      "sourceBlockId": "362",
+      "sourceHeading": "Part 7.8 二分图"
+    },
+    {
+      "sourceBlockId": "363",
+      "sourceHeading": "Part 7.9 网络流"
+    },
+    {
+      "sourceBlockId": "364",
+      "sourceHeading": "Part 7.9.1 最大流"
+    },
+    {
+      "sourceBlockId": "365",
+      "sourceHeading": "Part 7.9.2 最小割"
+    },
+    {
+      "sourceBlockId": "366",
+      "sourceHeading": "Part 7.9.3 费用流"
+    },
+    {
+      "sourceBlockId": "367",
+      "sourceHeading": "Part 7.9.4 上下界网络流"
+    },
+    {
+      "sourceBlockId": "368",
+      "sourceHeading": "Part 7.10 2-SAT"
+    },
+    {
+      "sourceBlockId": "369",
+      "sourceHeading": "Part 7.11 点分治"
+    },
+    {
+      "sourceBlockId": "370",
+      "sourceHeading": "Part 7.12 虚树"
+    },
+    {
+      "sourceBlockId": "371",
+      "sourceHeading": "Part 7.13 矩阵树定理"
+    },
+    {
+      "sourceBlockId": "372",
+      "sourceHeading": "Part 8 计算几何"
+    },
+    {
+      "sourceBlockId": "373",
+      "sourceHeading": "Part 8.1 凸包"
+    },
+    {
+      "sourceBlockId": "374",
+      "sourceHeading": "Part 8.2 旋转卡壳"
+    },
+    {
+      "sourceBlockId": "375",
+      "sourceHeading": "Part 8.3 半平面交"
+    },
+    {
+      "sourceBlockId": "376",
+      "sourceHeading": "Part 9 杂项"
+    },
+    {
+      "sourceBlockId": "377",
+      "sourceHeading": "Part 9.1 模拟退火"
+    },
+    {
+      "sourceBlockId": "378",
+      "sourceHeading": "Part 9.2 0/1 分数规划"
+    },
+    {
+      "sourceBlockId": "379",
+      "sourceHeading": "Part 9.3 离线算法"
+    },
+    {
+      "sourceBlockId": "380",
+      "sourceHeading": "Part 9.3.1 CDQ 分治"
+    },
+    {
+      "sourceBlockId": "381",
+      "sourceHeading": "Part 9.3.2 整体二分"
+    },
+    {
+      "sourceBlockId": "382",
+      "sourceHeading": "Part 9.3.3 莫队"
+    },
+    {
+      "sourceBlockId": "383",
+      "sourceHeading": "Part 9.4 奇怪的题目"
+    },
+    {
+      "sourceBlockId": "384",
+      "sourceHeading": "Part 9.5 非传统题"
+    },
+    {
+      "sourceBlockId": "385",
+      "sourceHeading": "Part 9.5.1 提交答案题"
+    }
+  ]
+}
