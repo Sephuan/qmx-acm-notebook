@@ -49,7 +49,16 @@
   function toast(message) { $('#toast').textContent = message; $('#toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('#toast').hidden = true; }, 3400); }
   function errorMessage(error) { const message = typeof error === 'string' ? error : error?.message || '操作未完成，请稍后重试'; return message.replace(/^Error invoking remote method '[^']+':\s*(?:Error:\s*)?/, ''); }
   function key(record) { return String(record.id ?? record.number ?? `${record.platform}:${record.pid}:${record.url}`); }
-  function uuid() { return crypto.randomUUID(); }
+  function uuid() {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+      return crypto.randomUUID();
+    }
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+      const r = Math.random() * 16 | 0;
+      const v = c === 'x' ? r : (r & 0x3 | 0x8);
+      return v.toString(16);
+    });
+  }
   function accountId() { return s.account?.id == null ? null : String(s.account.id); }
   function repo() { return s.permissions.repo || s.settings.repo || ''; }
   function sameRepo(record) { return !!record.repo && String(record.repo).toLowerCase() === String(repo()).toLowerCase(); }
@@ -1091,7 +1100,45 @@
   async function sync() {
     if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭当前编辑'); return; }
     setBusy(true);
-    try { if (demo) { toast('演示模式：本地记录已保留，未连接公共题库'); return; } if (!navigator.onLine) throw new Error('当前离线，请连接网络后重试'); applyPayload(await call('sync')); s.comments.clear(); refreshFilters(); render(); toast('学习空间已同步'); } catch (error) { const message = errorMessage(error); try { applyPayload(await call('bootstrap')); } catch (_) {} s.error = message; refreshFilters(); render(); toast(`同步失败：${message}`); } finally { setBusy(false); }
+    try {
+      if (demo) {
+        const currentRepo = repo() || 'ctguacm/2026';
+        const currentServer = s.settings?.serverUrl || 'http://172.25.5.128:3000';
+        try {
+          const res = await fetch(`/api/sync?repo=${encodeURIComponent(currentRepo)}&serverUrl=${encodeURIComponent(currentServer)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data.records) && data.records.length > 0) {
+              s.records = data.records.map(r => ({ ...r, repo: currentRepo }));
+              s.issues = (Array.isArray(data.issues) ? data.issues : []).map(r => ({ ...r, repo: currentRepo }));
+              s.lastSync = new Date().toISOString();
+              s.comments.clear();
+              refreshFilters();
+              render();
+              toast(`已从 ${currentRepo} 同步 ${s.records.length} 道题解`);
+              return;
+            }
+          }
+        } catch (_) {}
+        toast('演示模式：本地记录已保留，未连接公共题库');
+        return;
+      }
+      if (!navigator.onLine) throw new Error('当前离线，请连接网络后重试');
+      applyPayload(await call('sync'));
+      s.comments.clear();
+      refreshFilters();
+      render();
+      toast('学习空间已同步');
+    } catch (error) {
+      const message = errorMessage(error);
+      try { applyPayload(await call('bootstrap')); } catch (_) {}
+      s.error = message;
+      refreshFilters();
+      render();
+      toast(`同步失败：${message}`);
+    } finally {
+      setBusy(false);
+    }
   }
   $$('.nav-item').forEach(node => node.addEventListener('click', event => { navigate(node.dataset.view); if (event.pointerType === 'touch') { sidebarHovered = false; sidebarFocused = false; updateSidebar(); } }));
   document.addEventListener('keydown', event => { if (event.key === 'Escape' && focusedDetail && !document.querySelector('dialog[open]')) { event.preventDefault(); closeDetail(); } });
@@ -1235,10 +1282,12 @@
         if (target) {
           s.settings.repo = target.repo;
           s.settings.serverUrl = target.serverUrl;
+          s.permissions.repo = target.repo;
         }
         writeDemo();
         renderRepoSelector();
         render();
+        void sync();
       }
       toast('已切换到仓库：' + (s.settings.repo || ''));
     } catch (err) {
@@ -1548,13 +1597,34 @@
   document.addEventListener('keydown', event => { if (event.key === '/' && !event.ctrlKey && !event.metaKey && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) && !document.querySelector('dialog[open]')) { event.preventDefault(); if (['home', 'tricks', 'algorithms'].includes(s.view)) { navigate('public'); } $('#search-input').focus(); } });
   async function bootstrap() {
     applyTheme(readTheme()); applySidebar(readSidebar()); render();
-    if (demo) { s.permissions = { repo: s.settings.repo || 'ctguacm/2026', push: false, admin: false }; s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo })); s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo })); s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} }); s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record); s.settings = cached?.settings || {}; applyTheme(s.settings.theme || readTheme()); applyCodeSettings(); }
+    if (demo) {
+      s.settings = cached?.settings || {};
+      if (!Array.isArray(s.settings.repositories) || !s.settings.repositories.length) {
+        s.settings.repositories = [
+          { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', repo: 'ctguacm/2026', serverUrl: 'http://172.25.5.128:3000' },
+          { id: 'official', name: '官方题解库 (GitHub)', repo: 'qmx-acm-data/2026', serverUrl: '' }
+        ];
+        s.settings.activeRepoId = 'ctgu-2026';
+        s.settings.repo = 'ctguacm/2026';
+        s.settings.serverUrl = 'http://172.25.5.128:3000';
+      }
+      s.permissions = { repo: s.settings.repo || 'ctguacm/2026', push: false, admin: false };
+      s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo }));
+      s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo }));
+      s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} });
+      s.local.records = s.local.records.map(record => record.id === 'demo-local-3' && record.pid === 'dp_f' && record.rating == null ? { ...examples[2] } : record);
+      applyTheme(s.settings.theme || readTheme());
+      applyCodeSettings();
+      renderRepoSelector();
+    }
     else { try { applyPayload(await call('bootstrap')); } catch (error) { s.error = errorMessage(error); } }
     s.loading = false; refreshFilters(); render();
+    renderRepoSelector();
     void refreshContests(false);
     if (!demo && !s.catalogFromPayload && typeof bridge?.getTagCatalog === 'function') { try { const catalog = await call('getTagCatalog'); if (Array.isArray(catalog?.categories)) s.tagCatalog = catalog; } catch (_) { /* Presets remain available offline. */ } }
     void checkStartupUpdates();
     if (!demo && !s.error && s.settings.autoSync !== false && navigator.onLine) await sync();
+    else if (demo && navigator.onLine) void sync();
   }
   setInterval(tickContests, 1000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { tickContests(); refreshVisibleContests(); } });

@@ -22,8 +22,32 @@ const MIME_TYPES = {
   '.eot': 'application/vnd.ms-fontobject'
 };
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   let reqPath = decodeURIComponent(req.url.split('?')[0]);
+
+  if (reqPath === '/api/sync') {
+    const urlObj = new URL(req.url, 'http://localhost');
+    const repo = urlObj.searchParams.get('repo') || 'ctguacm/2026';
+    const serverUrl = urlObj.searchParams.get('serverUrl') || 'http://172.25.5.128:3000';
+    try {
+      const { GitHub } = require('./electron/github.cjs');
+      const gh = new GitHub({ repo, serverUrl });
+      const result = await gh.sync();
+      res.writeHead(200, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache-Control': 'no-cache',
+        'Access-Control-Allow-Origin': '*'
+      });
+      res.end(JSON.stringify(result));
+    } catch (err) {
+      res.writeHead(500, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Access-Control-Allow-Origin': '*'
+      });
+      res.end(JSON.stringify({ error: err.message, records: [], issues: [] }));
+    }
+    return;
+  }
 
   if (reqPath === '' || reqPath === '/') {
     res.writeHead(302, { Location: '/ui/' });
