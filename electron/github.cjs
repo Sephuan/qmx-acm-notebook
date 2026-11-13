@@ -121,17 +121,27 @@ function samePayload(a, b) {
 }
 
 class GitHub {
-  constructor({ token = '', repo = 'qmx-acm-data/2026', fetcher = fetch } = {}) {
+  constructor({ token = '', repo = 'ctguacm/2026', fetcher = fetch, serverUrl = '' } = {}) {
     repoParts(repo);
     this.repo = repo;
     this.token = token;
     this.fetcher = fetcher;
+    this.serverUrl = serverUrl;
+  }
+
+  apiUrl(path) {
+    if (!this.serverUrl || this.serverUrl === 'https://api.github.com' || this.serverUrl === 'https://github.com') {
+      return API + path;
+    }
+    const base = this.serverUrl.replace(/\/+$/, '');
+    if (base.endsWith('/api/v1')) return base + path;
+    return base + '/api/v1' + path;
   }
 
   async request(path, opts = {}) {
     let r;
     try {
-      r = await this.fetcher(API + path, {
+      r = await this.fetcher(this.apiUrl(path), {
         ...opts,
         headers: {
           Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'QMX-Notebook',

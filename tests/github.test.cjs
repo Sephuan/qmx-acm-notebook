@@ -449,3 +449,15 @@ test('GitHub denied authentication returns actionable message', async () => {
   const gh = new GitHub({ fetcher: async () => ({ ok: false, status: 401, json: async () => ({}), headers: new Headers() }) });
   await assert.rejects(gh.request('/user'), /重新授权/);
 });
+
+test('custom Git / Gitea server URL formats and routes API requests', () => {
+  const ghDefault = new GitHub({ repo: 'a/b' });
+  assert.equal(ghDefault.apiUrl('/user'), 'https://api.github.com/user');
+  assert.equal(ghDefault.apiUrl('/repos/a/b'), 'https://api.github.com/repos/a/b');
+
+  const ghGitea = new GitHub({ repo: 'ctguacm/2026', serverUrl: 'http://172.25.5.128:3000' });
+  assert.equal(ghGitea.apiUrl('/repos/ctguacm/2026'), 'http://172.25.5.128:3000/api/v1/repos/ctguacm/2026');
+
+  const ghGiteaV1 = new GitHub({ repo: 'ctguacm/2026', serverUrl: 'http://172.25.5.128:3000/api/v1/' });
+  assert.equal(ghGiteaV1.apiUrl('/user'), 'http://172.25.5.128:3000/api/v1/user');
+});

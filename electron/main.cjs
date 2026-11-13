@@ -74,7 +74,7 @@ function ensureIdle() {
 }
 // Public OAuth application identifier; never embed a client secret or user token.
 const TEAM_CLIENT_ID = 'Ov23likjqSdpkS6MYGzJ';
-const defaults = { repo: 'qmx-acm-data/2026', clientId: TEAM_CLIENT_ID, theme: 'light' };
+const defaults = { serverUrl: 'http://172.25.5.128:3000', repo: 'ctguacm/2026', clientId: TEAM_CLIENT_ID, theme: 'light' };
 function read(name, fallback) {
   try { return JSON.parse(fs.readFileSync(path.join(dir, name), 'utf8')); } catch { return fallback; }
 }
@@ -89,9 +89,9 @@ function settings() {
   return value;
 }
 function local() { return { records: [], favorites: [], mastery: {}, draft: {}, ...read('local.json', {}) }; }
-function githubClient(currentToken = token, repo = settings().repo) {
+function githubClient(currentToken = token, repo = settings().repo, serverUrl = settings().serverUrl) {
   const ticket = auth.capture();
-  const gh = new GitHub({ repo, token: currentToken, fetcher: networkFetch });
+  const gh = new GitHub({ repo, token: currentToken, fetcher: networkFetch, serverUrl });
   // All authenticated operations, including writes, invalidate only on a structured HTTP 401.
   return new Proxy(gh, { get(target, name) {
     const value = target[name];
@@ -121,9 +121,15 @@ function state(error) {
 }
 function assertExternal(url) {
   const u = new URL(url);
-  if (!u.username && !u.password && !u.port && u.protocol === 'https:' && ['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com', 'leetcode.cn', 'leetcode.com', 'www.luogu.com'].includes(u.hostname)) return u;
+  const allowedHosts = ['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com', 'leetcode.cn', 'leetcode.com', 'www.luogu.com', '172.25.5.128'];
+  const custom = settings()?.serverUrl;
+  if (custom) {
+    try { const customHost = new URL(custom).hostname; if (!allowedHosts.includes(customHost)) allowedHosts.push(customHost); } catch (_) {}
+  }
+  const isCustom = custom && u.hostname === new URL(custom).hostname;
+  if (!u.username && !u.password && (u.protocol === 'https:' || u.hostname === '172.25.5.128' || isCustom) && allowedHosts.includes(u.hostname)) return u;
   try { return new URL(problemUrl(url)); }
-  catch { throw new Error('仅允许打开 GitHub 和受支持题目平台的链接（HTTP 仅限官方题目）'); }
+  catch { throw new Error('仅允许打开 GitHub、校内代码平台和受支持题目平台的链接（HTTP 仅限官方题目）'); }
 }
 async function external(url) {
   const u = assertExternal(url);
@@ -387,6 +393,11 @@ function setup() {
     if (writeBusy || syncBusy) throw new Error('请等待当前操作完成后再修改设置');
     const old = settings(), next = { ...old };
     if (data.repo !== undefined) { repoParts(data.repo); next.repo = data.repo; }
+    if (data.serverUrl !== undefined) {
+      const url = String(data.serverUrl).trim();
+      if (url && !/^https?:\/\/[^\s$.?#].[^\s]*$/i.test(url)) throw new Error('Git 服务地址格式不正确');
+      next.serverUrl = url;
+    }
     if (data.clientId !== undefined) {
       if (!/^[A-Za-z0-9_.-]{0,100}$/.test(data.clientId)) throw new Error('Client ID 格式不正确');
       next.clientId = data.clientId.trim() || TEAM_CLIENT_ID;
@@ -405,8 +416,8 @@ function setup() {
       if (data.contestOptOuts.some(item => typeof item !== 'string' || !/^[a-z0-9-]{1,40}:[^\s:]{1,120}$/i.test(item))) throw new Error('比赛偏好格式不正确');
       next.contestOptOuts = [...new Set(data.contestOptOuts.map(item => item.trim()))];
     }
-    if (next.repo !== old.repo) permissions = null;
-    if (next.clientId !== old.clientId || next.repo !== old.repo) loginGeneration++;
+    if (next.repo !== old.repo || next.serverUrl !== old.serverUrl) permissions = null;
+    if (next.clientId !== old.clientId || next.repo !== old.repo || next.serverUrl !== old.serverUrl) loginGeneration++;
     save('settings.json', next); return state();
   });
   handle('updateLocal', data => {
