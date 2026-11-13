@@ -146,7 +146,8 @@
         "feishu-part-6",
         "feishu-part-7",
         "feishu-part-8",
-        "feishu-part-9"
+        "feishu-part-9",
+        "directory-contest-experience"
       ],
       "sourceUrls": []
     },
@@ -11291,6 +11292,20 @@
       "type": "directory",
       "scope": "目录导航：待分类专题。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
       "rationale": "此节点仅用于目录分类与笔记关联，不评价学习难度；原有算法内容在独立子节点中保留。",
+      "provenance": "directory",
+      "confidence": "not-applicable",
+      "evidenceScope": "directory",
+      "derivedFrom": [],
+      "sourceUrls": []
+    },
+    {
+      "nodeId": "directory-contest-experience",
+      "label": "算法竞赛经验与游记",
+      "level": "parent",
+      "status": "not-applicable",
+      "type": "directory",
+      "scope": "算法竞赛的赛制认识、训练方法、团队协作、参赛经验、赛后复盘与比赛游记；目录可直接关联公开笔记。",
+      "rationale": "经验与游记用于理解竞赛、交流训练与记录参赛经历，不是具体算法或题目能力等级，因此不设置 D1–D5 难度。",
       "provenance": "directory",
       "confidence": "not-applicable",
       "evidenceScope": "directory",

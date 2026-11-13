@@ -13,7 +13,8 @@
     "completionRule": "学习完成与独立解题通关分开记录；阶段挑战应包含无标签新题、完整实现和复盘。",
     "optionalRule": "标记optional的专题可跳学，不作为达到任一CF区间的必要清单；expert知识点仅出现在后期选修。",
     "problemRule": "此路线尚未绑定真实题目，不提供未经核实的题号或自动判题结果。",
-    "learningThreadRule": "学习脉络描述算法的初识、进阶与组合关系，threadGateIds用于回顾和延伸，不构成额外先修或锁关条件。"
+    "learningThreadRule": "学习脉络描述算法的初识、进阶与组合关系，threadGateIds用于回顾和延伸，不构成额外先修或锁关条件。",
+    "orientationPrelude": "第0章为竞赛认识导览，首关“总览算法竞赛”关联知识树“算法竞赛经验与游记”；不绑定题目或评级，可按需跳学。"
   },
   "sources": [
     {
@@ -26,6 +27,54 @@
     }
   ],
   "stages": [
+    {
+      "id": "stage-00",
+      "index": 0,
+      "type": "orientation",
+      "title": "认识算法竞赛",
+      "description": "从比赛是什么、怎样训练开始，建立对赛制、评测、协作和复盘的整体认识。",
+      "goal": "能描述一次比赛与日常训练的基本流程，并为自己确定下一步学习目标。",
+      "luoguDifficulty": [],
+      "rationale": "这是进入算法学习前的导览章节，不按题目难度选题，也不要求先完成全部算法专题。",
+      "completionCriteria": [
+        "用自己的话描述解题与提交评测的流程",
+        "阅读一篇经验或游记，记录值得借鉴的做法与适用条件",
+        "写下下一步训练安排或尚待解答的问题"
+      ],
+      "prerequisites": {
+        "stageIds": []
+      },
+      "gates": [
+        {
+          "id": "stage-00-gate-01",
+          "index": 1,
+          "title": "总览算法竞赛",
+          "kind": "learning",
+          "topicIds": [
+            "directory-contest-experience"
+          ],
+          "luoguDifficulty": [],
+          "description": "先认识算法竞赛：阅读题意和约束，设计算法并分析复杂度，实现程序后提交评测；了解个人赛与团队赛的协作方式，再建立训练和复盘习惯。",
+          "goals": [
+            "说清读题、设计算法、证明与复杂度分析、实现、测试、提交、复盘的完整过程",
+            "了解 ICPC/CCPC 等团队赛与 Codeforces、AtCoder 等个人赛，参赛前以当场规则确认赛制、计分和允许使用的资料",
+            "认识 AC、WA、TLE、MLE、RE 等常见评测结果，能从样例、边界和约束着手排查",
+            "制定适合自己的入门训练计划，阅读队友经验与游记并记录收获"
+          ],
+          "prerequisites": {
+            "gateIds": [],
+            "topicIds": []
+          },
+          "optional": false,
+          "scope": "竞赛认识与训练方法导览；不绑定练习题，不进行 CF Rating 或洛谷难度评级。",
+          "learningTitle": "认识比赛 · 找到自己的起点",
+          "learningDescription": "算法竞赛把问题理解、数学推理、算法设计和程序实现放在一起。先了解赛制和评测，建立“独立思考—实现验证—赛后补题—记录复盘”的训练循环。游记可以帮助认识赛场、分工与心态，但每个人的基础和路径不同；读完导览后，从第1章写稳 C++，已有基础则按需跳学。",
+          "threadGateIds": [
+            "stage-01-gate-01"
+          ]
+        }
+      ]
+    },
     {
       "id": "stage-01",
       "index": 1,
@@ -6835,9 +6884,9 @@
     }
   ],
   "summary": {
-    "stages": 14,
-    "gates": 168,
+    "stages": 15,
+    "gates": 169,
     "optionalGates": 10,
-    "topicCount": 153
+    "topicCount": 154
   }
 }

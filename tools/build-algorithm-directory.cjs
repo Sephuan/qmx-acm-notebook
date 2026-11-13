@@ -32,7 +32,7 @@ function build({ check = false } = {}) {
     flat.push(n); n.children.forEach(child => visit(child, depth + 1));
   }
   visit(data.tree, 0);
-  assert.deepEqual(data.tree.children.map(n => n.part), Array.from({length:10}, (_,i)=>String(i)));
+  assert.deepEqual(data.tree.children.map(n => n.part), Array.from({length:11}, (_,i)=>String(i)));
   assert.equal(headings.length, 126);
   if (data.sourceIndex) {
     assert.equal(data.sourceIndex.length, 126);

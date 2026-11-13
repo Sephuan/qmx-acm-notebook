@@ -13,9 +13,10 @@ function validate(data, tree, directory) {
   index(tree, topics); index(directory.tree, sourceTopics);
   const stages = new Map(), gates = new Map(), gateOrder = new Map();
   for (const [i, stage] of data.stages.entries()) {
-    assert.equal(stage.index, i + 1); assert.ok(stage.id && !stages.has(stage.id)); stages.set(stage.id, stage);
+    assert.equal(stage.index, i); if (i === 0) { assert.equal(stage.id, 'stage-00'); assert.equal(stage.type, 'orientation'); } else assert.notEqual(stage.type, 'orientation'); assert.ok(stage.id && !stages.has(stage.id)); stages.set(stage.id, stage);
     assert.ok(stage.title && stage.description && stage.goal && stage.rationale);
-    assert.ok(stage.gates.length >= 12 && stage.gates.length <= 16);
+    if (stage.type === 'orientation') assert.equal(stage.gates.length, 1);
+    else assert.ok(stage.gates.length >= 12 && stage.gates.length <= 16);
     for (const [j, gate] of stage.gates.entries()) {
       assert.equal(gate.index, j + 1); assert.ok(gate.id && !gates.has(gate.id), `Duplicate gate ${gate.id}`);
       gates.set(gate.id, gate); gateOrder.set(gate.id, gateOrder.size);
@@ -27,7 +28,9 @@ function validate(data, tree, directory) {
   function range(cf, name) { assert.ok(Number.isInteger(cf?.min) && cf.min >= 0, `Invalid CF range ${name}`); assert.ok(cf.max === null || Number.isInteger(cf.max) && cf.max >= cf.min, `Invalid CF ceiling ${name}`); }
   function tags(value, name) { assert.ok(Array.isArray(value) && value.length > 0 && value.every(tag => luogu.has(tag)), `Invalid Luogu tags ${name}`); }
   for (const stage of data.stages) {
-    range(stage.cf, stage.id); tags(stage.luoguDifficulty, stage.id);
+    const orientation = stage.type === 'orientation';
+    if (orientation) { assert.equal(stage.cf, undefined); assert.deepEqual(stage.luoguDifficulty, []); }
+    else { range(stage.cf, stage.id); tags(stage.luoguDifficulty, stage.id); }
     for (const parent of stage.prerequisites?.stageIds || []) assert.ok(stages.has(parent) && stages.get(parent).index < stage.index, `Invalid stage prerequisite ${parent}`);
     for (const gate of stage.gates) {
       assert.ok(['learning', 'mixed', 'challenge'].includes(gate.kind));
@@ -40,12 +43,16 @@ function validate(data, tree, directory) {
       assert.ok(typeof gate.optional === 'boolean');
       assert.ok(Array.isArray(gate.topicIds) && gate.topicIds.length >= 1 && gate.topicIds.length <= 3, `Missing topic links ${gate.id}`);
       assert.equal(new Set(gate.topicIds).size, gate.topicIds.length);
-      range(gate.cf, gate.id); tags(gate.luoguDifficulty, gate.id);
-      assert.ok(gate.cf.min >= stage.cf.min && (stage.cf.max === null || gate.cf.max !== null && gate.cf.max <= stage.cf.max), `Gate range outside stage ${gate.id}`);
+      if (orientation) { assert.equal(gate.cf, undefined); assert.deepEqual(gate.luoguDifficulty, []); assert.equal(gate.kind, 'learning'); }
+      else {
+        range(gate.cf, gate.id); tags(gate.luoguDifficulty, gate.id);
+        assert.ok(gate.cf.min >= stage.cf.min && (stage.cf.max === null || gate.cf.max !== null && gate.cf.max <= stage.cf.max), `Gate range outside stage ${gate.id}`);
+      }
       for (const id of gate.topicIds) {
         const topic = topics.get(id), source = sourceTopics.get(id); assert.ok(topic && source, `Unresolved topic ${id}`);
-        assert.equal(topic.kind, 'algorithm', `Directory linked as algorithm ${gate.id}: ${id}`);
-        assert.ok(colors.has(topic.color), `Missing knowledge difficulty ${id}`); assert.equal(topic.color, source.color);
+        if (orientation) { assert.equal(topic.kind, 'directory'); assert.equal(topic.color, 'parent'); }
+        else { assert.equal(topic.kind, 'algorithm', `Directory linked as algorithm ${gate.id}: ${id}`); assert.ok(colors.has(topic.color), `Missing knowledge difficulty ${id}`); }
+        assert.equal(topic.color, source.color);
         if (topic.color === 'expert') assert.ok(gate.optional && stage.index >= 13, `Expert topic must stay in optional late branch ${gate.id}`);
         referenced.add(id);
       }
@@ -57,11 +64,11 @@ function validate(data, tree, directory) {
       assert.equal(gate.problemIds, undefined, 'Real problem bindings must be verified separately');
       assert.equal(gate.knowledgeDifficulty, undefined, 'Knowledge difficulty must come from linked tree');
     }
-    assert.equal(stage.gates.at(-1).kind, 'challenge'); assert.ok(stage.gates.filter(gate => gate.kind === 'mixed').length >= 2);
+    if (!orientation) { assert.equal(stage.gates.at(-1).kind, 'challenge'); assert.ok(stage.gates.filter(gate => gate.kind === 'mixed').length >= 2); }
   }
   const summary = { stages: data.stages.length, gates: gates.size, optionalGates: [...gates.values()].filter(gate => gate.optional).length, topicCount: referenced.size };
   assert.deepEqual(data.summary, summary);
-  const early = new Set(data.stages.slice(0, 2).flatMap(stage => stage.gates.flatMap(gate => gate.topicIds)));
+  const early = new Set(data.stages.filter(stage => stage.type !== 'orientation').slice(0, 2).flatMap(stage => stage.gates.flatMap(gate => gate.topicIds)));
   for (const id of ['xcpc-vector-1', 'algorithm-string', 'xcpc-pair-1', 'algorithm-常用算法函数与迭代器', 'xcpc-set-1', 'xcpc-map-1', 'algorithm-stack-queue', 'xcpc-priority-queue-1']) assert.ok(early.has(id), `STL missing from early stages ${id}`);
   assert.ok(data.sources.every(source => /^https:\/\//.test(source.url)));
   return summary;

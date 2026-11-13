@@ -1,6 +1,6 @@
 {
   "name": "qmx-acm-notebook",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "启明星 ACM 共享错题与算法资料客户端",
   "main": "electron/main.cjs",
   "private": true,

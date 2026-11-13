@@ -75,7 +75,10 @@
       const button = control(label || entry.node.label, className, () => opts.onTopic?.(entry.node.id));
       button.title = `${entry.path.join(' / ')}${entry.node.fullLabel && entry.node.fullLabel !== entry.node.label ? ` · ${entry.node.fullLabel}` : ''}`; button.disabled = typeof opts.onTopic !== 'function'; return button;
     }
-    function rangeTags(parent, cf, luogu) {
+    function isOrientation(stage) { return stage.type === 'orientation'; }
+    function learningPosition(stage, cf = stage.cf) { return isOrientation(stage) ? '入门导览' : cfLabel(cf); }
+    function rangeTags(parent, cf, luogu, orientation = false) {
+      if (orientation) { parent.append(el('span', 'alp-range', '入门导览')); return; }
       add(parent, el('span', 'alp-range alp-range-cf', cfLabel(cf)));
       if (list(luogu).length) parent.append(el('span', 'alp-range', `洛谷参考：${luogu.join(' / ')}`));
     }
@@ -83,7 +86,7 @@
       if (isCompleted(gate.id)) return 'completed';
       return gateProgress(gate.id)?.status === 'learning' || stageCurrent(stage)?.id === gate.id ? 'learning' : 'todo';
     }
-    function stageNumber(stage) { return stageById.get(stage.id).index + 1; }
+    function stageNumber(stage) { return Number.isInteger(stage.index) ? stage.index : stageById.get(stage.id).index + 1; }
     function gateNumber(gate) { return gateById.get(gate.id).index + 1; }
     function selectGate(id, { focus = false, center = true } = {}) {
       const entry = gateById.get(id); if (!entry || destroyed || busy) return false;
@@ -99,7 +102,7 @@
         const stat = el('div', 'alp-stat'); add(stat, el('strong', '', value), el('span', '', label)); summary.append(stat);
       }
       const resumed = records().find(({ gate }) => gateProgress(gate.id)?.status === 'learning') || records().find(({ gate }) => !isCompleted(gate.id));
-      if (resumed) summary.append(control(`继续 第${resumed.stageIndex + 1}章 · 第${resumed.index + 1}关 →`, 'alp-button alp-button-primary alp-resume', () => selectGate(resumed.gate.id, { focus: true })));
+      if (resumed) summary.append(control(`继续 第${stageNumber(resumed.stage)}章 · 第${gateNumber(resumed.gate)}关 →`, 'alp-button alp-button-primary alp-resume', () => selectGate(resumed.gate.id, { focus: true })));
       else summary.append(el('span', 'alp-all-complete', '✓ 已完成全部关卡记录，可随时回顾'));
     }
     function renderAchievements() {
@@ -126,7 +129,7 @@
         const card = control('', 'alp-stage-card', () => { if (busy) return; stageDialog.close(); selectGate(stageCurrent(stage)?.id); stageButton.focus({ preventScroll: true }); });
         card.dataset.stageId = stage.id; card.dataset.completed = String(complete); card.setAttribute('aria-current', String(stageId === stage.id));
         add(card, el('span', 'alp-stage-index', `${complete ? '✓ 已完成 · ' : ''}第${stageNumber(stage)}章`), el('strong', 'alp-stage-name', stage.title), el('span', 'alp-stage-description', stage.description || stage.goal));
-        const ranges = el('div', 'alp-ranges'); rangeTags(ranges, stage.cf, stage.luoguDifficulty); card.append(ranges);
+        const ranges = el('div', 'alp-ranges'); rangeTags(ranges, stage.cf, stage.luoguDifficulty, isOrientation(stage)); card.append(ranges);
         const bar = el('progress', 'alp-stage-progress'); bar.max = gates.length || 1; bar.value = done; bar.setAttribute('aria-label', `第${stageNumber(stage)}章完成 ${done} / ${gates.length} 关`);
         add(card, el('span', 'alp-stage-count', `${done} / ${gates.length} 关已完成`), bar); grid.append(card);
       });
@@ -147,7 +150,7 @@
         const copy = el('span', 'alp-checkpoint-copy');
         add(copy, el('strong', '', `第${gateNumber(gate)}关 ${gate.title}`));
         if (gate.learningTitle) copy.append(el('span', 'alp-checkpoint-story', gate.learningTitle));
-        copy.append(el('span', 'alp-checkpoint-subtitle', `${kinds[gate.kind] || '学习关'}${gate.optional ? ' · 选修' : ''} · ${cfLabel(gate.cf || stage.cf)}`));
+        copy.append(el('span', 'alp-checkpoint-subtitle', `${kinds[gate.kind] || '学习关'}${gate.optional ? ' · 选修' : ''} · ${learningPosition(stage, gate.cf || stage.cf)}`));
         add(row, el('span', 'alp-checkpoint-number', symbol), copy, el('span', 'alp-checkpoint-status', `${status === 'completed' ? '✓ ' : status === 'learning' ? '▶ ' : '○ '}${statusText}`));
         route.append(row);
         if (gate.kind === 'mixed' || gate.kind === 'challenge') {
@@ -163,14 +166,14 @@
       const heading = el('h3', 'alp-gate-title', gate.title); heading.tabIndex = -1;
       const label = el('div', 'alp-detail-eyebrow', `第${stageNumber(stage)}章 · 第${gateNumber(gate)}关`);
       add(detail, label, heading, el('span', 'alp-kind', `${kinds[gate.kind] || '学习关'}${gate.optional ? ' · 选修' : ''}`));
-      const ranges = el('div', 'alp-ranges'); rangeTags(ranges, gate.cf || stage.cf, gate.luoguDifficulty || stage.luoguDifficulty);
+      const ranges = el('div', 'alp-ranges'); rangeTags(ranges, gate.cf || stage.cf, gate.luoguDifficulty || stage.luoguDifficulty, isOrientation(stage));
       if (gate.learningTitle || gate.learningDescription) {
         const story = el('div', 'alp-learning-story');
         if (gate.learningTitle) story.append(el('strong', '', gate.learningTitle));
         if (gate.learningDescription) story.append(el('p', '', gate.learningDescription));
         detail.append(story);
       }
-      add(detail, el('p', 'alp-description', gate.description || stage.description), ranges, el('p', 'alp-fine-print', '题目难度用于选题；知识点等级单独显示，两者不作换算。'));
+      add(detail, el('p', 'alp-description', gate.description || stage.description), ranges, !isOrientation(stage) && el('p', 'alp-fine-print', '题目难度用于选题；知识点等级单独显示，两者不作换算。'));
       const thread = list(gate.threadGateIds).map(id => gateById.get(id)).filter(Boolean);
       if (thread.length) {
         detail.append(sectionHeading('把知识连成线'));
@@ -197,13 +200,13 @@
       const requiredTopics = list(gate.prerequisites?.topicIds).map(id => topics.get(id)).filter(Boolean);
       if (requiredGates.length || requiredTopics.length) {
         detail.append(sectionHeading('先修与回补')); const group = el('div', 'alp-prerequisites');
-        requiredGates.forEach(required => group.append(control(`${isCompleted(required.gate.id) ? '✓' : '↩'} 第${required.stageIndex + 1}章·第${required.index + 1}关 ${required.gate.title}`, 'alp-prerequisite', () => selectGate(required.gate.id, { focus: true }))));
+        requiredGates.forEach(required => group.append(control(`${isCompleted(required.gate.id) ? '✓' : '↩'} 第${stageNumber(required.stage)}章·第${gateNumber(required.gate)}关 ${required.gate.title}`, 'alp-prerequisite', () => selectGate(required.gate.id, { focus: true }))));
         requiredTopics.forEach(topic => group.append(nodeButton(topic, `↩ ${topic.node.label}`, 'alp-prerequisite')));
         add(detail, group, el('p', 'alp-fine-print', '先修是学习建议，可按实际掌握情况回补或跳学。'));
       }
-      if (stage.goal) add(detail, sectionHeading('阶段综合目标'), el('p', 'alp-stage-goal', stage.goal));
+      if (stage.goal) add(detail, sectionHeading(isOrientation(stage) ? '导览目标' : '阶段综合目标'), el('p', 'alp-stage-goal', stage.goal));
       if (list(stage.completionCriteria).length) {
-        detail.append(sectionHeading('阶段通关检验'));
+        detail.append(sectionHeading(isOrientation(stage) ? '导览完成检验' : '阶段通关检验'));
         const criteria = el('ul', 'alp-goals alp-stage-criteria');
         stage.completionCriteria.forEach(criterion => criteria.append(el('li', '', criterion)));
         detail.append(criteria);
@@ -254,12 +257,14 @@
       renderSummary(); renderAchievements();
       stageButton.replaceChildren();
       add(stageButton, el('span', 'alp-selected-stage-number', String(stageNumber(stage)).padStart(2, '0')));
-      const name = el('span', 'alp-selected-stage-copy'); add(name, el('strong', '', `第${stageNumber(stage)}章 ${stage.title}`), el('span', '', `${cfLabel(stage.cf)} · ${completedCount(validGates(stage))} / ${validGates(stage).length} 关完成`));
+      const name = el('span', 'alp-selected-stage-copy'); add(name, el('strong', '', `第${stageNumber(stage)}章 ${stage.title}`), el('span', '', `${learningPosition(stage)} · ${completedCount(validGates(stage))} / ${validGates(stage).length} 关完成`));
       add(stageButton, name, el('span', 'alp-switch-label', '切换阶段 ⌄'));
       const stageIntro = root.querySelector('.alp-stage-intro'); stageIntro.replaceChildren();
-      add(stageIntro, el('span', 'alp-eyebrow', `阶段 ${stageNumber(stage)} · 先广后深，独立完成综合题`), el('h2', 'alp-stage-title', `第${stageNumber(stage)}章 ${stage.title}`));
-      const ranges = el('div', 'alp-ranges'); rangeTags(ranges, stage.cf, stage.luoguDifficulty);
+      add(stageIntro, el('span', 'alp-eyebrow', `阶段 ${stageNumber(stage)} · ${isOrientation(stage) ? '入门导览' : '先广后深，独立完成综合题'}`), el('h2', 'alp-stage-title', `第${stageNumber(stage)}章 ${stage.title}`));
+      const ranges = el('div', 'alp-ranges'); rangeTags(ranges, stage.cf, stage.luoguDifficulty, isOrientation(stage));
       add(stageIntro, ranges, el('p', 'alp-description', stage.description || stage.goal));
+      const orientation = isOrientation(stage);
+      root.querySelector('.alp-footer').hidden = orientation;
       renderRoute(stage); renderDetail();
       routeScroll.scrollTop = oldScroll;
       if (center) centerSelected();
@@ -309,7 +314,7 @@
           await persist(evidenceGateId, nextRecord);
           if (destroyed) return;
           dialog.close(); renderMain();
-          if (nextRecord.status === 'completed') { lastCelebrated = '✓ 本关完成记录已保存，继续积累自己的解题方法。'; showCelebration(lastCelebrated); }
+          if (nextRecord.status === 'completed') { lastCelebrated = isOrientation(gateById.get(evidenceGateId).stage) ? '✓ 导览完成记录已保存。' : '✓ 本关完成记录已保存，继续积累自己的解题方法。'; showCelebration(lastCelebrated); }
           detail.querySelector('.alp-complete-button')?.focus({ preventScroll: true });
         } catch (error) { if (!destroyed) { evidenceError.textContent = error?.message || '未能保存，请保留记录后重试。'; evidenceError.hidden = false; } }
       });
@@ -318,10 +323,11 @@
     function openEvidence(id, preferredStatus) {
       if (busy || !gateById.has(id)) return;
       evidenceGateId = id; const entry = gateById.get(id), record = gateProgress(id);
-      evidenceForm.querySelector('.alp-evidence-title').textContent = `第${entry.stageIndex + 1}章 · 第${entry.index + 1}关 ${entry.gate.title}`;
+      evidenceForm.querySelector('.alp-evidence-title').textContent = `第${stageNumber(entry.stage)}章 · 第${gateNumber(entry.gate)}关 ${entry.gate.title}`;
       evidenceForm.elements.status.value = preferredStatus || 'completed';
       evidenceForm.elements.problemUrl.value = record?.problemUrl || '';
       evidenceForm.elements.reflection.value = record?.reflection || '';
+      evidenceForm.elements.reflection.placeholder = isOrientation(entry.stage) ? '写下导览中的理解，或还没有弄清楚的地方。' : '写下独立解题过程、关键观察，或还没有弄清楚的地方。';
       evidenceError.hidden = true; previousFocus = document.activeElement;
       evidenceDialog.showModal(); evidenceForm.elements.reflection.focus();
     }
@@ -350,14 +356,14 @@
     function shareText(id) {
       const entry = gateById.get(id), record = gateProgress(id); if (!entry) return '';
       const names = list(entry.gate.topicIds).map(id => topics.get(id)).filter(Boolean).map(topic => topic.path.join(' / '));
-      return ['【拾题 · 学习互助卡】', `第${entry.stageIndex + 1}章 · 第${entry.index + 1}关 ${entry.gate.title}`,
+      return ['【拾题 · 学习互助卡】', `第${stageNumber(entry.stage)}章 · 第${gateNumber(entry.gate)}关 ${entry.gate.title}`,
         entry.gate.learningTitle ? `学习脉络：${entry.gate.learningTitle}` : '',
-        `目标选题：${cfLabel(entry.gate.cf || entry.stage.cf)}；洛谷参考：${list(entry.gate.luoguDifficulty || entry.stage.luoguDifficulty).join(' / ') || '按具体题目选择'}`,
+        isOrientation(entry.stage) ? '学习定位：入门导览' : `目标选题：${cfLabel(entry.gate.cf || entry.stage.cf)}；洛谷参考：${list(entry.gate.luoguDifficulty || entry.stage.luoguDifficulty).join(' / ') || '按具体题目选择'}`,
         `知识路径：${names.join('；') || '按本关学习目标'}`,
         `当前记录：${record?.status === 'completed' ? '已完成（本人记录）' : record?.status === 'learning' ? '学习中' : '尚未记录'}`,
         record?.problemUrl ? `练习题目：${record.problemUrl}` : '',
         record?.reflection ? `我的复盘 / 困惑：${record.reflection}` : '想请教的问题：请补充自己的思路、卡点与尝试。',
-        '一起讨论：关键观察是什么？有没有反例？如何证明复杂度？'].filter(Boolean).join('\n');
+        !isOrientation(entry.stage) && '一起讨论：关键观察是什么？有没有反例？如何证明复杂度？'].filter(Boolean).join('\n');
     }
     function buildShareDialog() {
       const dialog = buildDialog('学习互助卡', 'alp-share-dialog');

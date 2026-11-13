@@ -23,7 +23,7 @@ test('all original source headings remain traceable independently of current top
   const path=[];let current=node;while(current&&current!==data.tree){path.unshift(current.label);current=parents.get(current.id);}
   assert.equal(entry.currentPath,path.join(' / '));
  }
- assert.deepEqual(data.tree.children.map(n=>n.part),['0','1','2','3','4','5','6','7','8','9']);
+ assert.deepEqual(data.tree.children.map(n=>n.part),['0','1','2','3','4','5','6','7','8','9','10']);
 });
 
 test('all historic notebook node identifiers resolve without collisions',()=>{
@@ -156,7 +156,7 @@ test('knowledge groups remove duplicated layers and keep cross-topic algorithms 
 test('only concrete algorithms have finalized scope-specific ratings',()=>{
  const levels=['basic','beginner','intermediate','advanced','expert'];
  assert.equal(data.summary.graded,graded.length);assert.equal(data.summary.confirmed,graded.length);
- assert.equal(nodes.length,577);assert.equal(graded.length,386);assert.equal(nodes.filter(isDirectory).length,191);
+ assert.equal(nodes.length,578);assert.equal(graded.length,386);assert.equal(nodes.filter(isDirectory).length,192);
  for(const n of nodes){
   assert.ok(n.scope.length>=8,n.label);assert.ok(n.rationale.length>15,n.label);
   if(isDirectory(n)){
@@ -177,7 +177,7 @@ test('all 473 original nodes and notes retain identity, position and original al
  const revision=data.editorial.directorySeparation;assert.equal(revision.originalNodesSnapshot.length,473);assert.equal(revision.contentMoves.length,104);
  for(const old of revision.originalNodesSnapshot){
   const n=byId.get(old.id);assert.ok(n,old.id);assert.equal(n.label,old.label);assert.equal(parents.get(n.id)?.id||null,old.parentId);
-  assert.deepEqual(n.children.filter(c=>!c.contentOf).map(c=>c.id),old.childIds);
+  assert.deepEqual(n.children.filter(c=>!c.contentOf && c.id!=='directory-contest-experience').map(c=>c.id),old.childIds);
   if(old.kind==='algorithm')assert.equal(createHash('sha256').update(JSON.stringify(n)).digest('hex'),old.sha256,n.label);
   else{
    assert.equal(n.kind,'directory');

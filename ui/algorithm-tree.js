@@ -22751,6 +22751,32 @@ const algorithmTree = {
       },
       "description": "目录导航：离线与杂项。保留此分类的已有笔记与位置，具体算法及学习难度见子节点。",
       "fullLabel": "离线算法、优化方法与特殊题型"
+    },
+    {
+      "id": "directory-contest-experience",
+      "label": "算法竞赛经验与游记",
+      "kind": "directory",
+      "color": "parent",
+      "part": "10",
+      "origin": "user",
+      "level": 1,
+      "attributes": [],
+      "aliases": [
+        "竞赛经验",
+        "比赛游记",
+        "算法竞赛总览"
+      ],
+      "children": [],
+      "scope": "算法竞赛的赛制认识、训练方法、团队协作、参赛经验、赛后复盘与比赛游记；目录可直接关联公开笔记。",
+      "rationale": "经验与游记用于理解竞赛、交流训练与记录参赛经历，不是具体算法或题目能力等级，因此不设置 D1–D5 难度。",
+      "rating": {
+        "status": "not-applicable",
+        "date": "2026-11-13",
+        "type": "directory",
+        "scope": "算法竞赛的赛制认识、训练方法、团队协作、参赛经验、赛后复盘与比赛游记；目录可直接关联公开笔记。",
+        "rationale": "经验与游记用于理解竞赛、交流训练与记录参赛经历，不是具体算法或题目能力等级，因此不设置 D1–D5 难度。"
+      },
+      "fullLabel": "算法竞赛经验与游记"
     }
   ],
   "level": 0,
@@ -22884,7 +22910,7 @@ const algorithmTree = {
       }
     },
     "summary": {
-      "nodes": 577,
+      "nodes": 578,
       "sourceHeadings": 126,
       "oldNodesMapped": 367,
       "graded": 386,
@@ -22902,8 +22928,8 @@ const algorithmTree = {
         "advanced": 101,
         "expert": 16
       },
-      "directories": 191,
-      "notApplicable": 191,
+      "directories": 192,
+      "notApplicable": 192,
       "addedAlgorithmContent": 104,
       "originalNodesPreserved": 473
     },

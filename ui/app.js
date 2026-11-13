@@ -606,9 +606,7 @@
       const card = button('', `record-card${key(record) === s.selected ? ' selected' : ''}`, () => { s.selected = key(record); $$('.record-card').forEach(n => { const active = n.dataset.key === s.selected; n.classList.toggle('selected', active); n.setAttribute('aria-pressed', String(active)); }); renderDetail(record); }); card.dataset.key = key(record); card.title = '单击预览，双击打开详情；Enter 打开详情'; card.setAttribute('aria-pressed', key(record) === s.selected ? 'true' : 'false');
       card.addEventListener('dblclick', () => openDetail(record));
       card.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); openDetail(record); } });
-      const excerpt = element('div', 'card-excerpt markdown-body');
-      renderMarkdown(excerpt, record.body || '尚未补充思考过程', { preview: true });
-      append(card, append(element('div', 'card-meta'), platformLabel(record), element('span', '', record.pid || `#${record.number || '本地'}`), difficultyBadge(record), supplementaryDifficultyBadge(record), badge(record)), element('h2', 'card-title', record.title || '未命名错题'), excerpt, tags(record), append(element('div', 'card-footer'), element('span', `card-state ${mastery(record)}`, stateLabels[mastery(record)]), element('span', '', `${favorite(record) ? '★ · ' : ''}${date(record.updatedAt)}`)));
+      append(card, append(element('div', 'card-meta'), platformLabel(record), element('span', '', record.pid || `#${record.number || '本地'}`), difficultyBadge(record), supplementaryDifficultyBadge(record), badge(record)), element('h2', 'card-title', record.title || '未命名错题'), tags(record), append(element('div', 'card-footer'), element('span', `card-state ${mastery(record)}`, stateLabels[mastery(record)]), element('span', '', `${favorite(record) ? '★ · ' : ''}${date(record.updatedAt)}`)));
       list.append(card);
     });
     if (!items.length) list.append(empty(s.loading ? '正在载入题库' : s.view === 'public' && s.libraryScope === 'local' ? '还没有本地题解' : '这里还没有题目', s.loading ? '等待客户端返回你的学习数据。' : '试试调整筛选，或记下第一道值得回顾的错题。', { label: '清空筛选', fn: clearFilters }));
@@ -824,21 +822,15 @@
   function openAlgorithmNoteDetail(note) { const panel=$('#algorithm-panel'); const drawer=element('div','algorithm-reading'); append(drawer,button('× 关闭算法笔记','button subtle algorithm-close-button',renderAlgorithmNotes),element('div','eyebrow','ALGORITHM NOTE'),element('h2','',note.title),append(element('div','author-row'),element('span','mini-avatar',authorName(note.author).slice(0,1)),element('span','',authorName(note.author)),element('span','separator','·'),element('span','',date(note.updatedAt)))); const body=element('div','markdown-body algorithm-reading-body');renderMarkdown(body,note.body);drawer.append(tags(note),body);panel.replaceChildren(drawer); }
   function openAlgorithmNoteEditor() { if (!s.account || !s.permissions.push) { toast('请先登录具有仓库写入权限的 GitHub 账户'); return; } const form=$('#algorithm-note-form'); form.reset(); const node=form.elements.nodeId; node.replaceChildren(...algorithmNodes().map(n=>{const o=element('option','',n.label);o.value=n.id;return o;})); node.value=algorithmSelectedNode; form.elements.noteScope.value=s.permissions.admin ? 'public' : 'personal'; form.elements.noteScope.disabled=!s.permissions.admin; $('#algorithm-note-error').hidden=true; $('#algorithm-note-dialog').showModal(); }
   $('#algorithm-note-form').addEventListener('submit', async event => { event.preventDefault(); const form=event.currentTarget;if(s.busy)return;const data=Object.fromEntries(new FormData(form));const note={title:data.noteTitle,noteScope:s.permissions.admin ? form.elements.noteScope.value : 'personal',nodeId:data.nodeId,tags:String(data.noteTags||'').split(/[,，、]/).map(x=>x.trim()).filter(Boolean),body:data.body,featured:data.featured === 'on',clientId:uuid(),repo:repo()};setBusy(true);try{const result=await call('saveAlgorithmNote',note);s.algorithmNotes=[...s.algorithmNotes.filter(x=>x.path!==result.path),result];$('#algorithm-note-dialog').close();render();toast('算法笔记已保存')}catch(error){$('#algorithm-note-error').textContent=errorMessage(error);$('#algorithm-note-error').hidden=false}finally{setBusy(false)}});
-  function renderMarkdown(container, body, { preview = false } = {}) {
+  function renderMarkdown(container, body) {
     const source = String(body || '还没有题解内容。可以从记录错因开始。');
     if (window.marked && window.DOMPurify) {
-      try { const parse = typeof window.marked.parse === 'function' ? window.marked.parse.bind(window.marked) : window.marked; const safe = window.DOMPurify.sanitize(window.NotebookMarkdownMath ? window.NotebookMarkdownMath.parse(source, window.marked) : parse(source), { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button', ...(preview ? ['select', 'option', 'textarea', 'details', 'summary', 'audio', 'video', 'label'] : [])], FORBID_ATTR: ['style', ...(preview ? ['tabindex', 'contenteditable', 'autofocus', 'controls'] : [])] }); container.innerHTML = safe;
-        if (preview) {
-          // Cards are buttons: preserve link text without nested interactive elements.
-          $$('a', container).forEach(link => { const text = element('span', 'card-preview-link'); text.append(...link.childNodes); link.replaceWith(text); });
-          $$('img', container).forEach(image => image.replaceWith(document.createTextNode(image.alt || '')));
-        }
+      try { const parse = typeof window.marked.parse === 'function' ? window.marked.parse.bind(window.marked) : window.marked; const safe = window.DOMPurify.sanitize(window.NotebookMarkdownMath ? window.NotebookMarkdownMath.parse(source, window.marked) : parse(source), { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button'], FORBID_ATTR: ['style'] }); container.innerHTML = safe;
         window.NotebookMarkdownMath?.render(container, window.katex);
         // Prism runs after sanitizing and reads textContent only, so highlighting cannot inject markup.
-        $$('pre code', container).forEach(code => { if (!preview && code.parentElement && (settingsPreview || s.settings).codeLineNumbers) code.parentElement.classList.add('line-numbers'); highlightCodeBlock(code); });
+        $$('pre code', container).forEach(code => { if (code.parentElement && (settingsPreview || s.settings).codeLineNumbers) code.parentElement.classList.add('line-numbers'); highlightCodeBlock(code); });
         // Decorate after Prism: the buttons are app chrome, not sanitized Markdown.
-        if (!preview) decorateCodeBlocks(container);
-        else $$('[tabindex]', container).forEach(node => node.removeAttribute('tabindex'));
+        decorateCodeBlocks(container);
         container.classList.add('rendered'); $$('a', container).forEach(link => link.addEventListener('click', event => { event.preventDefault(); openExternal(link.getAttribute('href')); })); return; } catch (_) { /* Plain text is the secure fallback. */ }
     }
     container.textContent = source;
