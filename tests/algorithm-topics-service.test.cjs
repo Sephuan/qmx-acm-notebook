@@ -172,11 +172,12 @@ test('main IPC caches only committed additions, exposes offline bootstrap/sync a
   const writes = h.writes.length; fail = true;
   await assert.rejects(h.invoke('saveAlgorithmTopic', input()), /SHA conflict/);
   assert.equal(h.writes.length, writes, 'failed remote commit does not write local cache');
-  const state = await h.invoke('sync'); assert.deepEqual(state.algorithmTopics, [record]);
+  const scopedRecord = { ...record, serverUrl: '', sourceKey: 'https://api.github.com|team/notebook' };
+  const state = await h.invoke('sync'); assert.deepEqual(state.algorithmTopics, [scopedRecord]);
   await h.invoke('saveSettings', { repo: 'other/repo' });
   assert.deepEqual((await h.invoke('bootstrap')).algorithmTopics, []);
   const offline = mainHarness({ account: null, files: { 'cache.json': h.stored('cache.json') } });
-  assert.deepEqual((await offline.invoke('bootstrap')).algorithmTopics, [record]);
+  assert.deepEqual((await offline.invoke('bootstrap')).algorithmTopics, [scopedRecord]);
   assert.equal(offline.calls.length, 0, 'offline bootstrap performs no network requests');
   await assert.rejects(h.handlers.get('saveAlgorithmTopic')({ sender: {} }, input()), /非法调用/);
 });

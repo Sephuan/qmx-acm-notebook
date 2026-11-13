@@ -461,3 +461,51 @@ test('custom Git / Gitea server URL formats and routes API requests', () => {
   const ghGiteaV1 = new GitHub({ repo: 'ctguacm/2026', serverUrl: 'http://172.25.5.128:3000/api/v1/' });
   assert.equal(ghGiteaV1.apiUrl('/user'), 'http://172.25.5.128:3000/api/v1/user');
 });
+
+
+test('custom public Gitea requests never receive GitHub credentials and reject writes before fetch', async () => {
+  const calls = [], gh = new GitHub({ repo: 'a/b', serverUrl: 'https://git.example.test/api/v1/', token: 'GITHUB_SECRET', fetcher: async (url, options) => {
+    calls.push({ url, options }); return { ok: true, json: async () => ({}), headers: new Headers() };
+  } });
+  await gh.request('/repos/a/b', { headers: { authorization: 'Bearer override' } });
+  assert.equal(gh.token, '');
+  assert.equal(calls[0].url, 'https://git.example.test/api/v1/repos/a/b');
+  assert.equal(new Headers(calls[0].options.headers).has('authorization'), false);
+  assert.equal(calls[0].options.redirect, 'error'); assert.equal(calls[0].options.credentials, 'omit');
+  await assert.rejects(gh.request('/user', { method: 'POST' }), /匿名读取/);
+  assert.equal(calls.length, 1);
+});
+
+test('GitHub aliases normalize safely and authenticated requests refuse redirects', async () => {
+  const { normalizeServerUrl, repositoryKey } = require('../electron/github.cjs');
+  for (const serverUrl of ['', 'https://github.com/', 'https://api.github.com/']) {
+    const gh = new GitHub({ repo: 'a/b', serverUrl, token: 'SECRET', fetcher: async (url, options) => {
+      assert.equal(url, 'https://api.github.com/user');
+      assert.equal(new Headers(options.headers).get('Authorization'), 'Bearer SECRET');
+      assert.equal(options.redirect, 'error');
+      return { ok: true, json: async () => ({ id: 42, login: 'alice' }), headers: new Headers() };
+    } });
+    assert.equal((await gh.identity()).account.login, 'alice');
+  }
+  assert.equal(repositoryKey('A/B', 'https://GIT.example.test:443/api/v1/'), 'https://git.example.test|a/b');
+  for (const url of ['file:///tmp/a', 'https://user:pass@git.example.test', 'https://git.example.test?q=1', 'https://git.example.test/#fragment']) assert.throws(() => normalizeServerUrl(url));
+});
+
+test('Gitea sync paginates trees and issues and returns source scoped records', async () => {
+  const calls = [], text = '# Gitea document';
+  const gh = new GitHub({ repo: 'a/b', serverUrl: 'https://git.example.test', token: 'NEVER_SEND', fetcher: async (url, options) => {
+    calls.push(url); assert.equal(new Headers(options.headers).has('authorization'), false);
+    const u = new URL(url); let data;
+    if (u.pathname.endsWith('/repos/a/b')) data = { default_branch: 'main' };
+    else if (u.pathname.endsWith('/issues')) { assert.equal(u.searchParams.get('limit'), '100'); data = []; }
+    else if (u.pathname.includes('/git/trees/')) data = { total_count: 2, tree: u.searchParams.get('page') === '1' ? [{ type: 'blob', path: 'problems/one.md', sha: 'one' }] : [{ type: 'blob', path: 'problems/two.md', sha: 'two' }] };
+    else if (u.pathname.includes('/git/blobs/')) data = { content: Buffer.from(text).toString('base64') };
+    else throw new Error('Unexpected '+url);
+    return { ok: true, json: async () => data, headers: new Headers() };
+  } });
+  const result = await gh.sync();
+  assert.equal(result.records.length, 2);
+  assert.equal(result.records[0].sourceKey, 'https://git.example.test|a/b');
+  assert.equal(result.records[0].url, 'https://git.example.test/a/b/src/branch/main/problems/one.md');
+  assert.equal(calls.filter(url => url.includes('/git/trees/')).length, 2);
+});

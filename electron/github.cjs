@@ -5,6 +5,18 @@ const { AlgorithmTopics, TOPICS_PATH, parseTopics } = require('./algorithm-topic
 const API = 'https://api.github.com';
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+function normalizeServerUrl(value = '') {
+  if (typeof value !== 'string') throw new Error('Git 服务地址格式不正确');
+  const text = value.trim();
+  if (!text) return '';
+  let url;
+  try { url = new URL(text); } catch { throw new Error('Git 服务地址格式不正确'); }
+  if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password || url.search || url.hash || /[\u0000-\u0020\u007f\\]/.test(text)) throw new Error('Git 服务地址格式不正确');
+  const base = url.origin + url.pathname.replace(/\/+$/, '').replace(/\/api\/v1$/, '');
+  return ['https://github.com', API].includes(base) ? '' : base;
+}
+function repositoryKey(repo, serverUrl = '') { return `${normalizeServerUrl(serverUrl) || API}|${repo.toLowerCase()}`; }
+
 function repoParts(repo) {
   if (!/^[\w.-]+\/[\w.-]+$/.test(repo || '')) throw new Error('仓库格式应为 owner/repo');
   return repo.split('/');
@@ -121,33 +133,31 @@ function samePayload(a, b) {
 }
 
 class GitHub {
-  constructor({ token = '', repo = 'ctguacm/2026', fetcher = fetch, serverUrl = '' } = {}) {
+  constructor({ token = '', repo = 'qmx-acm-data/2026', fetcher = fetch, serverUrl = '' } = {}) {
     repoParts(repo);
     this.repo = repo;
-    this.token = token;
+    this.serverUrl = normalizeServerUrl(serverUrl);
+    // GitHub OAuth credentials are valid only at GitHub. Custom Gitea sources are public reads.
+    this.token = this.serverUrl ? '' : token;
     this.fetcher = fetcher;
-    this.serverUrl = serverUrl;
   }
 
-  apiUrl(path) {
-    if (!this.serverUrl || this.serverUrl === 'https://api.github.com' || this.serverUrl === 'https://github.com') {
-      return API + path;
-    }
-    const base = this.serverUrl.replace(/\/+$/, '');
-    if (base.endsWith('/api/v1')) return base + path;
-    return base + '/api/v1' + path;
-  }
+  apiUrl(path) { return (this.serverUrl ? this.serverUrl + '/api/v1' : API) + path; }
 
   async request(path, opts = {}) {
+    if (this.serverUrl && opts.method && opts.method !== 'GET') throw new Error('自定义 Gitea 目前仅支持匿名读取公开仓库');
+    const headers = new Headers({
+      Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'QMX-Notebook',
+      ...(opts.body ? { 'Content-Type': 'application/json' } : {}), ...opts.headers,
+    });
+    headers.delete('Authorization');
+    if (this.token && !this.serverUrl) headers.set('Authorization', `Bearer ${this.token}`);
     let r;
     try {
       r = await this.fetcher(this.apiUrl(path), {
         ...opts,
-        headers: {
-          Accept: 'application/vnd.github+json', 'X-GitHub-Api-Version': '2022-11-28', 'User-Agent': 'QMX-Notebook',
-          ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}),
-          ...(opts.body ? { 'Content-Type': 'application/json' } : {}), ...opts.headers,
-        },
+        headers: { ...Object.fromEntries([...headers].filter(([name]) => name !== 'authorization')), ...(this.token ? { Authorization: `Bearer ${this.token}` } : {}) },
+        credentials: 'omit', redirect: 'error',
         signal: AbortSignal.timeout(25000),
       });
     } catch (error) {
@@ -176,12 +186,19 @@ class GitHub {
   async pages(path, max = 100) {
     const all = [];
     for (let page = 1; page <= max; page++) {
-      const { data, link } = await this.request(`${path}${path.includes('?') ? '&' : '?'}per_page=100&page=${page}`);
+      const { data, link } = await this.request(`${path}${path.includes('?') ? '&' : '?'}${this.serverUrl ? 'limit' : 'per_page'}=100&page=${page}`);
       if (!Array.isArray(data)) throw new Error('GitHub 返回了意外的数据格式');
       all.push(...data);
-      if (!link.includes('rel="next"')) return all;
+      if (!link.includes('rel="next"') && (!this.serverUrl || data.length < 100)) return all;
     }
     throw new Error('数据量超过单次同步上限，请缩小仓库范围');
+  }
+
+  async identity() {
+    if (!this.token) throw new Error('请先登录 GitHub');
+    const { data: user } = await this.request('/user');
+    if (!authorId(user.id) || !user.login) throw new Error('无法确认 GitHub 登录用户身份，请重新登录');
+    return { account: { id: user.id, login: user.login, name: user.name || user.login, avatarUrl: user.avatar_url || '' } };
   }
 
   async profile() {
@@ -198,6 +215,10 @@ class GitHub {
   checkScope(record) {
     if (record.repo !== undefined && (typeof record.repo !== 'string' || record.repo.toLowerCase() !== this.repo.toLowerCase())) {
       throw new Error('文档所属仓库与当前仓库不一致，请切换仓库并同步');
+    }
+    const expected = repositoryKey(this.repo, this.serverUrl);
+    if ((record.sourceKey && record.sourceKey !== expected) || (record.serverUrl !== undefined && repositoryKey(this.repo, record.serverUrl) !== expected)) {
+      throw new Error('文档所属 Git 服务与当前仓库不一致，请切换仓库并同步');
     }
   }
 
@@ -218,7 +239,7 @@ class GitHub {
   async currentDocument(path, branch) {
     try {
       const { data } = await this.request(`${this.contentEndpoint(path)}?ref=${encodeURIComponent(branch)}`);
-      if (data.type !== 'file' || data.encoding !== 'base64' || typeof data.content !== 'string' || !data.sha) throw new Error('GitHub 未返回完整 Markdown 文件，请同步后重试');
+      if (data.type !== 'file' || (data.encoding !== 'base64' && !(this.serverUrl && !data.encoding)) || typeof data.content !== 'string' || !data.sha) throw new Error('GitHub 未返回完整 Markdown 文件，请同步后重试');
       return { sha: data.sha, text: Buffer.from(data.content, 'base64').toString('utf8') };
     } catch (error) {
       if (error.status === 404) return null;
@@ -234,8 +255,8 @@ class GitHub {
   }
 
   recordResult(path, text, sha, branch) {
-    const extra = { sha, repo: this.repo, branch,
-      url: `https://github.com/${this.repo}/blob/${encodeURIComponent(branch)}/${path.split('/').map(encodeURIComponent).join('/')}` };
+    const extra = { sha, repo: this.repo, serverUrl: this.serverUrl, sourceKey: repositoryKey(this.repo, this.serverUrl), branch,
+      url: `${this.serverUrl || 'https://github.com'}/${this.repo}/${this.serverUrl ? 'src/branch' : 'blob'}/${encodeURIComponent(branch)}/${path.split('/').map(encodeURIComponent).join('/')}` };
     return path.startsWith('algorithms/notes/') ? parseAlgorithmNote(path, text, extra) : parseDocument(path, text, extra);
   }
 
@@ -395,13 +416,25 @@ class GitHub {
   }
 
   async sync(previous = {}) {
+    const scope = { repo: this.repo, serverUrl: this.serverUrl, sourceKey: repositoryKey(this.repo, this.serverUrl) };
     const { data: info } = await this.request(`/repos/${this.repo}`);
     const branch = info.default_branch;
     const [{ data: tree }, issues] = await Promise.all([
-      this.request(`/repos/${this.repo}/git/trees/${encodeURIComponent(branch)}?recursive=1`),
+      this.request(`/repos/${this.repo}/git/trees/${encodeURIComponent(branch)}?recursive=1${this.serverUrl ? '&per_page=1000&page=1' : ''}`),
       this.pages(`/repos/${this.repo}/issues?state=all&sort=updated&direction=desc`),
     ]);
     if (tree.truncated) throw new Error('仓库目录过大，GitHub 未返回完整文件树');
+    if (!Array.isArray(tree.tree)) throw new Error('Git 服务返回了意外的文件树格式');
+    // Gitea paginates recursive trees and may clamp per_page below our request.
+    if (this.serverUrl && Number(tree.total_count) > tree.tree.length) {
+      const expected = Number(tree.total_count);
+      for (let page = 2; tree.tree.length < expected; page++) {
+        if (page > 100 || !tree.tree.length) throw new Error('Gitea 文件树超过单次同步上限');
+        const { data: next } = await this.request(`/repos/${this.repo}/git/trees/${encodeURIComponent(branch)}?recursive=1&per_page=1000&page=${page}`);
+        if (next.truncated || !Array.isArray(next.tree) || !next.tree.length) throw new Error('Gitea 未返回完整文件树');
+        tree.tree.push(...next.tree);
+      }
+    }
     const hasAlgorithmNotes = tree.tree.some(x => x.type === 'blob' && x.path.startsWith('algorithms/notes/'));
     const currentUser = hasAlgorithmNotes && this.token ? (await this.request('/user')).data : null;
     const personalPrefix = currentUser?.id ? `algorithms/notes/personal/${currentUser.id}/` : null;
@@ -425,12 +458,12 @@ class GitHub {
       })));
     }
     const additions = tree.tree.find(item => item.type === 'blob' && item.path === TOPICS_PATH);
-    const algorithmTopics = additions ? parseTopics((await this.currentDocument(TOPICS_PATH, branch))?.text).map(topic => ({ ...topic, repo: this.repo })) : [];
+    const algorithmTopics = additions ? parseTopics((await this.currentDocument(TOPICS_PATH, branch))?.text).map(topic => ({ ...topic, ...scope })) : [];
     return {
       algorithmTopics,
       records: records.filter(r => r.kind === 'document'),
       algorithmNotes: records.filter(r => r.kind === 'algorithm-note'),
-      issues: issues.filter(x => !x.pull_request && !/<!--\s*qmx-tag-request\s+[\s\S]*?-->/i.test(String(x.body || ''))).map(x => ({ ...issueRecord(x), repo: this.repo })),
+      issues: issues.filter(x => !x.pull_request && !/<!--\s*qmx-tag-request\s+[\s\S]*?-->/i.test(String(x.body || ''))).map(x => ({ ...issueRecord(x), ...scope })),
       blobs: Object.fromEntries(docs.map(d => [d.sha, blobs[d.sha]])), branch, lastSync: new Date().toISOString(),
     };
   }
@@ -458,4 +491,4 @@ class GitHub {
   }
 }
 
-module.exports = { GitHub, repoParts, identify, parseDocument, parseAlgorithmNote, issueRecord, issueBody, documentContent };
+module.exports = { GitHub, normalizeServerUrl, repositoryKey, repoParts, identify, parseDocument, parseAlgorithmNote, issueRecord, issueBody, documentContent };

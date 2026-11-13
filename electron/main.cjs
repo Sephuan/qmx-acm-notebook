@@ -2,7 +2,7 @@
 const { app, BrowserWindow, ipcMain, shell, safeStorage, net } = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
-const { GitHub, repoParts } = require('./github.cjs');
+const { GitHub, repoParts, normalizeServerUrl, repositoryKey } = require('./github.cjs');
 const { randomUUID } = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { createUpdater } = require('./updater.cjs');
@@ -11,7 +11,7 @@ const { cleanupUpdateStorage } = require('./update-storage.cjs');
 const { createAuth, configureUserData } = require('./auth.cjs');
 const { createContestService } = require('./contests.cjs');
 const { createPlatformService } = require('./platform-service.cjs');
-const { createPlannerService, problemUrl } = require('./planner-service.cjs');
+const { createPlannerService } = require('./planner-service.cjs');
 const { createPublicPageReader } = require('./platform-page.cjs');
 const APP_VERSION = require('../package.json').version;
 configureUserData(app);
@@ -75,13 +75,13 @@ function ensureIdle() {
 // Public OAuth application identifier; never embed a client secret or user token.
 const TEAM_CLIENT_ID = 'Ov23likjqSdpkS6MYGzJ';
 const defaults = {
-  serverUrl: 'http://172.25.5.128:3000',
-  repo: 'ctguacm/2026',
+  serverUrl: '',
+  repo: 'qmx-acm-data/2026',
   repositories: [
     { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', serverUrl: 'http://172.25.5.128:3000', repo: 'ctguacm/2026' },
     { id: 'qmx-official', name: '官方公共题库 (GitHub)', serverUrl: '', repo: 'qmx-acm-data/2026' }
   ],
-  activeRepoId: 'ctgu-2026',
+  activeRepoId: 'qmx-official',
   clientId: TEAM_CLIENT_ID,
   theme: 'light'
 };
@@ -101,7 +101,9 @@ function normalizeRepositories(data, fallbackRepo = defaults.repo, fallbackServe
       { id: 'qmx-official', name: '官方公共题库 (GitHub)', serverUrl: '', repo: 'qmx-acm-data/2026' }
     ];
   }
-  if (data?.repo && !repos.some(r => r && r.repo === data.repo)) {
+  if (data?.repo && !repos.some(r => {
+    try { return r && repositoryKey(r.repo, r.serverUrl || '') === repositoryKey(data.repo, data.serverUrl || ''); } catch { return false; }
+  })) {
     repos.unshift({ id: 'repo-current', name: '当前题库', serverUrl: data.serverUrl !== undefined ? data.serverUrl : fallbackServerUrl, repo: data.repo });
   }
   const validRepos = [];
@@ -113,8 +115,8 @@ function normalizeRepositories(data, fallbackRepo = defaults.repo, fallbackServe
     let id = String(item.id || '').trim();
     if (!id || seenIds.has(id)) id = 'repo-' + Math.random().toString(36).slice(2, 9);
     seenIds.add(id);
-    let serverUrl = String(item.serverUrl || '').trim();
-    if (serverUrl && !/^https?:\/\/[^\s$.?#].[^\s]*$/i.test(serverUrl)) serverUrl = '';
+    let serverUrl;
+    try { serverUrl = normalizeServerUrl(item.serverUrl || ''); } catch { continue; }
     const name = String(item.name || '').trim().slice(0, 50) || repoPath;
     validRepos.push({ id, name, serverUrl, repo: repoPath });
   }
@@ -123,10 +125,10 @@ function normalizeRepositories(data, fallbackRepo = defaults.repo, fallbackServe
   }
   let active = null;
   if (data?.activeRepoId) {
-    active = validRepos.find(r => r.id === data.activeRepoId && (!data.repo || r.repo === data.repo));
+    active = validRepos.find(r => r.id === data.activeRepoId);
   }
   if (!active && data?.repo) {
-    active = validRepos.find(r => r.repo === data.repo);
+    active = validRepos.find(r => repositoryKey(r.repo, r.serverUrl) === repositoryKey(data.repo, data.serverUrl || ''));
   }
   if (!active) {
     active = validRepos.find(r => r.id === data?.activeRepoId) || validRepos[0];
@@ -137,7 +139,7 @@ function settings() {
   const stored = read('settings.json', {});
   const raw = { ...defaults, ...stored };
   const requestedRepo = stored.repo !== undefined ? stored.repo : raw.repo;
-  const requestedActiveId = stored.activeRepoId !== undefined ? stored.activeRepoId : (stored.repo && stored.repo !== defaults.repo ? null : raw.activeRepoId);
+  const requestedActiveId = stored.activeRepoId !== undefined ? stored.activeRepoId : (stored.repo !== undefined || stored.serverUrl !== undefined ? null : raw.activeRepoId);
   const normalized = normalizeRepositories({ ...raw, repo: requestedRepo, activeRepoId: requestedActiveId }, defaults.repo, defaults.serverUrl);
   const value = {
     ...raw,
@@ -152,6 +154,8 @@ function settings() {
 function local() { return { records: [], favorites: [], mastery: {}, draft: {}, ...read('local.json', {}) }; }
 function githubClient(currentToken = token, repo = settings().repo, serverUrl = settings().serverUrl) {
   const ticket = auth.capture();
+  serverUrl = normalizeServerUrl(serverUrl);
+  if (serverUrl) currentToken = '';
   const gh = new GitHub({ repo, token: currentToken, fetcher: networkFetch, serverUrl });
   // All authenticated operations, including writes, invalidate only on a structured HTTP 401.
   return new Proxy(gh, { get(target, name) {
@@ -164,40 +168,50 @@ function githubClient(currentToken = token, repo = settings().repo, serverUrl = 
   } });
 }
 function client() { return githubClient(); }
-function repoCache(cache, repo = settings().repo) {
-  if (cache.repos && cache.repos[repo]) return cache.repos[repo];
-  if (cache.repo === repo) return cache;
+function sourceScope(s = settings()) { return { repo: s.repo, serverUrl: normalizeServerUrl(s.serverUrl || ''), sourceKey: repositoryKey(s.repo, s.serverUrl || '') }; }
+function annotate(record, scope = sourceScope()) { return { ...record, ...scope }; }
+function repoCache(cache, repo = settings().repo, serverUrl = settings().serverUrl) {
+  const key = repositoryKey(repo, serverUrl);
+  if (cache.repos?.[key]) return cache.repos[key];
+  if (cache.sourceKey === key) return cache;
+  // Releases before custom sources only cached GitHub; never reuse ambiguous data on Gitea.
+  if (!normalizeServerUrl(serverUrl) && !cache.sourceKey && !cache.serverUrl) {
+    if (cache.repos?.[repo] && !cache.repos[repo].sourceKey && !cache.repos[repo].serverUrl) return cache.repos[repo];
+    if (cache.repo === repo) return cache;
+  }
   return {};
 }
+function saveRepoCache(old, updated, scope = sourceScope()) {
+  const value = { ...updated, ...scope }; delete value.repos;
+  const repos = { ...(old.repos || {}), [scope.sourceKey]: value };
+  save('cache.json', { ...value, repos });
+}
+function ensureSource(key, generation = loginGeneration) {
+  if (key !== sourceScope().sourceKey || generation !== loginGeneration) throw new Error('账号或仓库配置已改变，请重新同步');
+}
 function state(error) {
-  const s = settings(), cache = read('cache.json', {});
-  const c = repoCache(cache, s.repo);
+  const s = settings(), scope = sourceScope(s), cache = read('cache.json', {});
+  const c = repoCache(cache, s.repo, s.serverUrl);
   const matching = c.repo === s.repo;
   return {
-    records: matching ? (c.records || []).filter(r => r.kind === 'document').map(r => ({ ...r, repo: s.repo })) : [],
-    algorithmNotes: matching ? (c.algorithmNotes || []).map(r => ({ ...r, repo: s.repo })) : [],
-    algorithmTopics: matching && Array.isArray(c.algorithmTopics) ? c.algorithmTopics.map(topic => ({ ...topic, repo: s.repo })) : [],
-    issues: matching ? (c.issues || (c.records || []).filter(r => r.kind === 'issue')).map(r => ({ ...r, repo: s.repo })) : [],
+    records: matching ? (c.records || []).filter(r => r.kind === 'document').map(r => annotate(r, scope)) : [],
+    algorithmNotes: matching ? (c.algorithmNotes || []).map(r => annotate(r, scope)) : [],
+    algorithmTopics: matching && Array.isArray(c.algorithmTopics) ? c.algorithmTopics.map(topic => annotate(topic, scope)) : [],
+    issues: matching ? (c.issues || (c.records || []).filter(r => r.kind === 'issue')).map(r => annotate(r, scope)) : [],
     lastSync: matching ? c.lastSync : null,
     tagCatalog: matching && c.tagCatalog ? c.tagCatalog : require('../ui/tag-presets.js'),
     tagCatalogError: matching ? c.tagCatalogError || null : null,
-    settings: s, account, authStatus: auth?.status, appVersion: APP_VERSION, update: updater?.getState(), updateCapability: getFileUpgradeCapability(), permissions: permissions?.repo === s.repo ? permissions : null,
+    settings: s, account, authStatus: auth?.status, appVersion: APP_VERSION, update: updater?.getState(), updateCapability: getFileUpgradeCapability(), permissions: permissions?.sourceKey === scope.sourceKey ? permissions : null,
     local: local(), contests: contestService?.snapshot(), platforms: platforms?.state(), planner: planner?.state(), error: error || null
   };
 }
 function assertExternal(url) {
-  const u = new URL(url);
-  const custom = settings()?.serverUrl;
-  let customUrl = null;
-  if (custom) {
-    try { customUrl = new URL(custom); } catch (_) {}
-  }
-  const isSchoolServer = u.hostname === '172.25.5.128';
-  const isCustom = customUrl && u.hostname === customUrl.hostname && (!u.port || u.port === customUrl.port);
-  if (!u.username && !u.password && (isSchoolServer || isCustom)) return u;
-  if (!u.username && !u.password && !u.port && u.protocol === 'https:' && ['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com', 'leetcode.cn', 'leetcode.com', 'www.luogu.com'].includes(u.hostname)) return u;
-  try { return new URL(problemUrl(url)); }
-  catch { throw new Error('仅允许打开 GitHub、校内代码平台和受支持题目平台的链接（HTTP 仅限官方题目）'); }
+  const invalid = () => new Error('仅允许打开不含账号密码的 HTTP 或 HTTPS 网页链接');
+  if (typeof url !== 'string' || url.length > 8192 || /[\u0000-\u0020\u007f\\]/.test(url) || !/^https?:\/\//i.test(url)) throw invalid();
+  let u;
+  try { u = new URL(url); } catch { throw invalid(); }
+  if (!['https:', 'http:'].includes(u.protocol) || !u.hostname || u.username || u.password) throw invalid();
+  return u;
 }
 async function external(url) {
   const u = assertExternal(url);
@@ -216,7 +230,7 @@ function chromePath() {
 }
 async function openAuthUrl(url) {
   const u = assertExternal(url);
-  if (u.hostname !== 'github.com') throw new Error('仅允许打开 GitHub 授权链接');
+  if (u.protocol !== 'https:' || u.hostname !== 'github.com' || u.port) throw new Error('仅允许打开 GitHub 授权链接');
   const chrome = chromePath();
   if (chrome) {
     const launched = await new Promise(resolve => {
@@ -264,13 +278,15 @@ async function avatarData(url) {
     return `data:${type};base64,${Buffer.concat(chunks).toString('base64')}`;
   } catch { return null; }
 }
-async function refreshIdentity(gh = client()) {
-  const gen = loginGeneration, repo = settings().repo, ticket = auth.capture();
-  const result = await gh.profile();
+async function refreshIdentity() {
+  const gen = loginGeneration, scope = sourceScope(), ticket = auth.capture();
+  const gh = githubClient(token, scope.repo, '');
+  const result = scope.serverUrl ? await gh.identity() : await gh.profile();
   const picture = await avatarData(result.account.avatarUrl);
-  if (gen !== loginGeneration || repo !== settings().repo) throw new Error('账号或仓库已改变，请重试');
+  ensureSource(scope.sourceKey, gen);
   const next = { ...result.account, avatarData: picture };
-  persistAuth({ token: ticket.token, account: next }, ticket); account = next; permissions = result.permissions;
+  persistAuth({ token: ticket.token, account: next }, ticket); account = next;
+  permissions = scope.serverUrl ? { ...scope, push: false, admin: false } : annotate(result.permissions, scope);
   return state();
 }
 async function oauth(endpoint, data) {
@@ -303,14 +319,15 @@ async function login() {
     if (result.error === 'slow_down') { interval += 5000; continue; }
     if (result.error) throw new Error(result.error_description || result.error);
     if (!result.access_token) throw new Error('GitHub 未返回凭据');
-    const repo = settings().repo;
-    const gh = githubClient(result.access_token, repo);
-    const profile = await gh.profile();
+    const scope = sourceScope();
+    const gh = githubClient(result.access_token, scope.repo, '');
+    const profile = scope.serverUrl ? await gh.identity() : await gh.profile();
     const picture = await avatarData(profile.account.avatarUrl);
-    if (gen !== loginGeneration || repo !== settings().repo) throw new Error('登录已取消或仓库已改变');
+    ensureSource(scope.sourceKey, gen);
     const next = { ...profile.account, avatarData: picture };
     persistAuth({ token: result.access_token, account: next }, ticket);
-    token = result.access_token; account = next; permissions = profile.permissions;
+    token = result.access_token; account = next;
+    permissions = scope.serverUrl ? { ...scope, push: false, admin: false } : annotate(profile.permissions, scope);
     return account;
   }
   throw new Error('授权码已过期，请重新登录');
@@ -328,8 +345,14 @@ function handle(name, fn) {
   });
 }
 function checkRecordRepo(record) {
-  if (record.repo && record.repo !== settings().repo) throw new Error('该题解属于其他仓库，请切换到原仓库后操作');
+  const scope = sourceScope();
+  if (record.repo && record.repo !== scope.repo) throw new Error('该题解属于其他仓库，请切换到原仓库后操作');
   if (record.path && !record.repo) throw new Error('旧记录缺少仓库信息，请同步后重试');
+  const key = record.sourceKey || (record.repo ? repositoryKey(record.repo, record.serverUrl || '') : scope.sourceKey);
+  if (key !== scope.sourceKey) throw new Error('该记录属于其他 Git 服务或仓库，请切换到原仓库后操作');
+}
+function requireWritableSource() {
+  if (sourceScope().serverUrl) throw new Error('自定义 Gitea 目前仅支持匿名读取公开仓库；请切换 GitHub 仓库后写入');
 }
 function rememberDocument(result, removed = false) {
   const repo = settings().repo, old = read('cache.json', {});
@@ -338,13 +361,11 @@ function rememberDocument(result, removed = false) {
   if (!cache.issues) cache.issues = (cache.records || []).filter(r => r.kind === 'issue').map(r => ({ ...r, repo }));
   cache.records = (cache.records || []).filter(r => r.kind === 'document' && r.id !== result.id);
   if (!removed) cache.records.unshift(result);
-  const repos = { ...(old.repos || {}) };
-  repos[repo] = cache;
-  save('cache.json', { ...cache, repo, repos });
+  saveRepoCache(old, cache);
   // Legacy releases kept online documents in local.records, which could resurrect remote deletions.
   const personal = local();
   personal.published = { ...(personal.published || {}) };
-  if (result.clientId && result.authorId) personal.published[`${repo}:${result.authorId}:${result.clientId}`] = result.path;
+  if (result.clientId && result.authorId) personal.published[`${sourceScope().sourceKey}:${result.authorId}:${result.clientId}`] = result.path;
   personal.records = personal.records.filter(r => r.kind === 'local' && !(result.clientId && r.clientId === result.clientId && !r.proposalUrl && (r.ownerId == null || String(r.ownerId) === String(account?.id))));
   save('local.json', personal);
 }
@@ -412,20 +433,19 @@ function setup() {
     finally { updateBusy = false; }
   });
   handle('getTagCatalog', () => writeOperation(async () => {
-    const repo = settings().repo;
+    const scope = sourceScope(), gen = loginGeneration, repo = scope.repo;
     const catalog = await client().getTagCatalog();
-    if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
+    ensureSource(scope.sourceKey, gen);
     const old = read('cache.json', {});
     const c = repoCache(old, repo);
     const updated = { ...(c.repo === repo ? c : {}), repo, tagCatalog: catalog, tagCatalogError: null };
-    const repos = { ...(old.repos || {}) };
-    repos[repo] = updated;
-    save('cache.json', { ...updated, repo, repos });
+    saveRepoCache(old, updated);
     return catalog;
   }));
-  handle('requestTag', data => writeOperation(() => client().requestTag(data)));
+  handle('requestTag', data => writeOperation(() => { requireWritableSource(); return client().requestTag(data); }));
   handle('getTagReview', () => client().getTagReview());
   handle('reviewTag', data => writeOperation(async () => {
+    requireWritableSource();
     const repo = settings().repo;
     const result = await client().reviewTag(data);
     if (repo === settings().repo && data.decision === 'approve') {
@@ -434,25 +454,22 @@ function setup() {
       try {
         const tagCatalog = await client().getTagCatalog();
         const updated = { ...(c.repo === repo ? c : {}), repo, tagCatalog, tagCatalogError: null };
-        const repos = { ...(old.repos || {}) };
-        repos[repo] = updated;
-        save('cache.json', { ...updated, repo, repos });
+        saveRepoCache(old, updated);
       }
       catch { /* Approval is already committed; preserve the successful result and refresh on next sync. */ }
     }
     return result;
   }));
   handle('saveAlgorithmTopic', data => writeOperation(async () => {
-    const repo = settings().repo;
+    requireWritableSource();
+    const scope = sourceScope(), gen = loginGeneration, repo = scope.repo;
     const result = await client().saveAlgorithmTopic(data);
-    if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
+    ensureSource(scope.sourceKey, gen);
     // Persist only the complete additions list returned after the repository commit succeeded.
     const old = read('cache.json', {});
     const c = repoCache(old, repo);
     const updated = { ...(c.repo === repo ? c : {}), repo, algorithmTopics: result.topics };
-    const repos = { ...(old.repos || {}) };
-    repos[repo] = updated;
-    save('cache.json', { ...updated, repo, repos });
+    saveRepoCache(old, updated);
     return result.topic;
   }));
   handle('refreshAccount', async () => {
@@ -463,18 +480,16 @@ function setup() {
     if (writeBusy || syncBusy) throw new Error('请等待当前操作完成');
     syncBusy = true;
     try {
-      const repo = settings().repo, old = read('cache.json', {});
+      const scope = sourceScope(), gen = loginGeneration, repo = scope.repo, old = read('cache.json', {});
       const c = repoCache(old, repo);
       const result = await client().sync(c.repo === repo ? c : {});
-      if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
+      ensureSource(scope.sourceKey, gen);
       let tagCatalog = c.repo === repo ? c.tagCatalog : null, tagCatalogError = null;
       try { tagCatalog = await client().getTagCatalog(); }
       catch (error) { tagCatalogError = error.status === 401 ? '标签目录授权已失效，请重新登录' : '标签目录暂未更新，继续使用已缓存的标签'; }
-      if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
+      ensureSource(scope.sourceKey, gen);
       const updated = { ...result, repo, tagCatalog, tagCatalogError, algorithmNotes: Array.isArray(result.algorithmNotes) ? result.algorithmNotes : [], algorithmTopics: Array.isArray(result.algorithmTopics) ? result.algorithmTopics : [] };
-      const repos = { ...(old.repos || {}) };
-      repos[repo] = updated;
-      save('cache.json', { ...updated, repo, repos });
+      saveRepoCache(old, updated);
       if (token) { try { await refreshIdentity(); } catch (error) { permissions = null; return state(`资料已同步，账号权限刷新失败：${error.message}`); } }
       return state();
     } finally { syncBusy = false; }
@@ -488,8 +503,7 @@ function setup() {
         if (!item || typeof item !== 'object') throw new Error('仓库配置格式不正确');
         repoParts(item.repo);
         if (item.serverUrl) {
-          const u = String(item.serverUrl).trim();
-          if (!/^https?:\/\/[^\s$.?#].[^\s]*$/i.test(u)) throw new Error('Git 服务地址格式不正确');
+          normalizeServerUrl(item.serverUrl);
         }
       }
       next.repositories = data.repositories;
@@ -504,8 +518,7 @@ function setup() {
       if (match) match.repo = data.repo;
     }
     if (data.serverUrl !== undefined && !data.repositories) {
-      const url = String(data.serverUrl).trim();
-      if (url && !/^https?:\/\/[^\s$.?#].[^\s]*$/i.test(url)) throw new Error('Git 服务地址格式不正确');
+      const url = normalizeServerUrl(data.serverUrl);
       next.serverUrl = url;
       const match = next.repositories?.find(r => r.id === next.activeRepoId);
       if (match) match.serverUrl = url;
@@ -557,16 +570,17 @@ function setup() {
       if (previous?.ownerId != null && String(previous.ownerId) !== String(record.ownerId)) throw new Error('不能更改本地题解的账号归属');
       if ((!previous || previous.ownerId == null) && record.ownerId != null && String(record.ownerId) !== String(account?.id ?? '')) throw new Error('不能以其他账号创建或绑定本地题解');
     }
-    const cache = read('cache.json', {});
+    const cache = repoCache(read('cache.json', {}));
+    const scope = sourceScope();
     const published = { ...(old.published || {}) };
     for (const doc of cache.records || []) {
-      if (cache.repo && doc.clientId && doc.authorId) published[`${cache.repo}:${doc.authorId}:${doc.clientId}`] = doc.path;
+      if (cache.repo && doc.clientId && doc.authorId) published[`${scope.sourceKey}:${doc.authorId}:${doc.clientId}`] = doc.path;
     }
     const records = data.records.filter(r => {
       if (r.kind !== 'local') return false;
       if (r.proposalUrl) return true;
       const owner = r.ownerId ?? account?.id;
-      return !published[`${settings().repo}:${owner}:${r.clientId}`];
+      return !published[`${scope.sourceKey}:${owner}:${r.clientId}`] && !(!scope.serverUrl && published[`${scope.repo}:${owner}:${r.clientId}`]);
     });
     save('local.json', { ...old, ...data, records, published }); return local();
   });
@@ -577,7 +591,7 @@ function setup() {
   });
   handle('cancelLogin', () => { loginGeneration++; });
   const saveDocument = record => writeOperation(async () => {
-    checkRecordRepo(record);
+    checkRecordRepo(record); requireWritableSource();
     if (!account?.id || !token) throw new Error('请先登录 GitHub');
     if (!record.path) {
       const personal = local();
@@ -589,34 +603,35 @@ function setup() {
       }
       if (bound) save('local.json', personal);
     }
-    const result = await client().saveDocument(record);
+    const result = annotate(await client().saveDocument(record));
     rememberDocument(result); return result;
   });
   handle('saveDocument', saveDocument);
   handle('saveAlgorithmNote', record => writeOperation(async () => {
-    checkRecordRepo(record);
+    checkRecordRepo(record); requireWritableSource();
     if (!account?.id || !token) throw new Error('请先登录 GitHub');
-    const result = await client().saveAlgorithmNote(record);
-    const cache = read('cache.json', {});
+    const result = annotate(await client().saveAlgorithmNote(record));
+    const old = read('cache.json', {}), cache = repoCache(old);
     const notes = (cache.algorithmNotes || []).filter(item => item.path !== result.path);
-    save('cache.json', { ...(cache.repo === settings().repo ? cache : {}), repo: settings().repo, algorithmNotes: [...notes, result] });
+    saveRepoCache(old, { ...cache, algorithmNotes: [...notes, result] });
     return result;
   }));
   handle('submit', saveDocument);
   handle('propose', saveDocument);
   handle('deleteDocument', record => writeOperation(async () => {
-    checkRecordRepo(record);
-    const result = await client().deleteDocument(record);
+    checkRecordRepo(record); requireWritableSource();
+    const result = annotate(await client().deleteDocument(record));
     rememberDocument(result, true); return result;
   }));
   handle('deleteIssue', record => writeOperation(async () => {
+    checkRecordRepo(record); requireWritableSource();
     if (record.repo !== settings().repo) throw new Error('讨论所属仓库已改变，请同步后重试');
     const result = await client().deleteIssue(record);
-    const repo = settings().repo, cache = read('cache.json', {});
+    const repo = settings().repo, old = read('cache.json', {}), cache = repoCache(old);
     if (cache.repo === repo) {
       cache.issues = (cache.issues || (cache.records || []).filter(r => r.kind === 'issue')).filter(r => r.number !== result.number);
       cache.records = (cache.records || []).filter(r => r.kind !== 'issue' || r.number !== result.number);
-      save('cache.json', cache);
+      saveRepoCache(old, cache);
     }
     const personal = local();
     personal.favorites = personal.favorites.filter(id => String(id) !== result.id);
@@ -626,6 +641,7 @@ function setup() {
     return result;
   }));
   handle('comment', data => writeOperation(() => {
+    checkRecordRepo(data); requireWritableSource();
     if (data.repo !== settings().repo) throw new Error('讨论所属仓库已改变，请同步后重试');
     return client().comment(data);
   }));

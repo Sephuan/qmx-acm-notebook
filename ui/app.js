@@ -4,6 +4,7 @@
   const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
   const bridge = window.notebook;
   const demo = !bridge;
+  const webPreview = demo && ['http:', 'https:'].includes(location.protocol);
   const STORAGE = 'acm-notebook.demo.v1';
   const THEME_STORAGE = 'acm-notebook.theme';
   const SIDEBAR_STORAGE = 'acm-notebook.sidebar';
@@ -26,7 +27,7 @@
   s.appVersion = ''; s.update = null;
   window.NotebookPlatforms?.init({ bridge, onSettings: () => $('#settings-button').click() });
   s.planner = { problems: [], tasks: [], layout: 'balanced' };
-  window.NotebookPlanner?.init({ bridge, onChange: value => { s.planner = value; document.body.dataset.homeLayout = 'compact'; } });
+  window.NotebookPlanner?.init({ bridge, onChange: value => { s.planner = value; } });
   let updateRunning = false;
   let updateReady = false;
   let toastTimer;
@@ -48,7 +49,7 @@
   function button(label, className, action) { const node = element('button', className, label); node.type = 'button'; node.addEventListener('click', action); return node; }
   function toast(message) { $('#toast').textContent = message; $('#toast').hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { $('#toast').hidden = true; }, 3400); }
   function errorMessage(error) { const message = typeof error === 'string' ? error : error?.message || '操作未完成，请稍后重试'; return message.replace(/^Error invoking remote method '[^']+':\s*(?:Error:\s*)?/, ''); }
-  function key(record) { return String(record.id ?? record.number ?? `${record.platform}:${record.pid}:${record.url}`); }
+  function key(record) { const id = String(record.id ?? record.number ?? `${record.platform}:${record.pid}:${record.url}`); return record.kind !== 'local' && record.sourceKey && record.sourceKey !== 'https://api.github.com|qmx-acm-data/2026' ? `${record.sourceKey}:${id}` : id; }
   function uuid() {
     if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
       return crypto.randomUUID();
@@ -61,7 +62,8 @@
   }
   function accountId() { return s.account?.id == null ? null : String(s.account.id); }
   function repo() { return s.permissions.repo || s.settings.repo || ''; }
-  function sameRepo(record) { return !!record.repo && String(record.repo).toLowerCase() === String(repo()).toLowerCase(); }
+  function repoSource(repoPath = repo(), serverUrl = s.settings.serverUrl) { let server = String(serverUrl || '').replace(/\/+$/, '').replace(/\/api\/v1$/, ''); if (!server || ['https://github.com', 'https://api.github.com'].includes(server)) server = 'https://api.github.com'; return `${server}|${String(repoPath).toLowerCase()}`; }
+  function sameRepo(record) { return !!record.repo && String(record.repo).toLowerCase() === String(repo()).toLowerCase() && (record.sourceKey ? record.sourceKey === repoSource() : repoSource(record.repo, record.serverUrl) === repoSource()); }
   const migratedClientIds = new Map();
   function normalizeLocal(local) { return { records: (Array.isArray(local?.records) ? local.records : []).filter(record => record?.kind === 'local').map(record => { const legacyKey = record.id == null ? null : String(record.id); const clientId = record.clientId || (legacyKey && migratedClientIds.get(legacyKey)) || uuid(); if (legacyKey) migratedClientIds.set(legacyKey, clientId); return { ...record, clientId, id: record.id ?? `local:${clientId}`, ownerId: record.ownerId == null ? null : String(record.ownerId) }; }), favorites: Array.isArray(local?.favorites) ? local.favorites : [], mastery: local?.mastery && typeof local.mastery === 'object' ? local.mastery : {}, draft: local?.draft && typeof local.draft === 'object' ? local.draft : {}, learningPaths: local?.learningPaths && typeof local.learningPaths === 'object' && !Array.isArray(local.learningPaths) ? local.learningPaths : {} }; }
   function visibleLocal(record) { return record.ownerId == null || (accountId() !== null && String(record.ownerId) === accountId()); }
@@ -84,7 +86,6 @@
     if (payload.authStatus) s.authStatus = payload.authStatus;
     window.NotebookPlatforms?.render(payload.platforms || {});
     if (payload.planner) s.planner = payload.planner;
-    document.body.dataset.homeLayout = 'compact';
     window.NotebookPlanner?.render(s.planner);
     if (typeof payload.appVersion === 'string') s.appVersion = payload.appVersion;
     if (payload.update && typeof payload.update === 'object') s.update = { ...payload.update };
@@ -576,7 +577,6 @@
     const toolbar = element('div', 'home-toolbar');
     const intro = element('div', 'home-intro');
     append(intro, element('span', 'home-date', new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' })), element('h2', '', '今天，继续向前。'));
-    if (s.settings.displayName === '布局预览 · 示例数据') intro.append(element('span', 'home-preview-badge', '示例数据 · 紧凑版预览'));
     append(toolbar, intro);
     const board = element('div', 'home-board');
     const planner = element('section', 'home-planner'); planner.id = 'home-planner'; planner.setAttribute('aria-label', '题单与学习任务');
@@ -761,6 +761,7 @@
     } finally { setBusy(false); }
   }
   function renderAlgorithmNotes() {
+    window.NotebookReadingDetail?.closeAll();
     const panel = $('#algorithm-panel');
     window.NotebookAlgorithmsController?.destroy(); learningController?.destroy(); learningController = null;
     panel.replaceChildren();
@@ -773,7 +774,7 @@
       learningController = window.NotebookLearningPath.render({ host, tree: s.algorithmTree, curriculum: window.QMX_ALGORITHM_LEARNING_PATH,
         progress: s.local.learningPaths?.[learningProgressKey()] || { gates: {} }, progressKey: learningProgressKey(), account: s.account, notes: s.algorithmNotes, canUpload: Boolean(s.account && s.permissions.push),
         onProgress: saveLearningProgress, onTopic: openLearningTopic,
-        onNote(note) { panel.dataset.scope = 'public'; openLearningTopic(note.nodeId); },
+        onNote: openAlgorithmNoteDetail,
         onUpload: id => { algorithmSelectedNode = id; openAlgorithmNoteEditor(); }, toast });
       return;
     }
@@ -829,19 +830,46 @@
     finally { setBusy(false); }
   });
   function isMineNote(note) { return accountId() !== null && String(note.authorId || '') === accountId(); }
-  function openAlgorithmNoteDetail(note) { const panel=$('#algorithm-panel'); const drawer=element('div','algorithm-reading'); append(drawer,button('× 关闭算法笔记','button subtle algorithm-close-button',renderAlgorithmNotes),element('div','eyebrow','ALGORITHM NOTE'),element('h2','',note.title),append(element('div','author-row'),element('span','mini-avatar',authorName(note.author).slice(0,1)),element('span','',authorName(note.author)),element('span','separator','·'),element('span','',date(note.updatedAt)))); const body=element('div','markdown-body algorithm-reading-body');renderMarkdown(body,note.body);drawer.append(tags(note),body);panel.replaceChildren(drawer); }
+  function openAlgorithmNoteDetail(note, { gateId } = {}) {
+    const holder = element('div', 'alg-browser'), pane = element('div', 'alg-pane'); holder.hidden = true;
+    const article = element('article', 'alg-reading'), title = element('h2', 'alg-reading-title', note.title || '未命名笔记');
+    const meta = element('div', 'alg-note-meta');
+    if (note.featured) meta.append(element('span', 'alg-featured', '精选'));
+    append(meta, element('span', 'alg-note-author', authorName(note.author)), element('span', '', date(note.updatedAt)));
+    const body = element('div', 'markdown-body alg-markdown'); renderMarkdown(body, note.body);
+    append(article, title, meta, tags(note), body); pane.append(article); holder.append(pane); $('#algorithm-panel').append(holder);
+    const path = [];
+    const stage = window.QMX_ALGORITHM_LEARNING_PATH?.stages.find(item => item.gates.some(gate => gateId ? gate.id === gateId : gate.topicIds.includes(note.nodeId)));
+    const gate = stage?.gates.find(item => gateId ? item.id === gateId : item.topicIds.includes(note.nodeId));
+    path.push({ label: '闯关学习', onClick() { window.NotebookReadingDetail.closeAll(); } });
+    if (stage) path.push({ label: `第${stage.index}章 ${stage.title}`, onClick() { window.NotebookReadingDetail.closeAll(); if (gate) learningController?.selectGate(gate.id); } });
+    if (gate) path.push({ label: gate.title, onClick() { noteDetail?.close(); } });
+    path.push({ label: note.title || '未命名笔记' });
+    const noteDetail = window.NotebookReadingDetail.open({ content: pane, title: '算法笔记详情', path, onClose() { holder.remove(); } });
+  }
   function openAlgorithmNoteEditor() { if (!s.account || !s.permissions.push) { toast('请先登录具有仓库写入权限的 GitHub 账户'); return; } const form=$('#algorithm-note-form'); form.reset(); const node=form.elements.nodeId; node.replaceChildren(...algorithmNodes().map(n=>{const o=element('option','',n.label);o.value=n.id;return o;})); node.value=algorithmSelectedNode; form.elements.noteScope.value=s.permissions.admin ? 'public' : 'personal'; form.elements.noteScope.disabled=!s.permissions.admin; $('#algorithm-note-error').hidden=true; $('#algorithm-note-dialog').showModal(); }
   $('#algorithm-note-form').addEventListener('submit', async event => { event.preventDefault(); const form=event.currentTarget;if(s.busy)return;const data=Object.fromEntries(new FormData(form));const note={title:data.noteTitle,noteScope:s.permissions.admin ? form.elements.noteScope.value : 'personal',nodeId:data.nodeId,tags:String(data.noteTags||'').split(/[,，、]/).map(x=>x.trim()).filter(Boolean),body:data.body,featured:data.featured === 'on',clientId:uuid(),repo:repo()};setBusy(true);try{const result=await call('saveAlgorithmNote',note);s.algorithmNotes=[...s.algorithmNotes.filter(x=>x.path!==result.path),result];$('#algorithm-note-dialog').close();render();toast('算法笔记已保存')}catch(error){$('#algorithm-note-error').textContent=errorMessage(error);$('#algorithm-note-error').hidden=false}finally{setBusy(false)}});
   function renderMarkdown(container, body) {
     const source = String(body || '还没有题解内容。可以从记录错因开始。');
     if (window.marked && window.DOMPurify) {
-      try { const parse = typeof window.marked.parse === 'function' ? window.marked.parse.bind(window.marked) : window.marked; const safe = window.DOMPurify.sanitize(window.NotebookMarkdownMath ? window.NotebookMarkdownMath.parse(source, window.marked) : parse(source), { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button'], FORBID_ATTR: ['style'] }); container.innerHTML = safe;
+      try { const parse = typeof window.marked.parse === 'function' ? window.marked.parse.bind(window.marked) : window.marked; const html = window.NotebookMarkdownMath ? window.NotebookMarkdownMath.parse(source, window.marked) : parse(source);
+        if (window.NotebookMarkdownColor) container.replaceChildren(window.NotebookMarkdownColor.sanitize(html, window.DOMPurify, container.ownerDocument));
+        else container.innerHTML = window.DOMPurify.sanitize(html, { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button'], FORBID_ATTR: ['style', 'color'] });
         window.NotebookMarkdownMath?.render(container, window.katex);
         // Prism runs after sanitizing and reads textContent only, so highlighting cannot inject markup.
         $$('pre code', container).forEach(code => { if (code.parentElement && (settingsPreview || s.settings).codeLineNumbers) code.parentElement.classList.add('line-numbers'); highlightCodeBlock(code); });
         // Decorate after Prism: the buttons are app chrome, not sanitized Markdown.
         decorateCodeBlocks(container);
-        container.classList.add('rendered'); $$('a', container).forEach(link => link.addEventListener('click', event => { event.preventDefault(); openExternal(link.getAttribute('href')); })); return; } catch (_) { /* Plain text is the secure fallback. */ }
+        container.classList.add('rendered'); $$('a', container).forEach(link => link.addEventListener('click', event => {
+          event.preventDefault(); const href = link.getAttribute('href');
+          if (href?.startsWith('#')) {
+            let id; try { id = decodeURIComponent(href.slice(1)); } catch (_) { return; }
+            const target = Array.from(container.querySelectorAll('[id],a[name]')).find(node => node.id === id || node.getAttribute('name') === id);
+            (target || (href === '#' ? container : null))?.scrollIntoView({ block: 'start' });
+            return;
+          }
+          openExternal(href);
+        })); return; } catch (_) { /* Plain text is the secure fallback. */ }
     }
     container.textContent = source;
   }
@@ -1101,12 +1129,13 @@
     if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭当前编辑'); return; }
     setBusy(true);
     try {
+      if (demo && !webPreview) { toast('演示模式：本地记录已保留，未连接公共题库'); return; }
       if (demo) {
         const activeRepo = (s.settings.repositories || []).find(r => r.id === s.settings.activeRepoId) ||
           (s.settings.repositories || [])[0] ||
-          { repo: 'ctguacm/2026', serverUrl: 'http://172.25.5.128:3000' };
-        const currentRepo = activeRepo.repo || s.settings?.repo || 'ctguacm/2026';
-        const currentServer = activeRepo.serverUrl !== undefined ? activeRepo.serverUrl : (s.settings?.serverUrl || 'http://172.25.5.128:3000');
+          { repo: 'qmx-acm-data/2026', serverUrl: '' };
+        const currentRepo = activeRepo.repo || s.settings?.repo || 'qmx-acm-data/2026';
+        const currentServer = activeRepo.serverUrl !== undefined ? activeRepo.serverUrl : (s.settings?.serverUrl || '');
         s.settings.repo = currentRepo;
         s.permissions.repo = currentRepo;
 
@@ -1115,8 +1144,11 @@
           if (res.ok) {
             const data = await res.json();
             if (Array.isArray(data.records)) {
-              s.records = data.records.map(r => ({ ...r, repo: currentRepo }));
-              s.issues = (Array.isArray(data.issues) ? data.issues : []).map(r => ({ ...r, repo: currentRepo }));
+              s.records = data.records.map(r => ({ ...r, repo: currentRepo, serverUrl: currentServer, sourceKey: repoSource(currentRepo, currentServer) }));
+              s.issues = (Array.isArray(data.issues) ? data.issues : []).map(r => ({ ...r, repo: currentRepo, serverUrl: currentServer, sourceKey: repoSource(currentRepo, currentServer) }));
+              s.algorithmNotes = Array.isArray(data.algorithmNotes) ? data.algorithmNotes : [];
+              s.algorithmTopics = Array.isArray(data.algorithmTopics) ? data.algorithmTopics : [];
+              s.algorithmTree = window.NotebookAlgorithmDirectory.hydrate(window.QMX_ALGORITHM_TREE, s.algorithmTopics);
               s.lastSync = new Date().toISOString();
               s.comments.clear();
               refreshFilters();
@@ -1220,7 +1252,7 @@
     const select = $('#repo-select');
     if (!select) return;
     const repos = Array.isArray(s.settings?.repositories) && s.settings.repositories.length ? s.settings.repositories : [
-      { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', repo: s.settings?.repo || 'ctguacm/2026', serverUrl: s.settings?.serverUrl || 'http://172.25.5.128:3000' }
+      { id: 'repo-current', name: '当前题库', repo: s.settings?.repo || 'qmx-acm-data/2026', serverUrl: s.settings?.serverUrl || '' }
     ];
     const activeId = s.settings?.activeRepoId || repos[0].id;
     select.replaceChildren();
@@ -1282,13 +1314,12 @@
   $('#repo-select')?.addEventListener('change', async event => {
     const selectedId = event.target.value;
     if (selectedId === s.settings.activeRepoId) return;
-    if (s.busy) { event.target.value = s.settings.activeRepoId; toast('请等待当前操作完成'); return; }
+    if (s.busy || $('#submit-dialog').open || document.querySelector('dialog[open]')) { event.target.value = s.settings.activeRepoId; toast('请先完成当前操作或关闭弹窗'); return; }
     setBusy(true);
     try {
       if (!demo) {
         await call('saveSettings', { activeRepoId: selectedId });
         applyPayload(await call('bootstrap'));
-        await sync();
       } else {
         s.settings.activeRepoId = selectedId;
         const target = (s.settings.repositories || []).find(r => r.id === selectedId);
@@ -1298,16 +1329,19 @@
           s.permissions.repo = target.repo;
         }
         writeDemo();
+        s.records = []; s.issues = []; s.algorithmNotes = []; s.algorithmTopics = []; s.lastSync = null;
+        s.algorithmTree = window.NotebookAlgorithmDirectory.hydrate(window.QMX_ALGORITHM_TREE, []);
         renderRepoSelector();
-        render();
-        void sync();
       }
+      s.comments.clear(); s.selected = null; focusedDetail = false; document.body.classList.remove('reading-detail');
+      refreshFilters(); render();
       toast('已切换到仓库：' + (s.settings.repo || ''));
     } catch (err) {
-      toast(errorMessage(err));
+      renderRepoSelector(); toast(errorMessage(err)); return;
     } finally {
       setBusy(false);
     }
+    await sync();
   });
 
   $('#new-repo-add-btn')?.addEventListener('click', () => {
@@ -1319,9 +1353,9 @@
       toast('仓库路径格式不正确，应为 owner/repo');
       return;
     }
-    if (serverUrl && !/^https?:\/\/[^\s$.?#].[^\s]*$/i.test(serverUrl)) {
-      toast('Git 服务地址格式不正确');
-      return;
+    if (serverUrl) {
+      try { const url = new URL(serverUrl); if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password || url.search || url.hash || /[\s\\]/.test(serverUrl)) throw new Error(); }
+      catch { toast('Git 服务地址须为不含账号密码、查询参数和锚点的 HTTP/HTTPS 地址'); return; }
     }
     const id = 'repo-' + Math.random().toString(36).slice(2, 9);
     editingRepos.push({ id, name: name || repo, serverUrl, repo });
@@ -1338,9 +1372,9 @@
       const form = $('#settings-form');
       if (form.elements.theme) form.elements.theme.value = settingsPreview.theme;
       editingRepos = (Array.isArray(s.settings.repositories) && s.settings.repositories.length) ? structuredClone(s.settings.repositories) : [
-        { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', serverUrl: 'http://172.25.5.128:3000', repo: 'ctguacm/2026' }
+        { id: 'repo-current', name: '当前题库', serverUrl: s.settings.serverUrl || '', repo: s.settings.repo || 'qmx-acm-data/2026' }
       ];
-      editingActiveId = s.settings.activeRepoId || editingRepos[0]?.id || 'ctgu-2026';
+      editingActiveId = s.settings.activeRepoId || editingRepos[0]?.id || 'repo-current';
       renderSettingsRepoList();
       if (form.elements.clientId) form.elements.clientId.value = s.settings.clientId || '';
       if (form.elements.displayName) form.elements.displayName.value = s.settings.displayName || '';
@@ -1357,6 +1391,7 @@
   $('#settings-form').addEventListener('submit', async event => {
     event.preventDefault();
     const form = event.currentTarget;
+    const previousSource = repoSource(); let saved = false;
     const activeRepoObj = editingRepos.find(r => r.id === editingActiveId) || editingRepos[0];
     const settings = {
       ...s.settings,
@@ -1364,7 +1399,7 @@
       repositories: editingRepos,
       activeRepoId: editingActiveId,
       serverUrl: activeRepoObj ? activeRepoObj.serverUrl : (s.settings.serverUrl || ''),
-      repo: activeRepoObj ? activeRepoObj.repo : (s.settings.repo || 'ctguacm/2026'),
+      repo: activeRepoObj ? activeRepoObj.repo : (s.settings.repo || 'qmx-acm-data/2026'),
       clientId: form.elements.clientId.value.trim(),
       displayName: form.elements.displayName.value.trim(),
       autoSync: form.elements.autoSync.checked,
@@ -1378,8 +1413,11 @@
         await call('saveSettings', settings);
         applyPayload(await call('bootstrap'));
       } else {
-        s.settings = settings;
+        s.settings = settings; s.permissions.repo = settings.repo;
+        if (previousSource !== repoSource()) { s.records = []; s.issues = []; s.algorithmNotes = []; s.algorithmTopics = []; s.lastSync = null; s.algorithmTree = window.NotebookAlgorithmDirectory.hydrate(window.QMX_ALGORITHM_TREE, []); }
       }
+      if (previousSource !== repoSource()) { s.comments.clear(); s.selected = null; focusedDetail = false; document.body.classList.remove('reading-detail'); }
+      saved = true;
       settingsPreview = null;
       applyCodeSettings();
       applyTheme(settings.theme);
@@ -1394,6 +1432,7 @@
     } finally {
       setBusy(false);
     }
+    if (saved && previousSource !== repoSource()) await sync();
   });
   $('#settings-form').elements.codeFontSize.addEventListener('input', () => { if (!settingsPreview) return; const size = Number($('#settings-form').elements.codeFontSize.value); settingsPreview.codeFontSize = size; applyCodeSettings(); $('#code-font-size-value').textContent = size + 'px'; });
   $('#settings-form').elements.codeLineNumbers.addEventListener('change', () => { if (!settingsPreview) return; settingsPreview.codeLineNumbers = $('#settings-form').elements.codeLineNumbers.checked; render(); });
@@ -1617,16 +1656,11 @@
           { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', repo: 'ctguacm/2026', serverUrl: 'http://172.25.5.128:3000' },
           { id: 'official', name: '官方题解库 (GitHub)', repo: 'qmx-acm-data/2026', serverUrl: '' }
         ];
-        s.settings.activeRepoId = 'ctgu-2026';
-        s.settings.repo = 'ctguacm/2026';
-        s.settings.serverUrl = 'http://172.25.5.128:3000';
+        s.settings.activeRepoId = 'official';
+        s.settings.repo = s.settings.repo || 'qmx-acm-data/2026';
+        s.settings.serverUrl = s.settings.serverUrl || '';
       }
-      if (!s.settings.repo || s.settings.repo.startsWith('qmx-acm-data')) {
-        s.settings.repo = 'ctguacm/2026';
-        s.settings.serverUrl = 'http://172.25.5.128:3000';
-        s.settings.activeRepoId = 'ctgu-2026';
-      }
-      s.permissions = { repo: s.settings.repo || 'ctguacm/2026', push: false, admin: false };
+      s.permissions = { repo: s.settings.repo || 'qmx-acm-data/2026', push: false, admin: false };
       s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo }));
       s.issues = examples.filter(record => record.kind === 'issue').map(record => ({ ...record, repo: s.permissions.repo }));
       s.local = normalizeLocal(cached?.local || { records: [examples[2]], favorites: [key(examples[1])], mastery: { [key(examples[1])]: 'reviewing' }, draft: {} });
@@ -1642,7 +1676,7 @@
     if (!demo && !s.catalogFromPayload && typeof bridge?.getTagCatalog === 'function') { try { const catalog = await call('getTagCatalog'); if (Array.isArray(catalog?.categories)) s.tagCatalog = catalog; } catch (_) { /* Presets remain available offline. */ } }
     void checkStartupUpdates();
     if (!demo && !s.error && s.settings.autoSync !== false && navigator.onLine) await sync();
-    else if (demo && navigator.onLine) void sync();
+    else if (webPreview && s.settings.autoSync !== false && navigator.onLine) void sync();
   }
   setInterval(tickContests, 1000);
   document.addEventListener('visibilitychange', () => { if (!document.hidden) { tickContests(); refreshVisibleContests(); } });

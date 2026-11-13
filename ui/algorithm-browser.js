@@ -185,7 +185,18 @@
     let matched = new Set();
     let matchingNotes = [];
     let focusedId = state.selectedNode;
-    let disposed = false;
+    let disposed = false, expandedReader = null;
+    function detailPath() {
+      const reading = state.reading && notes.find(note => noteKey(note) === state.reading);
+      const entries = []; let entry = byId.get(reading?.nodeId || state.selectedNode);
+      while (entry) { entries.unshift(entry); entry = byId.get(entry.parent); }
+      const result = [{ label: '知识树', onClick() { expandedReader?.close(); } }, ...entries.map(item => ({ label: item.node.label, onClick() { selectNode(item.node.id); } }))];
+      if (reading) result.push({ label: reading.title || '未命名笔记' });
+      return result;
+    }
+    function openDetail() {
+      expandedReader = global.NotebookReadingDetail?.open({ content: pane, mount: host, title: state.reading ? '算法笔记详情' : '知识节点详情', path: detailPath(), onClose() { expandedReader = null; } });
+    }
     let filtering = false;
     function badge(node) {
       if (isDirectory(node)) { const directory = element('span', 'alg-node-kind', '目录'); directory.title = '目录可保存说明和笔记，具体算法在子节点中分级'; return directory; }
@@ -235,6 +246,7 @@
     }
     function selectNode(id, focusPane) {
       if (!byId.has(id)) return;
+      expandedReader?.close();
       state.selectedNode = id; state.reading = null; state.listScroll = 0; state.paneScroll = 0;
       focusedId = id; expandAncestors(id);
       const oldScroll = treeScroller.scrollTop;
@@ -367,6 +379,7 @@
       return card;
     }
     function renderPane() {
+      expandedReader?.setPath(detailPath());
       pane.replaceChildren();
       const selected = byId.get(state.selectedNode);
       const reading = state.reading && notes.find(note => noteKey(note) === state.reading);
@@ -375,32 +388,40 @@
           state.reading = null; renderPane(); pane.scrollTop = state.listScroll;
           pane.querySelector('.alg-detail-title')?.focus({ preventScroll: true });
         });
-        pane.append(back, breadcrumbs(reading.nodeId));
+        const actions = element('div', 'reading-detail-actions');
+        actions.append(back, button('打开详情 ↗', 'alg-button reading-detail-trigger alg-open-detail', openDetail));
+        pane.append(actions, breadcrumbs(reading.nodeId));
         const article = element('article', 'alg-reading');
         const title = element('h2', 'alg-reading-title', reading.title || '未命名笔记'); title.tabIndex = -1;
         article.append(title, noteMetadata(reading), noteTags(reading));
-        if (byId.has(reading.nodeId)) article.append(button(`在目录中查看：${byId.get(reading.nodeId).node.label}`, 'alg-text-button alg-note-location', () => selectNode(reading.nodeId)));
         const body = element('div', 'alg-markdown markdown-body');
         if (typeof opts.renderMarkdown === 'function') opts.renderMarkdown(body, String(reading.body || ''));
         else body.textContent = String(reading.body || '');
-        article.append(body); pane.append(article); return;
+        article.append(body);
+        if (byId.has(reading.nodeId)) article.append(button(`在目录中查看：${byId.get(reading.nodeId).node.label}`, 'alg-text-button alg-note-location', () => selectNode(reading.nodeId)));
+        pane.append(article); return;
       }
       pane.append(breadcrumbs(selected.node.id));
       const detail = element('header', 'alg-detail-heading');
-      detail.append(element('span', 'alg-eyebrow', selected.node.id === root.id ? 'EXPLORE & LEARN' : 'ALGORITHM TOPIC'));
+      const detailBar = element('div', 'alg-detail-toolbar');
+      detailBar.append(element('span', 'alg-eyebrow', selected.node.id === root.id ? '知识目录' : '知识节点'), button('打开详情 ↗', 'alg-button reading-detail-trigger alg-open-detail', openDetail));
+      detail.append(detailBar);
       const titleRow = element('div', 'alg-detail-title-row');
       const title = element('h2', 'alg-detail-title', selected.node.fullLabel || selected.node.label); title.tabIndex = -1;
       titleRow.append(title, badge(selected.node)); const attr = attributeBadge(selected.node); if (attr) titleRow.append(attr);
       detail.append(titleRow, element('p', 'alg-detail-stats', `${selected.descendants} 个子节点 · ${counts.get(selected.node.id)} 篇笔记（含子目录）`));
-      if (selected.node.id === root.id) detail.append(element('p', 'alg-intro', '从一条知识主线出发，逐步建立你的算法体系。展开左侧目录，或选择下方分类；每个节点都可以阅读和积累学习笔记。'));
-      if (isDirectory(selected.node)) detail.append(element('p', 'alg-intro', selected.node.origin === 'admin' && selected.node.scope ? selected.node.scope : '此目录用于分类、专题说明和学习笔记，具体算法及难度请查看子节点。'));
+      const information = element('section', 'alg-node-information');
+      if (selected.node.id === root.id) information.append(element('p', 'alg-intro', '从一条知识主线出发，逐步建立你的算法体系。展开左侧目录，或选择下方分类；每个节点都可以阅读和积累学习笔记。'));
+      if (isDirectory(selected.node)) information.append(element('p', 'alg-intro', selected.node.scope || '此目录用于分类、专题说明和学习笔记，具体算法及难度请查看子节点。'));
       if (levelOf(selected.node) && selected.node.difficultySource) {
         const origin = selected.node.difficultySource.kind === 'user-md' ? '难度依据：用户颜色文档' : selected.node.rating?.type === 'category' ? '难度依据：分类基础学习门槛' : selected.node.rating?.type === 'entry' ? '难度依据：入口或任务形式的使用门槛' : '难度依据：本项目逐项定稿';
         const range = selected.node.rating?.range;
-        detail.append(element('p', 'alg-intro', `${origin}${range && selected.node.children?.length ? `；覆盖 D${range.min}–D${range.max}` : ''}${selected.node.rationale ? `。${selected.node.rationale}` : ''}${selected.node.scope ? ` 学习范围：${selected.node.scope}` : ''}`));
+        information.append(element('p', 'alg-intro', `${origin}${range && selected.node.children?.length ? `；覆盖 D${range.min}–D${range.max}` : ''}${selected.node.rationale ? `。${selected.node.rationale}` : ''}${selected.node.scope ? ` 学习范围：${selected.node.scope}` : ''}`));
       }
-      if (opts.canManage && typeof opts.onAddTopic === 'function') detail.append(button('＋ 添加算法', 'alg-text-button alg-add-topic-detail', () => opts.onAddTopic(selected.node.id)));
-      if (typeof opts.onLearningPath === 'function') detail.append(button('在学习路径中查看 →', 'alg-button alg-add-topic-detail', () => opts.onLearningPath(selected.node.id)));
+      const utilities = element('footer', 'alg-detail-utilities');
+      if (opts.canManage && typeof opts.onAddTopic === 'function') utilities.append(button('＋ 添加算法', 'alg-text-button alg-add-topic-detail', () => { expandedReader?.close(); opts.onAddTopic(selected.node.id); }));
+      if (typeof opts.onLearningPath === 'function') utilities.append(button('在学习路径中查看 →', 'alg-text-button alg-add-topic-detail', () => { expandedReader?.close(); opts.onLearningPath(selected.node.id); }));
+      function appendInformation() { if (information.childNodes.length) pane.append(information); if (utilities.childNodes.length) pane.append(utilities); }
       pane.append(detail);
       if (filtering) {
         // Keep the selected topic useful while the global query stays active.
@@ -438,14 +459,19 @@
         if (matchingNotes.length) { const list = element('div', 'alg-note-list'); matchingNotes.forEach(note => list.append(noteCard(note, true))); pane.append(list); }
         else pane.append(element('p', 'alg-inline-empty', '当前范围内没有匹配的笔记。可以尝试算法名称、笔记标题、作者或标签。'));
         if (!topicMatches.length && !matchingNotes.length) pane.append(button('清除全部筛选', 'alg-button', () => clear.click()));
-        return;
+        appendInformation(); return;
       }
       const children = selected.node.children || [];
       const direct = sortedNotes.filter(note => note.nodeId === selected.node.id);
-      const notesHeading = () => heading(state.scope === 'personal' ? '我的节点笔记' : '节点笔记', direct.length);
-      if (direct.length) {
+      const featured = direct.filter(note => note.featured), ordinary = direct.filter(note => !note.featured);
+      const notesHeading = () => heading(state.scope === 'personal' ? '我的节点笔记' : '节点笔记', ordinary.length);
+      if (featured.length) {
+        const section = element('section', 'alg-featured-section'); section.append(heading('精选笔记', featured.length));
+        const list = element('div', 'alg-note-list'); featured.forEach(note => list.append(noteCard(note, false))); section.append(list); pane.append(section);
+      }
+      if (ordinary.length) {
         pane.append(notesHeading());
-        const list = element('div', 'alg-note-list'); direct.forEach(note => list.append(noteCard(note, false))); pane.append(list);
+        const list = element('div', 'alg-note-list'); ordinary.forEach(note => list.append(noteCard(note, false))); pane.append(list);
       }
       if (children.length) {
         pane.append(heading(selected.node.id === root.id ? '选择知识主线' : '继续探索', children.length));
@@ -460,6 +486,7 @@
         else empty.append(button('＋ 为此节点上传笔记', 'alg-button', () => upload.click()));
         pane.append(empty);
       }
+      appendInformation();
     }
     function refresh() {
       if (disposed) return;
@@ -492,8 +519,10 @@
     const controller = {
       selectNode(id) { if (!byId.has(id)) return; state.search = ''; state.level = ''; state.attribute = ''; state.draftSearch = ''; state.draftLevel = ''; state.draftAttribute = ''; search.value = ''; attribute.value = ''; selectNode(id); refresh(); },
       getState: snapshot,
+      openNote(note, { fullscreen = false } = {}) { const found = notes.find(item => noteKey(item) === noteKey(note)); if (!found) return; openNote(found); if (fullscreen) openDetail(); },
       destroy() {
         if (disposed) return;
+        expandedReader?.close();
         state.treeScroll = treeScroller.scrollTop; state.paneScroll = pane.scrollTop; disposed = true;
         if (active === controller) active = null;
       }
