@@ -26,7 +26,7 @@
   s.appVersion = ''; s.update = null;
   window.NotebookPlatforms?.init({ bridge, onSettings: () => $('#settings-button').click() });
   s.planner = { problems: [], tasks: [], layout: 'balanced' };
-  window.NotebookPlanner?.init({ bridge, onChange: value => { s.planner = value; document.body.dataset.homeLayout = 'compact'; } });
+  window.NotebookPlanner?.init({ bridge, onChange: value => { s.planner = value; } });
   let updateRunning = false;
   let updateReady = false;
   let toastTimer;
@@ -75,7 +75,6 @@
     if (payload.authStatus) s.authStatus = payload.authStatus;
     window.NotebookPlatforms?.render(payload.platforms || {});
     if (payload.planner) s.planner = payload.planner;
-    document.body.dataset.homeLayout = 'compact';
     window.NotebookPlanner?.render(s.planner);
     if (typeof payload.appVersion === 'string') s.appVersion = payload.appVersion;
     if (payload.update && typeof payload.update === 'object') s.update = { ...payload.update };
@@ -566,7 +565,6 @@
     const toolbar = element('div', 'home-toolbar');
     const intro = element('div', 'home-intro');
     append(intro, element('span', 'home-date', new Date().toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'long' })), element('h2', '', '今天，继续向前。'));
-    if (s.settings.displayName === '布局预览 · 示例数据') intro.append(element('span', 'home-preview-badge', '示例数据 · 紧凑版预览'));
     append(toolbar, intro);
     const board = element('div', 'home-board');
     const planner = element('section', 'home-planner'); planner.id = 'home-planner'; planner.setAttribute('aria-label', '题单与学习任务');
@@ -842,13 +840,24 @@
   function renderMarkdown(container, body) {
     const source = String(body || '还没有题解内容。可以从记录错因开始。');
     if (window.marked && window.DOMPurify) {
-      try { const parse = typeof window.marked.parse === 'function' ? window.marked.parse.bind(window.marked) : window.marked; const safe = window.DOMPurify.sanitize(window.NotebookMarkdownMath ? window.NotebookMarkdownMath.parse(source, window.marked) : parse(source), { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button'], FORBID_ATTR: ['style'] }); container.innerHTML = safe;
+      try { const parse = typeof window.marked.parse === 'function' ? window.marked.parse.bind(window.marked) : window.marked; const html = window.NotebookMarkdownMath ? window.NotebookMarkdownMath.parse(source, window.marked) : parse(source);
+        if (window.NotebookMarkdownColor) container.replaceChildren(window.NotebookMarkdownColor.sanitize(html, window.DOMPurify, container.ownerDocument));
+        else container.innerHTML = window.DOMPurify.sanitize(html, { FORBID_TAGS: ['style', 'iframe', 'form', 'input', 'button'], FORBID_ATTR: ['style', 'color'] });
         window.NotebookMarkdownMath?.render(container, window.katex);
         // Prism runs after sanitizing and reads textContent only, so highlighting cannot inject markup.
         $$('pre code', container).forEach(code => { if (code.parentElement && (settingsPreview || s.settings).codeLineNumbers) code.parentElement.classList.add('line-numbers'); highlightCodeBlock(code); });
         // Decorate after Prism: the buttons are app chrome, not sanitized Markdown.
         decorateCodeBlocks(container);
-        container.classList.add('rendered'); $$('a', container).forEach(link => link.addEventListener('click', event => { event.preventDefault(); openExternal(link.getAttribute('href')); })); return; } catch (_) { /* Plain text is the secure fallback. */ }
+        container.classList.add('rendered'); $$('a', container).forEach(link => link.addEventListener('click', event => {
+          event.preventDefault(); const href = link.getAttribute('href');
+          if (href?.startsWith('#')) {
+            let id; try { id = decodeURIComponent(href.slice(1)); } catch (_) { return; }
+            const target = Array.from(container.querySelectorAll('[id],a[name]')).find(node => node.id === id || node.getAttribute('name') === id);
+            (target || (href === '#' ? container : null))?.scrollIntoView({ block: 'start' });
+            return;
+          }
+          openExternal(href);
+        })); return; } catch (_) { /* Plain text is the secure fallback. */ }
     }
     container.textContent = source;
   }

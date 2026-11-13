@@ -204,7 +204,7 @@ test('planner IPC validates sender/update locks and opens accepted official prob
   assert.equal(h.stored('planner.json'), null);
   gate.resolve(); await downloading;
   for (const url of ['http://codeforces.com/problemset/problem/1/A', 'https://hydro.ac/d/luogu/p/P1001', 'http://www.acwing.com/problem/content/1/']) await h.invoke('openExternal', url);
-  for (const url of ['http://codeforces.com/profile/alice', 'https://user:pass@codeforces.com/problemset/problem/1/A', 'https://codeforces.com:8443/problemset/problem/1/A']) await assert.rejects(h.invoke('openExternal', url), /仅允许/);
+  for (const url of ['javascript:alert(1)', 'https://user:pass@codeforces.com/problemset/problem/1/A', 'file:///tmp/problem.html']) await assert.rejects(h.invoke('openExternal', url), /仅允许/);
   assert.equal(h.externalCalls.length, 3);
 });
 
@@ -265,7 +265,7 @@ test('active platform requests prevent update checks, downloads and installation
   assert.deepEqual(await h.invoke('unbindPlatform', 'CF'), {});
 });
 
-test('platform IPC shares sender validation and update locks and opens only supported HTTPS profile links', async () => {
+test('platform IPC shares sender validation and update locks while opening ordinary web links', async () => {
   const gate = deferred(), h = harness({ updaterBackend: { download: () => gate.promise } });
   const downloading = h.invoke('downloadUpdate');
   for (const [name, args] of [['bindPlatform', ['CF', 'https://codeforces.com/profile/time-lo']], ['refreshPlatform', ['CF']], ['unbindPlatform', ['CF']]]) {
@@ -275,7 +275,7 @@ test('platform IPC shares sender validation and update locks and opens only supp
   assert.equal(h.networkCalls.length, 0);
   gate.resolve(); await downloading;
   for (const url of ['https://leetcode.cn/u/time-lo/', 'https://leetcode.com/u/time-lo/', 'https://www.luogu.com/user/123']) await h.invoke('openExternal', url);
-  for (const url of ['http://leetcode.cn/u/time-lo/', 'https://leetcode.cn.evil.test/u/time-lo/', 'https://evil.test/']) await assert.rejects(h.invoke('openExternal', url), /仅允许/);
+  for (const url of ['mailto:reader@example.com', 'https://user:pass@leetcode.cn/u/time-lo/', 'bilibili://video/123']) await assert.rejects(h.invoke('openExternal', url), /仅允许/);
   await assert.rejects(h.invoke('openAuthUrl', 'https://leetcode.cn/u/time-lo/'), /GitHub 授权/);
   assert.equal(h.externalCalls.length, 3);
 });
@@ -442,9 +442,21 @@ test('missing Chrome, synchronous launch failure, spawn error and missing spawn 
   }
 });
 
+test('external links open Bilibili, short links and other web sites through the system browser', async () => {
+  const h = harness();
+  const urls = ['https://www.bilibili.com/video/BV1xx411c7mD/?t=42#reply', 'https://b23.tv/AbCdEf', 'https://www.zhihu.com/question/123', 'https://blog.example.org:8443/notes?q=latex%20color', 'http://example.org/legacy', 'https://oi-wiki.org/math/'];
+  for (const url of urls) await h.invoke('openExternal', url);
+  assert.deepEqual(h.externalCalls, urls.map(url => new URL(url).href));
+  await assert.rejects(h.handlers.get('openExternal')({ sender: {} }, urls[0]), /非法调用/);
+  for (const url of ['javascript:alert(1)', 'data:text/html,test', 'file:///C:/Windows/notepad.exe', 'bilibili://video/1', '//b23.tv/test', 'https://user:pass@example.org/', 'https://example.org/\n', 'https://example.org/\\path', 'https://', null]) await assert.rejects(h.invoke('openExternal', url), /仅允许/);
+  assert.equal(h.externalCalls.length, urls.length);
+  const failing = harness({ browserBackend: { openExternal() { throw new Error('no browser available'); } } });
+  await assert.rejects(failing.invoke('openExternal', urls[0]), /no browser available/);
+});
+
 test('auth browser validates URLs before launching and reports explicit default-browser failures', async () => {
   const h = harness({ browserBackend: { openExternal() { throw new Error('no browser available'); } } });
-  for (const url of ['http://github.com/login/device', 'https://example.com/', 'https://codeforces.com/']) {
+  for (const url of ['http://github.com/login/device', 'https://github.com:8443/login/device', 'https://github.com.evil.test/login/device', 'https://user:pass@github.com/login/device', 'https://example.com/', 'https://codeforces.com/']) {
     await assert.rejects(h.invoke('openAuthUrl', url), /仅允许/);
   }
   assert.deepEqual(h.externalCalls, []);

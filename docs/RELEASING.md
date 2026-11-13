@@ -21,7 +21,7 @@ git push -u origin main
 
 ## 构建与版本发布
 
-版本说明按版本保存在 [`docs/releases/`](releases/)；当前版本说明见 [v1.1.1 更新说明](releases/v1.1.1.md)，历史版本说明保留在同一目录。
+版本说明按版本保存在 [`docs/releases/`](releases/)；当前版本说明见 [v1.2.4 更新说明](releases/v1.2.4.md)，历史版本说明保留在同一目录。
 
 本地安装依赖、检查和构建的完整命令集中在 [CONTRIBUTING](../CONTRIBUTING.md#环境与命令)。发布构建使用 `pnpm dist`，同时生成便携目录与 NSIS 安装程序；仅需便携目录时使用该文档列出的独立打包命令。
 

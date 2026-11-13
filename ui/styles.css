@@ -144,24 +144,9 @@ body:is(.sidebar-open,.sidebar-pinned) .sidebar-rail .rail-nav-item,body:is(.sid
 @media(max-width:650px){.sidebar-drawer{padding-left:0}.sidebar-drawer .brand{padding-left:8px}.sidebar-drawer .nav-item{padding-left:8px}.sidebar-drawer .workspace-label,.sidebar-drawer .sidebar-note{margin-left:8px}.sidebar-drawer .sidebar-bottom{padding-left:8px}body:is(.sidebar-open,.sidebar-pinned) .sidebar-rail .rail-nav-item,body:is(.sidebar-open,.sidebar-pinned) .sidebar-rail .sidebar-bottom{width:calc(100% + 4px)}}
 /* This navigation motion is explicitly requested, including under reduced system motion. */
 @media(prefers-reduced-motion:reduce){.app-shell{transition:grid-template-columns var(--sidebar-motion)!important}.sidebar-drawer{transition:transform var(--sidebar-motion),visibility 0s .3s!important}body:is(.sidebar-open,.sidebar-pinned) .sidebar-drawer{transition:transform var(--sidebar-motion),visibility 0s!important}.sidebar-toggle svg{transition:transform var(--sidebar-motion)!important}}
-/* A calm starting point, with familiar destinations one click away. */
-.home-panel{display:grid;gap:22px}
-.home-welcome{padding:clamp(26px,4vw,52px);border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(125deg,var(--surface) 25%,var(--accent-soft));box-shadow:var(--shadow)}
-.home-welcome .eyebrow{color:var(--accent);letter-spacing:1.8px}
-.home-welcome h2{max-width:720px;margin:18px 0 12px;font-size:clamp(23px,3vw,34px);font-weight:650;line-height:1.5;letter-spacing:.02em}
-.home-welcome p{max-width:600px;margin:0 0 28px;color:var(--muted);font-size:14px;line-height:1.9}
-.home-welcome .button{display:inline-flex;align-items:center;min-height:42px}
-.home-shortcuts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
-.home-shortcut{display:flex;flex-direction:column;align-items:flex-start;gap:11px;min-width:0;min-height:182px;padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow);color:var(--text);text-align:left;transition:border-color .15s,background .15s}
-.home-shortcut:hover{border-color:var(--accent);background:var(--surface-soft)}
-.home-shortcut-title{font-size:16px;font-weight:650}
-.home-shortcut-caption{font-size:12px;line-height:1.8;color:var(--muted)}
-.home-shortcut-count{margin-top:auto;padding-top:10px;color:var(--accent);font-size:12px;font-variant-numeric:tabular-nums}
 .section-placeholder{display:grid;place-items:center;min-height:300px;padding:32px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
 .section-placeholder .empty-state{max-width:440px;margin:0;text-align:center}
-@media(max-width:1100px){.home-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:650px){body:is(.sidebar-open,.sidebar-pinned) .sidebar .sidebar-note{display:none}.home-panel{gap:16px}.home-welcome{padding:25px 22px}.home-welcome p{font-size:13px}.home-shortcuts{grid-template-columns:1fr;gap:12px}.home-shortcut{min-height:150px;padding:22px}.section-placeholder{padding:24px}.topbar{height:auto;min-height:72px;padding:12px 16px}.topbar-actions{min-width:0;flex-wrap:wrap;gap:8px}.theme-control{min-width:0}.theme-control select{max-width:130px}#submit-button{padding-left:10px;padding-right:10px}.top-divider{display:none}}
-@media(prefers-reduced-motion:reduce){.home-shortcut{transition:none}}
+@media(max-width:650px){body:is(.sidebar-open,.sidebar-pinned) .sidebar .sidebar-note{display:none}.section-placeholder{padding:24px}.topbar{height:auto;min-height:72px;padding:12px 16px}.topbar-actions{min-width:0;flex-wrap:wrap;gap:8px}.theme-control{min-width:0}.theme-control select{max-width:130px}#submit-button{padding-left:10px;padding-right:10px}.top-divider{display:none}}
 /* Saved schedules stay readable while each source updates independently. */
 .home-contests{min-width:0;padding:24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface);box-shadow:var(--shadow)}
 .contests-heading{display:flex;align-items:center;justify-content:space-between;gap:20px}.contests-heading>div{min-width:0}.contests-heading .eyebrow{color:var(--accent);font-size:9px;letter-spacing:1.6px}.contests-heading h2{font-size:22px;font-weight:650;line-height:1.5;margin:8px 0 4px}.contest-actions{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px}.contests-heading .button{flex:none;min-height:38px;white-space:nowrap}.contest-restore[hidden]{display:none}.contest-restore-dialog{width:min(620px,calc(100vw - 32px));max-height:min(82vh,760px);overflow:auto}.contest-restore-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;color:var(--muted);font-size:12px}.contest-restore-toolbar>span:last-child{display:flex;gap:6px}.contest-restore-options{display:grid;gap:7px;max-height:min(50vh,460px);overflow:auto;border:1px solid var(--line);border-radius:7px;padding:8px}.contest-restore-option{display:grid;grid-template-columns:18px minmax(0,1fr);align-items:start;gap:9px;padding:10px;border-radius:6px;background:var(--surface-soft);cursor:pointer}.contest-restore-option:hover{background:var(--accent-soft)}.contest-restore-option input{margin:3px 0 0}.contest-restore-option-copy{display:grid;gap:3px;min-width:0}.contest-restore-option-copy strong{font-size:12px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.contest-restore-option-copy small{color:var(--muted);font-size:10px;line-height:1.5}.contest-restore-dialog .form-error{margin:10px 0 0}
@@ -235,6 +220,7 @@ body:is(.sidebar-open,.sidebar-pinned) .sidebar-rail .rail-nav-item,body:is(.sid
 .markdown-body h4{font-size:1.1em;line-height:1.5;margin:1.1em 0 .45em}
 .markdown-body h5,.markdown-body h6{font-size:1em;line-height:1.5;margin:1em 0 .4em}
 .markdown-body strong,.markdown-body b{font-weight:800;font-synthesis:weight;color:var(--text)}
+.markdown-body .notebook-foreground :is(strong,b,a){color:inherit}
 .markdown-body ul,.markdown-body ol{padding-left:1.8em;margin:.7em 0}
 .markdown-body li+li{margin-top:.25em}
 .markdown-body li>p{margin:.3em 0}

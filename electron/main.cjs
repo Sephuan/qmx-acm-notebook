@@ -11,7 +11,7 @@ const { cleanupUpdateStorage } = require('./update-storage.cjs');
 const { createAuth, configureUserData } = require('./auth.cjs');
 const { createContestService } = require('./contests.cjs');
 const { createPlatformService } = require('./platform-service.cjs');
-const { createPlannerService, problemUrl } = require('./planner-service.cjs');
+const { createPlannerService } = require('./planner-service.cjs');
 const { createPublicPageReader } = require('./platform-page.cjs');
 const APP_VERSION = require('../package.json').version;
 configureUserData(app);
@@ -120,10 +120,12 @@ function state(error) {
   };
 }
 function assertExternal(url) {
-  const u = new URL(url);
-  if (!u.username && !u.password && !u.port && u.protocol === 'https:' && ['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com', 'leetcode.cn', 'leetcode.com', 'www.luogu.com'].includes(u.hostname)) return u;
-  try { return new URL(problemUrl(url)); }
-  catch { throw new Error('仅允许打开 GitHub 和受支持题目平台的链接（HTTP 仅限官方题目）'); }
+  const invalid = () => new Error('仅允许打开不含账号密码的 HTTP 或 HTTPS 网页链接');
+  if (typeof url !== 'string' || url.length > 8192 || /[\u0000-\u0020\u007f\\]/.test(url) || !/^https?:\/\//i.test(url)) throw invalid();
+  let u;
+  try { u = new URL(url); } catch { throw invalid(); }
+  if (!['https:', 'http:'].includes(u.protocol) || !u.hostname || u.username || u.password) throw invalid();
+  return u;
 }
 async function external(url) {
   const u = assertExternal(url);
@@ -142,7 +144,7 @@ function chromePath() {
 }
 async function openAuthUrl(url) {
   const u = assertExternal(url);
-  if (u.hostname !== 'github.com') throw new Error('仅允许打开 GitHub 授权链接');
+  if (u.protocol !== 'https:' || u.hostname !== 'github.com' || u.port) throw new Error('仅允许打开 GitHub 授权链接');
   const chrome = chromePath();
   if (chrome) {
     const launched = await new Promise(resolve => {

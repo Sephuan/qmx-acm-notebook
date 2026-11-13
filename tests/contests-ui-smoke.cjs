@@ -9,6 +9,36 @@ const url = pathToFileURL(path.resolve(__dirname, '../ui/index.html')).href;
 const instant = Date.parse('2030-01-02T00:00:00Z');
 const iso = offset => new Date(instant + offset).toISOString();
 const hostile = '<img src=x onerror="window.contestInjection=true"> & fixture with a deliberately long contest title to verify single-line truncation in the compact desktop row';
+// Check real element geometry so responsive rules cannot silently place fields
+// in the same grid cell, or clip the date, duration, or countdown inside a row.
+async function assertContestLayout(page, label) {
+  const issues = await page.locator('.contest-card').evaluateAll(nodes => {
+    if (!nodes.length) return ['no contest rows'];
+    const issues = [];
+    const selectors = ['.contest-platform-label', '.contest-title-group', '.contest-schedule', '.contest-duration', '.contest-countdown', '.contest-decline'];
+    for (const node of nodes) {
+      const row = node.getBoundingClientRect();
+      const fields = selectors.map(selector => ({ selector, element: node.querySelector(selector) }));
+      for (const field of fields) {
+        const rect = field.element?.getBoundingClientRect();
+        if (!rect || rect.width <= 0 || rect.height <= 0) {
+          issues.push(`${node.dataset.contestId}: ${field.selector} is missing or has no visible area`);
+          continue;
+        }
+        field.rect = rect;
+        if (rect.left < row.left - 1 || rect.right > row.right + 1 || rect.top < row.top - 1 || rect.bottom > row.bottom + 1) issues.push(`${node.dataset.contestId}: ${field.selector} extends outside its row`);
+        if (['.contest-schedule', '.contest-duration', '.contest-countdown'].includes(field.selector) && field.element.scrollWidth > field.element.clientWidth + 1) issues.push(`${node.dataset.contestId}: ${field.selector} text is clipped`);
+      }
+      for (let i = 0; i < fields.length; i++) for (let j = i + 1; j < fields.length; j++) {
+        const a = fields[i].rect, b = fields[j].rect;
+        if (a && b && Math.min(a.right, b.right) - Math.max(a.left, b.left) > 0.5 && Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top) > 0.5) issues.push(`${node.dataset.contestId}: ${fields[i].selector} overlaps ${fields[j].selector}`);
+      }
+    }
+    return issues;
+  });
+  assert.deepEqual(issues, [], `${label}: contest fields stay readable and do not overlap`);
+}
+
 const fixture = { fetchedAt: iso(0), platforms: [
   { id: 'luogu', name: '洛谷', url: 'https://www.luogu.com.cn/contest/list', updatedAt: iso(-60000), stale: false, error: null, contests: [
     { id: 'far', title: 'Fourth upcoming fixture', url: 'https://www.luogu.com.cn/contest/4', startTime: iso(90000), endTime: iso(150000) },
@@ -49,7 +79,12 @@ const fixture = { fetchedAt: iso(0), platforms: [
     await page.waitForFunction(() => window.contestCalls.length === 1);
     assert.deepEqual(await page.evaluate(() => contestCalls), [false]);
     assert.equal(await page.locator('#contests-title').innerText(), '比赛提醒');
-    assert(await page.locator('#home-panel').evaluate(panel => panel.firstElementChild?.matches('.home-contests') && panel.querySelector('.home-contests').nextElementSibling?.matches('.home-welcome')), 'contest reminders are the first home section, before the hero');
+    assert.deepEqual(await page.locator('#home-panel > *').evaluateAll(nodes => nodes.map(node => node.className)), ['home-toolbar', 'home-board'], 'compact Home contains its toolbar followed by the board');
+    assert.equal(await page.locator('#home-panel .home-welcome, #home-panel .home-layout-picker, #home-panel .home-shortcuts').count(), 0, 'compact Home has no legacy hero, layout picker, or shortcut section');
+    assert.equal(await page.locator('.home-toolbar .home-intro h2').innerText(), '今天，继续向前。');
+    assert.equal(await page.locator('.home-board > #home-planner').count(), 1, 'planner is mounted in the board');
+    assert.equal(await page.locator('.home-board > .home-contests').count(), 1, 'contest reminders are mounted in the board');
+    assert.equal(await page.locator('.home-board > #platform-overview').count(), 1, 'platform overview is mounted in the board');
     assert.equal(await page.locator('#contest-platforms > .contest-sources').count(), 1);
     assert.equal(await page.locator('.contest-platform').count(), 0, 'sources do not create separate platform panels');
     assert.equal(await page.locator('.contest-sources .contest-source[data-platform]').count(), 4, 'all sources render from bootstrap while request is pending');
@@ -64,7 +99,14 @@ const fixture = { fetchedAt: iso(0), platforms: [
     assert.deepEqual(await page.locator('.contest-card[data-platform="codeforces"]').evaluateAll(nodes => nodes.map(node => node.dataset.contestId)), ['cf-active', 'cf-upcoming', 'stale'], 'each source contributes at most three contests');
     assert.deepEqual(await page.locator('.contest-list > .contest-card').evaluateAll(nodes => nodes.map(node => node.dataset.contestId)), ['cf-active', 'active', 'transition', 'cf-upcoming', 'later', 'stale'], 'one global order: ongoing first, then upcoming, each by start timestamp');
     assert.deepEqual(await page.locator('.contest-card .contest-platform-label').allTextContents(), ['Codeforces', '洛谷', '洛谷', 'Codeforces', '洛谷', 'Codeforces']);
-    assert(await page.locator('.contest-card').evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().height <= 70)), 'desktop contest rows are at most 70px tall');
+    await assertContestLayout(page, '1440px desktop compact board');
+    assert(await page.locator('.contest-card').evaluateAll(nodes => nodes.every(node => {
+      const platform = node.querySelector('.contest-platform-label').getBoundingClientRect();
+      const title = node.querySelector('.contest-title-group').getBoundingClientRect();
+      const schedule = node.querySelector('.contest-schedule').getBoundingClientRect();
+      const duration = node.querySelector('.contest-duration').getBoundingClientRect();
+      return platform.bottom <= title.top && title.bottom <= schedule.top && schedule.bottom <= duration.top;
+    })), 'compact contest rows stack platform, title, start time, and duration in that order');
     assert(await page.locator('.contest-card .contest-title').evaluateAll(nodes => nodes.every(node => { const style = getComputedStyle(node); return style.whiteSpace === 'nowrap' && style.textOverflow === 'ellipsis' && style.overflowX === 'hidden' && node.getBoundingClientRect().height <= parseFloat(style.lineHeight) + 1; })), 'desktop titles use one line with ellipsis');
     assert(await page.locator('[data-contest-id="transition"] .contest-title').evaluate(node => node.scrollWidth > node.clientWidth), 'long escaped fixture actually exercises title truncation');
     assert.equal(await page.locator('.contest-card .contest-duration').count(), await page.locator('.contest-card').count(), 'each compact row shows its contest duration');
@@ -91,11 +133,11 @@ const fixture = { fetchedAt: iso(0), platforms: [
     assert.match(await page.locator('.contest-source[data-platform="atcoder"]').getAttribute('title'), /尚无成功更新时间/);
     assert.doesNotMatch(await page.locator('.home-contests').innerText(), /raw_stack_secret|HTTP|TypeError/);
     // Ordinary ticks preserve all surrounding home controls and card DOM.
-    await page.evaluate(() => { window.heroNode = document.querySelector('.home-welcome'); window.cardNode = document.querySelector('[data-contest-id="transition"]'); });
+    await page.evaluate(() => { window.toolbarNode = document.querySelector('.home-toolbar'); window.boardNode = document.querySelector('.home-board'); window.plannerNode = document.querySelector('#home-planner'); window.overviewNode = document.querySelector('#platform-overview'); window.cardNode = document.querySelector('[data-contest-id="transition"]'); });
     await page.locator('[data-contest-id="transition"] .contest-title').focus();
     await page.clock.runFor(1000);
     assert.match(await page.locator('[data-contest-id="transition"] .contest-countdown').innerText(), /距开始 2秒/);
-    assert(await page.evaluate(() => heroNode === document.querySelector('.home-welcome') && cardNode === document.querySelector('[data-contest-id="transition"]')));
+    assert(await page.evaluate(() => toolbarNode === document.querySelector('.home-toolbar') && boardNode === document.querySelector('.home-board') && plannerNode === document.querySelector('#home-planner') && overviewNode === document.querySelector('#platform-overview') && cardNode === document.querySelector('[data-contest-id="transition"]')), 'ordinary ticks preserve the compact home board and surviving card DOM');
     assert(await page.locator('[data-contest-id="transition"] .contest-title').evaluate(node => node === document.activeElement));
     await page.clock.runFor(2000);
     assert.match(await page.locator('[data-contest-id="transition"] .contest-phase').textContent(), /正在进行/);
@@ -110,7 +152,7 @@ const fixture = { fetchedAt: iso(0), platforms: [
     await page.evaluate(() => { externalCalls.length = 0; });
     assert.deepEqual(await page.locator('.contest-card[data-platform="luogu"]').evaluateAll(nodes => nodes.map(node => node.dataset.contestId)), ['later', 'far']);
     assert.deepEqual(await page.locator('.contest-list > .contest-card').evaluateAll(nodes => nodes.map(node => node.dataset.contestId)), ['cf-active', 'cf-upcoming', 'later', 'far', 'stale'], 'boundary rebuild preserves global ordering and fills the per-source limit');
-    assert(await page.evaluate(() => heroNode === document.querySelector('.home-welcome')), 'boundaries do not rebuild home');
+    assert(await page.evaluate(() => toolbarNode === document.querySelector('.home-toolbar') && boardNode === document.querySelector('.home-board') && plannerNode === document.querySelector('#home-planner') && overviewNode === document.querySelector('#platform-overview')), 'boundaries preserve the toolbar, planner, and platform overview');
     await page.evaluate(fixture => finishContests(fixture), fixture);
     await page.waitForFunction(() => !document.querySelector('#contests-refresh').disabled);
     await page.locator('#contests-refresh').click();
@@ -165,16 +207,14 @@ const fixture = { fetchedAt: iso(0), platforms: [
       await page.setViewportSize({ width: 390, height: 844 });
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${theme} narrow viewport has no horizontal overflow`);
       assert(await page.locator('.contest-source, .contest-card').evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().right <= innerWidth && node.getBoundingClientRect().left >= 0)), `${theme} compact sources and shared rows fit the narrow viewport`);
+      await assertContestLayout(page, `${theme} 390px compact board`);
     }
-    for (const width of [800, 700, 650, 390]) {
+    for (const width of [1440, 1200, 1050, 1024, 800, 700, 650, 390]) {
       await page.setViewportSize({ width, height: 844 });
-      assert(await page.locator('.contest-card').evaluateAll(nodes => nodes.length > 0 && nodes.every(node => {
-        const start = node.querySelector('.contest-schedule').getBoundingClientRect();
-        const duration = node.querySelector('.contest-duration').getBoundingClientRect();
-        return start.width > 0 && duration.width > 0 && (start.bottom <= duration.top || duration.bottom <= start.top || start.right <= duration.left || duration.right <= start.left);
-      })), `start time and duration remain readable without overlap at ${width}px`);
+      assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `compact board has no horizontal overflow at ${width}px`);
+      await assertContestLayout(page, `${width}px compact board`);
     }
-    await page.locator('#home-panel [data-view="favorites"]').focus();
+    await page.locator('.rail-nav-item[data-view="favorites"]').focus();
     await page.keyboard.press('Enter');
     assert.equal(await page.locator('body').getAttribute('data-view'), 'favorites');
     const callsBeforeLeaving = await page.evaluate(() => contestCalls.length);
@@ -412,9 +452,10 @@ const fixture = { fetchedAt: iso(0), platforms: [
       await typesPage.setViewportSize({ width, height: 1000 });
       assert(await typesPage.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `AtCoder badge layout fits ${width}px`);
       assert(await typesPage.locator('.contest-card .contest-type-badge').evaluateAll(nodes => nodes.every(node => node.getBoundingClientRect().width > 0 && node.getBoundingClientRect().right <= innerWidth)));
+      await assertContestLayout(typesPage, `AtCoder badge layout ${width}px`);
     }
     await typesPage.close();
     console.log('ATCODER TYPES PASS: ABC/ARC/AGC by ID, sponsored AHC by official title, unknown/practice unlabelled, non-AtCoder excluded, restore badges and responsive layout');
-    console.log('CONTESTS UI PASS: reminders before hero, four compact source links, one globally sorted list with three contests per source, <=70px desktop rows and ellipsized titles, source status/tooltips, background/forced/TTL refresh and focus throttling, ticking and start/end boundaries, keyboard focus fallback, rejection retention, Beijing timezone, escaped title, external links, navigation, three themes and narrow layout, durations and decline controls, selective restore modal and rollback, honest preview');
+    console.log('CONTESTS UI PASS: compact toolbar and planner/contests/overview board, four compact source links, one globally sorted list with three contests per source, stacked compact rows and ellipsized titles, source status/tooltips, background/forced/TTL refresh and focus throttling, ticking and start/end boundaries with stable board DOM, keyboard focus fallback, rejection retention, Beijing timezone, escaped title, external links, rail navigation, three themes and responsive fields without clipping or overlap, durations and decline controls, selective restore modal and rollback, honest preview');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
