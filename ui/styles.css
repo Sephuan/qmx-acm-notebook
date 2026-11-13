@@ -225,3 +225,53 @@ body:is(.sidebar-open,.sidebar-pinned) .sidebar-rail .rail-nav-item,body:is(.sid
 .algorithm-reading-body{max-width:900px;font-size:14px;line-height:1.9}
 .algorithm-note-dialog{width:min(760px,92vw);max-height:88vh;border:1px solid var(--line);border-radius:16px;padding:22px;background:var(--surface);color:var(--text)}
 @media(max-width:950px){.algorithm-workspace{grid-template-columns:1fr}}
+
+/* Compact rendered excerpts keep formulas intact and leave card actions on the card. */
+body .card-excerpt.markdown-body{display:block;min-height:0;max-height:4.4em;width:100%;min-width:0;font-size:11px;line-height:1.7;overflow:hidden;white-space:normal;color:var(--muted)}
+.card-excerpt.markdown-body>:first-child{margin-top:0}
+.card-excerpt.markdown-body p,.card-excerpt.markdown-body pre,.card-excerpt.markdown-body blockquote,.card-excerpt.markdown-body ul,.card-excerpt.markdown-body ol{margin:0 0 .35em}
+.card-excerpt.markdown-body h1,.card-excerpt.markdown-body h2,.card-excerpt.markdown-body h3,.card-excerpt.markdown-body h4,.card-excerpt.markdown-body h5,.card-excerpt.markdown-body h6{font-size:inherit;line-height:inherit;margin:0 0 .25em}
+.card-excerpt.markdown-body pre{padding:3px 6px;max-width:100%;overflow:hidden}
+.card-excerpt.markdown-body blockquote{padding:0 6px}
+.card-excerpt.markdown-body ul,.card-excerpt.markdown-body ol{padding-left:1.5em}
+.card-excerpt.markdown-body .katex-display{margin:.1em 0;text-align:left;overflow:hidden}
+.card-excerpt.markdown-body .katex-display>.katex{text-align:left}
+.card-excerpt.markdown-body .katex{font-size:1em}
+.card-preview-link{color:var(--accent)}
+
+/* Reading layout: scroll wide content locally instead of widening the page. */
+.markdown-body{min-width:0;max-width:100%;tab-size:4}
+.markdown-body :is(h1,h2,h3,h4,h5,h6){color:var(--text);font-weight:750;font-synthesis:weight;letter-spacing:normal}
+.markdown-body h1{font-size:2em;line-height:1.35;margin:1.6em 0 .7em}
+.markdown-body h2{font-size:1.65em;line-height:1.4;margin:1.5em 0 .65em;padding-bottom:.3em;border-bottom:1px solid var(--line)}
+.markdown-body h3{font-size:1.25em;line-height:1.5;margin:1.3em 0 .5em}
+.markdown-body h4{font-size:1.1em;line-height:1.5;margin:1.1em 0 .45em}
+.markdown-body h5,.markdown-body h6{font-size:1em;line-height:1.5;margin:1em 0 .4em}
+.markdown-body strong,.markdown-body b{font-weight:800;font-synthesis:weight;color:var(--text)}
+.markdown-body ul,.markdown-body ol{padding-left:1.8em;margin:.7em 0}
+.markdown-body li+li{margin-top:.25em}
+.markdown-body li>p{margin:.3em 0}
+.markdown-body :not(pre)>code{background:var(--surface-soft);border-radius:3px;padding:.1em .3em;overflow-wrap:anywhere}
+.markdown-body pre{max-width:100%;white-space:pre;overflow-x:auto;overflow-wrap:normal;line-height:1.65}
+.markdown-body pre code{white-space:pre;overflow-wrap:normal}
+.markdown-body table{width:max-content;max-width:100%;overflow-x:auto;line-height:1.65;margin:1em 0}
+.markdown-body th{background:var(--surface-soft);font-weight:650}
+.markdown-body th,.markdown-body td{min-width:3em;vertical-align:top}
+.markdown-body hr{border:0;border-top:1px solid var(--line);margin:1.5em 0}
+.markdown-task-marker{font-size:1.1em;color:var(--accent);margin-right:.2em}
+.markdown-body .notebook-math-source{max-width:100%}
+.markdown-body div.notebook-math-source{margin:.8em 0;overflow-x:auto;overflow-y:hidden;padding:.25em 0}
+.markdown-body .katex-display{max-width:100%;overflow-x:auto;overflow-y:hidden;margin:.5em 0;padding:.15em 0}
+.markdown-body .katex-display>.katex{white-space:nowrap;overflow-wrap:normal}
+.markdown-body .katex,.markdown-body .katex *{overflow-wrap:normal}
+.markdown-body .notebook-math-error{font-family:Consolas,monospace;color:var(--tone-red,var(--text));white-space:pre-wrap;overflow-wrap:anywhere;border-bottom:1px dotted currentColor}
+/* Card excerpts retain their compact typography over the reading rules above. */
+.card-excerpt.markdown-body div.notebook-math-source{margin:0;padding:.1em 0;overflow:hidden}
+.card-excerpt.markdown-body .katex-display{margin:0;padding:.1em 0;overflow:hidden}
+.card-excerpt.markdown-body table{margin:0}
+.card-excerpt.markdown-body pre{overflow:hidden}
+.card-excerpt.markdown-body :is(h1,h2,h3,h4,h5,h6){line-height:1.4;margin:0 0 .15em;padding:0;border:0}
+.card-excerpt.markdown-body h1{font-size:1.3em}
+.card-excerpt.markdown-body h2{font-size:1.15em}
+.card-excerpt.markdown-body h3{font-size:1em}
+.card-excerpt.markdown-body h4,.card-excerpt.markdown-body h5,.card-excerpt.markdown-body h6{font-size:1em}
