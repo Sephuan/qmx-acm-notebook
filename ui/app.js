@@ -1152,6 +1152,7 @@
   $('#submit-form').addEventListener('input', () => { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 650); });
   $('#submit-form').elements.platform.addEventListener('change', () => { const form = $('#submit-form'); form.elements.rating.value = ''; form.elements.difficulty.value = ''; setEditorPlatform(form.elements.platform.value, false); });
   $('#save-local-button').addEventListener('click', () => saveRecord(false)); $('#submit-form').addEventListener('submit', event => { event.preventDefault(); saveRecord(true); });
+  const escapeHtml = value => String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
   let editingRepos = [];
   let editingActiveId = '';
 
@@ -1270,20 +1271,25 @@
   $('#theme-select').addEventListener('change', async event => { const previous = { ...s.settings }; s.settings.theme = event.target.value; applyTheme(s.settings.theme); try { if (demo) writeDemo(); else await call('saveSettings', { ...s.settings }); } catch (error) { s.settings = previous; toast(`当前风格已预览，设置未保存：${errorMessage(error)}`); } });
   $('#settings-button').addEventListener('click', () => {
     if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; }
-    settingsPreview = { ...s.settings, theme: document.body.dataset.theme };
-    const form = $('#settings-form');
-    form.elements.theme.value = settingsPreview.theme;
-    editingRepos = (Array.isArray(s.settings.repositories) && s.settings.repositories.length) ? structuredClone(s.settings.repositories) : [
-      { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', serverUrl: 'http://172.25.5.128:3000', repo: 'ctguacm/2026' }
-    ];
-    editingActiveId = s.settings.activeRepoId || editingRepos[0]?.id || 'ctgu-2026';
-    renderSettingsRepoList();
-    form.elements.clientId.value = s.settings.clientId || '';
-    form.elements.displayName.value = s.settings.displayName || '';
-    form.elements.autoSync.checked = s.settings.autoSync !== false;
-    form.elements.codeFontSize.value = String(s.settings.codeFontSize || 11);
-    $('#code-font-size-value').textContent = (s.settings.codeFontSize || 11) + 'px';
-    form.elements.codeLineNumbers.checked = s.settings.codeLineNumbers === true;
+    try {
+      settingsPreview = { ...s.settings, theme: document.body.dataset.theme };
+      const form = $('#settings-form');
+      if (form.elements.theme) form.elements.theme.value = settingsPreview.theme;
+      editingRepos = (Array.isArray(s.settings.repositories) && s.settings.repositories.length) ? structuredClone(s.settings.repositories) : [
+        { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', serverUrl: 'http://172.25.5.128:3000', repo: 'ctguacm/2026' }
+      ];
+      editingActiveId = s.settings.activeRepoId || editingRepos[0]?.id || 'ctgu-2026';
+      renderSettingsRepoList();
+      if (form.elements.clientId) form.elements.clientId.value = s.settings.clientId || '';
+      if (form.elements.displayName) form.elements.displayName.value = s.settings.displayName || '';
+      if (form.elements.autoSync) form.elements.autoSync.checked = s.settings.autoSync !== false;
+      if (form.elements.codeFontSize) form.elements.codeFontSize.value = String(s.settings.codeFontSize || 11);
+      const fontSizeNode = $('#code-font-size-value');
+      if (fontSizeNode) fontSizeNode.textContent = (s.settings.codeFontSize || 11) + 'px';
+      if (form.elements.codeLineNumbers) form.elements.codeLineNumbers.checked = s.settings.codeLineNumbers === true;
+    } catch (e) {
+      console.error('Settings init error:', e);
+    }
     $('#settings-dialog').showModal();
   });
   $('#settings-form').addEventListener('submit', async event => {
