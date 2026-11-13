@@ -1102,13 +1102,19 @@
     setBusy(true);
     try {
       if (demo) {
-        const currentRepo = repo() || 'ctguacm/2026';
-        const currentServer = s.settings?.serverUrl || 'http://172.25.5.128:3000';
+        const activeRepo = (s.settings.repositories || []).find(r => r.id === s.settings.activeRepoId) ||
+          (s.settings.repositories || [])[0] ||
+          { repo: 'ctguacm/2026', serverUrl: 'http://172.25.5.128:3000' };
+        const currentRepo = activeRepo.repo || s.settings?.repo || 'ctguacm/2026';
+        const currentServer = activeRepo.serverUrl !== undefined ? activeRepo.serverUrl : (s.settings?.serverUrl || 'http://172.25.5.128:3000');
+        s.settings.repo = currentRepo;
+        s.permissions.repo = currentRepo;
+
         try {
           const res = await fetch(`/api/sync?repo=${encodeURIComponent(currentRepo)}&serverUrl=${encodeURIComponent(currentServer)}`);
           if (res.ok) {
             const data = await res.json();
-            if (Array.isArray(data.records) && data.records.length > 0) {
+            if (Array.isArray(data.records)) {
               s.records = data.records.map(r => ({ ...r, repo: currentRepo }));
               s.issues = (Array.isArray(data.issues) ? data.issues : []).map(r => ({ ...r, repo: currentRepo }));
               s.lastSync = new Date().toISOString();
@@ -1118,8 +1124,15 @@
               toast(`已从 ${currentRepo} 同步 ${s.records.length} 道题解`);
               return;
             }
+          } else {
+            const errData = await res.json().catch(() => ({}));
+            toast(`同步失败：${errData.error || res.statusText}`);
+            return;
           }
-        } catch (_) {}
+        } catch (fetchErr) {
+          toast(`网络请求失败：${errorMessage(fetchErr)}`);
+          return;
+        }
         toast('演示模式：本地记录已保留，未连接公共题库');
         return;
       }
@@ -1607,6 +1620,11 @@
         s.settings.activeRepoId = 'ctgu-2026';
         s.settings.repo = 'ctguacm/2026';
         s.settings.serverUrl = 'http://172.25.5.128:3000';
+      }
+      if (!s.settings.repo || s.settings.repo.startsWith('qmx-acm-data')) {
+        s.settings.repo = 'ctguacm/2026';
+        s.settings.serverUrl = 'http://172.25.5.128:3000';
+        s.settings.activeRepoId = 'ctgu-2026';
       }
       s.permissions = { repo: s.settings.repo || 'ctguacm/2026', push: false, admin: false };
       s.records = examples.filter(record => record.kind === 'document').map(record => ({ ...record, repo: s.permissions.repo }));

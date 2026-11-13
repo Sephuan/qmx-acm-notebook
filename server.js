@@ -24,15 +24,18 @@ const MIME_TYPES = {
 
 const server = http.createServer(async (req, res) => {
   let reqPath = decodeURIComponent(req.url.split('?')[0]);
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
 
   if (reqPath === '/api/sync') {
     const urlObj = new URL(req.url, 'http://localhost');
-    const repo = urlObj.searchParams.get('repo') || 'ctguacm/2026';
-    const serverUrl = urlObj.searchParams.get('serverUrl') || 'http://172.25.5.128:3000';
+    let repo = urlObj.searchParams.get('repo') || 'ctguacm/2026';
+    let serverUrl = urlObj.searchParams.get('serverUrl') || 'http://172.25.5.128:3000';
+    console.log(`[API /api/sync] Syncing repo=${repo}, serverUrl=${serverUrl}`);
     try {
       const { GitHub } = require('./electron/github.cjs');
       const gh = new GitHub({ repo, serverUrl });
       const result = await gh.sync();
+      console.log(`[API /api/sync] Success: found ${result.records.length} records`);
       res.writeHead(200, {
         'Content-Type': 'application/json; charset=utf-8',
         'Cache-Control': 'no-cache',
@@ -40,6 +43,7 @@ const server = http.createServer(async (req, res) => {
       });
       res.end(JSON.stringify(result));
     } catch (err) {
+      console.error(`[API /api/sync] Error: ${err.message}`);
       res.writeHead(500, {
         'Content-Type': 'application/json; charset=utf-8',
         'Access-Control-Allow-Origin': '*'
