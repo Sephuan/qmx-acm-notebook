@@ -751,6 +751,7 @@
     } finally { setBusy(false); }
   }
   function renderAlgorithmNotes() {
+    window.NotebookReadingDetail?.closeAll();
     const panel = $('#algorithm-panel');
     window.NotebookAlgorithmsController?.destroy(); learningController?.destroy(); learningController = null;
     panel.replaceChildren();
@@ -763,7 +764,7 @@
       learningController = window.NotebookLearningPath.render({ host, tree: s.algorithmTree, curriculum: window.QMX_ALGORITHM_LEARNING_PATH,
         progress: s.local.learningPaths?.[learningProgressKey()] || { gates: {} }, progressKey: learningProgressKey(), account: s.account, notes: s.algorithmNotes, canUpload: Boolean(s.account && s.permissions.push),
         onProgress: saveLearningProgress, onTopic: openLearningTopic,
-        onNote(note) { panel.dataset.scope = 'public'; openLearningTopic(note.nodeId); },
+        onNote: openAlgorithmNoteDetail,
         onUpload: id => { algorithmSelectedNode = id; openAlgorithmNoteEditor(); }, toast });
       return;
     }
@@ -819,7 +820,23 @@
     finally { setBusy(false); }
   });
   function isMineNote(note) { return accountId() !== null && String(note.authorId || '') === accountId(); }
-  function openAlgorithmNoteDetail(note) { const panel=$('#algorithm-panel'); const drawer=element('div','algorithm-reading'); append(drawer,button('× 关闭算法笔记','button subtle algorithm-close-button',renderAlgorithmNotes),element('div','eyebrow','ALGORITHM NOTE'),element('h2','',note.title),append(element('div','author-row'),element('span','mini-avatar',authorName(note.author).slice(0,1)),element('span','',authorName(note.author)),element('span','separator','·'),element('span','',date(note.updatedAt)))); const body=element('div','markdown-body algorithm-reading-body');renderMarkdown(body,note.body);drawer.append(tags(note),body);panel.replaceChildren(drawer); }
+  function openAlgorithmNoteDetail(note, { gateId } = {}) {
+    const holder = element('div', 'alg-browser'), pane = element('div', 'alg-pane'); holder.hidden = true;
+    const article = element('article', 'alg-reading'), title = element('h2', 'alg-reading-title', note.title || '未命名笔记');
+    const meta = element('div', 'alg-note-meta');
+    if (note.featured) meta.append(element('span', 'alg-featured', '精选'));
+    append(meta, element('span', 'alg-note-author', authorName(note.author)), element('span', '', date(note.updatedAt)));
+    const body = element('div', 'markdown-body alg-markdown'); renderMarkdown(body, note.body);
+    append(article, title, meta, tags(note), body); pane.append(article); holder.append(pane); $('#algorithm-panel').append(holder);
+    const path = [];
+    const stage = window.QMX_ALGORITHM_LEARNING_PATH?.stages.find(item => item.gates.some(gate => gateId ? gate.id === gateId : gate.topicIds.includes(note.nodeId)));
+    const gate = stage?.gates.find(item => gateId ? item.id === gateId : item.topicIds.includes(note.nodeId));
+    path.push({ label: '闯关学习', onClick() { window.NotebookReadingDetail.closeAll(); } });
+    if (stage) path.push({ label: `第${stage.index}章 ${stage.title}`, onClick() { window.NotebookReadingDetail.closeAll(); if (gate) learningController?.selectGate(gate.id); } });
+    if (gate) path.push({ label: gate.title, onClick() { noteDetail?.close(); } });
+    path.push({ label: note.title || '未命名笔记' });
+    const noteDetail = window.NotebookReadingDetail.open({ content: pane, title: '算法笔记详情', path, onClose() { holder.remove(); } });
+  }
   function openAlgorithmNoteEditor() { if (!s.account || !s.permissions.push) { toast('请先登录具有仓库写入权限的 GitHub 账户'); return; } const form=$('#algorithm-note-form'); form.reset(); const node=form.elements.nodeId; node.replaceChildren(...algorithmNodes().map(n=>{const o=element('option','',n.label);o.value=n.id;return o;})); node.value=algorithmSelectedNode; form.elements.noteScope.value=s.permissions.admin ? 'public' : 'personal'; form.elements.noteScope.disabled=!s.permissions.admin; $('#algorithm-note-error').hidden=true; $('#algorithm-note-dialog').showModal(); }
   $('#algorithm-note-form').addEventListener('submit', async event => { event.preventDefault(); const form=event.currentTarget;if(s.busy)return;const data=Object.fromEntries(new FormData(form));const note={title:data.noteTitle,noteScope:s.permissions.admin ? form.elements.noteScope.value : 'personal',nodeId:data.nodeId,tags:String(data.noteTags||'').split(/[,，、]/).map(x=>x.trim()).filter(Boolean),body:data.body,featured:data.featured === 'on',clientId:uuid(),repo:repo()};setBusy(true);try{const result=await call('saveAlgorithmNote',note);s.algorithmNotes=[...s.algorithmNotes.filter(x=>x.path!==result.path),result];$('#algorithm-note-dialog').close();render();toast('算法笔记已保存')}catch(error){$('#algorithm-note-error').textContent=errorMessage(error);$('#algorithm-note-error').hidden=false}finally{setBusy(false)}});
   function renderMarkdown(container, body) {

@@ -56,7 +56,7 @@
     let gateId = gateById.has(remembered?.gateId) && gateById.get(remembered.gateId).stage.id === stageId ? remembered.gateId
       : gateById.has(progress.gateId) && gateById.get(progress.gateId).stage.id === stageId ? progress.gateId : null;
     let destroyed = false, busy = false, celebrationTimer, saveError = '', root, routeScroll, detail, summary, stageButton, stageDialog, evidenceDialog, shareDialog;
-    let evidenceForm, evidenceError, evidenceGateId = null, previousFocus, lastCelebrated = null;
+    let evidenceForm, evidenceError, evidenceGateId = null, previousFocus, lastCelebrated = null, detailController = null;
     const canSave = typeof opts.onProgress === 'function';
     const records = () => [...gateById.values()];
     const gateProgress = id => progress.gates[id] && ['learning', 'completed'].includes(progress.gates[id].status) ? progress.gates[id] : null;
@@ -92,7 +92,7 @@
       const entry = gateById.get(id); if (!entry || destroyed || busy) return false;
       stageId = entry.stage.id; gateId = entry.gate.id; saveError = ''; remember();
       renderMain({ center });
-      if (focus) root.querySelector('.alp-checkpoint[aria-pressed="true"]')?.focus({ preventScroll: true });
+      if (focus) (detailController ? detail.querySelector('.alp-gate-title') : root.querySelector('.alp-checkpoint[aria-pressed="true"]'))?.focus({ preventScroll: true });
       return true;
     }
     function renderSummary() {
@@ -163,9 +163,23 @@
     function renderDetail() {
       const entry = currentEntry(); detail.replaceChildren(); if (!entry) return;
       const { gate, stage } = entry, record = gateProgress(gate.id);
+      const readingPath = [
+        { label: '闯关学习', onClick() { detailController?.close(); } },
+        { label: `第${stageNumber(stage)}章 ${stage.title}`, onClick() { detailController?.close(); openStagePicker(); } },
+        { label: `第${gateNumber(gate)}关 ${gate.title}` }
+      ];
+      detailController?.setPath(readingPath);
       const heading = el('h3', 'alp-gate-title', gate.title); heading.tabIndex = -1;
       const label = el('div', 'alp-detail-eyebrow', `第${stageNumber(stage)}章 · 第${gateNumber(gate)}关`);
-      add(detail, label, heading, el('span', 'alp-kind', `${kinds[gate.kind] || '学习关'}${gate.optional ? ' · 选修' : ''}`));
+      const header = el('div', 'alp-detail-header'), title = el('div', 'alp-detail-title');
+      add(title, label, heading, el('span', 'alp-kind', `${kinds[gate.kind] || '学习关'}${gate.optional ? ' · 选修' : ''}`));
+      const open = control('打开详情', 'alp-button alp-button-secondary alp-detail-open-button reading-detail-trigger', () => {
+        if (detailController || typeof global.NotebookReadingDetail?.open !== 'function') return;
+        detailController = global.NotebookReadingDetail.open({ content: detail, mount: host, title: '关卡详情', path: readingPath, onClose() { detailController = null; } });
+      });
+      add(header, title, open); detail.append(header);
+      const related = list(gate.topicIds).map(id => topics.get(id)).filter(Boolean);
+      const notes = renderNotes(gate, related);
       const ranges = el('div', 'alp-ranges'); rangeTags(ranges, gate.cf || stage.cf, gate.luoguDifficulty || stage.luoguDifficulty, isOrientation(stage));
       if (gate.learningTitle || gate.learningDescription) {
         const story = el('div', 'alp-learning-story');
@@ -174,6 +188,27 @@
         detail.append(story);
       }
       add(detail, el('p', 'alp-description', gate.description || stage.description), ranges, !isOrientation(stage) && el('p', 'alp-fine-print', '题目难度用于选题；知识点等级单独显示，两者不作换算。'));
+      const goals = list(gate.goals);
+      if (goals.length) { detail.append(sectionHeading('本关目标')); const ul = el('ul', 'alp-goals'); goals.forEach(goal => ul.append(el('li', '', goal))); detail.append(ul); }
+      const actions = el('div', 'alp-actions');
+      const complete = control(record?.status === 'completed' ? '编辑完成记录' : '✓ 记录本关完成', 'alp-button alp-button-primary alp-complete-button', () => openEvidence(gate.id));
+      complete.disabled = busy || !canSave; actions.append(complete);
+      const learning = control(record?.status === 'completed' ? '撤销完成，设为学习中' : record?.status === 'learning' ? '编辑学习记录' : '▶ 开始学习', 'alp-button alp-button-secondary alp-learning-button', () => {
+        if (record?.status === 'learning') openEvidence(gate.id, 'learning');
+        else saveStatus(gate.id, 'learning');
+      }); learning.disabled = busy || !canSave; actions.append(learning);
+      add(detail, actions, el('p', 'alp-fine-print', '完成状态由自己记录，用于学习追踪；不代表系统判题通过。'));
+      if (!canSave) detail.append(el('p', 'alp-inline-error', '当前无法保存学习进度，请稍后重试。'));
+      if (saveError) { const error = el('p', 'alp-inline-error', saveError); error.setAttribute('role', 'alert'); detail.append(error); }
+      detail.append(sectionHeading('关联知识点'));
+      if (related.length) {
+        const group = el('div', 'alp-topics');
+        related.forEach(topic => {
+          const card = el('div', 'alp-topic'); card.append(nodeButton(topic));
+          const grade = grades[topic.node.color]; if (grade && topic.node.kind !== 'directory') { const tag = el('span', 'alp-grade', grade[0]); tag.dataset.level = grade[1]; card.append(tag); }
+          group.append(card);
+        }); detail.append(group);
+      } else detail.append(el('p', 'alp-fine-print', '此关的知识点正在整理，可先按学习目标练习。'));
       const thread = list(gate.threadGateIds).map(id => gateById.get(id)).filter(Boolean);
       if (thread.length) {
         detail.append(sectionHeading('把知识连成线'));
@@ -184,18 +219,6 @@
         });
         detail.append(links);
       }
-      const goals = list(gate.goals);
-      if (goals.length) { detail.append(sectionHeading('本关目标')); const ul = el('ul', 'alp-goals'); goals.forEach(goal => ul.append(el('li', '', goal))); detail.append(ul); }
-      const related = list(gate.topicIds).map(id => topics.get(id)).filter(Boolean);
-      detail.append(sectionHeading('关联知识点'));
-      if (related.length) {
-        const group = el('div', 'alp-topics');
-        related.forEach(topic => {
-          const card = el('div', 'alp-topic'); card.append(nodeButton(topic));
-          const grade = grades[topic.node.color]; if (grade && topic.node.kind !== 'directory') { const tag = el('span', 'alp-grade', grade[0]); tag.dataset.level = grade[1]; card.append(tag); }
-          group.append(card);
-        }); detail.append(group);
-      } else detail.append(el('p', 'alp-fine-print', '此关的知识点正在整理，可先按学习目标练习。'));
       const requiredGates = list(gate.prerequisites?.gateIds).map(id => gateById.get(id)).filter(Boolean);
       const requiredTopics = list(gate.prerequisites?.topicIds).map(id => topics.get(id)).filter(Boolean);
       if (requiredGates.length || requiredTopics.length) {
@@ -219,18 +242,15 @@
         if (record.updatedAt && Number.isFinite(Date.parse(record.updatedAt))) saved.append(el('span', 'alp-saved-date', new Date(record.updatedAt).toLocaleString('zh-CN')));
         detail.append(saved);
       }
-      const actions = el('div', 'alp-actions');
-      const complete = control(record?.status === 'completed' ? '编辑完成记录' : '✓ 记录本关完成', 'alp-button alp-button-primary alp-complete-button', () => openEvidence(gate.id));
-      complete.disabled = busy || !canSave; actions.append(complete);
-      const learning = control(record?.status === 'completed' ? '撤销完成，设为学习中' : record?.status === 'learning' ? '编辑学习记录' : '▶ 开始学习', 'alp-button alp-button-secondary alp-learning-button', () => {
-        if (record?.status === 'learning') openEvidence(gate.id, 'learning');
-        else saveStatus(gate.id, 'learning');
-      }); learning.disabled = busy || !canSave; actions.append(learning);
-      const share = control('复制互助卡', 'alp-button alp-button-secondary alp-share-button', () => openShare(gate.id)); share.disabled = busy; actions.append(share);
-      add(detail, actions, el('p', 'alp-fine-print', '完成状态由自己记录，用于学习追踪；不代表系统判题通过。'));
-      if (!canSave) detail.append(el('p', 'alp-inline-error', '当前无法保存学习进度，请稍后重试。'));
-      if (saveError) { const error = el('p', 'alp-inline-error', saveError); error.setAttribute('role', 'alert'); detail.append(error); }
-      renderNotes(gate, related);
+      const utilities = el('footer', 'alp-detail-utilities'), utilityActions = el('div', 'alp-utility-actions');
+      const share = control('复制互助卡', 'alp-button alp-button-secondary alp-share-button', () => openShare(gate.id)); share.disabled = busy; utilityActions.append(share);
+      if (related[0] && typeof opts.onUpload === 'function') {
+        const upload = control('＋ 为本关知识点补充笔记', 'alp-text-button alp-upload-button', () => { if (opts.canUpload !== false) opts.onUpload(related[0].node.id); });
+        upload.disabled = opts.canUpload === false; if (upload.disabled) upload.title = '登录并获得仓库写入权限后可补充共享笔记'; utilityActions.append(upload);
+      }
+      utilities.append(utilityActions);
+      if (notes.length) { const authors = [...new Set(notes.map(note => authorName(note.author)))]; add(utilities, sectionHeading('相关笔记贡献者'), el('p', 'alp-contributors', authors.join(' · '))); }
+      detail.append(utilities);
     }
     function renderNotes(gate, related) {
       const ids = new Set(related.map(topic => topic.node.id));
@@ -240,16 +260,12 @@
       if (notes.length) {
         const noteList = el('div', 'alp-notes');
         notes.slice(0, 5).forEach(note => {
-          const topic = topics.get(note.nodeId); const noteButton = control('', 'alp-note', () => { if (typeof opts.onNote === 'function') opts.onNote(note); else opts.onTopic?.(topic.node.id); });
-          add(noteButton, el('strong', '', note.title || '未命名笔记'), el('span', '', `${authorName(note.author)} · ${topic.node.label}`)); noteButton.title = '在知识树中查看此知识点的笔记'; noteList.append(noteButton);
+          const topic = topics.get(note.nodeId); const noteButton = control('', `alp-note${note.featured ? ' alp-note-featured' : ''}`, () => { if (typeof opts.onNote === 'function') opts.onNote(note, { gateId: gate.id }); else opts.onTopic?.(topic.node.id); });
+          if (note.featured) noteButton.append(el('span', 'alp-note-featured-label', '精选'));
+          add(noteButton, el('strong', '', note.title || '未命名笔记'), el('span', '', `${authorName(note.author)} · ${topic.node.label}`)); noteButton.title = '打开笔记详情'; noteList.append(noteButton);
         }); detail.append(noteList);
-        const authors = [...new Set(notes.map(note => authorName(note.author)))];
-        add(detail, sectionHeading('相关笔记贡献者'), el('p', 'alp-contributors', authors.join(' · ')));
       } else detail.append(el('p', 'alp-fine-print', '此关尚无相关公开笔记，可以分享自己的理解与复盘。'));
-      if (related[0] && typeof opts.onUpload === 'function') {
-        const upload = control('＋ 为本关知识点补充笔记', 'alp-text-button alp-upload-button', () => { if (opts.canUpload !== false) opts.onUpload(related[0].node.id); });
-        upload.disabled = opts.canUpload === false; if (upload.disabled) upload.title = '登录并获得仓库写入权限后可补充共享笔记'; detail.append(upload);
-      }
+      return notes;
     }
     function renderMain({ center = false } = {}) {
       if (destroyed || !stages.length) return;
@@ -335,7 +351,7 @@
       busy = value; root.dataset.saving = String(value); root.setAttribute('aria-busy', String(value));
       evidenceForm?.querySelectorAll('button,input,textarea,select').forEach(input => { input.disabled = value; });
       evidenceDialog?.querySelector('.alp-dialog-close')?.toggleAttribute('disabled', value);
-      root.querySelectorAll('.alp-complete-button,.alp-learning-button').forEach(button => { button.disabled = value || !canSave; });
+      detail.querySelectorAll('.alp-complete-button,.alp-learning-button').forEach(button => { button.disabled = value || !canSave; });
     }
     async function persist(id, record) {
       if (!canSave) throw new Error('当前无法保存学习进度，请稍后重试。');
@@ -404,7 +420,7 @@
     add(root, summary, legend, achievements, success, main, footer, stageDialog, evidenceDialog, shareDialog);
     host.replaceChildren(root); remember(); renderMain({ center: true });
     const controller = {
-      destroy() { if (destroyed) return; destroyed = true; clearTimeout(celebrationTimer); [stageDialog, evidenceDialog, shareDialog].forEach(dialog => { if (dialog.open) dialog.close(); }); root.remove(); },
+      destroy() { if (destroyed) return; destroyed = true; detailController?.close(); detailController = null; clearTimeout(celebrationTimer); [stageDialog, evidenceDialog, shareDialog].forEach(dialog => { if (dialog.open) dialog.close(); }); root.remove(); },
       selectGate(id) { return selectGate(id, { focus: true }); },
       selectTopic(id) {
         const canonicalId = topics.get(id)?.node.id || id;
