@@ -74,7 +74,17 @@ function ensureIdle() {
 }
 // Public OAuth application identifier; never embed a client secret or user token.
 const TEAM_CLIENT_ID = 'Ov23likjqSdpkS6MYGzJ';
-const defaults = { serverUrl: 'http://172.25.5.128:3000', repo: 'ctguacm/2026', clientId: TEAM_CLIENT_ID, theme: 'light' };
+const defaults = {
+  serverUrl: 'http://172.25.5.128:3000',
+  repo: 'ctguacm/2026',
+  repositories: [
+    { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', serverUrl: 'http://172.25.5.128:3000', repo: 'ctguacm/2026' },
+    { id: 'qmx-official', name: '官方公共题库 (GitHub)', serverUrl: '', repo: 'qmx-acm-data/2026' }
+  ],
+  activeRepoId: 'ctgu-2026',
+  clientId: TEAM_CLIENT_ID,
+  theme: 'light'
+};
 function read(name, fallback) {
   try { return JSON.parse(fs.readFileSync(path.join(dir, name), 'utf8')); } catch { return fallback; }
 }
@@ -83,8 +93,59 @@ function save(name, data) {
   fs.writeFileSync(file + '.tmp', JSON.stringify(data, null, 2));
   fs.renameSync(file + '.tmp', file);
 }
+function normalizeRepositories(data, fallbackRepo = defaults.repo, fallbackServerUrl = defaults.serverUrl) {
+  let repos = Array.isArray(data?.repositories) ? [...data.repositories] : [];
+  if (repos.length === 0) {
+    repos = [
+      { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', serverUrl: 'http://172.25.5.128:3000', repo: 'ctguacm/2026' },
+      { id: 'qmx-official', name: '官方公共题库 (GitHub)', serverUrl: '', repo: 'qmx-acm-data/2026' }
+    ];
+  }
+  if (data?.repo && !repos.some(r => r && r.repo === data.repo)) {
+    repos.unshift({ id: 'repo-current', name: '当前题库', serverUrl: data.serverUrl !== undefined ? data.serverUrl : fallbackServerUrl, repo: data.repo });
+  }
+  const validRepos = [];
+  const seenIds = new Set();
+  for (const item of repos) {
+    if (!item || typeof item !== 'object') continue;
+    let repoPath = String(item.repo || '').trim();
+    try { repoParts(repoPath); } catch { continue; }
+    let id = String(item.id || '').trim();
+    if (!id || seenIds.has(id)) id = 'repo-' + Math.random().toString(36).slice(2, 9);
+    seenIds.add(id);
+    let serverUrl = String(item.serverUrl || '').trim();
+    if (serverUrl && !/^https?:\/\/[^\s$.?#].[^\s]*$/i.test(serverUrl)) serverUrl = '';
+    const name = String(item.name || '').trim().slice(0, 50) || repoPath;
+    validRepos.push({ id, name, serverUrl, repo: repoPath });
+  }
+  if (validRepos.length === 0) {
+    validRepos.push({ id: 'repo-current', name: '当前题库', serverUrl: fallbackServerUrl, repo: fallbackRepo });
+  }
+  let active = null;
+  if (data?.activeRepoId) {
+    active = validRepos.find(r => r.id === data.activeRepoId && (!data.repo || r.repo === data.repo));
+  }
+  if (!active && data?.repo) {
+    active = validRepos.find(r => r.repo === data.repo);
+  }
+  if (!active) {
+    active = validRepos.find(r => r.id === data?.activeRepoId) || validRepos[0];
+  }
+  return { repositories: validRepos, activeRepoId: active.id, repo: active.repo, serverUrl: active.serverUrl };
+}
 function settings() {
-  const value = { ...defaults, ...read('settings.json', {}) };
+  const stored = read('settings.json', {});
+  const raw = { ...defaults, ...stored };
+  const requestedRepo = stored.repo !== undefined ? stored.repo : raw.repo;
+  const requestedActiveId = stored.activeRepoId !== undefined ? stored.activeRepoId : (stored.repo && stored.repo !== defaults.repo ? null : raw.activeRepoId);
+  const normalized = normalizeRepositories({ ...raw, repo: requestedRepo, activeRepoId: requestedActiveId }, defaults.repo, defaults.serverUrl);
+  const value = {
+    ...raw,
+    repositories: normalized.repositories,
+    activeRepoId: normalized.activeRepoId,
+    repo: normalized.repo,
+    serverUrl: normalized.serverUrl
+  };
   value.clientId = typeof value.clientId === 'string' && value.clientId.trim() ? value.clientId.trim() : TEAM_CLIENT_ID;
   return value;
 }
@@ -103,31 +164,38 @@ function githubClient(currentToken = token, repo = settings().repo, serverUrl = 
   } });
 }
 function client() { return githubClient(); }
+function repoCache(cache, repo = settings().repo) {
+  if (cache.repos && cache.repos[repo]) return cache.repos[repo];
+  if (cache.repo === repo) return cache;
+  return {};
+}
 function state(error) {
   const s = settings(), cache = read('cache.json', {});
-  // Old caches mixed Issues into records. Keep the two sources separate even before first sync.
-  const matching = cache.repo === s.repo;
+  const c = repoCache(cache, s.repo);
+  const matching = c.repo === s.repo;
   return {
-    records: matching ? (cache.records || []).filter(r => r.kind === 'document').map(r => ({ ...r, repo: s.repo })) : [],
-    algorithmNotes: matching ? (cache.algorithmNotes || []).map(r => ({ ...r, repo: s.repo })) : [],
-    algorithmTopics: matching && Array.isArray(cache.algorithmTopics) ? cache.algorithmTopics.map(topic => ({ ...topic, repo: s.repo })) : [],
-    issues: matching ? (cache.issues || (cache.records || []).filter(r => r.kind === 'issue')).map(r => ({ ...r, repo: s.repo })) : [],
-    lastSync: matching ? cache.lastSync : null,
-    tagCatalog: matching && cache.tagCatalog ? cache.tagCatalog : require('../ui/tag-presets.js'),
-    tagCatalogError: matching ? cache.tagCatalogError || null : null,
+    records: matching ? (c.records || []).filter(r => r.kind === 'document').map(r => ({ ...r, repo: s.repo })) : [],
+    algorithmNotes: matching ? (c.algorithmNotes || []).map(r => ({ ...r, repo: s.repo })) : [],
+    algorithmTopics: matching && Array.isArray(c.algorithmTopics) ? c.algorithmTopics.map(topic => ({ ...topic, repo: s.repo })) : [],
+    issues: matching ? (c.issues || (c.records || []).filter(r => r.kind === 'issue')).map(r => ({ ...r, repo: s.repo })) : [],
+    lastSync: matching ? c.lastSync : null,
+    tagCatalog: matching && c.tagCatalog ? c.tagCatalog : require('../ui/tag-presets.js'),
+    tagCatalogError: matching ? c.tagCatalogError || null : null,
     settings: s, account, authStatus: auth?.status, appVersion: APP_VERSION, update: updater?.getState(), updateCapability: getFileUpgradeCapability(), permissions: permissions?.repo === s.repo ? permissions : null,
     local: local(), contests: contestService?.snapshot(), platforms: platforms?.state(), planner: planner?.state(), error: error || null
   };
 }
 function assertExternal(url) {
   const u = new URL(url);
-  const allowedHosts = ['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com', 'leetcode.cn', 'leetcode.com', 'www.luogu.com', '172.25.5.128'];
   const custom = settings()?.serverUrl;
+  let customUrl = null;
   if (custom) {
-    try { const customHost = new URL(custom).hostname; if (!allowedHosts.includes(customHost)) allowedHosts.push(customHost); } catch (_) {}
+    try { customUrl = new URL(custom); } catch (_) {}
   }
-  const isCustom = custom && u.hostname === new URL(custom).hostname;
-  if (!u.username && !u.password && (u.protocol === 'https:' || u.hostname === '172.25.5.128' || isCustom) && allowedHosts.includes(u.hostname)) return u;
+  const isSchoolServer = u.hostname === '172.25.5.128';
+  const isCustom = customUrl && u.hostname === customUrl.hostname && (!u.port || u.port === customUrl.port);
+  if (!u.username && !u.password && (isSchoolServer || isCustom)) return u;
+  if (!u.username && !u.password && !u.port && u.protocol === 'https:' && ['github.com', 'codeforces.com', 'atcoder.jp', 'www.luogu.com.cn', 'luogu.com.cn', 'ac.nowcoder.com', 'www.nowcoder.com', 'contest.codeforces.com', 'leetcode.cn', 'leetcode.com', 'www.luogu.com'].includes(u.hostname)) return u;
   try { return new URL(problemUrl(url)); }
   catch { throw new Error('仅允许打开 GitHub、校内代码平台和受支持题目平台的链接（HTTP 仅限官方题目）'); }
 }
@@ -265,11 +333,14 @@ function checkRecordRepo(record) {
 }
 function rememberDocument(result, removed = false) {
   const repo = settings().repo, old = read('cache.json', {});
-  const cache = old.repo === repo ? old : { repo, records: [], issues: [], blobs: {} };
+  const c = repoCache(old, repo);
+  const cache = c.repo === repo ? { ...c } : { repo, records: [], issues: [], blobs: {} };
   if (!cache.issues) cache.issues = (cache.records || []).filter(r => r.kind === 'issue').map(r => ({ ...r, repo }));
   cache.records = (cache.records || []).filter(r => r.kind === 'document' && r.id !== result.id);
   if (!removed) cache.records.unshift(result);
-  save('cache.json', cache);
+  const repos = { ...(old.repos || {}) };
+  repos[repo] = cache;
+  save('cache.json', { ...cache, repo, repos });
   // Legacy releases kept online documents in local.records, which could resurrect remote deletions.
   const personal = local();
   personal.published = { ...(personal.published || {}) };
@@ -344,8 +415,12 @@ function setup() {
     const repo = settings().repo;
     const catalog = await client().getTagCatalog();
     if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
-    const cache = read('cache.json', {});
-    save('cache.json', { ...(cache.repo === repo ? cache : {}), repo, tagCatalog: catalog, tagCatalogError: null });
+    const old = read('cache.json', {});
+    const c = repoCache(old, repo);
+    const updated = { ...(c.repo === repo ? c : {}), repo, tagCatalog: catalog, tagCatalogError: null };
+    const repos = { ...(old.repos || {}) };
+    repos[repo] = updated;
+    save('cache.json', { ...updated, repo, repos });
     return catalog;
   }));
   handle('requestTag', data => writeOperation(() => client().requestTag(data)));
@@ -354,8 +429,15 @@ function setup() {
     const repo = settings().repo;
     const result = await client().reviewTag(data);
     if (repo === settings().repo && data.decision === 'approve') {
-      const cache = read('cache.json', {});
-      try { const tagCatalog = await client().getTagCatalog(); save('cache.json', { ...(cache.repo === repo ? cache : {}), repo, tagCatalog, tagCatalogError: null }); }
+      const old = read('cache.json', {});
+      const c = repoCache(old, repo);
+      try {
+        const tagCatalog = await client().getTagCatalog();
+        const updated = { ...(c.repo === repo ? c : {}), repo, tagCatalog, tagCatalogError: null };
+        const repos = { ...(old.repos || {}) };
+        repos[repo] = updated;
+        save('cache.json', { ...updated, repo, repos });
+      }
       catch { /* Approval is already committed; preserve the successful result and refresh on next sync. */ }
     }
     return result;
@@ -365,8 +447,12 @@ function setup() {
     const result = await client().saveAlgorithmTopic(data);
     if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
     // Persist only the complete additions list returned after the repository commit succeeded.
-    const cache = read('cache.json', {});
-    save('cache.json', { ...(cache.repo === repo ? cache : {}), repo, algorithmTopics: result.topics });
+    const old = read('cache.json', {});
+    const c = repoCache(old, repo);
+    const updated = { ...(c.repo === repo ? c : {}), repo, algorithmTopics: result.topics };
+    const repos = { ...(old.repos || {}) };
+    repos[repo] = updated;
+    save('cache.json', { ...updated, repo, repos });
     return result.topic;
   }));
   handle('refreshAccount', async () => {
@@ -378,13 +464,17 @@ function setup() {
     syncBusy = true;
     try {
       const repo = settings().repo, old = read('cache.json', {});
-      const result = await client().sync(old.repo === repo ? old : {});
+      const c = repoCache(old, repo);
+      const result = await client().sync(c.repo === repo ? c : {});
       if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
-      let tagCatalog = old.repo === repo ? old.tagCatalog : null, tagCatalogError = null;
+      let tagCatalog = c.repo === repo ? c.tagCatalog : null, tagCatalogError = null;
       try { tagCatalog = await client().getTagCatalog(); }
       catch (error) { tagCatalogError = error.status === 401 ? '标签目录授权已失效，请重新登录' : '标签目录暂未更新，继续使用已缓存的标签'; }
       if (repo !== settings().repo) throw new Error('仓库配置已改变，请重新同步');
-      save('cache.json', { ...result, repo, tagCatalog, tagCatalogError, algorithmNotes: Array.isArray(result.algorithmNotes) ? result.algorithmNotes : [], algorithmTopics: Array.isArray(result.algorithmTopics) ? result.algorithmTopics : [] });
+      const updated = { ...result, repo, tagCatalog, tagCatalogError, algorithmNotes: Array.isArray(result.algorithmNotes) ? result.algorithmNotes : [], algorithmTopics: Array.isArray(result.algorithmTopics) ? result.algorithmTopics : [] };
+      const repos = { ...(old.repos || {}) };
+      repos[repo] = updated;
+      save('cache.json', { ...updated, repo, repos });
       if (token) { try { await refreshIdentity(); } catch (error) { permissions = null; return state(`资料已同步，账号权限刷新失败：${error.message}`); } }
       return state();
     } finally { syncBusy = false; }
@@ -392,12 +482,40 @@ function setup() {
   handle('saveSettings', data => {
     if (writeBusy || syncBusy) throw new Error('请等待当前操作完成后再修改设置');
     const old = settings(), next = { ...old };
-    if (data.repo !== undefined) { repoParts(data.repo); next.repo = data.repo; }
-    if (data.serverUrl !== undefined) {
+    if (Array.isArray(data.repositories)) {
+      if (data.repositories.length === 0) throw new Error('至少需要保留一个仓库配置');
+      for (const item of data.repositories) {
+        if (!item || typeof item !== 'object') throw new Error('仓库配置格式不正确');
+        repoParts(item.repo);
+        if (item.serverUrl) {
+          const u = String(item.serverUrl).trim();
+          if (!/^https?:\/\/[^\s$.?#].[^\s]*$/i.test(u)) throw new Error('Git 服务地址格式不正确');
+        }
+      }
+      next.repositories = data.repositories;
+    }
+    if (data.activeRepoId !== undefined) {
+      next.activeRepoId = String(data.activeRepoId).trim();
+    }
+    if (data.repo !== undefined && !data.repositories) {
+      repoParts(data.repo);
+      next.repo = data.repo;
+      const match = next.repositories?.find(r => r.id === next.activeRepoId);
+      if (match) match.repo = data.repo;
+    }
+    if (data.serverUrl !== undefined && !data.repositories) {
       const url = String(data.serverUrl).trim();
       if (url && !/^https?:\/\/[^\s$.?#].[^\s]*$/i.test(url)) throw new Error('Git 服务地址格式不正确');
       next.serverUrl = url;
+      const match = next.repositories?.find(r => r.id === next.activeRepoId);
+      if (match) match.serverUrl = url;
     }
+    const normalized = normalizeRepositories(next, old.repo, old.serverUrl);
+    next.repositories = normalized.repositories;
+    next.activeRepoId = normalized.activeRepoId;
+    next.repo = normalized.repo;
+    next.serverUrl = normalized.serverUrl;
+
     if (data.clientId !== undefined) {
       if (!/^[A-Za-z0-9_.-]{0,100}$/.test(data.clientId)) throw new Error('Client ID 格式不正确');
       next.clientId = data.clientId.trim() || TEAM_CLIENT_ID;

@@ -92,6 +92,7 @@
     s.account = payload.account || null; s.lastSync = payload.lastSync || null; s.error = payload.error ? errorMessage(payload.error) : '';
     applyTheme(s.settings.theme || readTheme());
     applyCodeSettings();
+    renderRepoSelector();
   }
   function readTheme() { try { return localStorage.getItem(THEME_STORAGE) || 'light'; } catch (_) { return 'light'; } }
   function applyTheme(theme) { theme = ['light', 'dark', 'cards'].includes(theme) ? theme : 'light'; document.body.dataset.theme = theme; $('#theme-select').value = theme; try { localStorage.setItem(THEME_STORAGE, theme); } catch (_) {} }
@@ -1151,9 +1152,181 @@
   $('#submit-form').addEventListener('input', () => { clearTimeout(draftTimer); draftTimer = setTimeout(saveDraft, 650); });
   $('#submit-form').elements.platform.addEventListener('change', () => { const form = $('#submit-form'); form.elements.rating.value = ''; form.elements.difficulty.value = ''; setEditorPlatform(form.elements.platform.value, false); });
   $('#save-local-button').addEventListener('click', () => saveRecord(false)); $('#submit-form').addEventListener('submit', event => { event.preventDefault(); saveRecord(true); });
+  let editingRepos = [];
+  let editingActiveId = '';
+
+  function renderRepoSelector() {
+    const select = $('#repo-select');
+    if (!select) return;
+    const repos = Array.isArray(s.settings?.repositories) && s.settings.repositories.length ? s.settings.repositories : [
+      { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', repo: s.settings?.repo || 'ctguacm/2026', serverUrl: s.settings?.serverUrl || 'http://172.25.5.128:3000' }
+    ];
+    const activeId = s.settings?.activeRepoId || repos[0].id;
+    select.replaceChildren();
+    repos.forEach(r => {
+      const opt = document.createElement('option');
+      opt.value = r.id;
+      opt.textContent = `${r.name || r.repo} (${r.repo})`;
+      if (r.id === activeId) opt.selected = true;
+      select.append(opt);
+    });
+  }
+
+  function renderSettingsRepoList() {
+    const container = $('#settings-repo-list');
+    if (!container) return;
+    container.replaceChildren();
+    editingRepos.forEach((r, idx) => {
+      const item = document.createElement('div');
+      item.className = 'repo-card-item' + (r.id === editingActiveId ? ' active' : '');
+      item.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:8px 12px;border:1px solid var(--line);border-radius:6px;margin-bottom:6px;background:var(--surface-soft);font-size:11px;';
+      if (r.id === editingActiveId) {
+        item.style.borderColor = 'var(--accent)';
+        item.style.background = 'var(--accent-soft)';
+      }
+      const meta = document.createElement('div');
+      meta.style.cssText = 'min-width:0;flex:1;';
+      meta.innerHTML = `<div><strong>${escapeHtml(r.name || r.repo)}</strong> ${r.id === editingActiveId ? '<span style="color:var(--accent);font-size:10px;font-weight:600;">[当前使用]</span>' : ''}</div><div style="font-size:10px;color:var(--muted);">${escapeHtml(r.serverUrl ? r.serverUrl + ' · ' : 'GitHub · ')}${escapeHtml(r.repo)}</div>`;
+      const actions = document.createElement('div');
+      actions.style.cssText = 'display:flex;gap:6px;align-items:center;';
+      if (r.id !== editingActiveId) {
+        const switchBtn = document.createElement('button');
+        switchBtn.type = 'button';
+        switchBtn.className = 'button secondary';
+        switchBtn.style.padding = '4px 8px';
+        switchBtn.style.fontSize = '10px';
+        switchBtn.textContent = '设为当前';
+        switchBtn.onclick = () => { editingActiveId = r.id; renderSettingsRepoList(); };
+        actions.append(switchBtn);
+      }
+      if (editingRepos.length > 1) {
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'icon-button';
+        delBtn.style.fontSize = '12px';
+        delBtn.title = '删除此仓库';
+        delBtn.textContent = '✕';
+        delBtn.onclick = () => {
+          editingRepos.splice(idx, 1);
+          if (editingActiveId === r.id) editingActiveId = editingRepos[0].id;
+          renderSettingsRepoList();
+        };
+        actions.append(delBtn);
+      }
+      item.append(meta, actions);
+      container.append(item);
+    });
+  }
+
+  $('#repo-select')?.addEventListener('change', async event => {
+    const selectedId = event.target.value;
+    if (selectedId === s.settings.activeRepoId) return;
+    if (s.busy) { event.target.value = s.settings.activeRepoId; toast('请等待当前操作完成'); return; }
+    setBusy(true);
+    try {
+      if (!demo) {
+        await call('saveSettings', { activeRepoId: selectedId });
+        applyPayload(await call('bootstrap'));
+        await sync();
+      } else {
+        s.settings.activeRepoId = selectedId;
+        const target = (s.settings.repositories || []).find(r => r.id === selectedId);
+        if (target) {
+          s.settings.repo = target.repo;
+          s.settings.serverUrl = target.serverUrl;
+        }
+        writeDemo();
+        renderRepoSelector();
+        render();
+      }
+      toast('已切换到仓库：' + (s.settings.repo || ''));
+    } catch (err) {
+      toast(errorMessage(err));
+    } finally {
+      setBusy(false);
+    }
+  });
+
+  $('#new-repo-add-btn')?.addEventListener('click', () => {
+    const nameInput = $('#new-repo-name'), serverInput = $('#new-repo-server'), pathInput = $('#new-repo-path');
+    const name = nameInput.value.trim();
+    const serverUrl = serverInput.value.trim();
+    const repo = pathInput.value.trim();
+    if (!repo || !/^[\w.-]+\/[\w.-]+$/.test(repo)) {
+      toast('仓库路径格式不正确，应为 owner/repo');
+      return;
+    }
+    if (serverUrl && !/^https?:\/\/[^\s$.?#].[^\s]*$/i.test(serverUrl)) {
+      toast('Git 服务地址格式不正确');
+      return;
+    }
+    const id = 'repo-' + Math.random().toString(36).slice(2, 9);
+    editingRepos.push({ id, name: name || repo, serverUrl, repo });
+    nameInput.value = ''; serverInput.value = ''; pathInput.value = '';
+    renderSettingsRepoList();
+    toast('已添加仓库：' + (name || repo));
+  });
+
   $('#theme-select').addEventListener('change', async event => { const previous = { ...s.settings }; s.settings.theme = event.target.value; applyTheme(s.settings.theme); try { if (demo) writeDemo(); else await call('saveSettings', { ...s.settings }); } catch (error) { s.settings = previous; toast(`当前风格已预览，设置未保存：${errorMessage(error)}`); } });
-  $('#settings-button').addEventListener('click', () => { if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; } settingsPreview = { ...s.settings, theme: document.body.dataset.theme }; const form = $('#settings-form'); form.elements.theme.value = settingsPreview.theme; if (form.elements.serverUrl) form.elements.serverUrl.value = s.settings.serverUrl !== undefined ? s.settings.serverUrl : 'http://172.25.5.128:3000'; form.elements.repo.value = s.settings.repo || 'ctguacm/2026'; form.elements.clientId.value = s.settings.clientId || ''; form.elements.displayName.value = s.settings.displayName || ''; form.elements.autoSync.checked = s.settings.autoSync !== false; form.elements.codeFontSize.value = String(s.settings.codeFontSize || 11); $('#code-font-size-value').textContent = (s.settings.codeFontSize || 11) + 'px'; form.elements.codeLineNumbers.checked = s.settings.codeLineNumbers === true; $('#settings-dialog').showModal(); });
-  $('#settings-form').addEventListener('submit', async event => { event.preventDefault(); const form = event.currentTarget; const settings = { ...s.settings, theme: form.elements.theme.value, serverUrl: form.elements.serverUrl ? form.elements.serverUrl.value.trim() : (s.settings.serverUrl || 'http://172.25.5.128:3000'), repo: form.elements.repo.value.trim() || 'ctguacm/2026', clientId: form.elements.clientId.value.trim(), displayName: form.elements.displayName.value.trim(), autoSync: form.elements.autoSync.checked, codeFontSize: Number(form.elements.codeFontSize.value), codeLineNumbers: form.elements.codeLineNumbers.checked }; if (s.busy) return; setBusy(true); try { if (!demo) { await call('saveSettings', settings); applyPayload(await call('bootstrap')); } else { s.settings = settings; } settingsPreview = null; applyCodeSettings(); applyTheme(settings.theme); writeDemo(); $('#settings-dialog').close(); refreshFilters(); render(); toast('设置已保存'); } catch (error) { toast(errorMessage(error)); } finally { setBusy(false); } });
+  $('#settings-button').addEventListener('click', () => {
+    if (s.busy || $('#submit-dialog').open) { toast('请先完成或关闭编辑'); return; }
+    settingsPreview = { ...s.settings, theme: document.body.dataset.theme };
+    const form = $('#settings-form');
+    form.elements.theme.value = settingsPreview.theme;
+    editingRepos = (Array.isArray(s.settings.repositories) && s.settings.repositories.length) ? structuredClone(s.settings.repositories) : [
+      { id: 'ctgu-2026', name: '三峡大学 2026 题解库 (校内)', serverUrl: 'http://172.25.5.128:3000', repo: 'ctguacm/2026' }
+    ];
+    editingActiveId = s.settings.activeRepoId || editingRepos[0]?.id || 'ctgu-2026';
+    renderSettingsRepoList();
+    form.elements.clientId.value = s.settings.clientId || '';
+    form.elements.displayName.value = s.settings.displayName || '';
+    form.elements.autoSync.checked = s.settings.autoSync !== false;
+    form.elements.codeFontSize.value = String(s.settings.codeFontSize || 11);
+    $('#code-font-size-value').textContent = (s.settings.codeFontSize || 11) + 'px';
+    form.elements.codeLineNumbers.checked = s.settings.codeLineNumbers === true;
+    $('#settings-dialog').showModal();
+  });
+  $('#settings-form').addEventListener('submit', async event => {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const activeRepoObj = editingRepos.find(r => r.id === editingActiveId) || editingRepos[0];
+    const settings = {
+      ...s.settings,
+      theme: form.elements.theme.value,
+      repositories: editingRepos,
+      activeRepoId: editingActiveId,
+      serverUrl: activeRepoObj ? activeRepoObj.serverUrl : (s.settings.serverUrl || ''),
+      repo: activeRepoObj ? activeRepoObj.repo : (s.settings.repo || 'ctguacm/2026'),
+      clientId: form.elements.clientId.value.trim(),
+      displayName: form.elements.displayName.value.trim(),
+      autoSync: form.elements.autoSync.checked,
+      codeFontSize: Number(form.elements.codeFontSize.value),
+      codeLineNumbers: form.elements.codeLineNumbers.checked
+    };
+    if (s.busy) return;
+    setBusy(true);
+    try {
+      if (!demo) {
+        await call('saveSettings', settings);
+        applyPayload(await call('bootstrap'));
+      } else {
+        s.settings = settings;
+      }
+      settingsPreview = null;
+      applyCodeSettings();
+      applyTheme(settings.theme);
+      renderRepoSelector();
+      writeDemo();
+      $('#settings-dialog').close();
+      refreshFilters();
+      render();
+      toast('设置已保存');
+    } catch (error) {
+      toast(errorMessage(error));
+    } finally {
+      setBusy(false);
+    }
+  });
   $('#settings-form').elements.codeFontSize.addEventListener('input', () => { if (!settingsPreview) return; const size = Number($('#settings-form').elements.codeFontSize.value); settingsPreview.codeFontSize = size; applyCodeSettings(); $('#code-font-size-value').textContent = size + 'px'; });
   $('#settings-form').elements.codeLineNumbers.addEventListener('change', () => { if (!settingsPreview) return; settingsPreview.codeLineNumbers = $('#settings-form').elements.codeLineNumbers.checked; render(); });
   $('#settings-dialog').addEventListener('close', () => { if (!settingsPreview) return; settingsPreview = null; applyCodeSettings(); render(); });
